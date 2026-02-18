@@ -1,14 +1,13 @@
 from typing import Literal, Optional
+import re
+from pathlib import Path
 
-import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
-OLLAMA_URL = "http://localhost:11434/api/chat"
-OLLAMA_MODEL = "mistral"
 
-app = FastAPI(title="KeanGlobal Backend", version="0.1.0")
+app = FastAPI(title="KeanGlobal Backend", version="3.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -18,108 +17,190 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ==============================
+# LOAD CALENDARS INTO MEMORY
+# ==============================
+
+DATA_FOLDER = Path("data")
+calendar_data = {}
+
+
+def normalize(text: str) -> str:
+    return re.sub(r"[^\w\s]", "", text.lower()).strip()
+
+
+def tokenize(text: str) -> set[str]:
+    return set(normalize(text).split())
+
+
+def is_term_header(line: str) -> bool:
+    return bool(
+        re.match(
+            r"^(Fall|Spring|Winter|Summer)\s\d{4}\s(Semester|Term)$",
+            line.strip()
+        )
+    )
+
+
+def load_calendars():
+    for file in DATA_FOLDER.glob("*.txt"):
+        with open(file, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+
+        current_term = None
+
+        for raw_line in lines:
+            line = raw_line.strip()
+
+            if is_term_header(line):
+                current_term = normalize(line)
+                calendar_data[current_term] = {}
+
+            elif line.startswith("-") and ":" in line and current_term:
+                event, date = line[1:].split(":", 1)
+                calendar_data[current_term][normalize(event)] = date.strip()
+
+
+load_calendars()
+
+# ==============================
+# REQUEST / RESPONSE MODELS
+# ==============================
 
 class ChatRequest(BaseModel):
-    message: str = Field(min_length=1, max_length=3000)
+    message: str
 
 
 class ChatResponse(BaseModel):
     answer: str
-    intent: Literal["location", "policy"]
+    intent: Literal["policy"]
     destination_id: Optional[str] = None
     use_current_location: bool = False
 
 
-BUILDING_ALIASES = {
-    "kean hall": "kean_hall",
-    "glassman hall": "glassman_hall",
-    "glab": "glassman_hall",
-    "library": "library",
-    "nancy thompson library": "library",
-    "stem": "stem",
-    "stem building": "stem",
-    "downs hall": "downs_hall",
-    "harwood": "harwood",
-    "harwood arena": "harwood",
-    "university center": "uc",
-    "student center": "uc",
-}
+# ==============================
+# INTENT DETECTION (STRICT)
+# ==============================
+
+def detect_event_category(question: str) -> Optional[str]:
+    q = normalize(question)
+
+    if any(p in q for p in ["begin", "start", "first day", "opening"]):
+        return "start"
+
+    if any(p in q for p in ["end", "finish", "last day"]):
+        return "end"
+
+    if "recess" in q or "break" in q:
+        return "recess"
+
+    if "immunization" in q:
+        return "immunization"
+
+    if "registration" in q:
+        return "registration"
+
+    if "withdraw" in q:
+        return "withdrawal"
+
+    if "exam" in q:
+        return "exam"
+
+    return None
 
 
-@app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
-
+# ==============================
+# CHAT ENDPOINT
+# ==============================
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(payload: ChatRequest) -> ChatResponse:
     user_text = payload.message.strip()
+    lowered = normalize(user_text)
 
-    # Temporary intent routing for map visibility until dedicated intent model is added.
-    lowered = user_text.lower()
-    intent: Literal["location", "policy"] = (
-        "location"
-        if any(keyword in lowered for keyword in ["where", "location", "building", "map"])
-        else "policy"
-    )
+    # ----- DETECT TERM -----
+    term_match = re.search(r"(fall|spring|winter|summer)\s(\d{4})", lowered)
 
-    destination_id = None
-    for alias, candidate_id in BUILDING_ALIASES.items():
-        if alias in lowered:
-            destination_id = candidate_id
-            intent = "location"
-            break
-
-    if intent == "location":
-        if destination_id:
-            return ChatResponse(
-                answer=(
-                    "Map updated. I will use your current location as start and draw a campus route "
-                    "to the requested building."
-                ),
-                intent="location",
-                destination_id=destination_id,
-                use_current_location=True,
-            )
+    if not term_match:
         return ChatResponse(
-            answer="Map opened. Please choose a destination building to create a route from your location.",
-            intent="location",
-            use_current_location=True,
+            answer="Please specify a term and year (e.g., Fall 2026).",
+            intent="policy"
         )
 
-    request_body = {
-        "model": OLLAMA_MODEL,
-        "stream": False,
-        "messages": [
-            {
-                "role": "system",
-                "content": (
-                    "You are KeanGlobal, a concise campus concierge for Kean University. "
-                    "Answer clearly and use plain language for students."
-                ),
-            },
-            {"role": "user", "content": user_text},
-        ],
-    }
+    term_name = term_match.group(1)
+    year = term_match.group(2)
+    search_term = f"{term_name} {year}"
 
-    try:
-        async with httpx.AsyncClient(timeout=60.0) as client:
-            response = await client.post(OLLAMA_URL, json=request_body)
-            response.raise_for_status()
-            data = response.json()
-    except httpx.ConnectError as exc:
-        raise HTTPException(
-            status_code=503,
-            detail=(
-                "Ollama is not reachable on localhost:11434. "
-                "Start Ollama and run `ollama run mistral` first."
-            ),
-        ) from exc
-    except httpx.HTTPError as exc:
-        raise HTTPException(status_code=502, detail=f"Ollama request failed: {exc}") from exc
+    matched_term = None
+    for term in calendar_data:
+        if search_term in term:
+            matched_term = term
+            break
 
-    answer = data.get("message", {}).get("content", "")
-    if not answer:
-        raise HTTPException(status_code=502, detail="Ollama returned an empty response.")
+    if not matched_term:
+        return ChatResponse(
+            answer="Term not found in academic calendar.",
+            intent="policy"
+        )
 
-    return ChatResponse(answer=answer.strip(), intent=intent)
+    # ----- DETECT EVENT CATEGORY -----
+    category = detect_event_category(user_text)
+
+    if not category:
+        return ChatResponse(
+            answer="Event type not recognized.",
+            intent="policy"
+        )
+
+    # ----- MATCH EVENTS SAFELY -----
+    best_match = None
+
+    for event in calendar_data[matched_term]:
+        words = tokenize(event)
+
+        # START
+        if category == "start" and ("begin" in words or "begins" in words):
+            best_match = event
+            break
+
+        # END
+        if category == "end" and ("end" in words or "ends" in words):
+            best_match = event
+            break
+
+        # RECESS
+        if category == "recess" and "recess" in words:
+            best_match = event
+            break
+
+        # IMMUNIZATION
+        if category == "immunization" and "immunization" in words:
+            best_match = event
+            break
+
+        # REGISTRATION
+        if category == "registration" and "registration" in words:
+            best_match = event
+            break
+
+        # WITHDRAWAL
+        if category == "withdrawal" and "withdrawal" in words:
+            best_match = event
+            break
+
+        # EXAMS (must contain BOTH final + exam)
+        if category == "exam" and "exam" in words:
+            best_match = event
+            break
+
+    if best_match:
+        date = calendar_data[matched_term][best_match]
+        return ChatResponse(
+            answer=f"{best_match.title()}: {date}",
+            intent="policy"
+        )
+
+    return ChatResponse(
+        answer="Date not found in academic calendar.",
+        intent="policy"
+    )
