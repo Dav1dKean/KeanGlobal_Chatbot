@@ -6,8 +6,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+# --- RAG IMPORTS ---
+import chromadb
+from chromadb.utils import embedding_functions
+import ollama
 
-app = FastAPI(title="KeanGlobal Backend", version="3.0.0")
+# ==============================
+# FASTAPI SETUP
+# ==============================
+
+app = FastAPI(title="KeanGlobal Backend", version="4.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -64,6 +72,26 @@ def load_calendars():
 load_calendars()
 
 # ==============================
+# CHROMA + OLLAMA (POLICIES)
+# ==============================
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+CHROMA_PATH = BASE_DIR / "app" / "chroma_db"
+
+client = chromadb.PersistentClient(path=str(CHROMA_PATH))
+
+embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
+    model_name="all-MiniLM-L6-v2"
+)
+
+policy_collection = client.get_collection(
+    name="kean_knowledge",
+    embedding_function=embedding_function
+)
+
+OLLAMA_MODEL = "llama3"
+
+# ==============================
 # REQUEST / RESPONSE MODELS
 # ==============================
 
@@ -73,13 +101,13 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     answer: str
-    intent: Literal["policy"]
+    intent: Literal["calendar", "policy"]
     destination_id: Optional[str] = None
     use_current_location: bool = False
 
 
 # ==============================
-# INTENT DETECTION (STRICT)
+# CALENDAR INTENT DETECTION
 # ==============================
 
 def detect_event_category(question: str) -> Optional[str]:
@@ -109,98 +137,141 @@ def detect_event_category(question: str) -> Optional[str]:
     return None
 
 
+def is_calendar_question(text: str) -> bool:
+    return bool(re.search(r"(fall|spring|winter|summer)\s\d{4}", normalize(text)))
+
+
 # ==============================
 # CHAT ENDPOINT
 # ==============================
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(payload: ChatRequest) -> ChatResponse:
+
     user_text = payload.message.strip()
-    lowered = normalize(user_text)
 
-    # ----- DETECT TERM -----
-    term_match = re.search(r"(fall|spring|winter|summer)\s(\d{4})", lowered)
+    # ==================================================
+    # 1️⃣ CALENDAR LOGIC (STRICT + UNTOUCHED)
+    # ==================================================
+    if is_calendar_question(user_text):
 
-    if not term_match:
+        lowered = normalize(user_text)
+        term_match = re.search(r"(fall|spring|winter|summer)\s(\d{4})", lowered)
+
+        if not term_match:
+            return ChatResponse(
+                answer="Please specify a term and year (e.g., Fall 2026).",
+                intent="calendar"
+            )
+
+        term_name = term_match.group(1)
+        year = term_match.group(2)
+        search_term = f"{term_name} {year}"
+
+        matched_term = None
+        for term in calendar_data:
+            if search_term in term:
+                matched_term = term
+                break
+
+        if not matched_term:
+            return ChatResponse(
+                answer="Term not found in academic calendar.",
+                intent="calendar"
+            )
+
+        category = detect_event_category(user_text)
+
+        if not category:
+            return ChatResponse(
+                answer="Event type not recognized.",
+                intent="calendar"
+            )
+
+        best_match = None
+
+        for event in calendar_data[matched_term]:
+            words = tokenize(event)
+
+            if category == "start" and ("begin" in words or "begins" in words):
+                best_match = event
+                break
+
+            if category == "end" and ("end" in words or "ends" in words):
+                best_match = event
+                break
+
+            if category == "recess" and "recess" in words:
+                best_match = event
+                break
+
+            if category == "immunization" and "immunization" in words:
+                best_match = event
+                break
+
+            if category == "registration" and "registration" in words:
+                best_match = event
+                break
+
+            if category == "withdrawal" and "withdrawal" in words:
+                best_match = event
+                break
+
+            if category == "exam" and "exam" in words:
+                best_match = event
+                break
+
+        if best_match:
+            date = calendar_data[matched_term][best_match]
+            return ChatResponse(
+                answer=f"{best_match.title()}: {date}",
+                intent="calendar"
+            )
+
         return ChatResponse(
-            answer="Please specify a term and year (e.g., Fall 2026).",
+            answer="Date not found in academic calendar.",
+            intent="calendar"
+        )
+
+    # ==================================================
+    # 2️⃣ POLICY RAG (OLLAMA + CHROMA)
+    # ==================================================
+
+    results = policy_collection.query(
+        query_texts=[user_text],
+        n_results=3
+    )
+
+    documents = results.get("documents", [[]])[0]
+
+    if not documents:
+        return ChatResponse(
+            answer="I couldn't find relevant policy information.",
             intent="policy"
         )
 
-    term_name = term_match.group(1)
-    year = term_match.group(2)
-    search_term = f"{term_name} {year}"
+    context = "\n\n".join(documents)
 
-    matched_term = None
-    for term in calendar_data:
-        if search_term in term:
-            matched_term = term
-            break
+    prompt = f"""
+You are a Kean University policy assistant.
+Answer ONLY using the context below.
+If the answer is not in the context, say you do not have enough information.
 
-    if not matched_term:
-        return ChatResponse(
-            answer="Term not found in academic calendar.",
-            intent="policy"
-        )
+Context:
+{context}
 
-    # ----- DETECT EVENT CATEGORY -----
-    category = detect_event_category(user_text)
+Question:
+{user_text}
+"""
 
-    if not category:
-        return ChatResponse(
-            answer="Event type not recognized.",
-            intent="policy"
-        )
+    response = ollama.chat(
+        model=OLLAMA_MODEL,
+        messages=[{"role": "user", "content": prompt}]
+    )
 
-    # ----- MATCH EVENTS SAFELY -----
-    best_match = None
-
-    for event in calendar_data[matched_term]:
-        words = tokenize(event)
-
-        # START
-        if category == "start" and ("begin" in words or "begins" in words):
-            best_match = event
-            break
-
-        # END
-        if category == "end" and ("end" in words or "ends" in words):
-            best_match = event
-            break
-
-        # RECESS
-        if category == "recess" and "recess" in words:
-            best_match = event
-            break
-
-        # IMMUNIZATION
-        if category == "immunization" and "immunization" in words:
-            best_match = event
-            break
-
-        # REGISTRATION
-        if category == "registration" and "registration" in words:
-            best_match = event
-            break
-
-        # WITHDRAWAL
-        if category == "withdrawal" and "withdrawal" in words:
-            best_match = event
-            break
-
-        # EXAMS (must contain BOTH final + exam)
-        if category == "exam" and "exam" in words:
-            best_match = event
-            break
-
-    if best_match:
-        date = calendar_data[matched_term][best_match]
-        return ChatResponse(
-            answer=f"{best_match.title()}: {date}",
-            intent="policy"
-        )
+    answer = response["message"]["content"]
 
     return ChatResponse(
-        answer="Date not found in academic calendar.",
+        answer=answer,
         intent="policy"
     )
