@@ -1,4 +1,4 @@
-# Logs
+# LOGS
 logs
 *.log
 npm-debug.log*
@@ -7,12 +7,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# NODE
 node_modules
 dist
 dist-ssr
 *.local
 
-# Editor directories and files
+# EDITOR FILES
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -22,9 +23,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-backend/.venv/
+
+# PYTHON
 __pycache__/
+*.pyc
 .pycache/
-.pycache/
-__pycache__/
+.venv/
+venv/
 backend/.venv/
+
+
+# Chroma DB
+backend/chroma_db/
+backend/app/chroma_db/
+*.sqlite3
+
+# MISC

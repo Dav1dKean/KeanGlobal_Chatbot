@@ -1,21 +1,20 @@
-
 from typing import Literal, Optional
 import os
 import re
 import json
 from pathlib import Path
-
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import httpx
+import chromadb
+from chromadb.utils import embedding_functions
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-# -----------------------
 # CONFIG
-# -----------------------
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://127.0.0.1:11434/api/chat")
 MODEL_NAME = os.getenv("OLLAMA_MODEL", "mistral")
@@ -28,140 +27,105 @@ ALLOWED_ORIGINS = os.getenv(
     "http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:8000,http://localhost:8000",
 )
 
-# -----------------------
 # APP SETUP
-# -----------------------
 
-app = FastAPI()
+app = FastAPI(title="KeanGlobal Backend", version="5.0.0")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in ALLOWED_ORIGINS.split(",") if origin.strip()],
+    allow_origins=[o.strip() for o in ALLOWED_ORIGINS.split(",") if o.strip()],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# LOAD CALENDARS
+
+DATA_FOLDER = Path("data")
+calendar_data = {}
+
+def normalize(text: str) -> str:
+    return re.sub(r"[^\w\s]", "", text.lower()).strip()
+
+def tokenize(text: str) -> set[str]:
+    return set(normalize(text).split())
+
+def is_term_header(line: str) -> bool:
+    return bool(re.match(r"^(Fall|Spring|Winter|Summer)\s\d{4}\s(Semester|Term)$", line.strip()))
+
+def load_calendars():
+    for file in DATA_FOLDER.glob("*.txt"):
+        with open(file, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+
+        current_term = None
+        for raw_line in lines:
+            line = raw_line.strip()
+            if is_term_header(line):
+                current_term = normalize(line)
+                calendar_data[current_term] = {}
+            elif line.startswith("-") and ":" in line and current_term:
+                event, date = line[1:].split(":", 1)
+                calendar_data[current_term][normalize(event)] = date.strip()
+
+load_calendars()
+
+# CHROMA RAG
+
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / "data"
-PROGRAMS_FILE = DATA_DIR / "program_info.json"
+CHROMA_PATH = BASE_DIR / "app" / "chroma_db"
+
+client = chromadb.PersistentClient(path=str(CHROMA_PATH))
+embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
+    model_name="all-MiniLM-L6-v2"
+)
+
+policy_collection = client.get_collection(
+    name="kean_knowledge",
+    embedding_function=embedding_function
+)
+
+# MODELS
 
 class ChatRequest(BaseModel):
     message: str
 
-# -----------------------
-# OLLAMA FUNCTION
-# -----------------------
+# CALENDAR LOGIC
+
+def detect_event_category(question: str) -> Optional[str]:
+    q = normalize(question)
+    if any(p in q for p in ["begin", "start", "first day", "opening"]):
+        return "start"
+    if any(p in q for p in ["end", "finish", "last day"]):
+        return "end"
+    if "recess" in q or "break" in q:
+        return "recess"
+    if "immunization" in q:
+        return "immunization"
+    if "registration" in q:
+        return "registration"
+    if "withdraw" in q:
+        return "withdrawal"
+    if "exam" in q:
+        return "exam"
+    return None
+
+def is_calendar_question(text: str) -> bool:
+    return bool(re.search(r"(fall|spring|winter|summer)\s\d{4}", normalize(text)))
+
+# TIME / LOCATION
 
 NYC_TIMEZONE = ZoneInfo("America/New_York")
-LOCAL_TIME_PATTERNS = [
-    re.compile(r"\btime\b.*\b(nyc|new york|new york city|newark|new jersey|nj|est|eastern)\b", re.IGNORECASE),
-    re.compile(r"\b(nyc|new york|new york city|newark|new jersey|nj|est|eastern)\b.*\btime\b", re.IGNORECASE),
-]
-LIBRARY_HOURS_PATTERNS = [
-    re.compile(r"\b(library|nancy thompson)\b.*\b(hour|hours|open|opened|close|closing)\b", re.IGNORECASE),
-    re.compile(r"\b(hour|hours|open|opened|close|closing)\b.*\b(library|nancy thompson)\b", re.IGNORECASE),
-]
-LOCATION_INTENT_KEYWORDS = (
-    "where",
-    "map",
-    "location",
-    "directions",
-    "route",
-    "how do i get",
-    "how to get",
-    "take me to",
-    "find",
-)
-BUILDING_ALIASES = {
-    "kean hall": "kean_hall",
-    "green lane academic building": "glassman_hall",
-    "glassman hall": "glassman_hall",
-    "glassman": "glassman_hall",
-    "glab": "glassman_hall",
-    "nancy thompson library": "library",
-    "library": "library",
-    "stem building": "stem",
-    "stem": "stem",
-    "downs hall": "downs_hall",
-    "downs": "downs_hall",
-    "harwood arena": "harwood",
-    "harwood": "harwood",
-    "university center": "uc",
-    "student center": "uc",
-    "miron student center": "uc",
-    "msc": "uc",
-    "human rights institute": "library",
-    "hri": "library",
-    "uc": "uc",
-}
-
 
 def get_time_response(prompt: str):
-    lowered = prompt.lower()
-    if not any(token in lowered for token in ["time", "date", "day", "today"]):
+    if "time" not in prompt.lower():
         return None
+    now = datetime.now(NYC_TIMEZONE)
+    return f"The current time in New York is {now.strftime('%I:%M %p')}."
 
-    is_local_time_question = any(pattern.search(prompt) for pattern in LOCAL_TIME_PATTERNS)
-    is_generic_time_question = lowered.strip() in {"what time is it", "what time is it?"}
-    if not is_local_time_question and not is_generic_time_question:
-        return None
+# OLLAMA
 
-    location_label = "New York City"
-    if any(token in lowered for token in ["newark", "new jersey", " nj"]):
-        location_label = "Newark, New Jersey"
-
-    now_nyc = datetime.now(NYC_TIMEZONE)
-    timezone_name = now_nyc.tzname() or "ET"
-    return (
-        f"The current time in {location_label} is {now_nyc.strftime('%I:%M %p')} "
-        f"on {now_nyc.strftime('%A, %B %d, %Y')} ({timezone_name})."
-    )
-
-
-def get_library_hours_response(prompt: str):
-    if not any(pattern.search(prompt) for pattern in LIBRARY_HOURS_PATTERNS):
-        return None
-
-    return (
-        "I do not have live library opening hours in this build. "
-        "Please check the Nancy Thompson Library website or front desk for today's exact times."
-    )
-
-
-def get_location_response(prompt: str):
-    lowered = prompt.lower().strip()
-    destination_id = None
-
-    for alias, candidate_id in BUILDING_ALIASES.items():
-        if alias in lowered:
-            destination_id = candidate_id
-            break
-
-    is_location_intent = destination_id is not None or any(
-        keyword in lowered for keyword in LOCATION_INTENT_KEYWORDS
-    )
-    if not is_location_intent:
-        return None
-
-    if destination_id:
-        return {
-            "answer": "Map opened. I set directions from your current location to your requested building.",
-            "reply": "Map opened. I set directions from your current location to your requested building.",
-            "intent": "location",
-            "destination_id": destination_id,
-            "use_current_location": True,
-        }
-
-    return {
-        "answer": "Map opened. Choose a destination and I can guide you there from your current location.",
-        "reply": "Map opened. Choose a destination and I can guide you there from your current location.",
-        "intent": "location",
-        "destination_id": None,
-        "use_current_location": True,
-    }
-
-
-def build_ollama_timeout() -> httpx.Timeout:
+def build_ollama_timeout():
     return httpx.Timeout(
         connect=OLLAMA_CONNECT_TIMEOUT_SECONDS,
         read=OLLAMA_READ_TIMEOUT_SECONDS,
@@ -169,251 +133,46 @@ def build_ollama_timeout() -> httpx.Timeout:
         pool=OLLAMA_CONNECT_TIMEOUT_SECONDS,
     )
 
-
 async def query_ollama(prompt: str):
     payload = {
         "model": MODEL_NAME,
-        "messages": [
-            {"role": "system", "content": "You are a helpful university policy assistant."},
-            {"role": "user", "content": prompt}
-        ],
+        "messages": [{"role": "user", "content": prompt}],
         "stream": False,
-        "options": {
-            "num_predict": 512,
-            "temperature": 0.3
-        }
     }
 
-    timeout = build_ollama_timeout()
-    for attempt in range(1, OLLAMA_MAX_RETRIES + 2):
-        try:
-            async with httpx.AsyncClient(timeout=timeout) as client:
-                response = await client.post(OLLAMA_URL, json=payload)
+    async with httpx.AsyncClient(timeout=build_ollama_timeout()) as client:
+        response = await client.post(OLLAMA_URL, json=payload)
+        response.raise_for_status()
+        data = response.json()
+        return data.get("message", {}).get("content", "No response.")
 
-            print("STATUS:", response.status_code)
-            print("RAW:", response.text[:300])
-
-            response.raise_for_status()
-            data = response.json()
-            return data.get("message", {}).get("content", "No response from model.")
-        except httpx.TimeoutException:
-            if attempt <= OLLAMA_MAX_RETRIES:
-                continue
-        except httpx.HTTPStatusError as exc:
-            return f"ERROR: Ollama returned HTTP {exc.response.status_code}: {exc.response.text[:200]}"
-        except httpx.RequestError as exc:
-            return f"ERROR contacting Ollama: {str(exc)}"
-        except ValueError:
-            return "ERROR: Ollama returned invalid JSON"
-
-    return (
-        "ERROR: Ollama timed out. "
-        f"Configured read timeout is {OLLAMA_READ_TIMEOUT_SECONDS:.0f}s at {OLLAMA_URL}. "
-        "Increase OLLAMA_READ_TIMEOUT_SECONDS or verify Ollama/model is running."
-    )
-
-
-def get_ollama_tags_url() -> str:
-    # Convert configured chat endpoint to Ollama tags endpoint for lightweight health checks.
-    if OLLAMA_URL.endswith("/api/chat"):
-        return OLLAMA_URL[: -len("/api/chat")] + "/api/tags"
-    return "http://127.0.0.1:11434/api/tags"
-
-# -----------------------
 # ROUTES
-# -----------------------
-
-@app.get("/api/programs")
-def get_programs():
-    """
-    Returns the parsed JSON data for all Kean programs.
-    """
-    if not PROGRAMS_FILE.exists():
-        raise HTTPException(status_code=404, detail="Program data file not found on the server.")
-        
-    try:
-        with open(PROGRAMS_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        return data
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to load program data: {str(e)}")
-    
-@app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
-
-    is_local_time_question = any(pattern.search(prompt) for pattern in LOCAL_TIME_PATTERNS)
-    is_generic_time_question = lowered.strip() in {"what time is it", "what time is it?"}
-    if not is_local_time_question and not is_generic_time_question:
-        return None
-
-    location_label = "New York City"
-    if any(token in lowered for token in ["newark", "new jersey", " nj"]):
-        location_label = "Newark, New Jersey"
-
-    now_nyc = datetime.now(NYC_TIMEZONE)
-    timezone_name = now_nyc.tzname() or "ET"
-    return (
-        f"The current time in {location_label} is {now_nyc.strftime('%I:%M %p')} "
-        f"on {now_nyc.strftime('%A, %B %d, %Y')} ({timezone_name})."
-    )
-
-
-def get_library_hours_response(prompt: str):
-    if not any(pattern.search(prompt) for pattern in LIBRARY_HOURS_PATTERNS):
-        return None
-
-    return (
-        "I do not have live library opening hours in this build. "
-        "Please check the Nancy Thompson Library website or front desk for today's exact times."
-    )
-
-
-def get_location_response(prompt: str):
-    lowered = prompt.lower().strip()
-    destination_id = None
-
-    for alias, candidate_id in BUILDING_ALIASES.items():
-        if alias in lowered:
-            destination_id = candidate_id
-            break
-
-    is_location_intent = destination_id is not None or any(
-        keyword in lowered for keyword in LOCATION_INTENT_KEYWORDS
-    )
-    if not is_location_intent:
-        return None
-
-    if destination_id:
-        return {
-            "answer": "Map opened. I set directions from your current location to your requested building.",
-            "reply": "Map opened. I set directions from your current location to your requested building.",
-            "intent": "location",
-            "destination_id": destination_id,
-            "use_current_location": True,
-        }
-
-    return {
-        "answer": "Map opened. Choose a destination and I can guide you there from your current location.",
-        "reply": "Map opened. Choose a destination and I can guide you there from your current location.",
-        "intent": "location",
-        "destination_id": None,
-        "use_current_location": True,
-    }
-
-
-def build_ollama_timeout() -> httpx.Timeout:
-    return httpx.Timeout(
-        connect=OLLAMA_CONNECT_TIMEOUT_SECONDS,
-        read=OLLAMA_READ_TIMEOUT_SECONDS,
-        write=OLLAMA_CONNECT_TIMEOUT_SECONDS,
-        pool=OLLAMA_CONNECT_TIMEOUT_SECONDS,
-    )
-
-
-async def query_ollama(prompt: str):
-    payload = {
-        "model": MODEL_NAME,
-        "messages": [
-            {"role": "system", "content": "You are a helpful university policy assistant."},
-            {"role": "user", "content": prompt}
-        ],
-        "stream": False,
-        "options": {
-            "num_predict": 512,
-            "temperature": 0.3
-        }
-    }
-
-    timeout = build_ollama_timeout()
-    for attempt in range(1, OLLAMA_MAX_RETRIES + 2):
-        try:
-            async with httpx.AsyncClient(timeout=timeout) as client:
-                response = await client.post(OLLAMA_URL, json=payload)
-
-            print("STATUS:", response.status_code)
-            print("RAW:", response.text[:300])
-
-            response.raise_for_status()
-            data = response.json()
-            return data.get("message", {}).get("content", "No response from model.")
-        except httpx.TimeoutException:
-            if attempt <= OLLAMA_MAX_RETRIES:
-                continue
-        except httpx.HTTPStatusError as exc:
-            return f"ERROR: Ollama returned HTTP {exc.response.status_code}: {exc.response.text[:200]}"
-        except httpx.RequestError as exc:
-            return f"ERROR contacting Ollama: {str(exc)}"
-        except ValueError:
-            return "ERROR: Ollama returned invalid JSON"
-
-    return (
-        "ERROR: Ollama timed out. "
-        f"Configured read timeout is {OLLAMA_READ_TIMEOUT_SECONDS:.0f}s at {OLLAMA_URL}. "
-        "Increase OLLAMA_READ_TIMEOUT_SECONDS or verify Ollama/model is running."
-    )
-
-
-def get_ollama_tags_url() -> str:
-    # Convert configured chat endpoint to Ollama tags endpoint for lightweight health checks.
-    if OLLAMA_URL.endswith("/api/chat"):
-        return OLLAMA_URL[: -len("/api/chat")] + "/api/tags"
-    return "http://127.0.0.1:11434/api/tags"
-
-# -----------------------
-# ROUTES
-# -----------------------
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
-
-@app.get("/health/ollama")
-def health_ollama():
-    tags_url = get_ollama_tags_url()
-    try:
-        response = httpx.get(tags_url, timeout=OLLAMA_HEALTH_TIMEOUT_SECONDS)
-        response.raise_for_status()
-        data = response.json()
-    except httpx.TimeoutException as exc:
-        raise HTTPException(status_code=503, detail="Ollama health check timed out.") from exc
-    except httpx.RequestError as exc:
-        raise HTTPException(status_code=503, detail=f"Ollama is unreachable: {exc}") from exc
-    except httpx.HTTPStatusError as exc:
-        raise HTTPException(status_code=503, detail=f"Ollama returned HTTP {exc.response.status_code}.") from exc
-    except ValueError as exc:
-        raise HTTPException(status_code=503, detail="Ollama returned invalid JSON.") from exc
-
-    models = data.get("models", []) if isinstance(data, dict) else []
-    model_names = [m.get("name") for m in models if isinstance(m, dict) and m.get("name")]
-    configured_model_found = MODEL_NAME in model_names or any(
-        name.startswith(f"{MODEL_NAME}:") for name in model_names
-    )
-    return {
-        "status": "ok",
-        "ollama_reachable": True,
-        "configured_chat_url": OLLAMA_URL,
-        "tags_url": tags_url,
-        "configured_model": MODEL_NAME,
-        "configured_model_found": configured_model_found,
-        "available_models": model_names,
-    }
-
-
 @app.post("/chat")
 async def chat(req: ChatRequest):
-    time_response = get_time_response(req.message)
-    if time_response:
-        return {"answer": time_response, "reply": time_response, "intent": "general"}
+    user_text = req.message.strip()
 
-    library_hours_response = get_library_hours_response(req.message)
-    if library_hours_response:
-        return {"answer": library_hours_response, "reply": library_hours_response, "intent": "general"}
+    if is_calendar_question(user_text):
+        term_match = re.search(r"(fall|spring|winter|summer)\s(\d{4})", normalize(user_text))
+        if not term_match:
+            return {"answer": "Please specify a term and year.", "intent": "calendar"}
 
-    location_response = get_location_response(req.message)
-    if location_response:
-        return location_response
+        term = f"{term_match.group(1)} {term_match.group(2)}"
+        matched = next((t for t in calendar_data if term in t), None)
+        if not matched:
+            return {"answer": "Term not found.", "intent": "calendar"}
 
-    reply = await query_ollama(req.message)
-    return {"answer": reply, "reply": reply, "intent": "general"}
+        category = detect_event_category(user_text)
+        if not category:
+            return {"answer": "Event not recognized.", "intent": "calendar"}
+
+        for event, date in calendar_data[matched].items():
+            if category in event:
+                return {"answer": f"{event.title()}: {date}", "intent": "calendar"}
+
+    reply = await query_ollama(user_text)
+    return {"answer": reply, "intent": "general"}
