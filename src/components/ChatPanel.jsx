@@ -6,6 +6,100 @@ const API_BASE_URLS = ENV_API_BASE_URL
   : ["http://127.0.0.1:8000", "http://localhost:8000"];
 const CHAT_STORAGE_KEY = "keanglobal_chat_messages";
 
+function shouldOpenMapFromResponse(data, answerText) {
+  if (data?.intent === "location") return true;
+  if (data?.destination_id) return true;
+  const text = (answerText || "").toLowerCase();
+  return (
+    text.includes("opening map") ||
+    text.includes("abriendo mapa") ||
+    text.includes("harita açılıyor") ||
+    text.includes("正在打开地图")
+  );
+}
+
+function renderBotMessage(message, onSelectSuggestion) {
+  const text = message?.text || "";
+  const foodSuggestions = Array.isArray(message?.foodSuggestions) ? message.foodSuggestions : [];
+  const lines = String(text || "")
+    .split("\n")
+    .map(line => line.trim())
+    .filter(Boolean);
+
+  if (!lines.length) return null;
+
+  const listItems = [];
+  let currentItem = null;
+
+  for (const line of lines) {
+    if (/^\d+\.\s+/.test(line)) {
+      if (currentItem) listItems.push(currentItem);
+      currentItem = { body: line.replace(/^\d+\.\s+/, "").trim(), source: "" };
+      continue;
+    }
+    if (/^source:\s*/i.test(line)) {
+      if (currentItem) {
+        currentItem.source = line.replace(/^source:\s*/i, "").trim();
+      }
+      continue;
+    }
+    if (currentItem) {
+      currentItem.body = `${currentItem.body} ${line}`.trim();
+    }
+  }
+
+  if (currentItem) listItems.push(currentItem);
+  if (!listItems.length) {
+    return (
+      <>
+        <div>{text}</div>
+        {foodSuggestions.length > 0 && (
+          <div className="chat-suggestion-group">
+            {foodSuggestions.map(suggestion => (
+              <button
+                key={suggestion.id}
+                type="button"
+                className="btn-secondary chat-suggestion-btn"
+                onClick={() => onSelectSuggestion(suggestion)}
+              >
+                {suggestion.name}
+              </button>
+            ))}
+          </div>
+        )}
+      </>
+    );
+  }
+
+  return (
+    <div className="bot-rich-msg">
+      <div className="bot-rich-intro">{lines[0]}</div>
+      <ol className="bot-rich-list">
+        {listItems.map((item, index) => (
+          <li key={`${item.body}-${index}`} className="bot-rich-item">
+            <div>{item.body}</div>
+            {item.source && <div className="bot-rich-source">Source: {item.source}</div>}
+          </li>
+        ))}
+      </ol>
+      {foodSuggestions.length > 0 && (
+        <div className="chat-suggestion-group">
+          {foodSuggestions.map(suggestion => (
+            <button
+              key={suggestion.id}
+              type="button"
+              className="btn-secondary chat-suggestion-btn"
+              onClick={() => onSelectSuggestion(suggestion)}
+            >
+              {suggestion.name}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 
 function ChatPanel({ setShowMap, setRouteRequest }) {
   const [messages, setMessages] = useState(() => {
@@ -65,9 +159,17 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
       }
 
       const answerText = data.answer || data.reply || "No response from backend.";
-      setMessages(prev => [...prev, { text: answerText, sender: "bot" }]);
-      setShowMap(data.intent === "location");
-      if (data.intent === "location") {
+      setMessages(prev => [
+        ...prev,
+        {
+          text: answerText,
+          sender: "bot",
+          foodSuggestions: Array.isArray(data.food_suggestions) ? data.food_suggestions : []
+        }
+      ]);
+      const openMap = shouldOpenMapFromResponse(data, answerText);
+      setShowMap(openMap);
+      if (openMap) {
         setRouteRequest({
           destinationId: data.destination_id || null,
           useCurrentLocation: Boolean(data.use_current_location),
@@ -142,6 +244,16 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
     }
   }
 
+  function selectFoodSuggestion(suggestion) {
+    if (!suggestion?.id) return;
+    setShowMap(true);
+    setRouteRequest({
+      destinationId: suggestion.id,
+      useCurrentLocation: false,
+      locationMode: "highlight"
+    });
+  }
+
   return (
     <div className="panel chat-panel">
       <div className="map-header">
@@ -156,7 +268,7 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
 
         {messages.map((m, i) => (
           <div key={i} className={m.sender === "user" ? "msg-user" : "msg-bot"}>
-            {m.text}
+            {m.sender === "bot" ? renderBotMessage(m, selectFoodSuggestion) : m.text}
           </div>
         ))}
       </div>

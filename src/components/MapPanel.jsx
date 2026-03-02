@@ -547,6 +547,12 @@ function MapPanel({ setShowMap, routeRequest }) {
   );
 
   const supplementalParkingLots = useMemo(() => {
+    // If dedicated parking polygons are loaded, avoid synthetic square overlays
+    // from point locations because they can overlap real lots and look incorrect.
+    if (parkingLots.length > 0) {
+      return [];
+    }
+
     const existingNames = new Set(parkingLots.map(lot => normalizeId(lot.name)));
     const existingIds = new Set(parkingLots.map(lot => normalizeId(lot.id)));
 

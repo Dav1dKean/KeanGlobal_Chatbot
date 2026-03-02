@@ -174,6 +174,42 @@ body.dark .panel-title {
   margin-bottom: 8px;
   max-width: 75%;
 }
+
+.bot-rich-msg {
+  white-space: normal;
+}
+
+.bot-rich-intro {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.bot-rich-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.bot-rich-item {
+  margin-bottom: 8px;
+}
+
+.bot-rich-source {
+  font-size: 12px;
+  color: #475569;
+  margin-top: 3px;
+}
+
+.chat-suggestion-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.chat-suggestion-btn {
+  padding: 6px 10px;
+  font-size: 12px;
+}
 /* Better dark mode contrast */
 
 body.dark .msg-user {
