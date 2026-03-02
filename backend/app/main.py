@@ -12,12 +12,16 @@ from zoneinfo import ZoneInfo
 import httpx
 import chromadb
 from chromadb.utils import embedding_functions
+from dotenv import load_dotenv
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # CONFIG
+
+BACKEND_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BACKEND_DIR / ".env")
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://127.0.0.1:11434/api/chat")
 OLLAMA_HEALTH_URL = os.getenv("OLLAMA_HEALTH_URL", "http://127.0.0.1:11434/api/tags")
@@ -149,7 +153,27 @@ def detect_event_category(question: str) -> Optional[str]:
         return "recess"
     if any(p in q for p in ["end", "finish", "bit", "termina", "结束", "ختم", "끝"]):
         return "end"
-    if any(p in q for p in ["begin", "start", "first day", "opening", "başla", "empieza", "开始", "شروع", "시작"]):
+    if any(
+        p in q
+        for p in [
+            "begin",
+            "start",
+            "first day",
+            "opening",
+            "başla",
+            "basla",
+            "başlıyor",
+            "basliyor",
+            "başlar",
+            "baslar",
+            "başlangıç",
+            "baslangic",
+            "empieza",
+            "开始",
+            "شروع",
+            "시작",
+        ]
+    ):
         return "start"
     return None
 
@@ -517,6 +541,18 @@ GENERIC_LOCATION_WORDS = {
     "parking",
     "station",
 }
+SECONDARY_PLACE_WORDS = {
+    "field",
+    "turf",
+    "room",
+    "lawn",
+    "statue",
+    "court",
+    "courts",
+    "pantry",
+    "starbucks",
+    "game",
+}
 DEFAULT_FAQ_INTENT_KEYWORDS = {
     "admissions": ("admission", "apply", "application", "accepted", "enroll"),
     "tuition_fees": ("tuition", "cost", "fees", "payment", "bill", "bursar"),
@@ -666,19 +702,60 @@ DATE_TRANSLATIONS = {
     },
 }
 
+CALENDAR_EVENT_TRANSLATIONS = {
+    "term begins": {
+        "tr": "Dönem Başlangıcı",
+        "es": "Inicio del semestre",
+        "zh": "学期开始",
+        "ur": "سمسٹر کا آغاز",
+        "ko": "학기 시작",
+    },
+    "term ends": {
+        "tr": "Dönem Bitişi",
+        "es": "Fin del semestre",
+        "zh": "学期结束",
+        "ur": "سمسٹر کا اختتام",
+        "ko": "학기 종료",
+    },
+    "registration begins": {
+        "tr": "Kayıt Başlangıcı",
+        "es": "Inicio de inscripción",
+        "zh": "注册开始",
+        "ur": "رجسٹریشن کا آغاز",
+        "ko": "수강신청 시작",
+    },
+    "exam week": {
+        "tr": "Sınav Haftası",
+        "es": "Semana de exámenes",
+        "zh": "考试周",
+        "ur": "امتحانی ہفتہ",
+        "ko": "시험 주간",
+    },
+}
+
 def detect_language(text: str) -> str:
     t = text.strip().lower()
+    t_norm = normalize(text)
+    t_tokens = set(t_norm.split())
     if re.search(r"[\u4e00-\u9fff]", t):
         return "zh"
     if re.search(r"[\uac00-\ud7af]", t):
         return "ko"
     if re.search(r"[\u0600-\u06ff]", t):
         return "ur"
+
     tr_chars = set("çğıöşü")
-    if any(ch in tr_chars for ch in t) or any(x in t for x in (" nasıl ", " nerede", " ne zaman", "güz", "bahar")):
+    if any(ch in tr_chars for ch in t) or any(
+        token in t_tokens for token in {"nerede", "nasil", "ne", "zaman", "guz", "bahar", "donem", "donemi", "basliyor"}
+    ):
         return "tr"
-    if any(x in t for x in ("¿", "¡", " dónde", " cuándo", " qué", "becas", "semestre")):
+
+    if any(ch in t for ch in ("¿", "¡")) or any(
+        token in t_tokens
+        for token in {"donde", "cuando", "que", "semestre", "otono", "primavera", "parqueo", "comida", "campus"}
+    ):
         return "es"
+
     return "en"
 
 def trn(key: str, lang: str, **kwargs) -> str:
@@ -693,6 +770,16 @@ def localize_date_text(text: str, lang: str) -> str:
     for en_word, local_word in mapping.items():
         text = re.sub(rf"\b{re.escape(en_word)}\b", local_word, text)
     return text
+
+def localize_calendar_event_text(event_text: str, lang: str) -> str:
+    if lang == "en":
+        return event_text.title()
+
+    normalized_event = normalize(event_text)
+    for key, mapping in CALENDAR_EVENT_TRANSLATIONS.items():
+        if key in normalized_event:
+            return mapping.get(lang, event_text.title())
+    return event_text.title()
 
 def parse_position(value: str) -> Optional[tuple[float, float]]:
     raw = str(value or "").strip()
@@ -969,6 +1056,7 @@ def find_location_destination_id(text: str, allowed_types: Optional[set[str]] = 
     q = normalize(text)
     padded_query = f" {q} "
     query_tokens = set(q.split())
+    query_requests_primary_building = any(token in query_tokens for token in {"center", "hall", "building"})
     best_place = None
     best_score = 0
 
@@ -985,15 +1073,19 @@ def find_location_destination_id(text: str, allowed_types: Optional[set[str]] = 
             alias_tokens = set(alias.split())
             informative_alias_tokens = {t for t in alias_tokens if len(t) >= 3 and t not in GENERIC_LOCATION_WORDS}
             overlap = len(informative_alias_tokens & query_tokens)
+            precision = overlap / max(1, len(informative_alias_tokens))
 
             if q == alias:
-                score = max(score, 100 + len(alias))
+                score = max(score, 220)
             elif padded_alias in padded_query and len(alias) >= 3:
-                score = max(score, 85 + len(alias))
+                score = max(score, 160)
             elif alias in q and len(alias) >= 5:
-                score = max(score, 70 + len(alias))
+                score = max(score, 125)
             elif overlap > 0:
-                score = max(score, 48 + overlap * 20 + len(alias))
+                score = max(score, 52 + overlap * 18 + int(precision * 24))
+
+            if query_requests_primary_building and any(token in alias_tokens for token in SECONDARY_PLACE_WORDS):
+                score -= 28
 
         if place["type"] == "building":
             score += 10
@@ -1462,7 +1554,7 @@ async def chat(req: ChatRequest):
                 if best_event:
                     event, date = best_event
                     return {
-                        "answer": f"{localize_date_text(event.title(), lang)}: {localize_date_text(date, lang)}",
+                        "answer": f"{localize_calendar_event_text(event, lang)}: {localize_date_text(date, lang)}",
                         "intent": "calendar",
                     }
 
