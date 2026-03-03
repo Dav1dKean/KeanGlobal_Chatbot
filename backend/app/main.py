@@ -56,6 +56,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# API (dont delete this sis)
+@app.get("/api/programs")
+def get_programs():
+    if not PROGRAMS_FILE.exists():
+        raise HTTPException(status_code=404, detail="Program data file not found on the server.")
+    try:
+        with open(PROGRAMS_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # LOAD CALENDARS
 
@@ -110,10 +120,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 CHROMA_PATH = BASE_DIR / "app" / "chroma_db"
 LOCATION_CSV_PATH = BASE_DIR.parent / "src" / "data" / "campus_locations_main_east_full.csv"
 POLICY_FOLDER = BASE_DIR / "Policies"
-RAG_DATA_FOLDER = BASE_DIR / "data"
-FAQ_INTENT_PATH = RAG_DATA_FOLDER / "faq_intent_keywords.json"
+DATA_FOLDER = BASE_DIR / "data"
+FAQ_INTENT_PATH = DATA_FOLDER / "faq_intent_keywords.json"
 EXCLUDED_RAG_DIR_NAMES = {"venv", ".venv", "chroma_db", "__pycache__"}
 EXCLUDED_RAG_FILE_NAMES = {"requirements.txt", "_RAG_TEMPLATE.txt", "faq_intent_keywords.json", "program_info_rag.txt"}
+PROGRAMS_FILE = DATA_FOLDER / "program_info.json"
 
 client = chromadb.PersistentClient(path=str(CHROMA_PATH))
 embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
