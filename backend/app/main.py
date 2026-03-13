@@ -1,7 +1,6 @@
 from typing import Optional
 import os
 import re
-import csv
 import json
 import asyncio
 from math import radians, sin, cos, asin, sqrt
@@ -14,7 +13,7 @@ import chromadb
 from chromadb.utils import embedding_functions
 from dotenv import load_dotenv
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -123,8 +122,32 @@ def extract_degree_subject_phrase(text: str) -> Optional[str]:
         if match:
             phrase = match.group(1).strip()
             if phrase:
+                phrase = re.sub(r"^(a|an)\s+", "", phrase).strip()
+                phrase = re.sub(r"^(degree|program|major)\s+(in\s+)?", "", phrase).strip()
+                phrase = re.sub(r"\s+", " ", phrase).strip()
                 return phrase
     return None
+
+def extract_follow_up_subject_phrase(text: str) -> Optional[str]:
+    q_norm = normalize(text)
+    match = re.search(
+        r"(?:about|sobre|hakkinda|hakkında|有关|關於|کے بارے میں)\s+(.+)$",
+        q_norm,
+    )
+    phrase = match.group(1).strip() if match else q_norm
+    if not phrase:
+        return None
+
+    phrase = re.sub(
+        r"\b(master|masters|graduate|undergraduate|undergrad|bachelor|degree|degrees|program|programs|major|ms|ma|mba)\b",
+        " ",
+        phrase,
+    )
+    phrase = re.sub(r"\b(tell|me|more|details|detail|please|por favor)\b", " ", phrase)
+    phrase = re.sub(r"\s+", " ", phrase).strip()
+    if len(phrase) < 2:
+        return None
+    return phrase
 
 def keyword_in_text(normalized_text: str, text_tokens: set[str], keyword: str) -> bool:
     normalized_keyword = normalize(keyword)
@@ -145,10 +168,31 @@ def keyword_in_text(normalized_text: str, text_tokens: set[str], keyword: str) -
 def is_term_header(line: str) -> bool:
     return bool(re.match(r"^(Fall|Spring|Winter|Summer)\s\d{4}\s(Semester|Term)$", line.strip()))
 
+def read_text_with_fallback(path: Path) -> str:
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        try:
+            text = path.read_text(encoding="cp1252")
+        except UnicodeDecodeError:
+            text = path.read_text(encoding="latin-1")
+    return (
+        text.replace("\xa0", " ")
+        .replace("\u2018", "'")
+        .replace("\u2019", "'")
+        .replace("\u201c", '"')
+        .replace("\u201d", '"')
+        .replace("\u2013", "-")
+        .replace("\u2014", "-")
+        .replace("\u2022", "*")
+    )
+
 def load_calendars():
     for file in DATA_FOLDER.glob("*.txt"):
-        with open(file, "r", encoding="utf-8") as f:
-            lines = f.readlines()
+        try:
+            lines = read_text_with_fallback(file).splitlines()
+        except Exception:
+            continue
 
         current_term = None
         for raw_line in lines:
@@ -166,7 +210,7 @@ load_calendars()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 CHROMA_PATH = BASE_DIR / "app" / "chroma_db"
-LOCATION_CSV_PATH = BASE_DIR.parent / "src" / "data" / "campus_locations_main_east_full.csv"
+LOCATION_JSON_PATH = BASE_DIR.parent / "src" / "data" / "kean_locations.json"
 POLICY_FOLDER = BASE_DIR / "Policies"
 DATA_FOLDER = BASE_DIR / "data"
 FAQ_INTENT_PATH = DATA_FOLDER / "faq_intent_keywords.json"
@@ -228,6 +272,9 @@ def detect_event_category(question: str) -> Optional[str]:
             "başlangıç",
             "baslangic",
             "empieza",
+            "comienza",
+            "comenza",
+            "inicia",
             "开始",
             "شروع",
             "시작",
@@ -266,7 +313,15 @@ def extract_term_from_text(text: str) -> Optional[str]:
             return f"{season_en} {year}"
     return None
 
-def find_best_calendar_event(events: dict[str, str], category: str) -> Optional[tuple[str, str]]:
+def extract_session_from_text(text: str) -> Optional[str]:
+    q = normalize(text)
+    if re.search(r"\b(i|1)\b", q) and any(alias in q for alias in SEASON_ALIASES.get("summer", ())):
+        return "1"
+    if re.search(r"\b(ii|2)\b", q) and any(alias in q for alias in SEASON_ALIASES.get("summer", ())):
+        return "2"
+    return None
+
+def find_best_calendar_event(events: dict[str, str], category: str, session: Optional[str] = None) -> Optional[tuple[str, str]]:
     best_event = None
     best_date = None
     best_score = -10**9
@@ -282,6 +337,14 @@ def find_best_calendar_event(events: dict[str, str], category: str) -> Optional[
                 score += 120
             if "classes begin" in e or "class begins" in e or "instruction begins" in e:
                 score += 90
+            if session == "1" and "session i begins" in e:
+                score += 220
+            if session == "2" and "session ii begins" in e:
+                score += 220
+            if session == "1" and "session ii begins" in e:
+                score -= 220
+            if session == "2" and "session i begins" in e:
+                score -= 220
             if "registration" in e:
                 score -= 120
             if "immunization" in e or "deadline" in e or "withdraw" in e:
@@ -634,6 +697,9 @@ conversation_state = {
     "last_degree_subject": None,
     "last_degree_level": None,
 }
+KEAN_MAIN_URL = "https://www.kean.edu"
+KEAN_PROGRAMS_URL = "https://www.kean.edu/academics"
+KEAN_CATALOG_URL = "https://kean.smartcatalogiq.com/"
 
 SUPPORTED_LANGS = {"en", "tr", "es", "zh", "ur", "ko"}
 LANGUAGE_NAMES = {
@@ -643,6 +709,21 @@ LANGUAGE_NAMES = {
     "zh": "Mandarin Chinese",
     "ur": "Urdu",
     "ko": "Korean",
+}
+LANGUAGE_HINT_KEYWORDS = {
+    "tr": {
+        "nerede", "nasil", "nasıl", "ne", "zaman", "guz", "güz", "bahar", "donem", "dönem",
+        "basliyor", "başlıyor", "kampus", "kampüs", "kayit", "kayıt", "otopark", "yemek",
+        "saat", "kutuphane", "kütüphane", "mali", "yardim", "yardım", "mezuniyet",
+    },
+    "es": {
+        "donde", "dónde", "cuando", "cuándo", "que", "qué", "semestre", "otono", "otoño",
+        "primavera", "parqueo", "estacionamiento", "comida", "horario", "biblioteca",
+        "admisiones", "solicitud", "matricula", "matrícula", "ayuda", "financiera",
+        "graduacion", "graduación",
+    },
+    "zh": {"哪里", "在哪", "怎么", "如何", "时间", "开放", "停车", "餐厅", "图书馆", "专业", "招生", "毕业"},
+    "ko": {"어디", "어떻게", "시간", "주차", "식당", "도서관", "전공", "입학", "졸업", "등록금"},
 }
 TRANSLATIONS = {
     "location_opening_specific": {
@@ -750,7 +831,7 @@ TRANSLATIONS = {
         "ko": "현재 Ollama를 사용할 수 없습니다. 가장 높은 컨텍스트 일치: {line}",
     },
     "fast_path_prefix": {
-        "en": "From campus records, here are the most relevant details:",
+        "en": "Here’s what I found in Kean’s records:",
         "tr": "Kampüs kayıtlarına göre en ilgili bilgiler:",
         "es": "Según los registros del campus, estos son los detalles más relevantes:",
         "zh": "根据校园记录，以下是最相关的信息：",
@@ -758,7 +839,7 @@ TRANSLATIONS = {
         "ko": "캠퍼스 기록 기준으로 가장 관련 있는 정보입니다:",
     },
     "faq_no_exact_match": {
-        "en": "I couldn't find an exact match in current campus records. Please rephrase with a specific program or policy name.",
+        "en": "Sorry, I couldn’t find that in my current Kean records. You can check the university website here: https://www.kean.edu",
         "tr": "Mevcut kampüs kayıtlarında tam bir eşleşme bulamadım. Lütfen belirli bir program veya politika adıyla tekrar sor.",
         "es": "No encontré una coincidencia exacta en los registros actuales del campus. Reformula con el nombre específico del programa o política.",
         "zh": "我在当前校园记录中未找到精确匹配。请用具体的项目或政策名称重新提问。",
@@ -766,7 +847,7 @@ TRANSLATIONS = {
         "ko": "현재 캠퍼스 기록에서 정확한 일치를 찾지 못했습니다. 특정 프로그램 또는 정책 이름으로 다시 질문해 주세요.",
     },
     "degree_exists_yes": {
-        "en": "Yes, a {subject} {level} degree is listed.",
+        "en": "Yes, {subject} is listed at the {level} level.",
         "tr": "Evet, {subject} için {level} bir derece programı listeleniyor.",
         "es": "Sí, hay un programa de {level} en {subject}.",
         "zh": "是的，学校列有 {subject} 的{level}学位项目。",
@@ -774,7 +855,7 @@ TRANSLATIONS = {
         "ko": "네, {subject} {level} 학위 과정이 있습니다.",
     },
     "degree_exists_no": {
-        "en": "Sorry, a {subject} {level} degree is not listed in the current records.",
+        "en": "Sorry, {subject} is not listed at the {level} level in current records.",
         "tr": "Üzgünüm, mevcut kayıtlarda {subject} için {level} bir derece programı listelenmiyor.",
         "es": "Lo siento, no aparece un programa de {level} en {subject} en los registros actuales.",
         "zh": "抱歉，当前记录中未列出 {subject} 的{level}学位项目。",
@@ -805,6 +886,54 @@ TRANSLATIONS = {
         "ur": "موجودہ ریکارڈ میں لائبریری کے اوقات نہیں ملے۔",
         "ko": "현재 기록에서 도서관 운영 시간을 찾지 못했습니다.",
     },
+    "gym_hours_intro": {
+        "en": "Miron Student Center building hours:",
+        "tr": "Miron Student Center bina saatleri:",
+        "es": "Horario del edificio Miron Student Center:",
+        "zh": "Miron 学生活动中心开放时间：",
+        "ur": "Miron Student Center عمارت کے اوقات:",
+        "ko": "Miron Student Center 건물 운영 시간:",
+    },
+    "pool_hours_intro": {
+        "en": "D'Angola Pool hours:",
+        "tr": "D'Angola Havuzu saatleri:",
+        "es": "Horario de la piscina D'Angola:",
+        "zh": "D'Angola 泳池开放时间：",
+        "ur": "D'Angola پول کے اوقات:",
+        "ko": "D'Angola 수영장 운영 시간:",
+    },
+    "pool_hours_unavailable": {
+        "en": "I couldn't find official pool hours in current records. If you want, I can show the nearest athletics facilities on the map.",
+        "tr": "Mevcut kayıtlarda resmi havuz saatlerini bulamadım. İstersen haritada en yakın atletizm tesislerini gösterebilirim.",
+        "es": "No encontré horario oficial de la piscina en los registros actuales. Si quieres, puedo mostrar las instalaciones deportivas cercanas en el mapa.",
+        "zh": "我在当前记录中未找到官方泳池开放时间。如需，我可以在地图上显示附近体育设施。",
+        "ur": "موجودہ ریکارڈ میں سوئمنگ پول کے باضابطہ اوقات نہیں ملے۔ چاہیں تو میں نقشے پر قریب ترین کھیلوں کی سہولیات دکھا سکتا ہوں۔",
+        "ko": "현재 기록에서 수영장 공식 운영 시간을 찾지 못했습니다. 원하면 지도에서 가까운 체육 시설을 보여드릴 수 있습니다.",
+    },
+    "hours_target_unavailable": {
+        "en": "I couldn't find operating hours for {target} in current records.",
+        "tr": "Mevcut kayıtlarda {target} için çalışma saatlerini bulamadım.",
+        "es": "No encontré horarios de atención para {target} en los registros actuales.",
+        "zh": "我在当前记录中未找到 {target} 的开放时间。",
+        "ur": "موجودہ ریکارڈ میں {target} کے اوقات نہیں ملے۔",
+        "ko": "현재 기록에서 {target} 운영 시간을 찾지 못했습니다.",
+    },
+    "hours_target_prompt": {
+        "en": "Please specify which place you mean, for example: library, gym, or pool.",
+        "tr": "Lütfen hangi yeri kastettiğini belirt: örneğin kütüphane, spor salonu veya havuz.",
+        "es": "Especifica qué lugar quieres consultar, por ejemplo: biblioteca, gimnasio o piscina.",
+        "zh": "请说明你要查询的地点，例如：图书馆、健身房或游泳池。",
+        "ur": "براہِ کرم جگہ واضح کریں، مثال کے طور پر: لائبریری، جم یا پول۔",
+        "ko": "어느 장소인지 지정해 주세요. 예: 도서관, 체육관, 수영장.",
+    },
+    "bot_identity_intro": {
+        "en": "I’m the Kean Global concierge assistant for the Kean University website. I answer questions in simple, easy language and can also help with campus locations, maps, and directions.",
+        "tr": "Ben Kean University web sitesi için Kean Global danışma asistanıyım. Soruları basit ve anlaşılır bir dille yanıtlarım; ayrıca kampüs konumları, haritalar ve yön tarifleri konusunda da yardımcı olabilirim.",
+        "es": "Soy el asistente de conserjería Kean Global para el sitio web de Kean University. Respondo preguntas con un lenguaje simple y claro, y también puedo ayudar con ubicaciones del campus, mapas y direcciones.",
+        "zh": "我是 Kean University 网站的 Kean Global 校园礼宾助理。我会用简单易懂的语言回答问题，也可以帮助你查找校园地点、地图和路线。",
+        "ur": "میں Kean University ویب سائٹ کے لیے Kean Global کنسیئر اسسٹنٹ ہوں۔ میں سوالوں کے جواب آسان اور سادہ زبان میں دیتا ہوں، اور کیمپس مقامات، نقشے اور راستوں میں بھی مدد کر سکتا ہوں۔",
+        "ko": "저는 Kean University 웹사이트용 Kean Global 안내 도우미입니다. 쉽고 간단한 언어로 질문에 답하고, 캠퍼스 위치, 지도, 길찾기도 도와드릴 수 있습니다.",
+    },
     "parking_ticket_fees_intro": {
         "en": "Here are the parking ticket fees listed by Kean:",
         "tr": "Kean tarafından listelenen park ihlali ücretleri:",
@@ -828,6 +957,39 @@ TRANSLATIONS = {
         "zh": "我可以确认 Kean 公布了停车违规费用表，但当前记录中未能解析出逐项金额。",
         "ur": "میں تصدیق کر سکتا ہوں کہ Kean پارکنگ خلاف ورزی فیس شیڈول شائع کرتا ہے، لیکن موجودہ ریکارڈ سے درست مد وار فیس نہیں نکال سکا۔",
         "ko": "Kean이 주차 위반 요금표를 게시하는 것은 확인했지만, 현재 기록에서 항목별 정확한 요금을 추출하지 못했습니다.",
+    },
+    "course_repeat_summary": {
+        "en": "Here’s a quick summary of Kean’s course repeat policy:\n1. Undergraduate students may repeat a course once if they earned F, D, C, C+, AF, or WD.\n2. Graduate-level coursework cannot be repeated or recalculated.\n3. If you earned B- or higher, you need approval to repeat the course.\n4. For courses completed before Fall 2024, grade recalculation requires a Registrar form.\n5. For more details, you can review Kean’s policy here: https://www.kean.edu",
+    },
+    "program_not_found": {
+        "en": "Sorry, I couldn’t find that major or program in my current Kean records. You can browse Kean’s academic programs here: https://www.kean.edu/academics",
+    },
+    "program_details_intro": {
+        "en": "Here’s a quick overview of {name}:",
+    },
+    "program_more_info": {
+        "en": "For more information, you can check: {url}",
+    },
+    "program_contact": {
+        "en": "Program contact: {contact}",
+    },
+    "admissions_summary": {
+        "en": "Here’s a quick admissions overview:\n1. Freshman, transfer, and readmit applicants use Kean’s application portal, while graduate and international applicants use apply.kean.edu.\n2. Most application fees listed in current records are $75.\n3. For general admissions help, contact Kean Admissions at (908) 737-7100 or admitme@kean.edu.\n4. You can start here: https://www.kean.edu/apply-now",
+    },
+    "graduation_summary": {
+        "en": "Here’s a quick graduation overview:\n1. Degree candidates must apply in KeanWISE to be considered for graduation.\n2. The graduation application fee listed in current records is $100.\n3. Current records say degrees are conferred in January, May, and August.\n4. For graduation questions, contact graduation@kean.edu or (908) 737-0400.\n5. More information is available on Kean’s website: https://www.kean.edu",
+    },
+    "financial_aid_summary": {
+        "en": "Here’s what I found about Financial Aid:\n1. The Financial Aid office helps with FAFSA, grants, loans, and work-study.\n2. Location: Administration Building, 1st floor.\n3. Hours: Monday to Thursday 8 a.m. to 6 p.m.; Friday 8 a.m. to 5 p.m.\n4. Contact: (908) 737-3190 or finaid@kean.edu.\n5. More information: https://www.kean.edu/offices/financial-aid",
+    },
+    "registrar_summary": {
+        "en": "Here’s what I found about the Registrar’s Office:\n1. The office handles registration, transcripts, grade recalculation, graduation evaluation, and enrollment verification.\n2. Location: Administration Building, 1st Floor.\n3. Hours: Monday to Thursday 8 a.m. to 6 p.m.; Friday 8 a.m. to 5 p.m.\n4. Contact: regme@kean.edu or (908) 737-0400.",
+    },
+    "one_stop_summary": {
+        "en": "Here’s what I found about the One Stop Service Center:\n1. One Stop helps with forms such as change of major, graduation applications, registration petitions, grade recalculations, and residency petitions.\n2. Location: CAS Lobby.\n3. Hours: Monday to Thursday 9 a.m. to 8 p.m.; Friday 9 a.m. to 5 p.m.; Saturday 9:30 a.m. to 2 p.m.\n4. Contact: regme@kean.edu or (908) 737-0400.",
+    },
+    "dining_summary": {
+        "en": "Here are the main dining locations and hours I found:\n1. Marketplace: Mon-Thu 9 a.m. to 11 p.m.; Fri 9 a.m. to 9 p.m.; Sat 12 p.m. to 6 p.m.; Sun 1 p.m. to 6 p.m.\n2. MSC Food Court: Mon-Thu 7:30 a.m. to 7 p.m.; Fri 7:30 a.m. to 3 p.m.; Sat 8 a.m. to 3 p.m.; Sun closed.\n3. Cougar’s Den: Mon-Thu 11 a.m. to 11 p.m.; Fri 11 a.m. to 5 p.m.; Sat-Sun closed.\n4. CAS Starbucks: Mon-Thu 7:30 a.m. to 5 p.m.; Fri-Sun closed.\n5. Library Starbucks: Mon-Thu 8 a.m. to 10 p.m.; Fri-Sat 8 a.m. to 4 p.m.; Sun 1 p.m. to 8 p.m.",
     },
 }
 
@@ -898,6 +1060,20 @@ CALENDAR_EVENT_TRANSLATIONS = {
         "ur": "امتحانی ہفتہ",
         "ko": "시험 주간",
     },
+    "summer session i begins": {
+        "tr": "Yaz Dönemi I Başlangıcı",
+        "es": "Inicio de Verano I",
+        "zh": "夏季第一学段开始",
+        "ur": "سمر سیشن اوّل کا آغاز",
+        "ko": "여름학기 I 시작",
+    },
+    "summer session ii begins": {
+        "tr": "Yaz Dönemi II Başlangıcı",
+        "es": "Inicio de Verano II",
+        "zh": "夏季第二学段开始",
+        "ur": "سمر سیشن دوم کا آغاز",
+        "ko": "여름학기 II 시작",
+    },
 }
 
 def detect_language(text: str) -> str:
@@ -912,18 +1088,82 @@ def detect_language(text: str) -> str:
         return "ur"
 
     tr_chars = set("çğıöşü")
-    if any(ch in tr_chars for ch in t) or any(
-        token in t_tokens for token in {"nerede", "nasil", "ne", "zaman", "guz", "bahar", "donem", "donemi", "basliyor"}
-    ):
+    if any(ch in tr_chars for ch in t):
         return "tr"
-
-    if any(ch in t for ch in ("¿", "¡")) or any(
-        token in t_tokens
-        for token in {"donde", "cuando", "que", "semestre", "otono", "primavera", "parqueo", "comida", "campus"}
-    ):
+    if any(ch in t for ch in ("¿", "¡", "ñ")):
         return "es"
 
+    lang_scores = {"tr": 0, "es": 0, "zh": 0, "ko": 0}
+    for lang_code, keywords in LANGUAGE_HINT_KEYWORDS.items():
+        for keyword in keywords:
+            if keyword_in_text(t_norm, t_tokens, keyword):
+                lang_scores[lang_code] += max(1, len(keyword) // 2)
+
+    best_lang = max(lang_scores, key=lang_scores.get)
+    if lang_scores[best_lang] >= 2:
+        return best_lang
+
     return "en"
+
+async def call_ollama(messages: list[dict], num_predict: Optional[int] = None) -> str:
+    payload = {
+        "model": MODEL_NAME,
+        "messages": messages,
+        "stream": False,
+        "options": {
+            "num_predict": num_predict or OLLAMA_NUM_PREDICT,
+            "temperature": OLLAMA_TEMPERATURE,
+            "num_ctx": OLLAMA_NUM_CTX,
+        },
+        "keep_alive": "30m",
+    }
+
+    async with httpx.AsyncClient(timeout=build_ollama_timeout()) as client:
+        health = await client.get(OLLAMA_HEALTH_URL, timeout=OLLAMA_HEALTH_TIMEOUT_SECONDS)
+        health.raise_for_status()
+
+        last_error = None
+        for _ in range(max(1, OLLAMA_MAX_RETRIES + 1)):
+            try:
+                response = await asyncio.wait_for(
+                    client.post(OLLAMA_URL, json=payload),
+                    timeout=OLLAMA_TOTAL_TIMEOUT_SECONDS,
+                )
+                response.raise_for_status()
+                data = response.json()
+                return data.get("message", {}).get("content", "No response.")
+            except (httpx.HTTPError, asyncio.TimeoutError) as exc:
+                last_error = exc
+
+        if last_error:
+            raise last_error
+        raise RuntimeError("Unknown Ollama error")
+
+async def localize_answer_text(answer: str, lang: str) -> str:
+    if lang == "en" or not answer.strip():
+        return answer
+
+    lang_name = LANGUAGE_NAMES.get(lang, "English")
+    try:
+        translated = await call_ollama(
+            [
+                {
+                    "role": "system",
+                    "content": (
+                        "You are translating a Kean University chatbot reply. "
+                        f"Translate the reply into {lang_name}. "
+                        "Keep the meaning exact. Preserve URLs, phone numbers, emails, bullets, numbering, and line breaks. "
+                        "Do not add explanations, do not cite sources, and do not invent facts. "
+                        "Keep official building, office, and program names unchanged unless there is a standard translation in the original text."
+                    ),
+                },
+                {"role": "user", "content": answer},
+            ],
+            num_predict=max(180, min(500, len(answer) // 2 + 80)),
+        )
+        return translated.strip() or answer
+    except Exception:
+        return answer
 
 def trn(key: str, lang: str, **kwargs) -> str:
     lang = lang if lang in SUPPORTED_LANGS else "en"
@@ -972,28 +1212,439 @@ def haversine_meters(point_a: tuple[float, float], point_b: tuple[float, float])
 
 def load_campus_locations():
     rows = []
-    if not LOCATION_CSV_PATH.exists():
+    if not LOCATION_JSON_PATH.exists():
         return rows
 
-    with open(LOCATION_CSV_PATH, "r", encoding="utf-8-sig", newline="") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            row_id = (row.get("id") or "").strip()
-            name = (row.get("name") or "").strip()
-            if not row_id or not name:
-                continue
-            row_type = (row.get("type") or "").strip().lower() or "location"
-            rows.append(
-                {
-                    "id": row_id,
-                    "name": name,
-                    "campus": (row.get("campus") or "").strip() or "Main",
-                    "type": row_type,
-                    "parent": (row.get("parent") or "").strip(),
-                    "position": parse_position(row.get("") or ""),
-                }
-            )
+    with open(LOCATION_JSON_PATH, "r", encoding="utf-8") as f:
+        try:
+            entries = json.load(f)
+        except json.JSONDecodeError:
+            return rows
+
+    for entry in entries:
+        row_id = str(entry.get("id") or "").strip()
+        name = str(entry.get("name") or "").strip()
+        if not row_id or not name:
+            continue
+
+        position = None
+        latitude = entry.get("latitude")
+        longitude = entry.get("longitude")
+        if isinstance(latitude, (int, float)) and isinstance(longitude, (int, float)):
+            position = (float(latitude), float(longitude))
+        elif entry.get("latlng"):
+            position = parse_position(str(entry.get("latlng")))
+        else:
+            coordinates = entry.get("coordinates")
+            if (
+                isinstance(coordinates, list)
+                and len(coordinates) >= 2
+                and isinstance(coordinates[0], (int, float))
+                and isinstance(coordinates[1], (int, float))
+            ):
+                position = (float(coordinates[1]), float(coordinates[0]))
+
+        row_type = str(entry.get("type") or "").strip().lower() or "location"
+        rows.append(
+            {
+                "id": row_id,
+                "name": name,
+                "campus": str(entry.get("campus") or "").strip() or "Main",
+                "type": row_type,
+                "parent": str(entry.get("parent") or "").strip(),
+                "position": position,
+            }
+        )
     return rows
+
+def load_program_catalog():
+    if not PROGRAMS_FILE.exists():
+        return []
+    try:
+        with open(PROGRAMS_FILE, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+    except Exception:
+        return []
+
+    programs = raw.get("programs", {}) if isinstance(raw, dict) else {}
+    catalog = []
+    for program_id, payload in programs.items():
+        if not isinstance(payload, dict):
+            continue
+        metadata = payload.get("metadata") or {}
+        details = payload.get("details") or {}
+        curriculum = payload.get("curriculum") or {}
+        full_name = str(metadata.get("full_name") or program_id).strip()
+        description = str(details.get("description") or "").strip()
+        contact = metadata.get("contact") or {}
+        contact_parts = [str(contact.get("email") or "").strip(), str(contact.get("phone") or "").strip()]
+        contact_text = " | ".join(part for part in contact_parts if part)
+
+        catalog_url = ""
+        for course_group in ("core_courses", "elective_courses"):
+            courses = curriculum.get(course_group) or {}
+            if isinstance(courses, dict):
+                for course in courses.values():
+                    if isinstance(course, dict) and course.get("url"):
+                        catalog_url = str(course.get("url")).strip()
+                        break
+            if catalog_url:
+                break
+
+        name_tokens = meaningful_tokens(full_name)
+        catalog.append(
+            {
+                "id": program_id,
+                "name": full_name,
+                "description": description,
+                "contact": contact_text,
+                "url": KEAN_PROGRAMS_URL,
+                "tokens": name_tokens | meaningful_tokens(description) | meaningful_tokens(program_id.replace("_", " ")),
+            }
+        )
+    return catalog
+
+def is_course_repeat_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "retake",
+            "repeat a course",
+            "repeat course",
+            "course repeat",
+            "grade recalculation",
+            "retakes",
+            "repeats",
+            "repetir clase",
+            "repetir curso",
+            "retomar clase",
+            "retomar la misma clase",
+            "volver a tomar una clase",
+            "volver a tomar un curso",
+            "tomar la misma clase",
+            "tomar una clase",
+            "tomar un curso",
+            "cuantas veces puedo tomar",
+            "cuántas veces puedo tomar",
+            "cuantas veces puedo retomar",
+            "cuántas veces puedo retomar",
+            "tekrar ders",
+            "ders tekrari",
+            "ders tekrarı",
+            "재수강",
+            "重修",
+        )
+    )
+
+def is_admissions_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "admission",
+            "admissions",
+            "apply",
+            "application",
+            "accepted",
+            "readmit",
+            "transfer admission",
+            "graduate admission",
+            "cougar app",
+            "admisiones",
+            "solicitud",
+            "aplicar",
+            "admission office",
+            "basvuru",
+            "başvuru",
+            "kabul",
+            "입학",
+            "申请",
+        )
+    )
+
+def is_graduation_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "graduation",
+            "graduate",
+            "commencement",
+            "diploma",
+            "degree conferral",
+            "honors",
+            "graduation fee",
+            "graduacion",
+            "graduación",
+            "diploma",
+            "mezuniyet",
+            "mezun olma",
+            "졸업",
+            "毕业",
+        )
+    ) and not is_degree_availability_question(text)
+
+def is_financial_aid_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "financial aid",
+            "fafsa",
+            "grant",
+            "loan",
+            "scholarship",
+            "work study",
+            "ayuda financiera",
+            "beca",
+            "prestamo",
+            "préstamo",
+            "mali yardim",
+            "mali yardım",
+            "burs",
+            "kredi",
+            "장학금",
+            "학자금",
+            "助学金",
+            "贷款",
+        )
+    )
+
+def is_registrar_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "registrar",
+            "transcript",
+            "enrollment verification",
+            "grade recalculation",
+            "registro",
+            "expediente",
+            "certificacion de estudios",
+            "certificación de estudios",
+            "transkript",
+            "ogrenci kayit",
+            "öğrenci kayıt",
+            "성적표",
+            "재학증명",
+            "成绩单",
+            "在学证明",
+        )
+    )
+
+def is_one_stop_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "one stop",
+            "one-stop",
+            "change of major form",
+            "registration petition",
+            "residency petition",
+            "cambio de especialidad",
+            "peticion de registro",
+            "petición de registro",
+            "major degistirme",
+            "major değiştirme",
+            "kayit dilekcesi",
+            "kayıt dilekçesi",
+            "원스톱",
+            "전공 변경",
+            "一站式",
+            "转专业",
+        )
+    )
+
+def is_dining_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "dining",
+            "food court",
+            "marketplace",
+            "starbucks",
+            "cougar's den",
+            "cougars den",
+            "cafe yumba",
+            "restaurant",
+            "eat on campus",
+            "comida",
+            "cafeteria",
+            "cafetería",
+            "restaurante",
+            "yemek",
+            "kafeterya",
+            "kantin",
+            "식당",
+            "음식",
+            "餐厅",
+            "食堂",
+        )
+    )
+
+def is_student_accounts_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "tuition",
+            "bursar",
+            "student accounting",
+            "payment plan",
+            "payment plans",
+            "monthly payment",
+            "installment plan",
+            "bill",
+            "refund",
+            "late payment fee",
+            "matricula",
+            "matrícula",
+            "plan de pago",
+            "cuotas",
+            "ucret",
+            "ücret",
+            "odeme plani",
+            "ödeme planı",
+            "등록금",
+            "분할 납부",
+            "学费",
+            "付款计划",
+        )
+    )
+
+def is_smoking_policy_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "smoke",
+            "smoking",
+            "tobacco",
+            "vape",
+            "vaping",
+            "cigarette",
+            "cannabis",
+            "marijuana",
+            "fumar",
+            "tabaco",
+            "vapear",
+            "sigara",
+            "tutun",
+            "tütün",
+            "icmek",
+            "içmek",
+            "흡연",
+            "담배",
+            "전자담배",
+            "吸烟",
+            "抽烟",
+        )
+    )
+
+def build_course_repeat_answer(lang: str) -> str:
+    return trn("course_repeat_summary", lang)
+
+def build_admissions_answer(lang: str) -> str:
+    return trn("admissions_summary", lang)
+
+def build_graduation_answer(lang: str) -> str:
+    return trn("graduation_summary", lang)
+
+def build_financial_aid_answer(lang: str) -> str:
+    return trn("financial_aid_summary", lang)
+
+def build_registrar_answer(lang: str) -> str:
+    return trn("registrar_summary", lang)
+
+def build_one_stop_answer(lang: str) -> str:
+    return trn("one_stop_summary", lang)
+
+def build_dining_answer(lang: str) -> str:
+    return trn("dining_summary", lang)
+
+def build_student_accounts_answer(lang: str) -> str:
+    return (
+        "Yes. Kean offers payment plans through the Office of Student Accounting.\n"
+        "1. Fall and spring payment plans are available in 3, 4, or 5 monthly installments.\n"
+        "2. Summer payment plans are available in 2 or 3 monthly installments.\n"
+        "3. Plans are set up directly with Kean through your Student Account Suite in KeanWISE under View/Pay My Bill > Payment Plan Management.\n"
+        "4. A non-refundable $40 plan initiation fee applies.\n"
+        "5. More information: https://www.kean.edu/offices/student-accounting"
+    )
+
+def build_smoking_policy_answer(lang: str) -> str:
+    return (
+        "No. You cannot smoke or vape inside campus buildings, residence halls, offices, state vehicles, or around the Child Care and Development Center.\n"
+        "1. If smoking is permitted outdoors, you must stay at least 3 feet from building entrances.\n"
+        "2. The policy includes cigarettes, cigars, hookahs, pipes, smokeless tobacco, e-cigarettes, vapes, and similar devices.\n"
+        "3. Cannabis or marijuana is not allowed anywhere on Kean property, even with a prescription.\n"
+        "4. Students who violate the policy may face fines and conduct sanctions.\n"
+        "5. More information: https://www.kean.edu"
+    )
+
+def find_program_match(text: str) -> Optional[dict]:
+    if not program_catalog:
+        return None
+
+    q = normalize(text)
+    q_tokens = meaningful_tokens(text)
+    if not q_tokens:
+        q_tokens = tokenize(text)
+
+    best_match = None
+    best_score = 0
+    for program in program_catalog:
+        name_norm = normalize(program["name"])
+        score = 0
+        overlap = len(q_tokens & program["tokens"])
+        if overlap:
+            score += overlap * 20
+        if name_norm and name_norm in q:
+            score += 120
+        if q in name_norm and len(q) >= 4:
+            score += 90
+        if score > best_score:
+            best_score = score
+            best_match = program
+
+    if best_match and best_score >= 40:
+        return best_match
+    return None
+
+def build_program_answer(program: dict, lang: str) -> str:
+    lines = [trn("program_details_intro", lang, name=program["name"])]
+    if program.get("description"):
+        lines.append(program["description"])
+    lines.append(trn("program_more_info", lang, url=program.get("url") or KEAN_PROGRAMS_URL))
+    if program.get("contact"):
+        lines.append(trn("program_contact", lang, contact=program["contact"]))
+    return "\n".join(lines)
+
+def build_degree_availability_answer(
+    exists: bool,
+    subject: str,
+    level: str,
+    lang: str,
+    program: Optional[dict] = None,
+) -> str:
+    answer = trn("degree_exists_yes" if exists else "degree_exists_no", lang, subject=subject, level=level)
+    if exists:
+        url = (program or {}).get("url") or KEAN_PROGRAMS_URL
+        answer = f"{answer}\n{trn('program_more_info', lang, url=url)}"
+    return answer
 
 def load_fallback_rag_docs():
     docs = []
@@ -1004,12 +1655,10 @@ def load_fallback_rag_docs():
             continue
         if file.name in EXCLUDED_RAG_FILE_NAMES:
             continue
-        if file.suffix.lower() not in {".txt", ".json"}:
+        if file.suffix.lower() not in {"", ".txt", ".json"}:
             continue
         try:
-            text = file.read_text(encoding="utf-8")
-        except UnicodeDecodeError:
-            text = file.read_text(encoding="latin-1")
+            text = read_text_with_fallback(file)
         except Exception:
             continue
 
@@ -1410,6 +2059,7 @@ def find_closest_parking_lot(reference_location_id: str) -> Optional[dict]:
 
 def detect_faq_intent(text: str) -> Optional[str]:
     q = normalize(text)
+    q_tokens = tokenize(text)
     best_topic = None
     best_score = 0
 
@@ -1419,7 +2069,7 @@ def detect_faq_intent(text: str) -> Optional[str]:
             normalized_keyword = normalize(keyword)
             if not normalized_keyword:
                 continue
-            if normalized_keyword in q:
+            if keyword_in_text(q, q_tokens, normalized_keyword):
                 score += len(normalized_keyword)
         if score > best_score:
             best_score = score
@@ -1430,9 +2080,9 @@ def detect_faq_intent(text: str) -> Optional[str]:
 def detect_degree_level(text: str) -> str:
     q = normalize(text)
     q_tokens = tokenize(text)
-    if any(keyword_in_text(q, q_tokens, k) for k in ("master", "masters", "graduate", "postgraduate", "mba", "ma", "ms")):
+    if any(keyword_in_text(q, q_tokens, k) for k in ("master", "masters", "graduate", "postgraduate", "mba", "ma", "ms", "maestria", "maestría", "posgrado", "yuksek lisans", "yüksek lisans", "lisansustu", "lisansüstü", "석사", "研究生", "硕士")):
         return "graduate/master"
-    if any(keyword_in_text(q, q_tokens, k) for k in ("undergraduate", "undergrad", "bachelor", "major", "ba", "bs")):
+    if any(keyword_in_text(q, q_tokens, k) for k in ("undergraduate", "undergrad", "bachelor", "major", "ba", "bs", "pregrado", "licenciatura", "lisans", "학부", "本科")):
         return "undergraduate"
     return "degree"
 
@@ -1474,7 +2124,7 @@ def is_degree_availability_question(text: str) -> bool:
     )
     asks_degree = any(
         keyword_in_text(q, q_tokens, k)
-        for k in ("major", "bachelor", "undergrad", "undergraduate", "master", "graduate", "degree", "program")
+        for k in ("major", "bachelor", "undergrad", "undergraduate", "master", "graduate", "degree", "program", "carrera", "especialidad", "maestria", "maestría", "lisans", "yuksek lisans", "yüksek lisans", "전공", "학위", "硕士", "专业")
     )
     return asks_existence and asks_degree
 
@@ -1503,12 +2153,55 @@ def is_program_follow_up_question(text: str) -> bool:
         )
     )
 
+def is_identity_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, k)
+        for k in (
+            "who are you",
+            "what are you",
+            "are you a bot",
+            "what can you do",
+            "quien eres",
+            "qué eres",
+            "que eres",
+            "quien sos",
+            "sen kimsin",
+            "nesin",
+            "你是谁",
+            "你是什麼",
+            "کون ہو",
+            "آپ کون ہیں",
+            "너는 누구야",
+            "뭐 할 수 있어",
+        )
+    )
+
 def is_hours_question(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
     return any(
         keyword_in_text(q, q_tokens, k)
-        for k in ("hours", "open hours", "opening hours", "what time", "schedule", "horario", "saat", "开放时间", "시간", "اوقات")
+        for k in (
+            "hours",
+            "open hours",
+            "opening hours",
+            "what time",
+            "schedule",
+            "horario",
+            "hora",
+            "abierto",
+            "saat",
+            "acik",
+            "açık",
+            "开放时间",
+            "营业时间",
+            "시간",
+            "영업 시간",
+            "운영 시간",
+            "اوقات",
+        )
     )
 
 def is_library_target(text: str) -> bool:
@@ -1516,11 +2209,23 @@ def is_library_target(text: str) -> bool:
     q_tokens = tokenize(text)
     return any(
         keyword_in_text(q, q_tokens, k)
-        for k in ("library", "thompson", "nancy thompson library")
+        for k in ("library", "thompson", "nancy thompson library", "biblioteca", "kutuphane", "kütüphane", "图书馆", "도서관")
     )
 
+def detect_hours_target(text: str) -> Optional[str]:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+
+    if any(keyword_in_text(q, q_tokens, k) for k in ("library", "thompson", "nancy thompson library", "biblioteca", "kutuphane", "kütüphane", "图书馆", "도서관")):
+        return "library"
+    if any(keyword_in_text(q, q_tokens, k) for k in ("gym", "fitness center", "recreation center", "harwood", "arena", "gimnasio", "spor salonu", "체육관", "健身房")):
+        return "gym"
+    if any(keyword_in_text(q, q_tokens, k) for k in ("pool", "swimming pool", "natatorium", "aquatic", "piscina", "havuz", "수영장", "游泳池")):
+        return "pool"
+    return None
+
 def build_library_hours_answer(lang: str) -> str:
-    hours_file = RAG_DATA_FOLDER / "Hours of Operation.txt"
+    hours_file = DATA_FOLDER / "Hours of Operation.txt"
     if not hours_file.exists():
         return trn("library_hours_unavailable", lang)
 
@@ -1532,21 +2237,27 @@ def build_library_hours_answer(lang: str) -> str:
     lines = [line.strip() for line in raw.splitlines()]
     target_idx = -1
     for idx, line in enumerate(lines):
-        if normalize(line) == "nancy thompson library":
+        line_norm = normalize(line)
+        if line_norm in {"nancy thompson library", "kean university thompson library"}:
             target_idx = idx
             break
     if target_idx < 0:
         return trn("library_hours_unavailable", lang)
 
     schedule_lines = []
-    for line in lines[target_idx + 1 : target_idx + 12]:
+    for line in lines[target_idx + 1 : target_idx + 18]:
         if not line:
             if schedule_lines:
                 break
             continue
         line_norm = normalize(line)
-        if any(day in line_norm for day in ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")):
-            schedule_lines.append(line)
+        if "====" in line:
+            break
+        if any(
+            line_norm.startswith(day)
+            for day in ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
+        ):
+            schedule_lines.append(line.replace("\t", " "))
 
     if not schedule_lines:
         return trn("library_hours_unavailable", lang)
@@ -1555,6 +2266,100 @@ def build_library_hours_answer(lang: str) -> str:
     for item in schedule_lines:
         answer_lines.append(f"- {localize_date_text(item, lang)}")
     return "\n".join(answer_lines)
+
+def _extract_hours_section(raw: str, anchor_keywords: tuple[str, ...], stop_markers: tuple[str, ...]) -> list[str]:
+    lines = [line.strip() for line in raw.splitlines()]
+    start_idx = -1
+    for idx, line in enumerate(lines):
+        line_norm = normalize(line)
+        if any(keyword in line_norm for keyword in anchor_keywords):
+            start_idx = idx
+            break
+    if start_idx < 0:
+        return []
+
+    section = []
+    for line in lines[start_idx + 1 : start_idx + 24]:
+        if not line:
+            if section:
+                break
+            continue
+        line_norm = normalize(line)
+        if any(marker in line_norm for marker in stop_markers):
+            break
+        if ":" in line and any(
+            day in line_norm
+            for day in ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
+        ):
+            section.append(line)
+        elif "to" in line_norm and any(
+            day in line_norm
+            for day in ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
+        ):
+            section.append(line)
+    return section
+
+def build_target_hours_answer(target: str, lang: str) -> str:
+    if target == "library":
+        return build_library_hours_answer(lang)
+
+    hours_file = DATA_FOLDER / "Hours of Operation.txt"
+    if not hours_file.exists():
+        return trn("hours_target_unavailable", lang, target=target)
+
+    try:
+        raw = hours_file.read_text(encoding="utf-8")
+    except Exception:
+        return trn("hours_target_unavailable", lang, target=target)
+
+    if target == "gym":
+        section = _extract_hours_section(
+            raw,
+            anchor_keywords=("miron student center building hours",),
+            stop_markers=("registrar", "office of the registrar", "dining locations"),
+        )
+        if not section:
+            return trn("hours_target_unavailable", lang, target=target)
+        answer_lines = [trn("gym_hours_intro", lang)]
+        for item in section[:6]:
+            answer_lines.append(f"- {localize_date_text(item, lang)}")
+        return "\n".join(answer_lines)
+
+    if target == "pool":
+        lines = [line.strip() for line in raw.splitlines()]
+        target_idx = -1
+        for idx, line in enumerate(lines):
+            line_norm = normalize(line)
+            if "dangola pool" in line_norm or "d angola pool" in line_norm:
+                target_idx = idx
+                break
+        if target_idx < 0:
+            return trn("pool_hours_unavailable", lang)
+
+        schedule_lines = []
+        for line in lines[target_idx + 1 : target_idx + 14]:
+            if not line:
+                if schedule_lines:
+                    break
+                continue
+            if "====" in line:
+                break
+            line_norm = normalize(line)
+            if any(
+                line_norm.startswith(day)
+                for day in ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
+            ):
+                schedule_lines.append(line.replace("\t", " "))
+
+        if not schedule_lines:
+            return trn("pool_hours_unavailable", lang)
+
+        answer_lines = [trn("pool_hours_intro", lang)]
+        for item in schedule_lines:
+            answer_lines.append(f"- {localize_date_text(item, lang)}")
+        return "\n".join(answer_lines)
+
+    return trn("hours_target_prompt", lang)
 
 def degree_exists_in_records(subject_tokens: set[str], level: str) -> bool:
     if not subject_tokens:
@@ -1596,6 +2401,7 @@ def get_time_response(prompt: str):
 campus_locations = load_campus_locations()
 campus_location_by_id = {place["id"]: place for place in campus_locations}
 fallback_rag_docs = load_fallback_rag_docs()
+program_catalog = load_program_catalog()
 FAQ_INTENT_KEYWORDS = load_faq_intent_keywords()
 
 # OLLAMA
@@ -1610,50 +2416,24 @@ def build_ollama_timeout():
 
 async def query_ollama(prompt: str, lang: str):
     lang_name = LANGUAGE_NAMES.get(lang, "English")
-    payload = {
-        "model": MODEL_NAME,
-        "messages": [
+    return await call_ollama(
+        [
             {
                 "role": "system",
                 "content": (
-                    "You are KeanGlobal assistant. "
+                    "You are the Kean Global concierge assistant for the Kean University website. "
                     f"Respond only in {lang_name}. "
-                    "Be concise, factual, and do not invent policy/calendar facts. "
-                    "Keep the response short (max 6 sentences)."
+                    "Use simple, easy-to-understand language. "
+                    "Be concise, factual, polite, and friendly. "
+                    "Default to English unless the user asks in another language. "
+                    "Do not invent policy or calendar facts. "
+                    "Do not cite sources or filenames. "
+                    "Keep the response short and easy to read (max 6 sentences)."
                 ),
             },
             {"role": "user", "content": prompt},
         ],
-        "stream": False,
-        "options": {
-            "num_predict": OLLAMA_NUM_PREDICT,
-            "temperature": OLLAMA_TEMPERATURE,
-            "num_ctx": OLLAMA_NUM_CTX,
-        },
-        "keep_alive": "30m",
-    }
-
-    async with httpx.AsyncClient(timeout=build_ollama_timeout()) as client:
-        # Fast health probe: fail quickly if Ollama endpoint is unreachable.
-        health = await client.get(OLLAMA_HEALTH_URL, timeout=OLLAMA_HEALTH_TIMEOUT_SECONDS)
-        health.raise_for_status()
-
-        last_error = None
-        for _ in range(max(1, OLLAMA_MAX_RETRIES + 1)):
-            try:
-                response = await asyncio.wait_for(
-                    client.post(OLLAMA_URL, json=payload),
-                    timeout=OLLAMA_TOTAL_TIMEOUT_SECONDS,
-                )
-                response.raise_for_status()
-                data = response.json()
-                return data.get("message", {}).get("content", "No response.")
-            except (httpx.HTTPError, asyncio.TimeoutError) as exc:
-                last_error = exc
-
-        if last_error:
-            raise last_error
-        raise RuntimeError("Unknown Ollama error")
+    )
 
 def retrieve_rag_context(question: str, max_results: int = RAG_MAX_RESULTS) -> list[str]:
     try:
@@ -1715,10 +2495,55 @@ def retrieve_fallback_context(
             else:
                 score *= 0.2
 
+        if faq_topic == "admissions":
+            source = str(doc.get("source", "")).lower()
+            if "admissions" in source or "applying" in source:
+                score *= 2.5
+
+        if faq_topic == "hours":
+            source = str(doc.get("source", "")).lower()
+            if "hours of operation" in source:
+                score *= 2.5
+
+        if faq_topic == "policies":
+            source = str(doc.get("source", "")).lower()
+            if "course repeats and retakes" in source or "graduation information" in source:
+                score *= 2.2
+
         if faq_topic == "parking_transport":
             source = str(doc.get("source", "")).lower()
             if "parking" in source:
                 score *= 2.0
+
+        if faq_topic == "housing":
+            source = str(doc.get("source", "")).lower()
+            if "housing" in source or "dorm" in source or "residential" in source:
+                score *= 2.4
+
+        if faq_topic == "health_services":
+            source = str(doc.get("source", "")).lower()
+            if "health" in source or "wellness" in source:
+                score *= 2.4
+
+        if faq_topic == "accessibility":
+            source = str(doc.get("source", "")).lower()
+            if "accessibility" in source:
+                score *= 2.5
+
+        if faq_topic == "bookstore":
+            source = str(doc.get("source", "")).lower()
+            if "bookstore" in source or "barnes" in source:
+                score *= 2.5
+
+        if faq_topic == "student_accounts":
+            source = str(doc.get("source", "")).lower()
+            if "tuition" in source or "bursar" in source:
+                score *= 2.5
+
+        if faq_topic == "smoking_policy":
+            source = str(doc.get("source", "")).lower()
+            if "smoking" in source:
+                score *= 2.5
 
         scored.append((score, doc))
 
@@ -1756,9 +2581,13 @@ def build_rag_prompt(user_text: str, context_blocks: list[str], faq_topic: Optio
 
     intent_line = f"Detected FAQ topic: {faq_topic}.\n" if faq_topic else ""
     return (
-        "You are KeanGlobal assistant. Use campus context first.\n"
-        "If context is missing, say that clearly before a brief best-effort answer.\n"
-        "Keep answers concise and practical.\n\n"
+        "You are the Kean Global concierge assistant for the Kean University website.\n"
+        "Use the provided campus context first.\n"
+        "Use simple, easy-to-understand language.\n"
+        "Be polite, friendly, clear, and easy to read.\n"
+        "Default to English unless the user asks in another language.\n"
+        "Do not mention sources or filenames in the answer.\n"
+        "If the information is not available in the context, apologize briefly and direct the user to https://www.kean.edu.\n\n"
         f"{intent_line}"
         f"Context:\n{joined_context}\n\n"
         f"User question: {user_text}"
@@ -1766,7 +2595,7 @@ def build_rag_prompt(user_text: str, context_blocks: list[str], faq_topic: Optio
 
 def build_fallback_answer(question: str, context_blocks: list[str], lang: str) -> str:
     if not context_blocks:
-        return trn("fallback_no_context", lang)
+        return trn("faq_no_exact_match", lang)
 
     question_tokens = meaningful_tokens(question)
     if not question_tokens:
@@ -1786,7 +2615,7 @@ def build_fallback_answer(question: str, context_blocks: list[str], lang: str) -
                 best_line = line
 
     if best_line:
-        return trn("fallback_best_match", lang, line=best_line)
+        return best_line
 
     first_block_lines = context_blocks[0].splitlines()
     first_content_line = ""
@@ -1797,7 +2626,7 @@ def build_fallback_answer(question: str, context_blocks: list[str], lang: str) -
             break
     if not first_content_line:
         first_content_line = context_blocks[0][:280]
-    return trn("fallback_top_context", lang, line=first_content_line[:280])
+    return first_content_line[:280]
 
 def _clean_fast_path_line(line: str) -> str:
     cleaned = line.strip()
@@ -1949,9 +2778,7 @@ def build_fast_path_answer(
     body_lines = [trn("fast_path_prefix", lang)]
     for idx, (line, source) in enumerate(selected, start=1):
         snippet = _truncate_snippet(line, max_chars=180)
-        source_name = Path(source).name or source
         body_lines.append(f"{idx}. {snippet}")
-        body_lines.append(f"   Source: {source_name}")
 
     return "\n".join(body_lines)
 
@@ -1969,19 +2796,112 @@ async def chat(req: ChatRequest):
     destination_id = find_location_destination_id(user_text)
     has_location_intent = is_location_question(user_text)
 
-    if is_hours_question(user_text) and is_library_target(user_text):
+    async def localized(answer: str) -> str:
+        return await localize_answer_text(answer, lang)
+
+    if is_identity_question(user_text):
         return {
-            "answer": build_library_hours_answer(lang),
+            "answer": trn("bot_identity_intro", lang),
+            "intent": "general",
+            "response_mode": "identity",
+        }
+
+    if is_hours_question(user_text):
+        hours_target = detect_hours_target(user_text)
+        if hours_target:
+            return {
+                "answer": await localized(build_target_hours_answer(hours_target, lang)),
+                "intent": "faq",
+                "faq_topic": "hours",
+                "response_mode": f"hours_{hours_target}",
+            }
+        return {
+            "answer": trn("hours_target_prompt", lang),
             "intent": "faq",
             "faq_topic": "hours",
-            "response_mode": "hours_library",
+            "response_mode": "hours_target_prompt",
+        }
+
+    if is_course_repeat_question(user_text):
+        return {
+            "answer": await localized(build_course_repeat_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "policies",
+            "response_mode": "course_repeat_policy",
+        }
+
+    if is_admissions_question(user_text):
+        return {
+            "answer": await localized(build_admissions_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "admissions",
+            "response_mode": "admissions_direct",
+        }
+
+    if is_graduation_question(user_text):
+        return {
+            "answer": await localized(build_graduation_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "policies",
+            "response_mode": "graduation_direct",
+        }
+
+    if is_financial_aid_question(user_text):
+        return {
+            "answer": await localized(build_financial_aid_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "financial_aid",
+            "response_mode": "financial_aid_direct",
+        }
+
+    if is_student_accounts_question(user_text):
+        return {
+            "answer": await localized(build_student_accounts_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "student_accounts",
+            "response_mode": "student_accounts_direct",
+        }
+
+    if is_registrar_question(user_text):
+        return {
+            "answer": await localized(build_registrar_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "registration",
+            "response_mode": "registrar_direct",
+        }
+
+    if is_one_stop_question(user_text):
+        return {
+            "answer": await localized(build_one_stop_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "registration",
+            "response_mode": "one_stop_direct",
+        }
+
+    if is_dining_question(user_text):
+        return {
+            "answer": await localized(build_dining_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "hours",
+            "response_mode": "dining_direct",
+        }
+
+    if is_smoking_policy_question(user_text):
+        return {
+            "answer": await localized(build_smoking_policy_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "smoking_policy",
+            "response_mode": "smoking_policy_direct",
         }
 
     if is_program_follow_up_question(user_text):
-        last_subject = conversation_state.get("last_degree_subject")
-        last_level = conversation_state.get("last_degree_level")
-        if last_subject:
-            follow_up_query = f"{last_subject} {last_level or ''} degree program details".strip()
+        current_subject = extract_degree_subject_phrase(user_text) or extract_follow_up_subject_phrase(user_text)
+        current_level = detect_degree_level(user_text)
+        follow_up_subject = (current_subject or conversation_state.get("last_degree_subject") or "").strip()
+        follow_up_level = current_level if current_subject else (conversation_state.get("last_degree_level") or current_level)
+
+        if follow_up_subject:
+            follow_up_query = f"{follow_up_subject} {follow_up_level or ''} degree program details".strip()
             context_blocks = retrieve_fallback_context(follow_up_query, faq_topic="programs")
             follow_up_answer = build_fast_path_answer(
                 follow_up_query,
@@ -1991,8 +2911,10 @@ async def chat(req: ChatRequest):
                 faq_topic="programs",
             )
             if follow_up_answer:
+                conversation_state["last_degree_subject"] = follow_up_subject
+                conversation_state["last_degree_level"] = follow_up_level
                 return {
-                    "answer": follow_up_answer,
+                    "answer": await localized(follow_up_answer),
                     "intent": "faq",
                     "faq_topic": "programs",
                     "sources_used": len(context_blocks),
@@ -2054,7 +2976,7 @@ async def chat(req: ChatRequest):
 
     if is_parking_ticket_fee_question(user_text):
         return {
-            "answer": build_parking_ticket_fee_answer(lang),
+            "answer": await localized(build_parking_ticket_fee_answer(lang)),
             "intent": "faq",
             "faq_topic": "parking_transport",
             "response_mode": "policy_fee_summary",
@@ -2103,11 +3025,12 @@ async def chat(req: ChatRequest):
 
     if is_calendar_question(user_text):
         term = extract_term_from_text(user_text)
+        session = extract_session_from_text(user_text)
         if term:
             matched = next((t for t in calendar_data if term in t), None)
             category = detect_event_category(user_text)
             if matched and category:
-                best_event = find_best_calendar_event(calendar_data[matched], category)
+                best_event = find_best_calendar_event(calendar_data[matched], category, session=session)
                 if best_event:
                     event, date = best_event
                     return {
@@ -2121,14 +3044,37 @@ async def chat(req: ChatRequest):
         level = detect_degree_level(user_text)
         localized_level = localize_degree_level(level, lang)
         subject_label = (subject_phrase or "that subject").strip()
-        exists = degree_exists_in_records(subject_tokens, level)
+        matched_program = find_program_match(subject_phrase or user_text)
+        exists = bool(matched_program) or degree_exists_in_records(subject_tokens, level)
         conversation_state["last_degree_subject"] = subject_label
         conversation_state["last_degree_level"] = level
         return {
-            "answer": trn("degree_exists_yes" if exists else "degree_exists_no", lang, subject=subject_label, level=localized_level),
+            "answer": await localized(
+                build_degree_availability_answer(
+                    exists,
+                    matched_program["name"] if matched_program else subject_label,
+                    localized_level,
+                    lang,
+                    matched_program,
+                )
+            ),
             "intent": "faq",
             "faq_topic": "programs",
             "response_mode": "degree_availability",
+        }
+
+    program_match = find_program_match(user_text)
+    if program_match and (
+        faq_topic == "programs"
+        or any(token in normalize(user_text) for token in ("major", "program", "degree", "curriculum"))
+        or len(tokenize(user_text)) <= 5
+    ):
+        conversation_state["last_degree_subject"] = program_match["name"]
+        return {
+            "answer": await localized(build_program_answer(program_match, lang)),
+            "intent": "faq",
+            "faq_topic": "programs",
+            "response_mode": "program_catalog_direct",
         }
 
     context_blocks = retrieve_rag_context(user_text)
@@ -2140,14 +3086,14 @@ async def chat(req: ChatRequest):
         fast_answer = build_fast_path_answer(user_text, context_blocks, lang, faq_topic=faq_topic)
         if fast_answer:
             return {
-                "answer": fast_answer,
+                "answer": await localized(fast_answer),
                 "intent": "faq",
                 "faq_topic": faq_topic,
                 "sources_used": len(context_blocks),
                 "response_mode": "fast_path",
             }
         return {
-            "answer": trn("faq_no_exact_match", lang),
+            "answer": await localized(trn("program_not_found", lang) if faq_topic == "programs" else trn("faq_no_exact_match", lang)),
             "intent": "faq",
             "faq_topic": faq_topic,
             "sources_used": len(context_blocks),
@@ -2162,25 +3108,25 @@ async def chat(req: ChatRequest):
         fast_answer = build_fast_path_answer(user_text, context_blocks, lang, max_lines=2, faq_topic=faq_topic)
         if fast_answer:
             return {
-                "answer": fast_answer,
+                "answer": await localized(fast_answer),
                 "intent": "faq" if faq_topic else "general",
                 "faq_topic": faq_topic,
                 "sources_used": len(context_blocks),
                 "response_mode": "fast_path_timeout",
             }
-        fallback_answer = build_fallback_answer(user_text, context_blocks, lang)
-        return {"answer": fallback_answer, "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)}
+        fallback_answer = trn("program_not_found", lang) if faq_topic == "programs" else build_fallback_answer(user_text, context_blocks, lang)
+        return {"answer": await localized(fallback_answer), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)}
     except Exception:
         fast_answer = build_fast_path_answer(user_text, context_blocks, lang, max_lines=2, faq_topic=faq_topic)
         if fast_answer:
             return {
-                "answer": fast_answer,
+                "answer": await localized(fast_answer),
                 "intent": "faq" if faq_topic else "general",
                 "faq_topic": faq_topic,
                 "sources_used": len(context_blocks),
                 "response_mode": "fast_path_timeout",
             }
-        fallback_answer = build_fallback_answer(user_text, context_blocks, lang)
-        return {"answer": fallback_answer, "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)}
+        fallback_answer = trn("program_not_found", lang) if faq_topic == "programs" else build_fallback_answer(user_text, context_blocks, lang)
+        return {"answer": await localized(fallback_answer), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)}
 
-    return {"answer": reply, "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)}
+    return {"answer": await localized(reply), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)}

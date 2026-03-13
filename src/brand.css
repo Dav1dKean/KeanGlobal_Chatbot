@@ -193,6 +193,17 @@ body.dark .panel-title {
   margin-bottom: 8px;
 }
 
+.chat-link {
+  color: #1d4ed8;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  word-break: break-word;
+}
+
+.chat-link:hover {
+  color: #1e3a8a;
+}
+
 .bot-rich-source {
   font-size: 12px;
   color: #475569;
@@ -220,6 +231,14 @@ body.dark .msg-user {
 body.dark .msg-bot {
   background: #334155; /* slate */
   color: white;
+}
+
+body.dark .chat-link {
+  color: #93c5fd;
+}
+
+body.dark .chat-link:hover {
+  color: #bfdbfe;
 }
 
 /* ---------- INPUTS ---------- */
@@ -271,7 +290,9 @@ input:focus {
 .main-layout {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  min-height: 0;
 }
 
 @media (max-width: 900px) {
@@ -290,13 +311,23 @@ input:focus {
 }
 
 .main-layout.two-col {
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(280px, 0.52fr) minmax(760px, 1.48fr);
+}
+
+.main-layout.two-col .chat-panel,
+.main-layout.two-col .map-panel {
+  min-height: 0;
+}
+
+.main-layout.two-col .chat-panel {
+  max-width: 520px;
 }
 
 /* ---------- MAP SLIDE ANIMATION ---------- */
 
 .map-panel {
   animation: slideIn 0.3s ease-in-out;
+  min-width: 0;
 }
 
 @keyframes slideIn {
@@ -374,6 +405,7 @@ input:focus {
   align-items: center;
   gap: 12px;
   margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 
 .route-note {
@@ -503,9 +535,19 @@ body.dark .directory-panel {
 
 .building-popup {
   width: min(320px, 76vw);
-  max-height: 260px;
+  max-height: 340px;
   overflow-y: auto;
   padding-right: 4px;
+}
+
+.building-popup-image {
+  display: block;
+  width: 100%;
+  height: 138px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background: #e2e8f0;
 }
 
 .building-popup-title {
@@ -563,6 +605,16 @@ body.dark .building-popup-label {
 body.dark .building-popup-text,
 body.dark .building-popup-list {
   color: #e2e8f0;
+}
+
+@media (max-width: 1200px) {
+  .main-layout.two-col {
+    grid-template-columns: minmax(260px, 0.7fr) minmax(0, 1.3fr);
+  }
+
+  .main-layout.two-col .chat-panel {
+    max-width: none;
+  }
 }
 
 @media (max-width: 900px) {

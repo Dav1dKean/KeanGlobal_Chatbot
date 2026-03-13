@@ -5,6 +5,11 @@ const API_BASE_URLS = ENV_API_BASE_URL
   ? [ENV_API_BASE_URL]
   : ["http://127.0.0.1:8000", "http://localhost:8000"];
 const CHAT_STORAGE_KEY = "keanglobal_chat_messages";
+const URL_PATTERN = /(https?:\/\/[^\s]+)([.,;:!?)]*)/gi;
+const DEFAULT_GREETING = {
+  text: "Hello! How can I help you today? I can answer questions about Kean University and help with campus locations and directions.",
+  sender: "bot"
+};
 
 function shouldOpenMapFromResponse(data, answerText) {
   if (data?.intent === "location") return true;
@@ -16,6 +21,42 @@ function shouldOpenMapFromResponse(data, answerText) {
     text.includes("harita açılıyor") ||
     text.includes("正在打开地图")
   );
+}
+
+function renderLinkedText(text) {
+  const content = String(text || "");
+  const parts = [];
+  let lastIndex = 0;
+
+  content.replace(URL_PATTERN, (match, url, trailing, offset) => {
+    if (offset > lastIndex) {
+      parts.push(content.slice(lastIndex, offset));
+    }
+    parts.push(
+      <a
+        key={`${url}-${offset}`}
+        href={url}
+        target="_blank"
+        rel="noreferrer"
+        className="chat-link"
+      >
+        {url}
+      </a>
+    );
+    if (trailing) {
+      parts.push(trailing);
+    }
+    lastIndex = offset + match.length;
+    return match;
+  });
+
+  if (lastIndex === 0) {
+    return content;
+  }
+  if (lastIndex < content.length) {
+    parts.push(content.slice(lastIndex));
+  }
+  return parts;
 }
 
 function renderBotMessage(message, onSelectSuggestion) {
@@ -38,9 +79,6 @@ function renderBotMessage(message, onSelectSuggestion) {
       continue;
     }
     if (/^source:\s*/i.test(line)) {
-      if (currentItem) {
-        currentItem.source = line.replace(/^source:\s*/i, "").trim();
-      }
       continue;
     }
     if (currentItem) {
@@ -52,7 +90,7 @@ function renderBotMessage(message, onSelectSuggestion) {
   if (!listItems.length) {
     return (
       <>
-        <div>{text}</div>
+        <div>{renderLinkedText(text)}</div>
         {foodSuggestions.length > 0 && (
           <div className="chat-suggestion-group">
             {foodSuggestions.map(suggestion => (
@@ -73,12 +111,11 @@ function renderBotMessage(message, onSelectSuggestion) {
 
   return (
     <div className="bot-rich-msg">
-      <div className="bot-rich-intro">{lines[0]}</div>
+      <div className="bot-rich-intro">{renderLinkedText(lines[0])}</div>
       <ol className="bot-rich-list">
         {listItems.map((item, index) => (
           <li key={`${item.body}-${index}`} className="bot-rich-item">
-            <div>{item.body}</div>
-            {item.source && <div className="bot-rich-source">Source: {item.source}</div>}
+            <div>{renderLinkedText(item.body)}</div>
           </li>
         ))}
       </ol>
@@ -105,9 +142,9 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
   const [messages, setMessages] = useState(() => {
     try {
       const saved = localStorage.getItem(CHAT_STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
+      return saved ? JSON.parse(saved) : [DEFAULT_GREETING];
     } catch {
-      return [];
+      return [DEFAULT_GREETING];
     }
   });
   const [input, setInput] = useState("");
@@ -228,7 +265,7 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
-    setMessages([]);
+    setMessages([DEFAULT_GREETING]);
     setInput("");
     setLoading(false);
     setShowMap(false);

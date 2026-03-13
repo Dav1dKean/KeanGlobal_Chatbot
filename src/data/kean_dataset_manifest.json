@@ -1,0 +1,18 @@
+{
+  "generated_from": [
+    "campus_edges_walkpaths_balanced_skeleton Final.xlsx",
+    "campus_locations_main_east_full.xlsx",
+    "kean_parking_lots.csv"
+  ],
+  "files": [
+    "kean_buildings.geojson",
+    "kean_entrances.geojson",
+    "kean_locations.json",
+    "kean_locations_all.geojson",
+    "kean_parking_lots.geojson",
+    "kean_parking_points.geojson",
+    "kean_paths.geojson",
+    "kean_paths_missing.json",
+    "kean_routing_graph.json"
+  ]
+}

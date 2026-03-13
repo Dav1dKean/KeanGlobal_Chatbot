@@ -1,10 +1,20 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import L from "leaflet";
 import { CircleMarker, MapContainer, Marker, Polygon, Polyline, Popup, TileLayer, useMap } from "react-leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import buildingProfiles from "../data/building_profiles.json";
+import campusLocationsData from "../data/kean_locations.json";
+import missingPathsData from "../data/kean_paths_missing.json";
+import routingGraphData from "../data/kean_routing_graph.json";
+import parkingLotsGeoJsonRaw from "../data/kean_parking_lots.geojson?raw";
+import pathsGeoJsonRaw from "../data/kean_paths.geojson?raw";
+
+const buildingImageModules = import.meta.glob("../assets/buildings/*.{png,jpg,jpeg,webp,gif}", {
+  eager: true,
+  import: "default"
+});
 
 const KEAN_MAIN_CAMPUS = [40.6798, -74.2341];
 const CAMPUS_BOUNDS = {
@@ -13,15 +23,19 @@ const CAMPUS_BOUNDS = {
   east: -74.2312,
   west: -74.2378
 };
+const EXPANDED_CAMPUS_BOUNDS = {
+  north: 40.6855,
+  south: 40.674,
+  east: -74.221,
+  west: -74.2415
+};
 
-const LOCATION_CSV_URL = new URL("../data/campus_locations_main_east_full.csv", import.meta.url).href;
-const PARKING_CSV_URL = new URL("../data/kean_parking_lots.csv", import.meta.url).href;
-const PATHS_CSV_URL = new URL("../data/campus_edges_walkpaths_balanced_skeleton Final.csv", import.meta.url).href;
 const PARKING_TYPE_COLORS = {
   student: "#2563eb",
   faculty_staff: "#f97316",
   overnight: "#16a34a"
 };
+const ROUTE_LINE_COLORS = ["#2563eb", "#f97316", "#9333ea"];
 
 const LOCATION_TYPE_LABELS = {
   building: "Building",
@@ -30,6 +44,70 @@ const LOCATION_TYPE_LABELS = {
   lawn: "Open Space",
   field: "Athletics"
 };
+
+const ROUTE_NODE_ALIASES = {
+  "downs_hall_entrance_front": "downs_hall_main",
+  "kean_hall_entrance_front": "kean_hall_main",
+  "kean_hall_entrance_side": "kean_hall_main",
+  "miron_center_main": "miron_main",
+  "naab_entrance_front": "naab_main",
+  "north_ave_academic_main": "naab_main",
+  "vaughn_eames_front": "vaughn_eames_main",
+  "wilkins_theatre_front": "wilkins_theatre_main"
+};
+
+const IMAGE_TOKEN_STOP_WORDS = new Set([
+  "building",
+  "hall",
+  "center",
+  "campus",
+  "main",
+  "new",
+  "university",
+  "residence",
+  "student",
+  "academic",
+  "for",
+  "and",
+  "the",
+  "of",
+  "at"
+]);
+
+const BUILDING_IMAGE_ALIASES = {
+  administration: ["administration building"],
+  bartlett_hall: ["bartlett hall"],
+  burch_hall: ["burch hall"],
+  cas: ["cas building", "center for academic success"],
+  cougar_hall: ["cougar hall"],
+  d_angola_gym: ["d angola gym", "dangola gym", "d'angola gymnasium", "d angola gymnasium"],
+  dougall_hall: ["dougall hall"],
+  downs_hall: ["downs hall"],
+  east_campus_building: ["east campus", "east campus building"],
+  freshman_residence_hall: ["freshman hall", "freshman residence hall"],
+  glab: ["glab", "green lane academic building"],
+  harwood_arena: ["harwood arena"],
+  hennings_hall: ["george hennings hall", "hennings hall"],
+  hennings_research: ["george hennings research", "hennings research building"],
+  hutchinson_hall: ["hutchinson hall"],
+  kean_hall: ["kean hall"],
+  library: ["nancy thompson library", "library"],
+  miron_center: ["miron student center", "miron center"],
+  naab: ["naab", "north avenue academic building"],
+  nathan_weiss_building: ["nathan weiss east campus", "nathan weiss building"],
+  rogers_hall: ["rogers hall"],
+  sozio_hall: ["sozio hall"],
+  stem: ["stem building", "stem"],
+  townsend_hall: ["townsend hall"],
+  upperclassman_residence_hall: ["upperclassmen hall", "upperclassman residence hall"],
+  vaughn_eames: ["vaughn eames hall", "vaughn-eames hall"],
+  whiteman_hall: ["whiteman hall"],
+  wilkins_theatre: ["wilkins theater", "wilkins theatre"]
+};
+
+const parkingLotsGeoJson = JSON.parse(parkingLotsGeoJsonRaw);
+const pathsGeoJson = JSON.parse(pathsGeoJsonRaw);
+const buildingImageRecords = buildBuildingImageRecords(buildingImageModules);
 
 const campusMarkerIcon = L.icon({
   iconRetinaUrl: markerIcon2x,
@@ -50,53 +128,92 @@ function normalizeId(value) {
     .replace(/^_+|_+$/g, "");
 }
 
+function stripImageExtension(value) {
+  return String(value || "").replace(/\.[^.]+$/, "");
+}
+
+function tokenizeMeaningfulName(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/['’]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .split(/\s+/)
+    .filter(token => token && !IMAGE_TOKEN_STOP_WORDS.has(token));
+}
+
+function buildBuildingImageRecords(modules) {
+  return Object.entries(modules).map(([path, src]) => {
+    const filename = path.split("/").pop() || "";
+    const normalizedName = normalizeId(stripImageExtension(filename));
+    const tokens = new Set(tokenizeMeaningfulName(filename));
+    return { path, src, filename, normalizedName, tokens };
+  });
+}
+
+function scoreImageCandidate(candidate, image) {
+  if (!candidate) return 0;
+  const normalized = normalizeId(candidate);
+  const tokens = tokenizeMeaningfulName(candidate);
+  let score = 0;
+
+  if (normalized && image.normalizedName === normalized) score += 200;
+  if (normalized && image.normalizedName.includes(normalized)) score += 120;
+  if (normalized && normalized.includes(image.normalizedName)) score += 80;
+
+  const overlap = tokens.filter(token => image.tokens.has(token)).length;
+  if (overlap) {
+    score += overlap * 40;
+    score += Math.round((overlap / Math.max(1, tokens.length)) * 30);
+  }
+
+  return score;
+}
+
 function toBoolean(value) {
   const normalized = String(value || "").trim().toLowerCase();
   return normalized === "yes" || normalized === "true" || normalized === "1";
 }
 
-function parseCsvRow(line) {
-  const cells = [];
-  let current = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < line.length; i += 1) {
-    const char = line[i];
-    const next = line[i + 1];
-
-    if (char === '"' && inQuotes && next === '"') {
-      current += '"';
-      i += 1;
-      continue;
-    }
-
-    if (char === '"') {
-      inQuotes = !inQuotes;
-      continue;
-    }
-
-    if (char === "," && !inQuotes) {
-      cells.push(current.trim());
-      current = "";
-      continue;
-    }
-
-    current += char;
-  }
-
-  cells.push(current.trim());
-  return cells;
+function prettifyRouteNodeName(id) {
+  return String(id || "")
+    .replace(/\bmain\d*\b/gi, "Main")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, letter => letter.toUpperCase());
 }
 
-function parseCsv(text) {
-  return text
-    .replace(/\r/g, "")
-    .split("\n")
-    .filter(line => line.trim().length > 0)
-    .map(parseCsvRow);
+function isWithinBounds([lat, lon], bounds) {
+  return lat <= bounds.north && lat >= bounds.south && lon <= bounds.east && lon >= bounds.west;
+}
+
+function normalizeCoordinatePair(value) {
+  if (!Array.isArray(value) || value.length < 2) return null;
+
+  const first = Number(value[0]);
+  const second = Number(value[1]);
+  if (Number.isNaN(first) || Number.isNaN(second)) return null;
+
+  const asLatLng = [first, second];
+  const asLngLat = [second, first];
+
+  const latLngInCampus = isWithinBounds(asLatLng, EXPANDED_CAMPUS_BOUNDS);
+  const lngLatInCampus = isWithinBounds(asLngLat, EXPANDED_CAMPUS_BOUNDS);
+
+  if (latLngInCampus && !lngLatInCampus) return asLatLng;
+  if (lngLatInCampus && !latLngInCampus) return asLngLat;
+
+  if (Math.abs(first) <= 90 && Math.abs(second) <= 180) return asLatLng;
+  if (Math.abs(second) <= 90 && Math.abs(first) <= 180) return asLngLat;
+  return null;
 }
 
 function parseLatLngPair(value) {
+  if (Array.isArray(value)) {
+    return normalizeCoordinatePair(value);
+  }
+
   const parts = String(value || "")
     .split(",")
     .map(piece => Number(piece.trim()));
@@ -104,48 +221,119 @@ function parseLatLngPair(value) {
   return [parts[0], parts[1]];
 }
 
-function parseLatLngList(value) {
-  return String(value || "")
-    .split(";")
-    .map(parseLatLngPair)
-    .filter(Boolean);
+function getLocationPosition(location) {
+  if (Number.isFinite(location?.latitude) && Number.isFinite(location?.longitude)) {
+    return [Number(location.latitude), Number(location.longitude)];
+  }
+
+  const latLng = parseLatLngPair(location?.latlng);
+  if (latLng) return latLng;
+
+  return normalizeCoordinatePair(location?.coordinates);
 }
 
-function parseLocationsCsv(text) {
-  const rows = parseCsv(text);
-  return rows
-    .slice(1)
-    .map(columns => {
-      const position = parseLatLngPair(columns[2]);
-      const id = String(columns[0] || "").replace(/\uFEFF/g, "").trim();
+function parseLocationRecords(data) {
+  return data
+    .map(location => {
+      const position = getLocationPosition(location);
+      const id = String(location?.id || "").replace(/\uFEFF/g, "").trim();
       if (!id || !position) return null;
       return {
         id,
-        name: columns[1] || id,
+        name: location?.name || id,
         position,
-        campus: columns[3] || "Main",
-        routable: toBoolean(columns[4]),
-        parent: (columns[5] || "").trim() || null,
-        accessibility: toBoolean(columns[6]),
-        type: (columns[7] || "").trim().toLowerCase() || "location"
+        campus: location?.campus || "Main",
+        routable: toBoolean(location?.routable),
+        parent: (location?.parent || "").trim() || null,
+        accessibility: toBoolean(location?.accessibility),
+        type: (location?.type || "location").trim().toLowerCase()
       };
     })
     .filter(Boolean);
 }
 
-function parseParkingCsv(text) {
-  const rows = parseCsv(text);
-  return rows
-    .slice(1)
-    .map(columns => {
-      const id = (columns[0] || "").trim();
-      const polygon = parseLatLngList(columns[4]);
-      if (!id || polygon.length < 3) return null;
+function parseRoutingNodes(graphData, existingLocations) {
+  const existingIds = new Set(existingLocations.map(location => location.id));
+  return (graphData?.nodes || [])
+    .map(node => {
+      const id = String(node?.id || "").trim();
+      const position = normalizeCoordinatePair(node?.coordinates);
+      if (!id || !position || existingIds.has(id)) return null;
       return {
         id,
-        name: columns[1] || id,
-        parkingType: (columns[2] || "").trim().toLowerCase(),
+        name: prettifyRouteNodeName(id),
+        position,
+        campus: isWithinBounds(position, CAMPUS_BOUNDS) ? "Main" : "Other",
+        routable: true,
+        parent: null,
+        accessibility: true,
+        type: "route_node"
+      };
+    })
+    .filter(Boolean);
+}
+
+function parseParkingGeoJson(data) {
+  return (data?.features || [])
+    .map(feature => {
+      const ring = feature?.geometry?.coordinates?.[0];
+      const polygon = Array.isArray(ring) ? ring.map(normalizeCoordinatePair).filter(Boolean) : [];
+      if (polygon.length < 3) return null;
+
+      const properties = feature?.properties || {};
+      const name = properties.name || properties.parking_id || "Parking";
+      return {
+        id: String(properties.parking_id || normalizeId(name)),
+        name,
+        parkingType: String(properties.parking_type || "").trim().toLowerCase() || inferParkingTypeFromName(name),
         polygon
+      };
+    })
+    .filter(Boolean);
+}
+
+function parsePathFeatures(data) {
+  return (data?.features || [])
+    .map(feature => {
+      const properties = feature?.properties || {};
+      const pathCoordinates = Array.isArray(feature?.geometry?.coordinates)
+        ? feature.geometry.coordinates.map(normalizeCoordinatePair).filter(Boolean)
+        : [];
+
+      const edgeId = String(properties.edge_id || "").replace(/\uFEFF/g, "").trim();
+      const fromId = String(properties.from_id || "").trim();
+      const toId = String(properties.to_id || "").trim();
+      if (!edgeId || !fromId || !toId) return null;
+
+      return {
+        edgeId,
+        fromId,
+        toId,
+        mode: String(properties.mode || "").trim().toLowerCase(),
+        pathCoordinates,
+        notes: String(properties.notes || "").trim(),
+        source: String(properties.source || "").trim().toLowerCase()
+      };
+    })
+    .filter(Boolean);
+}
+
+function parseMissingPathRecords(data) {
+  return (data || [])
+    .map(edge => {
+      const edgeId = String(edge?.edge_id || "").replace(/\uFEFF/g, "").trim();
+      const fromId = String(edge?.from_id || "").trim();
+      const toId = String(edge?.to_id || "").trim();
+      if (!edgeId || !fromId || !toId) return null;
+
+      return {
+        edgeId,
+        fromId,
+        toId,
+        mode: String(edge?.mode || "").trim().toLowerCase(),
+        pathCoordinates: [],
+        notes: String(edge?.notes || "").trim(),
+        source: "auto_proximity"
       };
     })
     .filter(Boolean);
@@ -168,6 +356,30 @@ function inferParkingTypeFromName(name) {
   return "student";
 }
 
+function getBuildingImage(building) {
+  const candidates = [
+    building?.id,
+    building?.name,
+    ...(BUILDING_IMAGE_ALIASES[normalizeId(building?.id)] || [])
+  ].filter(Boolean);
+
+  let bestImage = null;
+  let bestScore = 0;
+
+  for (const image of buildingImageRecords) {
+    let imageScore = 0;
+    for (const candidate of candidates) {
+      imageScore = Math.max(imageScore, scoreImageCandidate(candidate, image));
+    }
+    if (imageScore > bestScore) {
+      bestScore = imageScore;
+      bestImage = image;
+    }
+  }
+
+  return bestScore >= 60 ? bestImage?.src || null : null;
+}
+
 function createSquareAroundPoint([lat, lon], delta = 0.00012) {
   return [
     [lat + delta, lon - delta],
@@ -175,26 +387,6 @@ function createSquareAroundPoint([lat, lon], delta = 0.00012) {
     [lat - delta, lon + delta],
     [lat - delta, lon - delta]
   ];
-}
-
-function parsePathsCsv(text) {
-  const rows = parseCsv(text);
-  return rows
-    .slice(1)
-    .map(columns => {
-      const edgeId = (columns[0] || "").replace(/\uFEFF/g, "").trim();
-      const fromId = (columns[1] || "").trim();
-      const toId = (columns[2] || "").trim();
-      if (!edgeId || !fromId || !toId) return null;
-      return {
-        edgeId,
-        fromId,
-        toId,
-        mode: (columns[3] || "").trim().toLowerCase(),
-        pathCoordinates: parseLatLngList(columns[5])
-      };
-    })
-    .filter(Boolean);
 }
 
 function getBuildingProfile(building) {
@@ -229,16 +421,47 @@ function haversineDistanceMeters([lat1, lon1], [lat2, lon2]) {
 }
 
 function isInsideCampus([lat, lon]) {
-  return (
-    lat <= CAMPUS_BOUNDS.north &&
-    lat >= CAMPUS_BOUNDS.south &&
-    lon <= CAMPUS_BOUNDS.east &&
-    lon >= CAMPUS_BOUNDS.west
-  );
+  return isWithinBounds([lat, lon], CAMPUS_BOUNDS);
 }
 
 function getLocationById(id, locationsById) {
   return locationsById.get(id);
+}
+
+function getLocationDisplayName(location, locationsById) {
+  if (!location) return "";
+  if (location.type !== "entrance") return location.name;
+
+  const parent = location.parent ? locationsById.get(location.parent) : null;
+  if (!parent) return location.name;
+
+  const parentName = parent.name;
+  const rawName = String(location.name || "");
+  const withoutParent = rawName
+    .replace(parentName, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!withoutParent) return parentName;
+
+  const normalizedSuffix = withoutParent
+    .replace(/^entrance\s*/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!normalizedSuffix) return `${parentName} Main Entrance`;
+
+  const prettySuffix = normalizedSuffix
+    .replace(/\bfront(\d+)\b/i, "Front Entrance $1")
+    .replace(/\brear(\d+)\b/i, "Rear Entrance $1")
+    .replace(/\bside(\d+)\b/i, "Side Entrance $1")
+    .replace(/\bfront\b/i, "Front Entrance")
+    .replace(/\brear\b/i, "Rear Entrance")
+    .replace(/\bside\b/i, "Side Entrance")
+    .replace(/\bmain\b/i, "Main Entrance")
+    .trim();
+
+  return `${parentName} - ${prettySuffix}`;
 }
 
 function getNearestLocation(position, locations) {
@@ -256,9 +479,49 @@ function getNearestLocation(position, locations) {
   return nearest;
 }
 
-function buildGraph(routableLocations, locationsById, edges, resolveRoutableId) {
+function resolveEdgeNodeId(rawId, locationsById, routableLocationIds, childrenByParent, resolveRoutableId) {
+  const requested = String(rawId || "").trim();
+  if (!requested) return null;
+
+  if (routableLocationIds.has(requested)) return requested;
+
+  const aliasedRequested = ROUTE_NODE_ALIASES[requested];
+  if (aliasedRequested && routableLocationIds.has(aliasedRequested)) {
+    return aliasedRequested;
+  }
+
+  const location = locationsById.get(requested);
+  if (location) {
+    const candidates = [];
+
+    const pushRoutable = candidateId => {
+      if (!candidateId || !routableLocationIds.has(candidateId)) return;
+      const candidate = locationsById.get(candidateId);
+      if (!candidate || !candidate.position || !location.position) return;
+      const distance = haversineDistanceMeters(location.position, candidate.position);
+      candidates.push({ id: candidateId, distance });
+    };
+
+    const siblingParent = location.parent || null;
+    if (siblingParent && childrenByParent.has(siblingParent)) {
+      childrenByParent.get(siblingParent).forEach(pushRoutable);
+    }
+    if (childrenByParent.has(requested)) {
+      childrenByParent.get(requested).forEach(pushRoutable);
+    }
+
+    if (candidates.length > 0) {
+      candidates.sort((a, b) => a.distance - b.distance);
+      return candidates[0].id;
+    }
+  }
+
+  return resolveRoutableId(requested);
+}
+
+function buildGraph(routableLocations, locationsById, edges, resolveRoutableId, routableLocationIds, childrenByParent) {
   const graph = {};
-  const edgeGeometryByDirection = {};
+  const edgeGeometryByKey = {};
 
   routableLocations.forEach(location => {
     graph[location.id] = [];
@@ -266,8 +529,8 @@ function buildGraph(routableLocations, locationsById, edges, resolveRoutableId) 
 
   edges.forEach(edge => {
     if (edge.mode && edge.mode !== "walk") return;
-    const fromId = resolveRoutableId(edge.fromId);
-    const toId = resolveRoutableId(edge.toId);
+    const fromId = resolveEdgeNodeId(edge.fromId, locationsById, routableLocationIds, childrenByParent, resolveRoutableId);
+    const toId = resolveEdgeNodeId(edge.toId, locationsById, routableLocationIds, childrenByParent, resolveRoutableId);
     if (!fromId || !toId || fromId === toId) return;
 
     const from = getLocationById(fromId, locationsById);
@@ -285,19 +548,27 @@ function buildGraph(routableLocations, locationsById, edges, resolveRoutableId) 
     for (let i = 1; i < coordinates.length; i += 1) {
       weight += haversineDistanceMeters(coordinates[i - 1], coordinates[i]);
     }
+    const hasTracedGeometry = edge.pathCoordinates.length > 1;
+    if (!hasTracedGeometry) {
+      const sourcePenalty = edge.source === "auto_proximity" ? 5.0 : 3.5;
+      weight *= sourcePenalty;
+    }
 
-    graph[fromId].push({ id: toId, weight });
-    graph[toId].push({ id: fromId, weight });
-    edgeGeometryByDirection[`${fromId}=>${toId}`] = coordinates;
-    edgeGeometryByDirection[`${toId}=>${fromId}`] = [...coordinates].reverse();
+    const forwardEdgeKey = `${edge.edgeId}:${fromId}=>${toId}`;
+    const reverseEdgeKey = `${edge.edgeId}:${toId}=>${fromId}`;
+
+    graph[fromId].push({ id: toId, weight, edgeKey: forwardEdgeKey });
+    graph[toId].push({ id: fromId, weight, edgeKey: reverseEdgeKey });
+    edgeGeometryByKey[forwardEdgeKey] = coordinates;
+    edgeGeometryByKey[reverseEdgeKey] = [...coordinates].reverse();
   });
 
-  return { graph, edgeGeometryByDirection };
+  return { graph, edgeGeometryByKey };
 }
 
 function dijkstra(startId, endId, graph) {
-  if (!startId || !endId || !graph[startId] || !graph[endId]) return [];
-  if (startId === endId) return [startId];
+  if (!startId || !endId || !graph[startId] || !graph[endId]) return { routeIds: [], edgeKeys: [] };
+  if (startId === endId) return { routeIds: [startId], edgeKeys: [] };
 
   const distances = {};
   const previous = {};
@@ -305,7 +576,7 @@ function dijkstra(startId, endId, graph) {
 
   Object.keys(graph).forEach(id => {
     distances[id] = Number.POSITIVE_INFINITY;
-    previous[id] = null;
+    previous[id] = { nodeId: null, edgeKey: null };
   });
 
   distances[startId] = 0;
@@ -326,29 +597,72 @@ function dijkstra(startId, endId, graph) {
 
     unvisited.delete(current);
 
-    graph[current].forEach(({ id: neighborId, weight }) => {
+    graph[current].forEach(({ id: neighborId, weight, edgeKey }) => {
       if (!unvisited.has(neighborId)) return;
       const candidate = distances[current] + weight;
       if (candidate < distances[neighborId]) {
         distances[neighborId] = candidate;
-        previous[neighborId] = current;
+        previous[neighborId] = { nodeId: current, edgeKey };
       }
     });
   }
 
-  const route = [];
+  const routeIds = [];
+  const edgeKeys = [];
   let cursor = endId;
 
   while (cursor) {
-    route.unshift(cursor);
-    cursor = previous[cursor];
+    routeIds.unshift(cursor);
+    const previousStep = previous[cursor];
+    if (previousStep?.edgeKey) {
+      edgeKeys.unshift(previousStep.edgeKey);
+    }
+    cursor = previousStep?.nodeId;
   }
 
-  if (route[0] !== startId) return [];
-  return route;
+  if (routeIds[0] !== startId) return { routeIds: [], edgeKeys: [] };
+  return { routeIds, edgeKeys };
 }
 
-function routeIdsToCoordinates(routeIds, edgeGeometryByDirection, locationsById) {
+function createPenalizedGraph(graph, edgeKeys, penaltyMultiplier = 1.9) {
+  if (edgeKeys.length === 0) return graph;
+
+  const penalizedEdges = new Set(edgeKeys);
+
+  const nextGraph = {};
+  Object.entries(graph).forEach(([nodeId, edges]) => {
+    nextGraph[nodeId] = edges.map(edge => ({
+      ...edge,
+      weight: penalizedEdges.has(edge.edgeKey) ? edge.weight * penaltyMultiplier : edge.weight
+    }));
+  });
+  return nextGraph;
+}
+
+function buildRouteVariants(startId, endId, graph, edgeGeometryByKey, locationsById, maxRoutes = 3) {
+  const routes = [];
+  const seen = new Set();
+  let workingGraph = graph;
+
+  for (let index = 0; index < maxRoutes; index += 1) {
+    const route = dijkstra(startId, endId, workingGraph);
+    if (route.routeIds.length < 2) break;
+
+    const signature = route.edgeKeys.join("|");
+    if (seen.has(signature)) break;
+    seen.add(signature);
+
+    const coordinates = routeIdsToCoordinates(route.routeIds, route.edgeKeys, edgeGeometryByKey, locationsById);
+    if (coordinates.length < 2) break;
+
+    routes.push({ routeIds: route.routeIds, edgeKeys: route.edgeKeys, coordinates });
+    workingGraph = createPenalizedGraph(workingGraph, route.edgeKeys);
+  }
+
+  return routes;
+}
+
+function routeIdsToCoordinates(routeIds, edgeKeys, edgeGeometryByKey, locationsById) {
   if (routeIds.length === 0) return [];
   if (routeIds.length === 1) {
     const only = locationsById.get(routeIds[0]);
@@ -360,7 +674,7 @@ function routeIdsToCoordinates(routeIds, edgeGeometryByDirection, locationsById)
     const fromId = routeIds[i - 1];
     const toId = routeIds[i];
     const segment =
-      edgeGeometryByDirection[`${fromId}=>${toId}`] ||
+      edgeGeometryByKey[edgeKeys[i - 1]] ||
       [locationsById.get(fromId)?.position, locationsById.get(toId)?.position].filter(Boolean);
     if (segment.length === 0) continue;
     if (coordinates.length === 0) {
@@ -377,8 +691,16 @@ function RouteViewport({ routeCoordinates }) {
 
   useEffect(() => {
     if (routeCoordinates.length < 2) return;
-    const bounds = L.latLngBounds(routeCoordinates);
-    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 18 });
+    const timer = window.setTimeout(() => {
+      map.invalidateSize({ pan: false });
+      const bounds = L.latLngBounds(routeCoordinates);
+      const handleMoveEnd = () => {
+        window.setTimeout(() => map.invalidateSize({ pan: false }), 60);
+      };
+      map.once("moveend", handleMoveEnd);
+      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 18, animate: false });
+    }, 180);
+    return () => window.clearTimeout(timer);
   }, [map, routeCoordinates]);
 
   return null;
@@ -389,8 +711,55 @@ function HighlightViewport({ destination, enabled }) {
 
   useEffect(() => {
     if (!enabled || !destination) return;
-    map.setView(destination, 19, { animate: true });
+    const timer = window.setTimeout(() => {
+      map.invalidateSize({ pan: false });
+      const handleMoveEnd = () => {
+        window.setTimeout(() => map.invalidateSize({ pan: false }), 60);
+      };
+      map.once("moveend", handleMoveEnd);
+      map.setView(destination, 19, { animate: false });
+    }, 180);
+    return () => window.clearTimeout(timer);
   }, [destination, enabled, map]);
+
+  return null;
+}
+
+function MapSizeInvalidator() {
+  const map = useMap();
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      map.invalidateSize({ pan: false });
+    }, 180);
+    return () => window.clearTimeout(timer);
+  }, [map]);
+
+  return null;
+}
+
+function MapResizeObserver() {
+  const map = useMap();
+
+  useEffect(() => {
+    const container = map.getContainer();
+    if (!container || typeof ResizeObserver === "undefined") return undefined;
+
+    let frameId = 0;
+    const observer = new ResizeObserver(() => {
+      if (frameId) window.cancelAnimationFrame(frameId);
+      frameId = window.requestAnimationFrame(() => {
+        map.invalidateSize({ pan: false });
+      });
+    });
+
+    observer.observe(container);
+
+    return () => {
+      observer.disconnect();
+      if (frameId) window.cancelAnimationFrame(frameId);
+    };
+  }, [map]);
 
   return null;
 }
@@ -403,49 +772,25 @@ function MapPanel({ setShowMap, routeRequest }) {
   const [campusFilter, setCampusFilter] = useState("All Campuses");
   const [directoryQuery, setDirectoryQuery] = useState("");
   const [locationMode, setLocationMode] = useState("directions");
-  const [showBuildingList, setShowBuildingList] = useState(false);
-  const [showDirectoryPanel, setShowDirectoryPanel] = useState(true);
+  const [showBuildingList, setShowBuildingList] = useState(true);
+  const [showDirectoryPanel, setShowDirectoryPanel] = useState(false);
   const [locations, setLocations] = useState([]);
   const [pathEdges, setPathEdges] = useState([]);
   const [parkingLots, setParkingLots] = useState([]);
   const [dataError, setDataError] = useState("");
+  const [highlightTargetId, setHighlightTargetId] = useState(null);
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function loadCsvData() {
-      try {
-        const [locationsResponse, parkingResponse, pathsResponse] = await Promise.all([
-          fetch(LOCATION_CSV_URL),
-          fetch(PARKING_CSV_URL),
-          fetch(PATHS_CSV_URL)
-        ]);
-
-        if (!locationsResponse.ok || !parkingResponse.ok || !pathsResponse.ok) {
-          throw new Error("CSV files could not be loaded.");
-        }
-
-        const [locationsText, parkingText, pathsText] = await Promise.all([
-          locationsResponse.text(),
-          parkingResponse.text(),
-          pathsResponse.text()
-        ]);
-
-        if (cancelled) return;
-        setLocations(parseLocationsCsv(locationsText));
-        setParkingLots(parseParkingCsv(parkingText));
-        setPathEdges(parsePathsCsv(pathsText));
-        setDataError("");
-      } catch (error) {
-        if (cancelled) return;
-        setDataError(error instanceof Error ? error.message : "Map data failed to load.");
-      }
+    try {
+      const parsedLocations = parseLocationRecords(campusLocationsData);
+      const routingNodes = parseRoutingNodes(routingGraphData, parsedLocations);
+      setLocations([...parsedLocations, ...routingNodes]);
+      setParkingLots(parseParkingGeoJson(parkingLotsGeoJson));
+      setPathEdges([...parsePathFeatures(pathsGeoJson), ...parseMissingPathRecords(missingPathsData)]);
+      setDataError("");
+    } catch (error) {
+      setDataError(error instanceof Error ? error.message : "Map data failed to load.");
     }
-
-    loadCsvData();
-    return () => {
-      cancelled = true;
-    };
   }, []);
 
   const locationsById = useMemo(() => {
@@ -488,15 +833,21 @@ function MapPanel({ setShowMap, routeRequest }) {
       const normalizedId = normalizeId(id);
       addAlias(id, id);
       addAlias(normalizedId, id);
+      addAlias(location.name, id);
 
       const base = normalizedId
-        .replace(/_entrance_(front|rear|side)$/g, "")
-        .replace(/_(front|rear|side)$/g, "")
-        .replace(/_main$/g, "");
+        .replace(/_entrance_(front|rear|side)\d*$/g, "")
+        .replace(/_(front|rear|side)\d*$/g, "")
+        .replace(/_main\d*$/g, "")
+        .replace(/_entrance$/g, "");
       if (base) {
         addAlias(base, id);
         addAlias(`${base}_main`, id);
       }
+    });
+
+    Object.entries(ROUTE_NODE_ALIASES).forEach(([sourceId, targetId]) => {
+      addAlias(sourceId, targetId);
     });
 
     return map;
@@ -515,6 +866,7 @@ function MapPanel({ setShowMap, routeRequest }) {
       };
 
       pushCandidate(requested);
+      pushCandidate(ROUTE_NODE_ALIASES[requested]);
 
       const normalizedCandidates = aliasCandidatesByNormalizedId.get(normalizeId(requested)) || [];
       normalizedCandidates.forEach(pushCandidate);
@@ -531,8 +883,13 @@ function MapPanel({ setShowMap, routeRequest }) {
     };
   }, [aliasCandidatesByNormalizedId, childrenByParent, routableLocationIds]);
 
+  const graphLocations = useMemo(() => locations.filter(location => location.routable), [locations]);
+
   const routableLocations = useMemo(
-    () => locations.filter(location => location.routable).sort((a, b) => a.name.localeCompare(b.name)),
+    () =>
+      locations
+        .filter(location => location.routable && location.type !== "route_node")
+        .sort((a, b) => a.name.localeCompare(b.name)),
     [locations]
   );
 
@@ -547,8 +904,6 @@ function MapPanel({ setShowMap, routeRequest }) {
   );
 
   const supplementalParkingLots = useMemo(() => {
-    // If dedicated parking polygons are loaded, avoid synthetic square overlays
-    // from point locations because they can overlap real lots and look incorrect.
     if (parkingLots.length > 0) {
       return [];
     }
@@ -572,29 +927,62 @@ function MapPanel({ setShowMap, routeRequest }) {
 
   const directoryPlaces = useMemo(() => {
     return locations
+      .filter(location => location.type !== "route_node")
       .map(location => {
         const resolvedDestinationId = resolveRoutableId(location.id);
         const parentName = location.parent ? locationsById.get(location.parent)?.name : null;
+        const displayName = getLocationDisplayName(location, locationsById);
         return {
           id: location.id,
-          name: location.name,
+          name: displayName,
+          rawName: location.name,
           campus: location.campus || "Main",
           category: LOCATION_TYPE_LABELS[location.type] || "Location",
           description: parentName
             ? `${LOCATION_TYPE_LABELS[location.type] || "Location"} for ${parentName}`
             : `${LOCATION_TYPE_LABELS[location.type] || "Location"} on campus`,
+          locationType: location.type,
           destinationId: resolvedDestinationId || null
         };
       })
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [locations, locationsById, resolveRoutableId]);
 
+  const routeOptions = useMemo(() => {
+    const byDestination = new Map();
+
+    const getPriority = place => {
+      if (place.locationType === "building") return 3;
+      if (place.locationType === "parking") return 2;
+      return 1;
+    };
+
+    directoryPlaces
+      .filter(place => place.destinationId)
+      .forEach(place => {
+        const existing = byDestination.get(place.destinationId);
+        if (!existing || getPriority(place) > getPriority(existing)) {
+          byDestination.set(place.destinationId, place);
+        }
+      });
+
+    return [...byDestination.values()].sort((a, b) => a.name.localeCompare(b.name));
+  }, [directoryPlaces]);
+
+  const routeOptionById = useMemo(() => {
+    const map = new Map();
+    routeOptions.forEach(option => {
+      map.set(option.destinationId, option);
+    });
+    return map;
+  }, [routeOptions]);
+
   useEffect(() => {
     if (routableLocations.length === 0) return;
 
     const defaultStart =
-      resolveRoutableId("kean_hall_main") ||
       resolveRoutableId("kean_hall_entrance_front") ||
+      resolveRoutableId("kean_hall_main") ||
       routableLocations[0].id;
     const defaultEnd =
       resolveRoutableId("library_main") ||
@@ -605,17 +993,18 @@ function MapPanel({ setShowMap, routeRequest }) {
     setEndId(prev => resolveRoutableId(prev) || defaultEnd);
   }, [resolveRoutableId, routableLocations]);
 
-  const { graph, edgeGeometryByDirection } = useMemo(
-    () => buildGraph(routableLocations, locationsById, pathEdges, resolveRoutableId),
-    [locationsById, pathEdges, resolveRoutableId, routableLocations]
+  const { graph, edgeGeometryByKey } = useMemo(
+    () => buildGraph(graphLocations, locationsById, pathEdges, resolveRoutableId, routableLocationIds, childrenByParent),
+    [childrenByParent, graphLocations, locationsById, pathEdges, resolveRoutableId, routableLocationIds]
   );
 
-  const routeBuildingIds = useMemo(() => dijkstra(startId, endId, graph), [endId, graph, startId]);
-
-  const routeCoordinates = useMemo(
-    () => routeIdsToCoordinates(routeBuildingIds, edgeGeometryByDirection, locationsById),
-    [edgeGeometryByDirection, locationsById, routeBuildingIds]
+  const routeVariants = useMemo(
+    () => buildRouteVariants(startId, endId, graph, edgeGeometryByKey, locationsById),
+    [edgeGeometryByKey, endId, graph, locationsById, startId]
   );
+
+  const routeBuildingIds = routeVariants[0]?.routeIds || [];
+  const routeCoordinates = routeVariants[0]?.coordinates || [];
 
   const routeDistanceMeters = useMemo(() => {
     if (routeCoordinates.length < 2) return 0;
@@ -630,6 +1019,14 @@ function MapPanel({ setShowMap, routeRequest }) {
     () => (locationMode === "highlight" ? [] : routeCoordinates),
     [locationMode, routeCoordinates]
   );
+  const displayRouteVariants = useMemo(
+    () => (locationMode === "highlight" ? [] : routeVariants),
+    [locationMode, routeVariants]
+  );
+  const routeOverlayKey = useMemo(
+    () => `${startId}:${endId}:${displayRouteVariants.map(variant => variant.edgeKeys.join("|")).join("~")}`,
+    [displayRouteVariants, endId, startId]
+  );
 
   const campusOptions = useMemo(() => ["All Campuses", ...new Set(directoryPlaces.map(place => place.campus))], [directoryPlaces]);
   const filteredDirectoryPlaces = useMemo(() => {
@@ -640,6 +1037,7 @@ function MapPanel({ setShowMap, routeRequest }) {
       if (!query) return true;
       return (
         place.name.toLowerCase().includes(query) ||
+        place.rawName.toLowerCase().includes(query) ||
         place.category.toLowerCase().includes(query) ||
         place.description.toLowerCase().includes(query)
       );
@@ -667,7 +1065,7 @@ function MapPanel({ setShowMap, routeRequest }) {
           return;
         }
 
-        const nearest = getNearestLocation(coords, routableLocations);
+        const nearest = getNearestLocation(coords, graphLocations);
         setStartId(nearest.id);
         setLocationStatus(`Using your location. Nearest start point: ${nearest.name}.`);
       },
@@ -676,13 +1074,18 @@ function MapPanel({ setShowMap, routeRequest }) {
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
-  }, [routableLocations]);
+  }, [graphLocations, routableLocations.length]);
 
   function swapRoute() {
     setLocationMode("directions");
     setStartId(endId);
     setEndId(startId);
   }
+
+  function showDirections() {
+    setLocationMode("directions");
+  }
+
   function routeToPlace(place) {
     const resolvedDestinationId = resolveRoutableId(place.destinationId);
     if (!resolvedDestinationId) {
@@ -698,14 +1101,19 @@ function MapPanel({ setShowMap, routeRequest }) {
 
   const startBuilding = getLocationById(startId, locationsById);
   const endBuilding = getLocationById(endId, locationsById);
+  const startLabel = routeOptionById.get(startId)?.name || startBuilding?.name;
+  const endLabel = routeOptionById.get(endId)?.name || endBuilding?.name;
+  const highlightTarget = getLocationById(highlightTargetId, locationsById) || endBuilding;
 
   useEffect(() => {
     if (!routeRequest) return;
 
+    const requestedDestination = routeRequest.destinationId ? getLocationById(routeRequest.destinationId, locationsById) : null;
     const mappedDestination = resolveRoutableId(routeRequest.destinationId);
     if (mappedDestination) {
       setEndId(mappedDestination);
     }
+    setHighlightTargetId(routeRequest.destinationId || mappedDestination || null);
 
     const nextMode = routeRequest.locationMode === "directions" ? "directions" : "highlight";
     setLocationMode(nextMode);
@@ -714,7 +1122,7 @@ function MapPanel({ setShowMap, routeRequest }) {
       setLocationMode("directions");
       setMyLocationAsStart();
     } else if (mappedDestination) {
-      const destination = getLocationById(mappedDestination, locationsById);
+      const destination = requestedDestination || getLocationById(mappedDestination, locationsById);
       if (destination) {
         setStartId(mappedDestination);
         setLocationStatus(`Showing ${destination.name} on the map.`);
@@ -732,7 +1140,7 @@ function MapPanel({ setShowMap, routeRequest }) {
             className="btn-secondary"
             onClick={() => setShowBuildingList(prev => !prev)}
           >
-            {showBuildingList ? "Hide Building List" : "Show Building List"}
+            {showBuildingList ? "Hide Directions" : "Show Directions"}
           </button>
           <button
             className="btn-secondary"
@@ -748,9 +1156,9 @@ function MapPanel({ setShowMap, routeRequest }) {
           <label className="route-field">
             Start
             <select value={startId} onChange={event => setStartId(event.target.value)}>
-              {routableLocations.map(location => (
-                <option key={location.id} value={location.id}>
-                  {location.name}
+              {routeOptions.map(option => (
+                <option key={option.destinationId} value={option.destinationId}>
+                  {option.name}
                 </option>
               ))}
             </select>
@@ -763,9 +1171,9 @@ function MapPanel({ setShowMap, routeRequest }) {
           <label className="route-field">
             Destination
             <select value={endId} onChange={event => setEndId(event.target.value)}>
-              {routableLocations.map(location => (
-                <option key={location.id} value={location.id}>
-                  {location.name}
+              {routeOptions.map(option => (
+                <option key={option.destinationId} value={option.destinationId}>
+                  {option.name}
                 </option>
               ))}
             </select>
@@ -777,12 +1185,15 @@ function MapPanel({ setShowMap, routeRequest }) {
         <button type="button" className="btn-primary" onClick={setMyLocationAsStart}>
           Use My Location
         </button>
+        <button type="button" className="btn-secondary" onClick={showDirections}>
+          Show Route
+        </button>
         {dataError && <span className="route-note">{dataError}</span>}
         {locationStatus && <span className="route-note">{locationStatus}</span>}
       </div>
 
       <div className="route-summary">
-        <strong>{startBuilding?.name}</strong> to <strong>{endBuilding?.name}</strong>
+        <strong>{startLabel}</strong> to <strong>{endLabel}</strong>
         {" - "}
         {locationMode === "highlight"
           ? "Showing destination only"
@@ -849,6 +1260,8 @@ function MapPanel({ setShowMap, routeRequest }) {
 
       <div className="leaflet-wrapper">
         <MapContainer center={KEAN_MAIN_CAMPUS} zoom={18} className="leaflet-map">
+          <MapSizeInvalidator />
+          <MapResizeObserver />
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -874,10 +1287,19 @@ function MapPanel({ setShowMap, routeRequest }) {
           ))}
           {buildingMarkers.map(building => {
             const profile = getBuildingProfile(building);
+            const imageSrc = getBuildingImage(building);
             return (
               <Marker key={building.id} position={building.position} icon={campusMarkerIcon}>
                 <Popup>
                   <div className="building-popup">
+                    {imageSrc ? (
+                      <img
+                        src={imageSrc}
+                        alt={building.name}
+                        className="building-popup-image"
+                        loading="lazy"
+                      />
+                    ) : null}
                     <h4 className="building-popup-title">{building.name}</h4>
                     <div className="building-popup-campus">{building.campus || "Main"} Campus</div>
                     <div className="building-popup-section">
@@ -912,26 +1334,35 @@ function MapPanel({ setShowMap, routeRequest }) {
             </CircleMarker>
           ))}
           <RouteViewport routeCoordinates={displayRouteCoordinates} />
-          <HighlightViewport destination={endBuilding?.position} enabled={locationMode === "highlight"} />
-          {displayRouteCoordinates.length > 1 && (
-            <>
-              <Polyline positions={displayRouteCoordinates} pathOptions={{ color: "#fdb813", weight: 10, opacity: 0.55 }} />
-              <Polyline positions={displayRouteCoordinates} pathOptions={{ color: "#003667", weight: 6, opacity: 0.95 }} />
-              <CircleMarker center={displayRouteCoordinates[0]} radius={8} pathOptions={{ color: "#16a34a", fillOpacity: 1 }}>
+          <HighlightViewport destination={highlightTarget?.position} enabled={locationMode === "highlight"} />
+          {displayRouteVariants.length > 0 && (
+            <Fragment key={routeOverlayKey}>
+              {displayRouteVariants.map((variant, index) => (
+                <Polyline
+                  key={`route-${variant.routeIds.join("-")}`}
+                  positions={variant.coordinates}
+                  pathOptions={{
+                    color: ROUTE_LINE_COLORS[index] || ROUTE_LINE_COLORS[ROUTE_LINE_COLORS.length - 1],
+                    weight: index === 0 ? 7 : 5,
+                    opacity: index === 0 ? 0.95 : 0.75
+                  }}
+                />
+              ))}
+              <CircleMarker center={displayRouteVariants[0].coordinates[0]} radius={8} pathOptions={{ color: "#16a34a", fillOpacity: 1 }}>
                 <Popup>Route Start</Popup>
               </CircleMarker>
               <CircleMarker
-                center={displayRouteCoordinates[displayRouteCoordinates.length - 1]}
+                center={displayRouteVariants[0].coordinates[displayRouteVariants[0].coordinates.length - 1]}
                 radius={8}
                 pathOptions={{ color: "#dc2626", fillOpacity: 1 }}
               >
                 <Popup>Route Destination</Popup>
               </CircleMarker>
-            </>
+            </Fragment>
           )}
-          {locationMode === "highlight" && endBuilding?.position && (
-            <CircleMarker center={endBuilding.position} radius={12} pathOptions={{ color: "#dc2626", fillOpacity: 0.25, weight: 3 }}>
-              <Popup>{endBuilding.name}</Popup>
+          {locationMode === "highlight" && highlightTarget?.position && (
+            <CircleMarker center={highlightTarget.position} radius={12} pathOptions={{ color: "#dc2626", fillOpacity: 0.25, weight: 3 }}>
+              <Popup>{highlightTarget.name}</Popup>
             </CircleMarker>
           )}
           {userPosition && (
