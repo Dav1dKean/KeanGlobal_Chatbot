@@ -81,6 +81,8 @@ const BUILDING_IMAGE_ALIASES = {
   cas: ["cas building", "center for academic success"],
   cougar_hall: ["cougar hall"],
   d_angola_gym: ["d angola gym", "dangola gym", "d'angola gymnasium", "d angola gymnasium"],
+  d_angola_pool: ["d angola pool", "dangola pool", "d'angola pool", "pool"],
+  enlow_hall_lawn: ["the lawn at enlow hall", "enlow hall lawn", "the lawn"],
   dougall_hall: ["dougall hall"],
   downs_hall: ["downs hall"],
   east_campus_building: ["east campus", "east campus building"],

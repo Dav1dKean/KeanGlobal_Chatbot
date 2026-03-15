@@ -24,6 +24,11 @@
     "departments": ["Athletics", "Recreation"],
     "notes": "Includes fitness and gym activity spaces."
   },
+  "d_angola_pool": {
+    "usage": "Aquatics and recreation facility.",
+    "departments": ["Athletics", "Recreation"],
+    "notes": "Used for swimming, aquatics, and related recreation activities."
+  },
   "downs_hall": {
     "usage": "Academic classrooms and offices.",
     "departments": ["Academic departments (varies by term)"],

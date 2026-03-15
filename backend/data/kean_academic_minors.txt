@@ -1,0 +1,310 @@
+KEAN UNIVERSITY ACADEMIC MINORS
+SOURCE_DATE_CHECKED: March 15, 2026
+PRIMARY_SOURCE: Kean University Change of Major/Minor Form (current PDF)
+SUPPORTING_SOURCES: Kean Degree Options page; Center for Interdisciplinary Studies page
+NOTES: This is a RAG-ready file with one academic minor per block. The list is based on verified minors shown on Kean's current Change of Major/Minor Form. Interdisciplinary minors are also supported by Kean's Center for Interdisciplinary Studies page.
+
+COLLEGE: College of Business and Public Management
+MINOR: Accounting
+DESCRIPTION: Accounting is listed as an academic minor at Kean University under College of Business and Public Management.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Business and Public Management
+MINOR: Arts Entrepreneurship
+DESCRIPTION: Arts Entrepreneurship is listed as an academic minor at Kean University under College of Business and Public Management.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Business and Public Management
+MINOR: Criminal Justice
+DESCRIPTION: Criminal Justice is listed as an academic minor at Kean University under College of Business and Public Management.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Business and Public Management
+MINOR: Cybercrime
+DESCRIPTION: Cybercrime is listed as an academic minor at Kean University under College of Business and Public Management.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Business and Public Management
+MINOR: Economics
+DESCRIPTION: Economics is listed as an academic minor at Kean University under College of Business and Public Management.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Business and Public Management
+MINOR: Finance
+DESCRIPTION: Finance is listed as an academic minor at Kean University under College of Business and Public Management.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Business and Public Management
+MINOR: Fintech
+DESCRIPTION: Fintech is listed as an academic minor at Kean University under College of Business and Public Management.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Business and Public Management
+MINOR: Management
+DESCRIPTION: Management is listed as an academic minor at Kean University under College of Business and Public Management.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Business and Public Management
+MINOR: Marketing
+DESCRIPTION: Marketing is listed as an academic minor at Kean University under College of Business and Public Management.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Business and Public Management
+MINOR: Public Administration
+DESCRIPTION: Public Administration is listed as an academic minor at Kean University under College of Business and Public Management.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Education
+MINOR: Athletic Coaching
+DESCRIPTION: Athletic Coaching is listed as an academic minor at Kean University under College of Education.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Education
+MINOR: French Studies
+DESCRIPTION: French Studies is listed as an academic minor at Kean University under College of Education.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Education
+MINOR: Inclusive Health and Physical Activity
+DESCRIPTION: Inclusive Health and Physical Activity is listed as an academic minor at Kean University under College of Education.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Education
+MINOR: Spanish
+DESCRIPTION: Spanish is listed as an academic minor at Kean University under College of Education.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Acting for the Camera
+DESCRIPTION: Acting for the Camera is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Art History
+DESCRIPTION: Art History is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Asian Studies
+DESCRIPTION: Asian Studies is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Chinese Studies
+DESCRIPTION: Chinese Studies is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Communication
+DESCRIPTION: Communication is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Dance
+DESCRIPTION: Dance is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: English
+DESCRIPTION: English is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Fine Arts
+DESCRIPTION: Fine Arts is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Global Studies
+DESCRIPTION: Global Studies is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: History
+DESCRIPTION: History is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Jewish Studies and World Affairs
+DESCRIPTION: Jewish Studies and World Affairs is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Music
+DESCRIPTION: Music is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Philosophy and Religion
+DESCRIPTION: Philosophy and Religion is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Political Science
+DESCRIPTION: Political Science is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Psychology
+DESCRIPTION: Psychology is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Social Media
+DESCRIPTION: Social Media is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Sociology
+DESCRIPTION: Sociology is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Liberal Arts
+MINOR: Theatre
+DESCRIPTION: Theatre is listed as an academic minor at Kean University under College of Liberal Arts.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Bioinformatics
+DESCRIPTION: Bioinformatics is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Biology
+DESCRIPTION: Biology is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Chemistry
+DESCRIPTION: Chemistry is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Computer Science
+DESCRIPTION: Computer Science is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Computer Science Education
+DESCRIPTION: Computer Science Education is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Cyber Security
+DESCRIPTION: Cyber Security is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Drone and Piloting Applications
+DESCRIPTION: Drone and Piloting Applications is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Environmental Health Science
+DESCRIPTION: Environmental Health Science is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Environmental Science
+DESCRIPTION: Environmental Science is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Forensic Science
+DESCRIPTION: Forensic Science is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Health Information Technology
+DESCRIPTION: Health Information Technology is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Information Technology
+DESCRIPTION: Information Technology is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Mathematical Sciences
+DESCRIPTION: Mathematical Sciences is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Physics
+DESCRIPTION: Physics is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Statistics
+DESCRIPTION: Statistics is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Dorothy and George Hennings College of Science, Mathematics, and Technology
+MINOR: Sustainability
+DESCRIPTION: Sustainability is listed as an academic minor at Kean University under Dorothy and George Hennings College of Science, Mathematics, and Technology.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Michael Graves College
+MINOR: Advertising
+DESCRIPTION: Advertising is listed as an academic minor at Kean University under Michael Graves College.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Health Professions and Human Services
+MINOR: American Sign Language
+DESCRIPTION: American Sign Language is listed as an academic minor at Kean University under College of Health Professions and Human Services.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Health Professions and Human Services
+MINOR: Exercise Science
+DESCRIPTION: Exercise Science is listed as an academic minor at Kean University under College of Health Professions and Human Services.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Health Professions and Human Services
+MINOR: Gerontology
+DESCRIPTION: Gerontology is listed as an academic minor at Kean University under College of Health Professions and Human Services.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Health Professions and Human Services
+MINOR: Recreation Administration
+DESCRIPTION: Recreation Administration is listed as an academic minor at Kean University under College of Health Professions and Human Services.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Health Professions and Human Services
+MINOR: Recreational Therapy
+DESCRIPTION: Recreational Therapy is listed as an academic minor at Kean University under College of Health Professions and Human Services.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Health Professions and Human Services
+MINOR: Speech-Language-Hearing Sciences
+DESCRIPTION: Speech-Language-Hearing Sciences is listed as an academic minor at Kean University under College of Health Professions and Human Services.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: College of Health Professions and Human Services
+MINOR: Yoga Studies
+DESCRIPTION: Yoga Studies is listed as an academic minor at Kean University under College of Health Professions and Human Services.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Division of General Education and Interdisciplinary Studies
+MINOR: Aging and Wellness
+DESCRIPTION: Aging and Wellness is listed as an academic minor at Kean University under Division of General Education and Interdisciplinary Studies.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Division of General Education and Interdisciplinary Studies
+MINOR: Africana Studies
+DESCRIPTION: Africana Studies is listed as an academic minor at Kean University under Division of General Education and Interdisciplinary Studies.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Division of General Education and Interdisciplinary Studies
+MINOR: Environmental Justice
+DESCRIPTION: Environmental Justice is listed as an academic minor at Kean University under Division of General Education and Interdisciplinary Studies.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Division of General Education and Interdisciplinary Studies
+MINOR: Latin American Studies
+DESCRIPTION: Latin American Studies is listed as an academic minor at Kean University under Division of General Education and Interdisciplinary Studies.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.
+
+COLLEGE: Division of General Education and Interdisciplinary Studies
+MINOR: Women's and Gender Studies
+DESCRIPTION: Women's and Gender Studies is listed as an academic minor at Kean University under Division of General Education and Interdisciplinary Studies.
+SOURCE: Kean University Change of Major/Minor Form; supporting verification from Kean academic program pages when applicable.

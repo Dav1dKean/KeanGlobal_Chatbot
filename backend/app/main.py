@@ -839,7 +839,7 @@ TRANSLATIONS = {
         "ko": "캠퍼스 기록 기준으로 가장 관련 있는 정보입니다:",
     },
     "faq_no_exact_match": {
-        "en": "Sorry, I couldn’t find that in my current Kean records. You can check the university website here: https://www.kean.edu",
+        "en": "I’m sorry, I could not find that information in my current Kean records. Please visit the official Kean University website for more information: https://www.kean.edu",
         "tr": "Mevcut kampüs kayıtlarında tam bir eşleşme bulamadım. Lütfen belirli bir program veya politika adıyla tekrar sor.",
         "es": "No encontré una coincidencia exacta en los registros actuales del campus. Reformula con el nombre específico del programa o política.",
         "zh": "我在当前校园记录中未找到精确匹配。请用具体的项目或政策名称重新提问。",
@@ -962,7 +962,7 @@ TRANSLATIONS = {
         "en": "Here’s a quick summary of Kean’s course repeat policy:\n1. Undergraduate students may repeat a course once if they earned F, D, C, C+, AF, or WD.\n2. Graduate-level coursework cannot be repeated or recalculated.\n3. If you earned B- or higher, you need approval to repeat the course.\n4. For courses completed before Fall 2024, grade recalculation requires a Registrar form.\n5. For more details, you can review Kean’s policy here: https://www.kean.edu",
     },
     "program_not_found": {
-        "en": "Sorry, I couldn’t find that major or program in my current Kean records. You can browse Kean’s academic programs here: https://www.kean.edu/academics",
+        "en": "I’m sorry, I could not find that major or program in my current Kean records. Please visit the official Kean University website for more information: https://www.kean.edu/academics",
     },
     "program_details_intro": {
         "en": "Here’s a quick overview of {name}:",
@@ -1291,6 +1291,12 @@ def load_program_catalog():
             if catalog_url:
                 break
 
+        program_url = (
+            str(metadata.get("url") or "").strip()
+            or str(details.get("url") or "").strip()
+            or ""
+        )
+
         name_tokens = meaningful_tokens(full_name)
         catalog.append(
             {
@@ -1298,7 +1304,8 @@ def load_program_catalog():
                 "name": full_name,
                 "description": description,
                 "contact": contact_text,
-                "url": KEAN_PROGRAMS_URL,
+                "url": program_url or KEAN_PROGRAMS_URL,
+                "catalog_url": catalog_url,
                 "tokens": name_tokens | meaningful_tokens(description) | meaningful_tokens(program_id.replace("_", " ")),
             }
         )
@@ -1493,6 +1500,40 @@ def is_dining_question(text: str) -> bool:
         )
     )
 
+def is_shuttle_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "shuttle",
+            "shuttle service",
+            "track my shuttle",
+            "trackmyshuttle",
+            "resident student shuttle",
+            "kean trolley",
+            "trolley",
+            "bus",
+            "transportation",
+            "transport request",
+            "transporte",
+            "autobus",
+            "autobús",
+            "servicio de transporte",
+            "rastrear shuttle",
+            "servis",
+            "otobus",
+            "otobüs",
+            "ulasim",
+            "ulaşım",
+            "셔틀",
+            "버스",
+            "交通车",
+            "班车",
+            "接驳",
+        )
+    )
+
 def is_student_accounts_question(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
@@ -1554,6 +1595,145 @@ def is_smoking_policy_question(text: str) -> bool:
         )
     )
 
+def is_housing_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "housing",
+            "residence life",
+            "dorm",
+            "dorms",
+            "residence hall",
+            "roommate",
+            "move in",
+            "move-in",
+            "meal plan",
+            "housing application",
+            "vivienda",
+            "residencia",
+            "dormitorio",
+            "companero de cuarto",
+            "compañero de cuarto",
+            "mudanza",
+            "yurt",
+            "konut",
+            "oda arkadasi",
+            "oda arkadaşı",
+            "tasinma",
+            "taşınma",
+            "기숙사",
+            "룸메이트",
+            "入住",
+            "宿舍",
+        )
+    )
+
+def is_health_services_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "student health",
+            "health services",
+            "wellness center",
+            "counseling center",
+            "mental health",
+            "immunization",
+            "vaccine",
+            "health absence",
+            "short term leave",
+            "semester withdrawal",
+            "uwill",
+            "salud",
+            "servicios de salud",
+            "bienestar",
+            "consejeria",
+            "consejería",
+            "vacuna",
+            "inmunizacion",
+            "inmunización",
+            "saglik",
+            "sağlık",
+            "danismanlik",
+            "danışmanlık",
+            "asi",
+            "aşı",
+            "wellness",
+            "건강",
+            "상담",
+            "예방접종",
+            "健康",
+            "心理咨询",
+            "疫苗",
+        )
+    )
+
+def is_accessibility_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "accessibility",
+            "accessibility services",
+            "accommodation",
+            "accommodations",
+            "disability",
+            "meal plan exemption",
+            "testing room",
+            "accommodate portal",
+            "oas",
+            "accesibilidad",
+            "acomodacion",
+            "acomodación",
+            "discapacidad",
+            "exencion de plan de comida",
+            "exención de plan de comida",
+            "erisilebilirlik",
+            "erişilebilirlik",
+            "engelli",
+            "uyarlama",
+            "장애",
+            "접근성",
+            "편의 제공",
+            "无障碍",
+            "便利服务",
+        )
+    )
+
+def is_bookstore_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "bookstore",
+            "barnes",
+            "noble",
+            "textbook",
+            "textbooks",
+            "ebook",
+            "e-book",
+            "yuzu",
+            "book shop",
+            "libreria",
+            "librería",
+            "libros",
+            "texto",
+            "kitabevi",
+            "ders kitabi",
+            "ders kitabı",
+            "서점",
+            "교재",
+            "电子书",
+            "书店",
+            "教材",
+        )
+    )
+
 def build_course_repeat_answer(lang: str) -> str:
     return trn("course_repeat_summary", lang)
 
@@ -1585,6 +1765,16 @@ def build_student_accounts_answer(lang: str) -> str:
         "5. More information: https://www.kean.edu/offices/student-accounting"
     )
 
+def build_shuttle_answer(lang: str) -> str:
+    return (
+        "Here’s what I found about the Kean shuttle service:\n"
+        "1. The Union campus shuttle runs Monday through Friday during the fall and spring semesters from 7:30 a.m. to 10:50 p.m.\n"
+        "2. After 5 p.m., the shuttle switches to on-demand service, and the last reservation is taken at 10:50 p.m.\n"
+        "3. Main shuttle stops listed in the current file include Kean Hall Parking Lot, Hennings Hall, Wilkins Theatre, NAAB, STEM/LHAC, East Campus Parking Lot, East Campus Building, Faculty Housing, and Hynes Hall.\n"
+        "4. Track the shuttle at https://www.trackmyshuttle.com using code KEAN. For on-demand service, use code KEANOD.\n"
+        "5. Resident students can also use the Residence Life shuttle on Fridays and Sundays: https://www.kean.edu/reslife/amenities/resident-student-shuttle"
+    )
+
 def build_smoking_policy_answer(lang: str) -> str:
     return (
         "No. You cannot smoke or vape inside campus buildings, residence halls, offices, state vehicles, or around the Child Care and Development Center.\n"
@@ -1593,6 +1783,46 @@ def build_smoking_policy_answer(lang: str) -> str:
         "3. Cannabis or marijuana is not allowed anywhere on Kean property, even with a prescription.\n"
         "4. Students who violate the policy may face fines and conduct sanctions.\n"
         "5. More information: https://www.kean.edu"
+    )
+
+def build_housing_answer(lang: str) -> str:
+    return (
+        "Here’s a quick housing overview:\n"
+        "1. Kean offers campus housing for freshmen, upperclassmen, transfer, and some graduate students.\n"
+        "2. Students apply for housing through the Residence Life Housing Portal in KeanWISE after admission.\n"
+        "3. The housing application includes a non-refundable $125 application fee.\n"
+        "4. For housing help, contact Residence Life at (908) 737-1700 or reslife@kean.edu.\n"
+        "5. More information: https://www.kean.edu"
+    )
+
+def build_health_services_answer(lang: str) -> str:
+    return (
+        "Here’s a quick health and wellness overview:\n"
+        "1. Student Health Services and the Counseling Center are located in Downs Hall through the Kean Wellness Center.\n"
+        "2. Student Health Services helps with primary care, vaccines, lab services, sexual health, and health-related absences.\n"
+        "3. The Counseling Center offers short-term counseling, crisis support, referrals, and Uwill teletherapy access.\n"
+        "4. For counseling and wellness appointments, call (908) 737-4850. For Student Health Services, use the Student Health Portal.\n"
+        "5. In an emergency, call 911 or Kean University Police at (908) 737-4800."
+    )
+
+def build_accessibility_answer(lang: str) -> str:
+    return (
+        "Here’s what I found about Accessibility Services:\n"
+        "1. The Office of Accessibility Services helps students request academic and housing accommodations.\n"
+        "2. Students must submit documentation and complete an application for services.\n"
+        "3. The office is in the Kean Wellness Center, Downs Hall Room 122.\n"
+        "4. Contact: accessibilityservices@kean.edu or (908) 737-4910.\n"
+        "5. More information: https://www.kean.edu"
+    )
+
+def build_bookstore_answer(lang: str) -> str:
+    return (
+        "Here’s what I found about the bookstore:\n"
+        "1. The Kean University Official Bookstore is in the Green Lane Building at 1040 Morris Avenue, Union, NJ 07083.\n"
+        "2. Store phone: (908) 737-4940.\n"
+        "3. General customer support: (877) 420-1734 or customercare@bncservices.com.\n"
+        "4. The bookstore supports textbooks, rentals, eBooks, apparel, and spirit items.\n"
+        "5. Store hours in the current file are Monday to Thursday 10 a.m. to 5 p.m., Friday 10 a.m. to 3 p.m., Saturday 10 a.m. to 2 p.m., and Sunday closed."
     )
 
 def find_program_match(text: str) -> Optional[dict]:
@@ -1628,7 +1858,8 @@ def build_program_answer(program: dict, lang: str) -> str:
     lines = [trn("program_details_intro", lang, name=program["name"])]
     if program.get("description"):
         lines.append(program["description"])
-    lines.append(trn("program_more_info", lang, url=program.get("url") or KEAN_PROGRAMS_URL))
+    link_url = program.get("url") or program.get("catalog_url") or KEAN_PROGRAMS_URL
+    lines.append(trn("program_more_info", lang, url=link_url))
     if program.get("contact"):
         lines.append(trn("program_contact", lang, contact=program["contact"]))
     return "\n".join(lines)
@@ -1642,9 +1873,76 @@ def build_degree_availability_answer(
 ) -> str:
     answer = trn("degree_exists_yes" if exists else "degree_exists_no", lang, subject=subject, level=level)
     if exists:
-        url = (program or {}).get("url") or KEAN_PROGRAMS_URL
+        url = (program or {}).get("url") or (program or {}).get("catalog_url") or KEAN_PROGRAMS_URL
         answer = f"{answer}\n{trn('program_more_info', lang, url=url)}"
     return answer
+
+def is_section_heading(line: str) -> bool:
+    text = str(line or "").strip()
+    if not text:
+        return False
+    if text.startswith(("*", "-", "1.", "2.", "3.")):
+        return False
+    if len(text) > 90:
+        return False
+    if text.endswith((".", "?", "!")) and len(text.split()) > 8:
+        return False
+    words = text.split()
+    if len(words) <= 8:
+        return True
+    uppercase_ratio = sum(1 for ch in text if ch.isupper()) / max(1, sum(1 for ch in text if ch.isalpha()))
+    return uppercase_ratio > 0.65
+
+def split_text_into_sections(text: str, max_chars: int = 900) -> list[str]:
+    lines = [line.strip() for line in str(text or "").splitlines()]
+    sections = []
+    heading = None
+    buffer = []
+
+    def flush():
+        nonlocal heading, buffer
+        if not heading and not buffer:
+            return
+        body = " ".join(part for part in buffer if part).strip()
+        if heading and body:
+            content = f"{heading}\n{body}"
+        else:
+            content = heading or body
+        content = content.strip()
+        if not content:
+            heading = None
+            buffer = []
+            return
+        if len(content) <= max_chars:
+            sections.append(content)
+        else:
+            paragraphs = [part.strip() for part in re.split(r"\n{2,}", content) if part.strip()]
+            current = ""
+            for paragraph in paragraphs:
+                candidate = f"{current}\n\n{paragraph}".strip() if current else paragraph
+                if current and len(candidate) > max_chars:
+                    sections.append(current.strip())
+                    current = paragraph
+                else:
+                    current = candidate
+            if current.strip():
+                sections.append(current.strip())
+        heading = None
+        buffer = []
+
+    for line in lines:
+        if not line:
+            if buffer:
+                flush()
+            continue
+        if is_section_heading(line):
+            flush()
+            heading = line
+            continue
+        buffer.append(line)
+
+    flush()
+    return [section for section in sections if section]
 
 def load_fallback_rag_docs():
     docs = []
@@ -1666,11 +1964,12 @@ def load_fallback_rag_docs():
             continue
 
         path_lower = file.relative_to(BASE_DIR).as_posix().lower()
-        if "policies/" in path_lower or "policy" in file.name.lower():
+        filename_lower = file.name.lower()
+        if "policies/" in path_lower or "policy" in filename_lower:
             doc_type = "policy"
-        elif "calendar" in file.name.lower():
+        elif "calendar" in filename_lower:
             doc_type = "calendar"
-        elif "program" in file.name.lower():
+        elif any(keyword in filename_lower for keyword in ("program", "major", "majors", "minor", "minors", "degree", "degrees", "catalog")):
             doc_type = "program"
         else:
             doc_type = "knowledge"
@@ -1706,12 +2005,9 @@ def load_fallback_rag_docs():
                 if flat_text:
                     text = flat_text
 
-        chunks = []
-        step = 1200
-        for i in range(0, len(text), step):
-            chunk = text[i : i + step].strip()
-            if chunk:
-                chunks.append(chunk)
+        chunks = split_text_into_sections(text, max_chars=max(700, RAG_MAX_CHARS_PER_BLOCK + 200))
+        if not chunks:
+            chunks = [text.strip()]
 
         for idx, chunk in enumerate(chunks):
             docs.append(
@@ -2490,7 +2786,7 @@ def retrieve_fallback_context(
         if faq_topic == "programs":
             source = str(doc.get("source", "")).lower()
             doc_type = str(doc.get("type", "")).lower()
-            if doc_type == "program" or "program" in source:
+            if doc_type == "program" or any(keyword in source for keyword in ("program", "major", "majors", "minor", "minors", "degree", "degrees", "online")):
                 score *= 2.0
             else:
                 score *= 0.2
@@ -2514,6 +2810,8 @@ def retrieve_fallback_context(
             source = str(doc.get("source", "")).lower()
             if "parking" in source:
                 score *= 2.0
+            if "shuttle" in source or "transport" in source or "trolley" in source:
+                score *= 2.4
 
         if faq_topic == "housing":
             source = str(doc.get("source", "")).lower()
@@ -2534,6 +2832,11 @@ def retrieve_fallback_context(
             source = str(doc.get("source", "")).lower()
             if "bookstore" in source or "barnes" in source:
                 score *= 2.5
+
+        if faq_topic == "theaters_events":
+            source = str(doc.get("source", "")).lower()
+            if any(keyword in source for keyword in ("stage", "theater", "theatre", "ticket", "wilkins", "enlow", "bauer")):
+                score *= 2.6
 
         if faq_topic == "student_accounts":
             source = str(doc.get("source", "")).lower()
@@ -2806,6 +3109,14 @@ async def chat(req: ChatRequest):
             "response_mode": "identity",
         }
 
+    if is_shuttle_question(user_text):
+        return {
+            "answer": await localized(build_shuttle_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "parking_transport",
+            "response_mode": "shuttle_direct",
+        }
+
     if is_hours_question(user_text):
         hours_target = detect_hours_target(user_text)
         if hours_target:
@@ -2860,6 +3171,38 @@ async def chat(req: ChatRequest):
             "intent": "faq",
             "faq_topic": "student_accounts",
             "response_mode": "student_accounts_direct",
+        }
+
+    if is_housing_question(user_text):
+        return {
+            "answer": await localized(build_housing_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "housing",
+            "response_mode": "housing_direct",
+        }
+
+    if is_health_services_question(user_text):
+        return {
+            "answer": await localized(build_health_services_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "health_services",
+            "response_mode": "health_services_direct",
+        }
+
+    if is_accessibility_question(user_text):
+        return {
+            "answer": await localized(build_accessibility_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "accessibility",
+            "response_mode": "accessibility_direct",
+        }
+
+    if is_bookstore_question(user_text):
+        return {
+            "answer": await localized(build_bookstore_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "bookstore",
+            "response_mode": "bookstore_direct",
         }
 
     if is_registrar_question(user_text):

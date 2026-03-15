@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useMemo, useState, useEffect } from "react";
 import { Search, BookOpen, ArrowRight, GraduationCap, Globe, Users, Sparkles } from "lucide-react";
+import ChatLauncher from "../components/ChatLauncher";
 
 
 const ProgPage = () => {
@@ -225,6 +226,8 @@ const ProgPage = () => {
           </div>
         )}
       </main>
+
+      <ChatLauncher />
     </div>
   );
 }

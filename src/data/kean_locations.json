@@ -432,6 +432,22 @@
     ]
   },
   {
+    "id": "d_angola_pool",
+    "name": "D'Angola Pool",
+    "latlng": "40.67979671480611, -74.23864032922894",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67979671480611,
+    "longitude": -74.23864032922894,
+    "coordinates": [
+      -74.23864032922894,
+      40.67979671480611
+    ]
+  },
+  {
     "id": "d_angola_lot",
     "name": "D'Angola Lot",
     "latlng": "40.679394, -74.23875",
