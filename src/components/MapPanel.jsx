@@ -4,6 +4,8 @@ import { CircleMarker, MapContainer, Marker, Polygon, Polyline, Popup, TileLayer
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import busIconImage from "../assets/buildings/bus icon.png";
+import phoneIconImage from "../assets/buildings/phone icon.png";
 import buildingProfiles from "../data/building_profiles.json";
 import campusLocationsData from "../data/kean_locations.json";
 import missingPathsData from "../data/kean_paths_missing.json";
@@ -33,6 +35,7 @@ const EXPANDED_CAMPUS_BOUNDS = {
 const PARKING_TYPE_COLORS = {
   student: "#2563eb",
   faculty_staff: "#f97316",
+  visitor: "#ec4899",
   overnight: "#16a34a"
 };
 const ROUTE_LINE_COLORS = ["#2563eb", "#f97316", "#9333ea"];
@@ -42,7 +45,10 @@ const LOCATION_TYPE_LABELS = {
   entrance: "Entrance",
   parking: "Parking",
   lawn: "Open Space",
-  field: "Athletics"
+  field: "Athletics",
+  landmark: "Landmark",
+  shuttle_stop: "Shuttle Stop",
+  emergency_phone: "Emergency Phone"
 };
 
 const ROUTE_NODE_ALIASES = {
@@ -95,14 +101,20 @@ const BUILDING_IMAGE_ALIASES = {
   hennings_research: ["george hennings research", "hennings research building"],
   hutchinson_hall: ["hutchinson hall"],
   kean_hall: ["kean hall"],
+  kean_east_soccer_field_1: ["kean east soccer field 1", "kean soccer field east campus 1"],
+  kean_east_soccer_field_2: ["kean east soccer field 2", "kean soccer field east campus 2"],
+  kean_shuttle_bus: ["kean shuttle bus", "shuttle bus", "campus shuttle"],
   library: ["nancy thompson library", "library"],
+  learning_plaza: ["learning plaza"],
   miron_center: ["miron student center", "miron center"],
   msc_turf_field: ["miron turf field", "msc turf field", "miron student center turf field", "turf field"],
   naab: ["naab", "north avenue academic building"],
   nathan_weiss_building: ["nathan weiss east campus", "nathan weiss building"],
+  one_mans_search: ["one mans", "one mans search", "one man's search"],
   rogers_hall: ["rogers hall"],
   sozio_hall: ["sozio hall"],
   stem: ["stem building", "stem"],
+  the_thinker_statue: ["the thinker", "the thinker statue"],
   townsend_hall: ["townsend hall"],
   union_train_station: ["union train station", "union township train station", "train station"],
   upperclassman_residence_hall: ["upperclassmen hall", "upperclassman residence hall"],
@@ -125,6 +137,26 @@ const campusMarkerIcon = L.icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
+
+const shuttleStopMarkerIcon = L.icon({
+  iconUrl: busIconImage,
+  iconRetinaUrl: busIconImage,
+  iconSize: [28, 28],
+  iconAnchor: [14, 14],
+  popupAnchor: [0, -14],
+  className: "map-image-marker"
+});
+
+const emergencyPhoneMarkerIcon = L.icon({
+  iconUrl: phoneIconImage,
+  iconRetinaUrl: phoneIconImage,
+  iconSize: [28, 28],
+  iconAnchor: [14, 14],
+  popupAnchor: [0, -14],
+  className: "map-image-marker"
+});
+
+const MARKER_LOCATION_TYPES = new Set(["building", "field", "lawn", "landmark", "shuttle_stop", "emergency_phone"]);
 
 function normalizeId(value) {
   return String(value || "")
@@ -387,6 +419,30 @@ function getBuildingImage(building) {
   return bestScore >= 60 ? bestImage?.src || null : null;
 }
 
+function getLocationImage(location) {
+  if (!location) return null;
+  if (location.type === "shuttle_stop") {
+    return getBuildingImage({ id: "kean_shuttle_bus", name: "Kean Shuttle Bus" });
+  }
+  if (location.type === "emergency_phone") {
+    return phoneIconImage;
+  }
+  return getBuildingImage(location);
+}
+
+function getLocationImagePlaceholder(location) {
+  if (location?.id === "learning_plaza") {
+    return "src/assets/buildings/Learning Plaza.jpg";
+  }
+  return null;
+}
+
+function getLocationMarkerIcon(location) {
+  if (location?.type === "shuttle_stop") return shuttleStopMarkerIcon;
+  if (location?.type === "emergency_phone") return emergencyPhoneMarkerIcon;
+  return campusMarkerIcon;
+}
+
 function createSquareAroundPoint([lat, lon], delta = 0.00012) {
   return [
     [lat + delta, lon - delta],
@@ -413,6 +469,45 @@ function getBuildingProfile(building) {
     usage: "Campus building used for academic, student, or operational functions.",
     departments: ["Details available from campus directory"],
     notes: "Detailed profile for this building is being added."
+  };
+}
+
+function getLocationProfile(location) {
+  if (!location) return null;
+  if (location.type === "building") return getBuildingProfile(location);
+  if (location.type === "field") {
+    return {
+      usage: "Outdoor athletics and recreation area on campus.",
+      departments: ["Athletics"],
+      notes: "Use the map route tools for walking directions to this field."
+    };
+  }
+  if (location.type === "lawn" || location.type === "landmark") {
+    return {
+      usage: "Campus point of interest used for wayfinding, gathering, or public art.",
+      departments: ["Campus Directory"],
+      notes: "This location can be highlighted directly from the map and directory."
+    };
+  }
+  if (location.type === "shuttle_stop") {
+    return {
+      usage: "Campus shuttle pickup and drop-off stop.",
+      departments: ["Kean Shuttle"],
+      notes:
+        "7:30 AM - 10:50 PM. The shuttle runs on weekdays during the fall and spring semesters, traveling around the Union campus. After 5 pm, the route is switched to an on-demand function."
+    };
+  }
+  if (location.type === "emergency_phone") {
+    return {
+      usage: "Emergency phone location for campus safety and urgent assistance.",
+      departments: ["Campus Police"],
+      notes: "Use this phone to contact emergency services or campus security."
+    };
+  }
+  return {
+    usage: "Campus point of interest.",
+    departments: ["Campus Directory"],
+    notes: "Additional details for this location are being added."
   };
 }
 
@@ -900,11 +995,11 @@ function MapPanel({ setShowMap, routeRequest }) {
     [locations]
   );
 
-  const buildingMarkers = useMemo(
+  const pointMarkers = useMemo(
     () =>
       locations.filter(
         location =>
-          location.type === "building" &&
+          MARKER_LOCATION_TYPES.has(location.type) &&
           !HIDDEN_BUILDING_MARKER_IDS.has(location.id)
       ),
     [locations]
@@ -1213,8 +1308,26 @@ function MapPanel({ setShowMap, routeRequest }) {
           ? `${Math.round(routeDistanceMeters)} m estimated path`
           : "No route found in campus graph"}
       </div>
-      <div className="route-note">
-        Parking overlay colors: Student (blue), Faculty/Staff (orange), Overnight (green).
+      <div className="map-legend" aria-label="Parking map legend">
+        <span className="map-legend-title">Parking Legend</span>
+        <div className="map-legend-items">
+          <span className="map-legend-item">
+            <span className="map-legend-swatch student" aria-hidden="true"></span>
+            Student
+          </span>
+          <span className="map-legend-item">
+            <span className="map-legend-swatch faculty" aria-hidden="true"></span>
+            Faculty/Staff
+          </span>
+          <span className="map-legend-item">
+            <span className="map-legend-swatch visitor" aria-hidden="true"></span>
+            Visitor
+          </span>
+          <span className="map-legend-item">
+            <span className="map-legend-swatch overnight" aria-hidden="true"></span>
+            Overnight
+          </span>
+        </div>
       </div>
 
       <div className="directory-panel">
@@ -1297,39 +1410,58 @@ function MapPanel({ setShowMap, routeRequest }) {
               </Popup>
             </Polygon>
           ))}
-          {buildingMarkers.map(building => {
-            const profile = getBuildingProfile(building);
-            const imageSrc = getBuildingImage(building);
+          {pointMarkers.map(location => {
+            const profile = getLocationProfile(location);
+            const imageSrc = getLocationImage(location);
+            const imagePlaceholder = getLocationImagePlaceholder(location);
             return (
-              <Marker key={building.id} position={building.position} icon={campusMarkerIcon}>
+              <Marker key={location.id} position={location.position} icon={getLocationMarkerIcon(location)}>
                 <Popup>
                   <div className="building-popup">
                     {imageSrc ? (
                       <img
                         src={imageSrc}
-                        alt={building.name}
+                        alt={location.name}
                         className="building-popup-image"
                         loading="lazy"
                       />
+                    ) : imagePlaceholder ? (
+                      <div className="building-popup-placeholder">
+                        Image placeholder: <code>{imagePlaceholder}</code>
+                      </div>
                     ) : null}
-                    <h4 className="building-popup-title">{building.name}</h4>
-                    <div className="building-popup-campus">{building.campus || "Main"} Campus</div>
-                    <div className="building-popup-section">
-                      <div className="building-popup-label">Use</div>
-                      <div className="building-popup-text">{profile.usage}</div>
+                    <h4 className="building-popup-title">{location.name}</h4>
+                    <div className="building-popup-campus">
+                      {location.campus || "Main"} Campus · {LOCATION_TYPE_LABELS[location.type] || "Location"}
                     </div>
                     <div className="building-popup-section">
-                      <div className="building-popup-label">Departments</div>
-                      <ul className="building-popup-list">
-                        {profile.departments.map(department => (
-                          <li key={department}>{department}</li>
-                        ))}
-                      </ul>
+                      <div className="building-popup-label">About</div>
+                      <div className="building-popup-text">{profile?.usage}</div>
                     </div>
-                    <div className="building-popup-section">
-                      <div className="building-popup-label">Relevant Info</div>
-                      <div className="building-popup-text">{profile.notes}</div>
-                    </div>
+                    {profile?.departments?.length ? (
+                      <div className="building-popup-section">
+                        <div className="building-popup-label">Related</div>
+                        <ul className="building-popup-list">
+                          {profile.departments.map(department => (
+                            <li key={department}>{department}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                    {profile?.notes ? (
+                      <div className="building-popup-section">
+                        <div className="building-popup-label">Relevant Info</div>
+                        <div className="building-popup-text">{profile.notes}</div>
+                      </div>
+                    ) : null}
+                    {imagePlaceholder && !imageSrc ? (
+                      <div className="building-popup-section">
+                        <div className="building-popup-label">Add Image Later</div>
+                        <div className="building-popup-text">
+                          Add a file with this name and it will be picked up automatically.
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
                 </Popup>
               </Marker>

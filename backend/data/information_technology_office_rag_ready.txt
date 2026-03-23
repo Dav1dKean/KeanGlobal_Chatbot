@@ -1,0 +1,224 @@
+DOCUMENT TITLE: Information Technology Office
+SOURCE ORGANIZATION: Kean University
+SOURCE FILE: Information Technology Office.txt
+DOCUMENT TYPE: IT Support and Technology Services
+RAG_COLLECTION: it_support
+LANGUAGE: English
+
+NOTES FOR RAG INGESTION:
+- Cleaned from source text for retrieval-augmented generation.
+- Normalized whitespace and common character encoding issues.
+- Headings and bullets were standardized where possible.
+# Information Technology Office/Support
+## About
+Information technology is a vital part of Kean University. The Office of Information Technology (IT) maintains and administers university computer systems. Kean is committed to offering students, faculty and staff access to the software and services they need to facilitate academic achievement and professional growth.
+## Mission
+Information Technology is committed to providing high quality technology services to the students, faculty and staff of Kean University in order that the University can maintain its commitment of accessibility, both academically and economically, to all students.
+IT supports and advocates for the use of technology to help facilitate students, faculty and staff to think critically, creatively and globally while adapting to changing social, economic, and technological environments. This will assist students, faculty and staff to reach their full potential.
+
+## Vision
+Kean University will be recognized as leaders in the use of technology in higher education. Our students, faculty and staff will have access to and be able to utilize leading edge technologies to support their endeavors while part of the university community and beyond.
+IT Support Services
+For technical support or help with account login issues, please contact our 24/7 Service Desk at908-737-6000.
+Click hereor scan the QR code below for more support options.
+
+- Accounts & Access
+Add or Change VALT Access
+For clinical software access
+## Alumni Secondary Email
+Change of Access
+Change Drives, Printers, etc.
+ID Card Access
+Request assistance with ID Access
+New Shared E-Mail & Sharepoint site Creation
+For departments and student organizations
+## Perceptive Content Access Request
+## Perceptive Content Access Request
+Perceptive Content module access form
+Request Access to Shared E-mail and Sharepoint Access
+Request Access to Shared E-mail and Sharepoint Access
+For requesting access to shared email mailboxes and department shar...
+Request Kean Username & Email for Contract/External Vendors
+Request Kean Username & Email for Contract/External Vendors
+For Contract/External Vendors, request creation of Kean Username & ...
+Request to be Enrolled in an Alternative Method of MFA
+Request to be Enrolled in an Alternative Method of MFA
+Enroll in an Alternative Method of MFA
+VMock Access in SSO
+VMock Access in SSO
+VMock Access
+## Windows 11 Network Reconnect
+## Windows 11 Network Reconnect
+## Windows 11 Reconnect
+E-mail
+Adjust my Employee Email alias
+Adjust the employee email alias
+## Request Now
+Request a M365 Group & Distributed List
+Request a M365 Group & Distributed List
+M365 Group/Distributed List creation
+- Software & Applications
+Add to Approved Software List - Application Approval Request
+Add to Approved Software List - Application Approval Request
+Application Approval Request - Add to Approved Software List
+## Request Now
+EMS Installation
+EMS Installation
+Get help installing EMS
+ESM Issue Report
+ESM Issue Report
+Report an issue with ESM
+IBM SPSS Statistics
+IBM SPSS Statistics
+Request an installation of IBM SPSS
+## Install Software
+## Install Software
+Any other software requiring an Administrator password
+Request to add an App to Zoom
+Request to add an App to Zoom
+Request to add an app to be added to a zoom account(s)
+Respondus LockDown Browser
+Respondus LockDown Browser
+Request an installation of Respondus LockDown Browser
+SAS Installation
+SAS Installation
+Request an installation of SAS statistics
+## Titanium
+## Titanium
+Request access or installation of Titanium software
+- Ellucian/Datatel
+## Ellucian Access Request Form
+## Ellucian Access Request Form
+For multiple modules/onboarding
+## Ellucian Campus Organization
+## Ellucian Campus Organization
+## Request Access
+## Ellucian Distributed Financials
+## Ellucian Distributed Financials
+## Request Access
+## Ellucian Financial Aid
+## Ellucian Financial Aid
+## Request Access
+## Ellucian Fixed Assets
+## Ellucian Fixed Assets
+## Request Access
+## Ellucian Graduate Admissions
+## Ellucian Graduate Admissions
+## Request Access
+## Ellucian Registrar
+## Ellucian Registrar
+## Request Access
+## Ellucian Student Accounting
+## Ellucian Student Accounting
+## Request Access
+## Ellucian Undergraduate Admissions
+## Ellucian Undergraduate Admissions
+## Request Access
+## Emburse Travel Student Profile
+## Emburse Travel Student Profile
+## For Student Profiles
+ESM Account Creation
+ESM Account Creation
+Requesting an ESM account to be created
+ESM Approval Workflow Adjustments
+ESM Approval Workflow Adjustments
+ESM Approval Adjustments
+## Events & Livestreaming
+
+Event Live Streaming and Recording
+## Livestreaming & Webcasts
+## Request Now
+Event Support from AVT
+Event Support from AVT
+Audio Visual equipment and staff.
+## Zoom Webinar License
+## Zoom Webinar License
+## Meeting For A Large Number Of Participants
+## Canvas
+## Canvas Course Adjustments
+Request assistance with Canvas
+## Request Now
+## Canvas Notification
+## Canvas Notification
+Unable to receive notifications from Canvas or is receiving duplica...
+## Missing Canvas Course Assignment
+## Missing Canvas Course Assignment
+Assignment course not showing in canvas
+## Kean Global Support
+## Online Course Adjustments/Issues
+Request assistance with Kean Global courses
+## Request Now
+## Online Course Approval Student Request
+Online course approval for non-Kean Global students.
+Proctoring Questions and Issues
+Proctoring Questions and Issues
+## Request Additional Student Assessment Attempts
+## Request Additional Student Assessment Attempts
+For Online instructor use only.
+## Student Accommodations - Online
+## Student Accommodations - Online
+For Kean Global students
+## Hardware & Equipment
+Borrow Equipment for Remote Work
+Loan accessories to work from home
+## Departmental Move
+## Departmental Move
+Procedures for moving an entire department or office
+Move equipment
+Move equipment
+Request equipment to be moved between offices
+Report a Lost Device
+Report a Lost Device
+Report a Missing Device
+Request a Tablet or iPad
+Request a Tablet or iPad
+Request a handheld tablet or an iPad
+Request a Webcam
+Request a Webcam
+Request a webcam through OCIS
+## Request Computer & Equipment
+## Request Computer & Equipment
+Request a new University-approved computer and/or equipment. Standa...
+## Request Peripherals & Accessories
+## Request Peripherals & Accessories
+For items such as keyboard, mouse, and conferencing equipment
+## Returning Equipment
+## Returning Equipment
+## Returning Equipment
+## Internet & Network
+## Ethernet/Phone Port Maintenance
+Activate or repair a datadrop/phone jack
+## Request Now
+## Student Ethernet Port Activation
+## Student Ethernet Port Activation
+Activate dormitory internet ports
+## Telecom
+## Existing Employee Move
+## Existing Employee Move
+Request for a current employee to move to a new location.
+## Request Now
+## Install New Wall Ports
+## Install New Wall Ports
+For phone lines and ethernet (wired internet)
+## New Phone Line
+## New Phone Line
+Request a phone
+## Phone Directory Updates
+## Phone Directory Updates
+Update or correct an entry on the phone directory
+Request a cell phone
+Request a cell phone
+Request a cell phone to be assigned.
+Request a loaner cell phone
+Request a loaner cell phone
+Request a loaner cell phone to be temporarily assigned.
+## Request International Service
+## Request International Service
+Request International Service for Kean assigned cell phone.
+- Microsoft 365
+## Custom Group Software Trainings
+Department Heads only
+## Request Now
+Request a Microsoft Teams "Team"
+Request a Microsoft Teams "Team"
+Requesting a "Team" group to be created in Microsoft Teams

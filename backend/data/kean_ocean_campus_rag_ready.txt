@@ -1,0 +1,62 @@
+DOCUMENT TITLE: Kean Ocean Campus
+SOURCE ORGANIZATION: Kean University
+SOURCE FILE: Kean Ocean Campus.txt
+DOCUMENT TYPE: Regional Campus Information
+RAG_COLLECTION: kean_ocean
+LANGUAGE: English
+
+NOTES FOR RAG INGESTION:
+- Cleaned from source text for retrieval-augmented generation.
+- Normalized whitespace and common character encoding issues.
+- Headings and bullets were standardized where possible.
+# Kean Ocean
+Find out moreabout our degree completion and graduate programs in Toms River and continue your educational journey through our unique partnership with Ocean County College.
+## Kean Ocean Community Day
+Join us on April 21 from 10:30 a.m. to 1 p.m.in celebrating the unique partnership between Kean University and Ocean County College. Enjoy fun, food, and giveaways!
+RSVP Today!
+## About Kean Ocean
+Kean Ocean is locatedon the Ocean County College campus in Toms River offering undergraduate transfer students and graduate students access to affordabledegree options.
+
+Kean Ocean offers:
+- Academicprograms identical to those at Keans main campus
+- Courses taught byKean faculty membersinsmall classesat Kean Oceans state-of-the-art Gateway Building
+- Opportunities tostudy abroadat Wenzhou-Kean University in China or in 30 other nations
+- Theconvenienceof studying close to home
+- Among the lowest tuition and feesin southern New Jersey
+
+Just starting your college career? You may be interested in theOCC/Kean Ocean combined degree program.Itsone of the most affordable and convenient ways to obtain a 4-year degreeon a single campus in New Jersey. Students completing their associates degree can seamlessly continue on with their study for a Kean bachelors degree with Kean courses offered on the OCC campus.
+
+VeteranStudent Services provides transition services to veterans, service members, and dependents under the KeanVeterans Educational Transition Services Program,Kean V.E.T.S. We are dedicated to creating a seamless transition from soldier to student by providing a multitude of services at Kean and the surrounding community. Click on the Military Friendly logo to get started.
+
+Kean Ocean Graduate Earns Degree While on Active Military Duty
+
+Kean Ocean Students Head to Front of the Class at Lavallette School
+Kean Ocean Students Head to Front of the Class at Lavallette School
+Health and Physical Education majors from Kean Ocean are getting the chance to earn extra in-school training through a unique relationship with the Lavallette school district.
+## Kean Ocean
+## Contact Us
+## Kean Ocean Administration Office
+## Gateway Building, 103
+## Ocean County College
+Toms River, NJ 08754
+## Telephone
+
+(908) 443-2500
+## Fax
+
+732-255-0465
+## Email
+
+keanocc@kean.edu
+## Kean Ocean Administrative Office Schedule
+Monday-Friday: 9:00am - 5:00pm
+keanocc@kean.edu
+(908)443-2500
+Map & Directions- Building #101 on the campus of Ocean County College
+
+## Kean Ocean Mission & Vision
+## Kean Ocean Mission Statement
+The mission of Kean Ocean is to extend the mission of Kean University to south central New Jersey; this includes providing access to affordable public higher education. Kean Ocean dedicates itself to the intellectual, cultural, and personal growth of all its members -- students, faculty, and professional staff. Kean Ocean will continue to offer baccalaureate-completion and graduate programs to the states sixth largest county by population, second largest by land area, and one of the fastest growing yet underserved (by higher education) counties. Kean Ocean will offer degrees in as many curricular areas as demand will support, with as much economy and efficiency as the partnerships sharing of resources will allow. Kean Ocean operations will continue to combine Kean University and Ocean County College support services, supplementing or enriching them as necessary to deliver the same Kean University World Class Education, regardless of location.
+## Kean Ocean Vision Statement
+To grow Kean Ocean and make it the premier public baccalaureate and graduate degree granting institution in Ocean and Monmouth Counties. In doing so, increase the programmatic offerings to 60 undergraduate and 25 graduate program options, with the eventual transformation of Kean Ocean into a full service branch campus. Kean Ocean will provide its students with full and unimpeded access to all university services, whether through physical duplication on site or through means of remote interaction with the home campus. Kean Ocean students will be fully enfranchised and satisfied members of the Kean University community.
+## Kean Ocean Strategic Plan

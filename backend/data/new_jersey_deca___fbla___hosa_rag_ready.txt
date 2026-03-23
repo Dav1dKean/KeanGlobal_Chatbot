@@ -1,0 +1,47 @@
+DOCUMENT TITLE: New Jersey DECA, FBLA, and HOSA
+SOURCE ORGANIZATION: Kean University
+SOURCE FILE: New Jersey DECA - FBLA - HOSA.txt
+DOCUMENT TYPE: Student Organizations / Academic Programs
+RAG_COLLECTION: deca_fbla_hosa
+LANGUAGE: English
+
+NOTES FOR RAG INGESTION:
+- Cleaned from source text for retrieval-augmented generation.
+- Normalized whitespace and common character encoding issues.
+- Headings and bullets were standardized where possible.
+# New Jersey DECA, FBLA & HOSA
+- College of Business and Public Management
+New Jersey DECA, New Jersey FBLA, & New Jersey HOSA
+Kean University is home to the state offices of New Jersey DECA, New Jersey FBLA, and New Jersey HOSA. These organizations are career and technical student organizations, and Kean University operates these programs under a grant from the New Jersey Department of Education.
+New Jersey DECA prepares emerging leaders and entrepreneurs in the fields of marketing, management, hospitality, and finance.With nearly a 70-year history, DECA has impacted the lives of more than ten million students, educators, school administrators and business professionals since it was founded in 1946. The program integrates into classroom Instruction, helps students apply learning, connect to business and promotes competition amongst its members.DECA prepares the next generation to be academically prepared, community oriented, professionally responsible, experienced leaders. In New Jersey, DECA has nearly 11,000 high school and collegiate members across over 150 secondary and post-secondary institutions.
+New Jersey Future Business Leaders of America inspires and prepares students to become community-minded business leaders in a global society through relevant career preparation and leadership experiences.FBLAs programs focus onleadership development, academic competitions. educational programs, and community service.FBLA's Goals are for students to develop competent, aggressive business leadership, strengthen the confidence of students in themselves and their work, create more interest in and understanding of American business enterprise, encourage members in the development of individual projects that contribute to the improvement of home, business, and community, assist students in the establishment of occupational goals and facilitate the transition from school to work. In New Jersey, FBLA has over 7,000 high school and collegiate members across over 150 secondary and post-secondary institutions.
+HOSAs mission is to empower HOSA-Future Health Professionals to become leaders in the global health community, through education, collaboration, and experience. HOSA actively promotes career opportunities in the health industry and to enhance the delivery of quality health care to all people. HOSAs goal is to encourage all health science instructors and students to affiliate and be actively involved in the HSE-HOSA Partnership. HOSA provides a unique program of leadership development, motivation, and recognition exclusively for secondary, postsecondary, middle school, adult, and collegiate students enrolled in health science education and biomedical science programs or have interests in pursuing careers in health professions. HOSA is 100% health care!
+Members who attend Kean University can receive up to 6 credits for their participation. For more information, contact us.
+These organizations hold events throughout the year for students at Kean, and throughout the state of New Jersey. For more information, please visit:
+NJDECA.org
+NJFBLA.org
+NJHOSA.org
+
+## DECA, FBLA, & HOSA
+Jeffrey R. Victor, D.Mgt.
+Executive Director, NJ DECA, NJ FBLA & NJ HOSA
+State Advisor, NJ DECA
+## Telephone (908) 737-0232
+Email jevictor@kean.edu
+Donna Smith, M.S.
+Academic Specialist, NJ DECA
+## Telephone 908-737-0231
+Email dsmith@njdeca.org
+## Kimberly F. Clark
+Managing Assistant Director & State Advisor, NJ FBLA
+## Telephone 908-737-0233
+Email kiclark@kean.edu
+## Fatima Rivera
+Graduate Assistant, NJ FBLA
+## Telephone 908-737-0234
+Amy Berkemeyer, RN, MS
+Academic Specialist & State Advisor, NJ HOSA
+## Telephone 908-737-0238
+## Jessica Seth
+Academic Specialist & Assistant Advisor, NJ HOSA
+## Telephone 908-737-0239

@@ -1,0 +1,81 @@
+DOCUMENT TITLE: Kean Skylands Campus
+SOURCE ORGANIZATION: Kean University
+SOURCE FILE: Kean Skylands Campus.txt
+DOCUMENT TYPE: Regional Campus Information
+RAG_COLLECTION: kean_skylands
+LANGUAGE: English
+
+NOTES FOR RAG INGESTION:
+- Cleaned from source text for retrieval-augmented generation.
+- Normalized whitespace and common character encoding issues.
+- Headings and bullets were standardized where possible.
+# Kean Skylands
+Kean Skylands sits on 40 acres of protected landin Jefferson Township, located in western Morris County, New Jersey. Learn more about the exciting programs and initiatives at this rural location.
+## About Kean Skylands
+Kean Universitys newest campus sits on 40 acres of pristine land, an hours drive and a world away from Keans main campus in Union.
+Kean Skylands is a breathtaking, rural campus thats close to home in Jefferson Township, New Jersey. This campus provides a unique setting for a multitude of events. Our facilities offer a variety of multipurpose spaces with first-rate amenities, in a stunning natural environment that can be used for your event or serve as a backdrop. Available year-around, our state-of-the-art facilities are a wonderful resource for all.
+
+## Frequently Asked Questions
+1. What are the operating hours of the Skylands campus?
+The Skylands staff is typically onsite Monday through Thursday from 8:00 a.m. to 4:00 p.m. Please email keanskylands@kean.edu to arrange your visit or to reserve use of the buildings, dorms,and meeting spaces.
+2. Can I enter the property after hours?
+Yes, you may access the property when staff is not onsite. The campus is located within the Kittatinny Valley State Park (Mt. Paul South Area) and is open to the public. The campus buildings and main gate may be closed.Please follow New Jersey State Park Rules and Regulations.
+3. Where should I park?
+If you're visiting the campus by appointment or with a reservation, specific information will be shared with you about parking. If you are visiting campus to explore the grounds or the state park, we suggest visitors park at the trailhead located along Ridge Road and walk up the driveway to access the hiking trails. If you park in the lots on campus, you may be locked in when staff leave.
+4. How many walking trails are available on the property?
+There are 10 walking trails located throughout the property.
+5. Where can I find a map of the Mount Paul trails?
+You can access a map and key trail information by clicking the following link:Mount Paul Trail Map.
+## Contact Us
+## Kean Skylands
+## 243 Mount Paul Road, Oak Ridge, N.J. 07438
+Monday-Friday: 8am-4pm
+## Erica Colace
+Director of Operations
+## Telephone
+
+(908) 737-1612
+## Email
+
+keanskylands@kean.edu
+Experiential Unmanned Aircraft Systems (UAS) Training
+Kean Skylands offers experiential learning and unmanned aircraft systems (UAS) training sessions for both Kean students and community members. These courses focus on preparing individuals for the FAA Part 107 exam and how to safely fly and use drones.
+
+The Kean Skylands hands-on UAS drone training program allows students to engage with a variety of drones and learn about their many uses across professions, all while preparing for the FAA Part 107 exam and resulting Remote Pilot Certificate. Learn in real time from true experts to fly with confidence!
+## Upcoming Training Courses
+Join us onJune 3-5, 2026for our Spring drone training program!
+## Pre-College Summer Programs
+Kean Skylands runs various pre-college summer programs focused on experiential and immersive learning for High School aged students. Questions may be directed tokeanskylands@kean.edu.
+
+SkyLAB
+Click here to view the 2026 SkyLAB program flier
+
+Do you enjoy exploring the great outdoors?
+Want to examine environmental science principles in natures laboratory this summer?
+
+Join us for a fun, informative and hands-on environmental science pre-college program that offers the opportunity to earn college credit or participate for personal enrichment.
+
+Open to high school students entering freshman through senior years, Keans SkyLAB summer program is being held at Kean Skylands, located on over 40 acres of protected land in rural Jefferson Township, New Jersey.
+Registration is now open! Click here to apply.
+Non-credit rate: $899.00 ($800.00, before March 31, 2026)
+For-credit rate (2-credits granted): $1,450.00
+## Program Highlights
+Introduction to Environmental Science & Sustainability:Dive into the world of environmental science! Understand the key concepts of ecosystems, climate change, sustainability, and conservation. Youll explore how human activity impacts the planet and what can be done to protect natural resources for future generations.
+Hands-On Field Research:Get outside and explore the environment firsthand! You'll collect data on air, water, and soil quality, learn how to use scientific instruments, and analyze the results in real-time.
+Ecology and Biodiversity Studies:Study the balance of life in various ecosystems. Learn how biodiversity is maintained and the role different species play in sustaining ecological health. Youll participate in species identification and habitat assessments to understand the importance of conservation efforts.
+Sustainable Practices and Green Technologies:Learn about green technologies and sustainable practices used in industries today. Explore renewable energy sources like solar and wind power, eco-friendly building materials, and sustainable farming techniques. Understand how these innovations are helping to reduce carbon footprints and combat climate change.
+Water Quality and Conservation:Dive into the science of water quality! Test the water at the Skylands campus and learn about pollutants, pH levels, and the importance of clean water. Discover ways we can conserve water resources and how they are managed for the future of the planet.
+Climate Change and Environmental Policy:Explore how climate change is affecting ecosystems and communities. Learn about global warming, extreme weather events, and rising sea levels. Youll also discuss environmental policies and the role of governments and organizations in addressing environmental challenges.
+
+## Drone Horizons
+Click here to view the 2026 Drone Horizons program flier
+Take your curiosity to new heights with Drone Horizons, a hands-on 4-day program designed for high school students (aged 16+) eager to explore the exciting world of drones and their real-world applications. From technology and design to safety and career opportunities, this program will give you a unique, immersive experience into the rapidly growing field of unmanned aircraft systems (UAS).
+Registration is now open! Click here to apply.
+Registration: $499.00(Materials and equipment provided)
+## Program Highlights
+Introduction to Drone Technology:Learn the basics of drone flight, navigation, and the technology behind UASs. Understand the mechanics, sensors, and software that make drones work.
+Drone Applications in the Real World:Discover how drones are transforming industries like agriculture, filmmaking, search and rescue, construction, and environmental monitoring.
+Hands-On Flight Experience:Get behind the controls of a drone! Practice flying in a safe, supervised environment while building confidence in your skills.
+Drone Safety & Regulations:Understand the important safety protocols and legal regulations that drone operators must follow. Learn how to fly responsibly and stay compliant.
+Exploring Careers in Drone Technology:Gain insights into the growing job market for drone operators, engineers, and specialists. Explore how this technology is shaping industries and creating new career paths.
+Team Projects & Challenges:Collaborate with other students in a fun, competitive environment. Design, test, and troubleshoot drone flight missions that will challenge your skills and creativity.

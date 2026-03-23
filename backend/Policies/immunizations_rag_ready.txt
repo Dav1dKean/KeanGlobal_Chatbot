@@ -1,0 +1,76 @@
+DOCUMENT TITLE: Immunizations
+SOURCE ORGANIZATION: Kean University
+SOURCE FILE: Immunizations.txt
+DOCUMENT TYPE: Student Health / Immunization Requirements
+RAG_COLLECTION: student_health
+LANGUAGE: English
+
+NOTES FOR RAG INGESTION:
+- Cleaned from source text for retrieval-augmented generation.
+- Normalized whitespace and common character encoding issues.
+- Headings and bullets were standardized where possible.
+# Immunizations
+In response to updated federal and state guidelines on COVID-19, as of June 1, 2023, Kean University no longer requires the COVID-19 vaccination, however, it is strongly recommended. Please read the information below carefully to learn more about other required vaccinations for students.
+The Immunization Requirements Form for new students is available via the Student Health Portal. Click on the buttons below for directions to access and submit the form.
+## New Students
+Submit All Immunizations in 5 Steps
+## Kean University Mandatory Immunization Requirements
+Effective June 1, 2023, Kean University will no longer requirethe COVID-19 vaccination, however, it is strongly recommended.
+
+## Immunization Deadline:
+Fall Semester Start: August 1st
+Spring Semester Start: January 6th
+Submit immunization records on the PyraMED Student Health Portal
+Additional details are available in theImmunizations Requirements Packet. Please read carefully for directions to complete and submit this document.
+***Returning students do not need to resubmit vaccination records already on file with the University. If returning students are missing immunization requirements, they are required to submit all missing documentation or a hold/restriction will be placed on their account.***
+
+The information below is available in theKean University Immunization Requirements Chart.
+## Vaccine Type
+Resident (Residesin campus housing)
+Commuter Part time (taking 1-11 credits)
+Commuter Full time (taking 12 or more credits)
+International (Residesin the U.S. with a student visa)
+## MMR
+?
+?
+?
+?
+## Hepatitis B
+?
+?
+?
+?
+Meningitis ACYW**
+?
+Required for all students under age 18
+
+Required for all students under age 18
+
+Required for all students under age 18
+
+Tuberculosis Skin Test (PPD, Mantoux, TST)
+?
+?
+?
+?
+Quantiferon Blood Testing if prior record of BCG vaccination
+**Meningitis ACYW: If your last dose was given greater than 5 years after age 16ANDyou are a new residential student, a booster will be required.
+
+Nursing Program Requirements ONLY
+MMR Titers
+## Hepatitis B Titers
+2 Step Tuberculosis Test/PPD/Mantoux/TSTorQuantiferon Blood Testing acceptable (within 12 months)
+## Varicella Titers
+## Tdap
+
+New Jersey State law mandates that Kean University complies with the Department of Health and Senior Services Immunization Regulations.Failure to submit your immunizations by the required dates may result in an immunization hold restriction being placed on your account. This restriction may prevent you from registering for future semesters and receiving grades.
+
+## Immunization Exemptions
+Exemptions for Immunization Requirements
+Request for Medical Exemption
+Directions to request a Medical Exemption:
+- Your healthcare provider must completetheNJDOH Medical Exemption Request Form
+- Upload the completed request formto theStudent Health Portalin the"Document Upload" sectionasMedical Exemption (Immunizations ONLY)
+- Fill out the Medical Exemption portion of theImmunization History Formlocated in the"My Forms" section of theStudent Health Portal
+Request for Religious Exemption
+## Kean Online Student Waiver

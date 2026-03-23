@@ -1,0 +1,295 @@
+DOCUMENT TITLE: Scholarship Services
+SOURCE ORGANIZATION: Kean University
+SOURCE FILE: Scholarhips.txt
+DOCUMENT TYPE: Financial Aid / Scholarships
+RAG_COLLECTION: scholarships
+LANGUAGE: English
+
+NOTES FOR RAG INGESTION:
+- Cleaned from source text for retrieval-augmented generation.
+- Normalized whitespace and common character encoding issues.
+- Headings and bullets were standardized where possible.
+# Scholarship Services
+## About
+The mission of the Office of Scholarship Services is to help support the academic excellence of prospective and current deserving Kean University students through philanthropic scholarship support. The Office is dedicated to providing financial access to a world-class education, as well as upholding ethical standards of scholarship dissemination and assessment.
+
+The Office of Scholarship Servicesfunctions within the scope of the University in their missions to strategically promote and grow the pool of available scholarships and further the advancement of scholarship recipients as they move beyond Kean University.
+Kean University offers a number of scholarships to help qualified undergraduate and graduate students of every race/ethnicity, gender, and creed meet the financial requirements of attending college.
+All students should complete a Free Application for Federal Student Aid (FAFSA) application to assist our Office in confirming their scholarship eligibility. Completing this application may also increase your funding through grants and other types of financial aid. Students should go to Keans How to Apply for Financial Aid web page athttps://www.kean.edu/offices/financial-aid/how-apply-financial-aidfor instructions on how to apply forFinancial Aid, as well as on how to complete a FAFSA application.
+## Scholarship Opportunities at Kean
+Merit Scholarships for New Incoming Students
+## Kean Foundation Scholarships
+Climb to Success Scholarship
+Climb to Completion
+## External Scholarships
+## Tuition Exchange Program
+
+Note:Kean University is an NCAA Division III member institution. NCAA Division III rules prohibit the awarding of financial aid and/or scholarships based upon athletics criteria. Therefore, the University is prohibited from awarding financial aid and/or scholarships based upon athletic ability, leadership, participation or performance.
+## Merit Scholarships
+Kean University offers a comprehensive array of merit- and need-based scholarships for incoming freshmen. Freshmen and transfer applicants are automatically considered for merit scholarships as part of their complete application for admission, no separate application is required.
+For priority consideration for the William Livingston Scholarship, applicants must submit acomplete application by February 1.
+Merit scholarships will continue to be awarded through June 1. Incoming freshmen and transfer students must complete their applications byMay 30to be considered for all other merit awards.
+## New Freshmen Merit Scholarships
+These awards are given based on alternate indicators including, but not limited to courses taken, academic rigor, class rankwith a primary focus on high school (unweighted) GPA and standardized exams (SAT, ACT) if applicable. Only recent high school graduates primarily admitted as full-time freshmen are eligible.
+These scholarships are renewable for up to four years (8 semesters) of consecutive undergraduate study.To renew your scholarship award you must file the FAFSA, maintain full-time enrollment, and maintain a minimumof a cumulative 3.0 GPA.To ensure that you continue to meet the eligibility requirements, this information will be reviewed at the end of each semester by the Office of Scholarship Services. If the requirements are not met at the end of the academic year, your Merit scholarship will be canceledand cannot be reinstated. In addition, it should be noted thatwe areunable to accommodate scholarship appeals.
+Please note that merit awards cannot be combined. Scholarship awards have no cash value and we reserve the right to reduce the scholarship amount if the total of all federal, state, and other grant/scholarship awards exceed direct costs defined as tuition, university fees, room and board, if applicable.
+There are six named levels of merit scholarships and recognition that range from $500 to full-in-state tuition.
+
+## Scholarship Name
+## Maximum Award Over 4 Years
+## William Livingston Full Scholarship
+up to 100% in-state tuition and fees
+## Kean Honors Scholarship
+up to $20,000
+## Trustee Honors Scholarship
+up to $14,000
+## Presidential Honors Scholarship
+up to $10,000
+## Academic Merit Honors Scholarship
+up to $6,000
+## World-Class Scholarship
+up to $4,000
+
+*Scholarship decisions are made by the Office of Admissions and are administered by the Office of Scholarships Services. Please know that all decisions are final.
+*The William Livingston Scholarship is competitive with limited funding; awards are subject to available funds.
+
+School of Integrative Science and Technology (IST) Scholarship, also referred to as the STEM Scholarship
+For incomingfreshmenwho matriculate directly into an IST Program. Consideration for these scholarshipsareconducted by the IST Admission Committee at the time of review foradmissions;therefore,there is no separate application needed.
+## Research Track
+- Computational Science & Engineering - STEM 5-year B.S./M.S.
+- Molecular Biology - STEM 5-year B.S./M.S.
+## Award Amounts
+Percentage of Tuition
+## Scholarship Type
+## Year 1
+## Year 2
+## Year 3
+## Year 4
+## STEM 50
+50%
+50%
+50%
+50%
+## STEM 75
+75%
+75%
+50%
+50%
+## STEM 100
+100%
+100%
+50%
+50%
+
+## Education Track
+- Biology - STEM Teacher Education - 5 yr B.S./M.A.
+- Chemistry Education - 5-year B.S./M.A.
+- Mathematics - STEM Education 5-year B.S./M.A.
+Percentage of Tuition
+## Scholarship Type
+## Year 1
+## Year 2
+## Year 3
+## Year 4
+## Year 5
+## STEM 50
+50%
+50%
+100%
+100%
+100%
+## STEM 75
+75%
+75%
+100%
+100%
+100%
+## STEM 100
+100%
+100%
+100%
+100%
+100%
+
+- Eligibility for scholarships will dependgreatly onthe successful completion of biology, chemistry, and pre-calculus OR equivalent courses in high school.
+** GPAs are based on a 4.0 scale.
+This scholarship isrenewable for8 consecutive semesters (Fall & Spring) with full-time enrollment (30 credits per academic year) and a 3.0 cumulative GPA.Please note that this award applies to tuition (excluding fees) and cannot be combined with any other merit awards offeredfromKean.For the research track, the fifth year is not eligible for scholarship coverage.
+For students in the STEM Education major within the IST honors college who commit toteachfor three years in a New Jersey school upon graduation, scholarships are renewablein accordance withprogram requirements.
+For academic program information, contact (908) 737-7200 or emailsist-scitech@kean.edu.
+Climb to Success Scholarship
+The Climb to Success Scholarship is both academic and need-based and is awarded to select incoming freshman who meet specific criteria. To read more about this scholarship, please visit the Climb to Success Scholarshipwebpagefor more information.
+## Transfer Merit Scholarships
+Kean offers new transfer students offers merit awards for the first year of study for fall entry students. Completed admissions application will qualify students for consideration.
+## TRANSFER MERIT SCHOLARSHIP
+The Transfer Merit Scholarship is a $1,000 one-time scholarship is awarded based on academic performance from applicant's prior institution of higher education, with 3.0 cumulative GPA and either an associate's degree or comparable coursework totaling a minimum of 60 credits, as determined by the Office of Admissions.
+This scholarship is contingent on full-time (minimum of 12 credits) enrollment and does not apply to students who have already earned a bachelor's degree.
+In addition, the transfer merit scholarship award has no cash value and we reserve the right to reduce the scholarship amount if the total of all federal, state, and other grant/scholarship awards exceed direct costs defined as tuition, university fees, on-campus room and board, if applicable.
+
+## PHI THETA KAPPA (PTK) SCHOLARSHIP
+The PTK Scholarship is a one-time award offered for the first year of study for fall start term students. For students starting in the spring start term, the PTK Scholarship is only awarded in the spring. To qualify, candidates are required to provide theOffice of Transfer Admissionsproofof organizational membership as well as final official transcripts that indicatedegree conferral.
+NOTE:If you are in your final semester, you will be tentativelyawarded the PTK Scholarship until Admissions receivesyour final official transcript with your degree conferred.
+Know thatthere are two tiers for the PTK Scholarshipbased on full or part time study. Students pursuing full time study (minimum of 12 credits)receive atotal annual amount of $2000($1000 towards each semester,fall and spring) Students studying part time receive a total annual award of $1000($500towards each semester,fall and spring).
+Office of Scholarship Services
+- Merit Scholarships
+- Kean University Foundation Scholarships
+- Climb to Completion
+- Climb to Success Scholarship
+- External Scholarships
+- Meet the Team
+- How to Write a Thank-You Letter
+## Kean University Foundation Scholarships
+
+- Office of Scholarship Services
+
+The Kean University Foundation is the universitys primary fundraising and gift-receiving organization. It was founded in 1984 as a non-profit, tax-exempt organization that advances the mission of Kean University by pursuing and securing private support to benefit Keans students, faculty, programs, and/or facilities.
+Who is eligible?
+Admitted undergraduate and graduate students enrolled in a degree seeking program can apply. This is a competitive application of Kean's best and brightest students, so be sure to prepare your application thoughtfully.
+Note:International students and non-matriculated students are not eligible to receive foundation funding.
+The 26/27 Kean University Foundation Application will open on December 1.
+
+- Clickhereto submit
+## Additional Information
+Selected scholars will be asked to review the scholarship agreement, accept the award, and submit a formal thank you letter to our generous donor.
+These steps are all to be completed on the Scholarship Manager website, loginhere. For help writing a formal thank you letter, please clickhere.
+*Selected scholarship recipients who do not complete the required final steps of reviewing the scholarship agreement, accepting the award, and submitting the formal thank you letter may no longer be eligible to receive the award.
+Scholarship awards have no cash value and we reserve the right to reduce the scholarship amount if the total of all federal, state, and other grant/scholarship awards exceed direct costs defined as tuition, university fees, on-campus room and board, if applicable.
+## Helpful Tips
+- One single application will enable you to be considered for any scholarship that matches your academic history, program, interests, and other criteria.
+- Be sure to answer each question in the application. The more complete your application, the better your chances of getting matched.
+- Write a well written thoughtful response to the writing prompt. Take this opportunity to introduce yourself to the Scholarship Committee.
+- Plan your time. As part of the application, it is highly suggested that you submit a letter of recommendation. Request this from an individual who will be able to provide insight as to who you are and some of your success stories. Your recommendation should come from someone other than a family member, such as a former teacher or academic adviser or someone from a volunteer/community services organization. Be sure to provide ample lead time to ensure you are conscientious of their busy schedules.
+Ready to create opportunities?
+Learn more about how you can engage with Kean University and be part of the growing community of generous donors. Make your gift to the Kean Fund for Excellence.
+## Kean University Foundation
+Climb to Completion
+## Breadcrumb
+- Home
+
+- Offices A-Z
+
+- Office of Scholarship Services
+Kean University understands that there may be financial challenges faced by full-time undergraduate students that can pose a barrier to completion and graduation. This scholarship is meant to address those challenges by awarding up to $3,000 to cover a balance or up to two summer courses to students who will graduate by the end of the academic year. A limited number of these awards are available annually. Candidacy is reviewed and determined by Kean University and may be based on information from the FAFSA.
+
+Eligibility Criteria are as follows:
+1. Full-time undergraduate students with 90 credits or more, pledging to graduate within the academic year (January, May, or August).
+2. Adjusted Gross Income (AGI) of $100,000 or less. This information has been entered on the FAFSA and will be confirmed by the Office of Scholarship Services.
+3. A gap exists between the financial aid received and direct costs.
+4. An application for graduation has been filed before receiving the award.
+5. FAFSA filing required, except in special circumstances.
+
+Please note:
+FAFSA filing is not required for undocumented students, international students, or special circumstances. In addition, scholarship awards have no cash value, and we reserve the right to reduce the scholarship amount if the total of all federal, state, and other grant/scholarship awards exceed direct costs defined as tuition, university fees, on-campus room and board, if applicable.
+Climb to Success Scholarship
+## Breadcrumb
+- Home
+
+- Offices A-Z
+
+- Office of Scholarship Services
+Kean University's affordable world-class education is now even more accessible to the region's best and brightest students. Kean has the most affordable tuition at a comprehensive university in New Jersey, and our graduates enter the workforce with less debt than the national average. We are able to achieve this by ensuring that our students are empowered through financial aid and university-funded awards, such as the Climb to Success Scholarship.
+While we offer many different scholarship opportunities to our incoming freshmen, what makes this one unique is the fact that in addition to academic performance, it considers the often-crucial factor of financial need. Best of all, other than the application for admission, the only application necessary for consideration is the Free Application for Federal Student Aid (FAFSA).
+A limited number of these awards are available annually. Candidacy is reviewed and determined by Kean University, based on the FAFSA application and high school transcripts. To secure a Climb to Success Scholarship offer, the enrollment deposit and the FAFSA application must be received by May 1.In addition, there may be one-time awards granted to continuing and/or transfer students on a case-by-case basis based on availability of residual funds.
+Climb to Success Fund Scholarship
+- $16,000 over four years (8 consecutive full-time semesters)
+- High School (unweighted) GPA range minimum 3.0
+- Need-based scholarship based on annual household income, as determined by FAFSA and Kean University*
+## Renewal Requirements:
+- Annual completion of the Free Application for Federal Student Aid (FAFSA)by May 1
+- 3.0 Cumulative GPA
+- Full-time enrollment for four years (8 consecutive semesters)
+- Financial eligibility is based upon an annual household income of $80,000 or less, as reported on the FAFSA, and verified by the Kean University Office of Financial Aid.
+Please note:
+FAFSA filing is not required for undocumented students, international students, or special circumstances.Scholarship awards have no cash value. We reserve the right to reduce the scholarship amount if the total of all federal, state, and other grant/scholarship awards exceeds the direct costs, defined as tuition, university fees, and on-campus room and board, if applicable.
+## External Scholarships
+Searching for External Scholarship Opportunities?
+Students are encouraged to seek external scholarships as additional financial assistance. We offer the information below as a reference for our students to start the research process.
+## Take Caution & Remember
+- Before submitting your personal information, review each company's privacy policy so you are aware of how your personal information will be used by the provider.
+
+- There are many scams associated with scholarships, so practice due diligence and research thoroughly.
+
+- Steer clear of any company that requires you to pay money to search for scholarships.
+
+- Tohelp you determine if you may be viewing a potential scam, you may want to start here;https://studentaid.gov/resources/scamsorhttps://www.consumer.ftc.gov/articles/how-avoid-scholarship-and-financial-aid-scams
+The sites below are in no way affiliated with Kean University, but are references to start your quest for scholarship support.
+## College Board
+## Fastweb
+HACU (Hispanic Association of Colleges and Universities)
+HESAA (Higher Education Student Assistance Authority)
+## Immigrants Rising
+Scholly Scholarships - Find & Search for College Scholarships
+Scholarship.com
+## Scholarship Owl
+The Paul & Daisy Soros Fellowship for New Americans
+U.S. Department of Labor
+Gilman-McCain Scholarship - Benjamin A. Gilman International Scholarship
+
+What to do if you have been awarded an external scholarship?
+## Remember:
+- Please have check made payable to "Kean University"
+- Include the student's full name and ID# on the check
+- Be sure the funding entity or bank is on the check
+- When possible include a letter from the donor or foundation Indicating the semester and year to which the funds are to be applied
+- Keep copies of checks and letter for your personal file
+Know that the University reserves the right to make any adjustments to need-based aid as a result of receiving external scholarships.
+Checks must be sent to:
+## Kean University
+Office of Student Accounting
+## Administration Building, Floor 3
+## 1000 Morris Avenue
+Union, NJ 07083
+## Note:
+In some cases a check will follow the notification. If this is the case for you, please email (scholarships@kean.edu) Scholarship Services a copy of the award letter as well as any accompanying information specifying the funding entity's guidelines. This way, a record of the pending award will be reflected in the student's KeanWise account. Once the payment is received, funds will be applied to the student account.
+Depending on the external donor's specifications, an external scholarship can sometimes be moved across semesters to cover a previous or forthcoming balance. Donor approval must be granted in these situations, and the University reserves the right to adjust the funds from an external scholarship to coincide with any financial aid that a student may already be receiving. In the event that an external scholarship exceeds the cost of attendance, and again per the donor's criteria, a refund check could be issued. In these cases, the recipient is strongly encouraged to apply this refund to a forthcoming tuition payment or books.
+It is the student's responsibility to follow up with donors on all external scholarship issues.
+Know that we cannot process checks made out directly to a student, nor can we accept a check which lists a student as the co-payee.
+Please emailscholarships@kean.eduwith any questions about the external scholarship process.
+Disclaimer: The resources on this page are provided as a courtesy to assist students with potential external scholarship opportunities and are not to be considered an endorsement by Kean University of any specific company or program. Although information is vetted prior to posting, Kean University cannot guarantee the accuracy of any information provided by third party scholarship providers in the links provided.
+How to Write a Thank-You Letter
+## Breadcrumb
+- Home
+
+- Offices A-Z
+
+- Office of Scholarship Services
+Securing your Scholarship
+A formal thank-you letter is one of the requirements in receiving a Kean University Foundation scholarship. Our donors would like to hear how scholarship funding is making a difference in the lives of students and how it will help them persist academically and personally. For students, this is a great way to share your gratitude and appreciation for being selected. Please keep in mind that you also need to toreview the scholarship agreementandaccept the award. These steps are all to be completed on the Scholarship Manager website,Login Here.
+## Tips:
+- Be formal and professional.
+- Introduce yourself and which scholarship you are writing on behalf.
+- Share your personal story.
+- Discuss your academic journey and include your future career and educational plans
+- What is the impact of receiving this scholarship for you and/or your family?
+- Close with a sincere thank you and make a commitment to strive for excellence in your studies and service to others.
+If further assistance is required in writing the letter, Kean students can use theWriting Centeras a resource.
+Frequently AskedQuestions
+## Breadcrumb
+- Home
+
+- Offices A-Z
+
+- Office of Scholarship Services
+What types of scholarships does Kean Offer?
+## Merit Scholarships
+## Kean University Foundation Scholarships
+Climb to Success Scholarship
+Climb to Completion
+Are there any External Scholarships available to students?
+Please review our webpage onExternal Scholarships.
+I have been notified that I have been awarded a Kean University Foundation Scholarship. What are the next steps?
+Selected scholars will be asked to review the scholarship agreement, accept the award, and submit a formal thank you letter to the generous donor on theScholarship Managerwebsite.
+*Selected scholarship recipients who do not complete the required final steps of reviewing the scholarship agreement, accepting the award, and submitting the formal thank you letter may no longer be eligible to receive the award.
+Will my scholarship go towards both the Fall and Spring semesters?
+Most of our scholarships are split evenly amongst both the fall and spring semesters.
+Do I have to apply for a Kean University Foundation Scholarship every year even though I have applied in a prior year?
+Yes, we release a new Kean University Foundation Scholarship application for the upcoming academic year in the fall semester and information does not carry over year to year.
+Can my scholarship be used as a refund?
+No, our scholarships are aimed towards direct costs tuition, fees, housing and meal plans.We are unable to award a scholarship that generates a refund.
+Are part-time students eligible to apply for the Kean University Foundation Scholarship?
+Yes, students who are part-time and full-time are eligible to apply.
+Who is eligible?
+Admitted undergraduate and graduate students enrolled in a degree seeking program can apply. This is a competitive application of Kean's best and brightest students, so be sure to prepare your application thoughtfully.
+Note:International students and non-matriculated students are not eligible to receive foundation funding.
+What information do I use to login to theScholarship Managerwebsite?
+Kean students will use their Kean username and password.*
+*Incoming accepted students can find this information on theirCougar App Portal.

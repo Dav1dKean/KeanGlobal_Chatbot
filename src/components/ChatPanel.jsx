@@ -6,18 +6,18 @@ const API_BASE_URLS = ENV_API_BASE_URL
   ? [ENV_API_BASE_URL]
   : ["http://127.0.0.1:8000", "http://localhost:8000"];
 const CHAT_STORAGE_KEY = "keanglobal_chat_messages";
-const URL_PATTERN = /(https?:\/\/[^\s]+)([.,;:!?)]*)/gi;
+const URL_PATTERN = /((?:https?:\/\/|\/)[^\s]+)([.,;:!?)]*)(?=\s|$)/gi;
 const DEFAULT_GREETING = {
   text: "Hello! How can I help you today? I can answer questions about Kean University and help with campus locations and directions.",
   sender: "bot"
 };
 const SPEECH_LANGUAGE_MAP = {
-  en: { code: "en-US", label: "English" },
-  es: { code: "es-ES", label: "Spanish" },
-  zh: { code: "zh-CN", label: "Mandarin" },
-  ko: { code: "ko-KR", label: "Korean" },
-  tr: { code: "tr-TR", label: "Turkish" },
-  ur: { code: "ur-PK", label: "Urdu" }
+  en: { code: "en-US", label: "English", alternates: ["en"] },
+  es: { code: "es-ES", label: "Spanish", alternates: ["es-US", "es"] },
+  zh: { code: "zh-CN", label: "Mandarin", alternates: ["zh-TW", "zh"] },
+  ko: { code: "ko-KR", label: "Korean", alternates: ["ko"] },
+  tr: { code: "tr-TR", label: "Turkish", alternates: ["tr"] },
+  ur: { code: "ur-PK", label: "Urdu", alternates: ["ur-IN", "ur"] }
 };
 const VOICE_LANGUAGE_OPTIONS = [
   { value: "auto", label: "Auto" },
@@ -82,8 +82,8 @@ function renderLinkedText(text) {
       <a
         key={`${url}-${offset}`}
         href={url}
-        target="_blank"
-        rel="noreferrer"
+        target={url.startsWith("/") ? undefined : "_blank"}
+        rel={url.startsWith("/") ? undefined : "noreferrer"}
         className="chat-link"
       >
         {url}
@@ -208,6 +208,16 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
   const sendMessageRef = useRef(() => {});
   const voiceTranscriptRef = useRef("");
   const shouldAutoSendVoiceRef = useRef(false);
+  const speechAttemptRef = useRef(0);
+  const shouldRestartVoiceRef = useRef(false);
+
+  function applyRecognitionLanguage(recognition, sampleText = "") {
+    const language = getActiveSpeechLanguage(sampleText);
+    const attempts = [language.code, ...(language.alternates || [])];
+    const index = Math.min(speechAttemptRef.current, attempts.length - 1);
+    recognition.lang = attempts[index];
+    return { label: language.label, code: attempts[index], hasFallback: index < attempts.length - 1 };
+  }
 
   function getActiveSpeechLanguage(sampleText = "") {
     if (voiceLanguage !== "auto") {
@@ -233,12 +243,12 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
     recognition.continuous = false;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
-    recognition.lang = getActiveSpeechLanguage("").code;
+    applyRecognitionLanguage(recognition, "");
 
     recognition.onstart = () => {
       setListening(true);
-      const language = getActiveSpeechLanguage(currentInputRef.current);
-      setVoiceStatus(`Listening in ${language.label}...`);
+      const activeLanguage = applyRecognitionLanguage(recognition, currentInputRef.current);
+      setVoiceStatus(`Listening in ${activeLanguage.label}...`);
     };
 
     recognition.onresult = event => {
@@ -254,6 +264,7 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
       const nextTranscript = transcript.trim();
       if (nextTranscript) {
         setInput(nextTranscript);
+        voiceTranscriptRef.current = nextTranscript;
       }
       if (finalTranscript.trim()) {
         voiceTranscriptRef.current = finalTranscript.trim();
@@ -261,6 +272,16 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
     };
 
     recognition.onerror = event => {
+      if (event.error === "language-not-supported") {
+        const activeLanguage = applyRecognitionLanguage(recognition, currentInputRef.current);
+        if (activeLanguage.hasFallback) {
+          speechAttemptRef.current += 1;
+          shouldRestartVoiceRef.current = true;
+          setListening(false);
+          setVoiceStatus(`Trying another ${activeLanguage.label} voice locale...`);
+          return;
+        }
+      }
       shouldAutoSendVoiceRef.current = false;
       const nextMessage =
         event.error === "not-allowed"
@@ -274,6 +295,16 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
 
     recognition.onend = () => {
       setListening(false);
+      if (shouldRestartVoiceRef.current) {
+        shouldRestartVoiceRef.current = false;
+        try {
+          applyRecognitionLanguage(recognition, currentInputRef.current);
+          recognition.start();
+          return;
+        } catch {
+          setVoiceStatus("Voice input is temporarily unavailable.");
+        }
+      }
       const transcript = voiceTranscriptRef.current.trim();
       if (shouldAutoSendVoiceRef.current && transcript) {
         shouldAutoSendVoiceRef.current = false;
@@ -458,11 +489,12 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
     }
 
     try {
-      const language = getActiveSpeechLanguage(currentInputRef.current);
-      recognition.lang = language.code;
+      speechAttemptRef.current = 0;
+      shouldRestartVoiceRef.current = false;
+      applyRecognitionLanguage(recognition, currentInputRef.current);
       voiceTranscriptRef.current = "";
       shouldAutoSendVoiceRef.current = true;
-      setVoiceStatus(`Listening in ${language.label}...`);
+      setVoiceStatus(`Listening in ${getActiveSpeechLanguage(currentInputRef.current).label}...`);
       recognition.start();
     } catch {
       setVoiceStatus("Voice input could not start. Please try again.");

@@ -1,0 +1,45 @@
+DOCUMENT TITLE: EPIC Program
+SOURCE ORGANIZATION: Kean University
+SOURCE FILE: EPIC Program.txt
+DOCUMENT TYPE: Admissions Program / Adult Learners
+RAG_COLLECTION: epic_program
+LANGUAGE: English
+
+NOTES FOR RAG INGESTION:
+- Cleaned from source text for retrieval-augmented generation.
+- Normalized whitespace and common character encoding issues.
+- Headings and bullets were standardized where possible.
+# EPIC Program
+## FREQUENTLY ASKED QUESTIONS
+
+What is the EPIC Program?
+The Entry Program into College (EPIC) is designed for you if you are an adult who understands the importance, value and necessity of a college education in todays changing job market and you want Kean University to be the place to obtain your undergraduate degree. As the admission program for adults age 22 and older, EPIC offers you the opportunity to become a Kean student if you demonstrate potential and motivation and have perseverance to be successful in college.
+To allow your transition to college to be as smooth as possible, and to help you balance the many commitments for your time, you will begin your studies part-time, taking fewer than 12 credits per semester. When you successfully complete 18 to 24 credits at Kean, you then have the option to attend full-time, taking 12 or more credits per semester.
+
+How am I eligible for the EPIC Program?
+If you are age 22 or older, and have been away from formal education for at least five years, you may be eligible to apply to Kean University as one of the following applicants:
+- EPIC Freshman: the adult who has no previous college enrollment and would be a first-time college student.
+- EPIC Transfer: the adult with prior college attendance who has taken no more than 15 credits and has achieved a minimum cumulative grade point average (GPA) of 2.00. (Applicants with more than 15 credits may apply for admission to Kean as a Regular Transfer.)
+All EPIC applicants must show completion of a high school education with an official transcript or an official GED transcript. Transfer applicants must also submit an official transcript from each college attended.
+
+What services will I receive from EPIC?
+As an eligible EPIC applicant, you will be guided through the Kean admissions process until your application is complete and ready for review. When you decide to enroll, EPIC will assist you in the selection of your first courses to meet the needs of your personal schedule. EPIC also instructs you on the use of KeanWISE, our online registration system. When you are a student, EPIC is your first advisor to monitor your progress, offer academic counseling and to give referrals to campus services when needed.
+
+Will I need to take a test for admission to Kean?
+No. If you are eligible to enter the EPIC Program there is no admission test, like the SAT, required.
+Before you can register for classes, you will take the Kean placement test to assess your ability in reading, writing and math. This test is only given to accepted applicants. The test results are used to select courses that are appropriate for your demonstrated skill level.
+
+I am nervous about being a college student as an adult. Is there help available for me at Kean?
+Making your transition to college student after years away from study does not happen overnight. That is why Kean provides a variety of support services to address the needs of diverse students, like you, the nontraditional college student.The Center for Academic Successprovides free tutoring for most courses and has flexible scheduling for this service. From the moment you enroll until you graduate and become one of the thousands of successful Kean alumni, the Career Development Center helps you prepare for the job market, from exploring your career interests, writing an effective rsum or researching for that job interview.
+OurChild Care Centeris located on campus in a safe environment staffed by professionals who provide educational and fun activities for your child, ages 2 to 5 years old, during the day from 8 a.m. 5 p.m. Evening care is also available for children ages 5 to 12 years old. You will meet and network with other adult students, as well as make new friends in college, as a member of the Graduate and Part-Time Student Council (GPSC), the student government association that represents the needs and concerns of the part-time undergraduate student at Kean.
+
+I work and have a family. When will I attend classes?
+As an EPIC student, you have several options to take your classes and maintain your personal obligations. Kean offers courses during the day, evening and on Saturday. Many courses are also available through distance learning and online instruction.
+
+How can I pay for this college education?
+Although Kean is one of the most affordable universities, the cost of a college education is a major expense for anyone. You are encouraged to apply for financial aid to determine if you are eligible for funds, such as grants, scholarships or loans, to pay for your college education even if you enroll part-time. The Free Application for Federal Student Aid (FAFSA) is available at the websitewww.fafsa.gov. Or, call toll free 1 (800) 433-3243, to request the current FAFSA application or to ask questions on college aid.
+Kean University also has several options students may use to pay their expenses. For more information on these payment options, contact Tuition Management Systems (TMS) atwww.afford.comor call 1 (800) 356-8329.
+
+I am ready to take the next step. How do I apply for admission to Kean?
+You can apply for admission to the fall semester by the June 1 deadline or to the spring semester by the December 1 deadline. The application is available on the Kean website, www.kean.edu, at the link Apply Here. A credit or debit card is needed to pay the application fee online. Be sure to select the EPIC Program for your application status before submitting your application. To complete the application, you must contact your former high school and college(s), if applicable, to request an official transcript be sent to the Office of Undergraduate Admissions. An official GED transcript can also be submitted to show high school completion.
+If you prefer to receive a paper application, please contact the Office of Undergraduate Admissions by phone (908) 737-7100 or by email atadmitme@kean.edu.

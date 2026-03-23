@@ -3,6 +3,7 @@ import os
 import re
 import json
 import asyncio
+from difflib import SequenceMatcher
 from math import radians, sin, cos, asin, sqrt
 from pathlib import Path
 from datetime import datetime
@@ -92,7 +93,8 @@ def program_subject_tokens_from_query(text: str) -> set[str]:
     drop_tokens = {
         "degree", "degrees", "program", "programs", "master", "masters", "graduate",
         "undergraduate", "undergrad", "available", "kean", "major", "bachelor",
-        "there", "have", "has", "is", "are", "does", "do",
+        "there", "have", "has", "is", "are", "does", "do", "offer", "offers",
+        "similar", "related", "something", "want", "looking",
     }
     base = {
         t
@@ -320,6 +322,96 @@ def extract_session_from_text(text: str) -> Optional[str]:
     if re.search(r"\b(ii|2)\b", q) and any(alias in q for alias in SEASON_ALIASES.get("summer", ())):
         return "2"
     return None
+
+def format_calendar_term_label(term_key: str) -> str:
+    q = normalize(term_key)
+    season = next((name.title() for name in ("winter", "spring", "summer", "fall") if name in q), None)
+    year_match = re.search(r"(20\d{2})", q)
+    if season and year_match:
+        return f"{season} {year_match.group(1)}"
+    return term_key.title()
+
+def sort_calendar_term_keys(term_keys: list[str]) -> list[str]:
+    season_order = {"winter": 0, "spring": 1, "summer": 2, "fall": 3}
+
+    def sort_key(term_key: str):
+        q = normalize(term_key)
+        year_match = re.search(r"(20\d{2})", q)
+        year = int(year_match.group(1)) if year_match else 9999
+        season = next((name for name in season_order if name in q), "")
+        return (year, season_order.get(season, 99), q)
+
+    return sorted(term_keys, key=sort_key)
+
+def get_calendar_term_examples(max_terms: int = 3) -> list[str]:
+    sorted_terms = sort_calendar_term_keys(list(calendar_data.keys()))
+    return [format_calendar_term_label(term) for term in sorted_terms[:max_terms]]
+
+def build_calendar_clarification_prompt(category: Optional[str], lang: str) -> str:
+    examples = get_calendar_term_examples()
+    example_text = ", ".join(examples) if examples else "Spring 2026, Summer 2026, or Fall 2026"
+
+    prompts = {
+        "registration": {
+            "en": f"Which semester are you asking about for registration? For example: {example_text}.",
+            "es": f"¿De qué semestre hablas para la inscripción? Por ejemplo: {example_text}.",
+        },
+        "start": {
+            "en": f"Which semester are you asking about? For example: {example_text}.",
+            "es": f"¿De qué semestre hablas? Por ejemplo: {example_text}.",
+        },
+        "end": {
+            "en": f"Which semester are you asking about? For example: {example_text}.",
+            "es": f"¿De qué semestre hablas? Por ejemplo: {example_text}.",
+        },
+        "exam": {
+            "en": f"Which semester are you asking about for exams? For example: {example_text}.",
+            "es": f"¿De qué semestre hablas para los exámenes? Por ejemplo: {example_text}.",
+        },
+        "withdrawal": {
+            "en": f"Which semester are you asking about for withdrawal dates? For example: {example_text}.",
+            "es": f"¿De qué semestre hablas para las fechas de retiro? Por ejemplo: {example_text}.",
+        },
+        "immunization": {
+            "en": f"Which semester are you asking about for the immunization deadline? For example: {example_text}.",
+            "es": f"¿De qué semestre hablas para la fecha límite de vacunación? Por ejemplo: {example_text}.",
+        },
+        "recess": {
+            "en": f"Which semester are you asking about for break dates? For example: {example_text}.",
+            "es": f"¿De qué semestre hablas para las fechas de receso? Por ejemplo: {example_text}.",
+        },
+        "default": {
+            "en": f"I need the semester to answer accurately. For example: {example_text}.",
+            "es": f"Necesito el semestre para responder con precisión. Por ejemplo: {example_text}.",
+        },
+    }
+    category_prompts = prompts.get(category or "", prompts["default"])
+    return category_prompts.get(lang, category_prompts["en"])
+
+def is_calendar_timing_question(text: str) -> bool:
+    q = normalize(text)
+    category = detect_event_category(text)
+    if not category:
+        return False
+    return any(
+        token in q
+        for token in (
+            "when",
+            "date",
+            "day",
+            "start",
+            "begin",
+            "begins",
+            "end",
+            "ends",
+            "deadline",
+            "cuándo",
+            "cuando",
+            "fecha",
+            "zaman",
+            "tarih",
+        )
+    )
 
 def find_best_calendar_event(events: dict[str, str], category: str, session: Optional[str] = None) -> Optional[tuple[str, str]]:
     best_event = None
@@ -696,10 +788,13 @@ fallback_rag_docs = []
 conversation_state = {
     "last_degree_subject": None,
     "last_degree_level": None,
+    "pending_calendar_category": None,
 }
 KEAN_MAIN_URL = "https://www.kean.edu"
 KEAN_PROGRAMS_URL = "https://www.kean.edu/academics"
 KEAN_CATALOG_URL = "https://kean.smartcatalogiq.com/"
+COMPANION_PROGRAMS_PATH = "/programs"
+COMPANION_PROGRAM_DETAIL_PREFIX = "/program"
 
 SUPPORTED_LANGS = {"en", "tr", "es", "zh", "ur", "ko"}
 LANGUAGE_NAMES = {
@@ -785,6 +880,46 @@ TRANSLATIONS = {
         "zh": "正在打开校园地图。请选择目的地或在目录中搜索。",
         "ur": "کیمپس کا نقشہ کھولا جا رہا ہے۔ براہِ کرم منزل منتخب کریں یا ڈائریکٹری میں تلاش کریں۔",
         "ko": "캠퍼스 지도를 여는 중입니다. 목적지를 선택하거나 디렉터리에서 검색하세요.",
+    },
+    "campus_map_in_development": {
+        "en": "Basic information for {campus} is available, but map support for that campus is currently in development.",
+        "tr": "{campus} için temel bilgiler mevcut, ancak bu kampüsün harita desteği şu anda geliştirilmektedir.",
+        "es": "Hay información básica disponible para {campus}, pero el soporte de mapa para ese campus está actualmente en desarrollo.",
+        "zh": "{campus} 的基本信息可用，但该校区的地图支持目前仍在开发中。",
+        "ur": "{campus} کے لیے بنیادی معلومات دستیاب ہیں، لیکن اس کیمپس کے نقشے کی سہولت اس وقت تیار کی جا رہی ہے۔",
+        "ko": "{campus}의 기본 정보는 제공할 수 있지만, 해당 캠퍼스의 지도 지원은 현재 개발 중입니다.",
+    },
+    "map_attached_note_highlight_specific": {
+        "en": "I also highlighted {name} on the map.",
+        "tr": "Ayrıca {name} konumunu haritada vurguladım.",
+        "es": "También marqué {name} en el mapa.",
+        "zh": "我也已在地图上标出 {name}。",
+        "ur": "میں نے {name} کو نقشے پر بھی نمایاں کر دیا ہے۔",
+        "ko": "{name} 위치도 지도에 표시했습니다.",
+    },
+    "map_attached_note_directions_specific": {
+        "en": "I also opened directions to {name}.",
+        "tr": "Ayrıca {name} için yol tarifi açtım.",
+        "es": "También abrí indicaciones para llegar a {name}.",
+        "zh": "我也已打开前往 {name} 的路线。",
+        "ur": "میں نے {name} کے لیے راستہ بھی کھول دیا ہے۔",
+        "ko": "{name}까지 가는 길도 열었습니다.",
+    },
+    "map_attached_note_highlight_generic": {
+        "en": "I also opened the campus map.",
+        "tr": "Ayrıca kampüs haritasını açtım.",
+        "es": "También abrí el mapa del campus.",
+        "zh": "我也已打开校园地图。",
+        "ur": "میں نے کیمپس کا نقشہ بھی کھول دیا ہے۔",
+        "ko": "캠퍼스 지도도 열었습니다.",
+    },
+    "map_attached_note_directions_generic": {
+        "en": "I also opened map directions.",
+        "tr": "Ayrıca harita yol tarifini açtım.",
+        "es": "También abrí indicaciones en el mapa.",
+        "zh": "我也已打开地图路线。",
+        "ur": "میں نے نقشے میں راستہ بھی کھول دیا ہے۔",
+        "ko": "지도 길안내도 열었습니다.",
     },
     "closest_parking_found": {
         "en": "The closest parking lot to {target} is {lot}. Opening map.",
@@ -1075,11 +1210,17 @@ TRANSLATIONS = {
     "program_details_intro": {
         "en": "Here’s a quick overview of {name}:",
     },
-    "program_more_info": {
-        "en": "For more information, you can check: {url}",
+    "program_official_more_info": {
+        "en": "For official program details, you can check: {url}",
     },
     "program_contact": {
         "en": "Program contact: {contact}",
+    },
+    "program_companion_browse": {
+        "en": "You can also browse related options on the Kean Programs page in this app: {url}",
+    },
+    "program_companion_details": {
+        "en": "Open this program in the app: {url}",
     },
     "admissions_summary": {
         "en": "Here’s a quick admissions overview:\n1. Freshman, transfer, and readmit applicants use Kean’s application portal, while graduate and international applicants use apply.kean.edu.\n2. Most application fees listed in current records are $75.\n3. For general admissions help, contact Kean Admissions at (908) 737-7100 or admitme@kean.edu.\n4. You can start here: https://www.kean.edu/apply-now",
@@ -1497,6 +1638,7 @@ def load_program_catalog():
                 "contact": contact_text,
                 "url": program_url or KEAN_PROGRAMS_URL,
                 "catalog_url": catalog_url,
+                "name_tokens": name_tokens | meaningful_tokens(program_id.replace("_", " ")),
                 "tokens": name_tokens | meaningful_tokens(description) | meaningful_tokens(program_id.replace("_", " ")),
             }
         )
@@ -1976,6 +2118,17 @@ def build_smoking_policy_answer(lang: str) -> str:
         "5. More information: https://www.kean.edu"
     )
 
+def build_general_policy_overview_answer(lang: str) -> str:
+    return (
+        "Here’s a general overview of academic policies at Kean:\n"
+        "1. Academic Integrity: Kean expects honest academic work and does not allow cheating, plagiarism, or other forms of academic dishonesty.\n"
+        "2. Course Repeats and Grade Recalculation: Undergraduate students may repeat some courses under specific rules, while graduate-level coursework cannot be repeated or recalculated.\n"
+        "3. Leave of Absence and Withdrawal: Students who need to step away for medical or personal reasons may request a leave of absence or review withdrawal options.\n"
+        "4. Student Privacy (FERPA): Educational records are protected, and access to student information is limited by privacy rules.\n"
+        "5. Student Conduct and Title IX: Kean also has policies covering student conduct, discrimination, harassment, and Title IX protections.\n"
+        "For official policy details, start at https://www.kean.edu and review the relevant office or policy page."
+    )
+
 def build_housing_answer(lang: str) -> str:
     return (
         "Here’s a quick housing overview:\n"
@@ -2030,7 +2183,7 @@ def find_program_match(text: str) -> Optional[dict]:
     for program in program_catalog:
         name_norm = normalize(program["name"])
         score = 0
-        overlap = len(q_tokens & program["tokens"])
+        overlap = len(q_tokens & program.get("name_tokens", program["tokens"]))
         if overlap:
             score += overlap * 20
         if name_norm and name_norm in q:
@@ -2045,12 +2198,102 @@ def find_program_match(text: str) -> Optional[dict]:
         return best_match
     return None
 
+def find_similar_programs(text: str, max_results: int = 3) -> list[dict]:
+    if not program_catalog:
+        return []
+
+    subject_basis = extract_degree_subject_phrase(text) or extract_follow_up_subject_phrase(text) or text
+    query_norm = normalize(subject_basis)
+    query_tokens = program_subject_tokens_from_query(subject_basis)
+    if not query_tokens:
+        query_tokens = meaningful_tokens(subject_basis)
+    if not query_tokens:
+        query_tokens = tokenize(subject_basis)
+
+    scored = []
+    for program in program_catalog:
+        name_norm = normalize(program["name"])
+        overlap = len(query_tokens & program.get("name_tokens", program["tokens"]))
+        ratio = SequenceMatcher(None, query_norm, name_norm).ratio() if query_norm else 0.0
+        contains_bonus = 18 if query_norm and (query_norm in name_norm or name_norm in query_norm) else 0
+        score = ratio * 100 + overlap * 14 + contains_bonus
+        if overlap == 0 and contains_bonus == 0 and ratio < 0.72:
+            continue
+        if score >= 42:
+            scored.append((score, program))
+
+    scored.sort(key=lambda item: item[0], reverse=True)
+    suggestions = []
+    seen = set()
+    for _, program in scored:
+        if program["name"] in seen:
+            continue
+        seen.add(program["name"])
+        suggestions.append(program)
+        if len(suggestions) >= max_results:
+            break
+    return suggestions
+
+def suggest_program_subject_correction(text: str) -> Optional[str]:
+    subject_basis = extract_degree_subject_phrase(text) or extract_follow_up_subject_phrase(text) or text
+    query_tokens = program_subject_tokens_from_query(subject_basis)
+    if not query_tokens:
+        query_tokens = meaningful_tokens(subject_basis)
+
+    vocabulary = set()
+    for program in program_catalog:
+        vocabulary.update(program.get("name_tokens", set()))
+
+    best_candidate = None
+    best_score = 0.0
+    for token in query_tokens:
+        if len(token) < 4 or token in GENERIC_QUERY_WORDS:
+            continue
+        for candidate in vocabulary:
+            if len(candidate) < 4 or candidate == token or candidate in GENERIC_QUERY_WORDS:
+                continue
+            ratio = SequenceMatcher(None, token, candidate).ratio()
+            if ratio >= 0.82 and ratio > best_score:
+                best_score = ratio
+                best_candidate = candidate
+    return best_candidate
+
+def build_program_discovery_reply(query: str, lang: str) -> str:
+    suggestions = find_similar_programs(query)
+    correction = suggest_program_subject_correction(query)
+    lines = []
+
+    if correction:
+        lines.append(f"Did you mean {correction}?")
+
+    if suggestions:
+        lines.append("I could not find an exact match, but these related programs may help:")
+        for index, program in enumerate(suggestions, start=1):
+            app_url = f"{COMPANION_PROGRAM_DETAIL_PREFIX}/{program['id']}"
+            official_url = program.get("catalog_url") or program.get("url") or KEAN_PROGRAMS_URL
+            lines.append(f"{index}. {program['name']}")
+            lines.append(trn("program_companion_details", lang, url=app_url))
+            if official_url:
+                lines.append(trn("program_official_more_info", lang, url=official_url))
+    else:
+        if correction:
+            lines.append(
+                f"I could not find an exact {correction} program in my current Kean program records."
+            )
+        else:
+            lines.append(trn("program_not_found", lang))
+
+    lines.append(trn("program_companion_browse", lang, url=COMPANION_PROGRAMS_PATH))
+    lines.append(trn("program_official_more_info", lang, url=KEAN_PROGRAMS_URL))
+    return "\n".join(lines)
+
 def build_program_answer(program: dict, lang: str) -> str:
     lines = [trn("program_details_intro", lang, name=program["name"])]
     if program.get("description"):
         lines.append(program["description"])
     link_url = program.get("url") or program.get("catalog_url") or KEAN_PROGRAMS_URL
-    lines.append(trn("program_more_info", lang, url=link_url))
+    lines.append(trn("program_companion_browse", lang, url=COMPANION_PROGRAMS_PATH))
+    lines.append(trn("program_official_more_info", lang, url=link_url))
     if program.get("contact"):
         lines.append(trn("program_contact", lang, contact=program["contact"]))
     return "\n".join(lines)
@@ -2065,7 +2308,12 @@ def build_degree_availability_answer(
     answer = trn("degree_exists_yes" if exists else "degree_exists_no", lang, subject=subject, level=level)
     if exists:
         url = (program or {}).get("url") or (program or {}).get("catalog_url") or KEAN_PROGRAMS_URL
-        answer = f"{answer}\n{trn('program_more_info', lang, url=url)}"
+        answer = (
+            f"{answer}\n{trn('program_companion_browse', lang, url=COMPANION_PROGRAMS_PATH)}"
+            f"\n{trn('program_official_more_info', lang, url=url)}"
+        )
+    else:
+        answer = f"{answer}\n{build_program_discovery_reply(subject, lang)}"
     return answer
 
 def is_section_heading(line: str) -> bool:
@@ -2443,13 +2691,18 @@ def should_route_destination_without_location_keyword(text: str) -> bool:
     # Allow direct lookup style messages ("naab", "miron center", etc.)
     if len(q_tokens) <= 4 and not any(
         keyword_in_text(q, q_tokens, keyword)
-        for keyword in ("major", "program", "degree", "repeat", "class", "policy", "tuition", "how many")
+        for keyword in (
+            "major", "program", "degree", "repeat", "class", "policy", "tuition",
+            "how many", "offer", "offers", "similar", "related", "looking for",
+        )
     ):
         return True
 
     return False
 
 def find_location_destination_id(text: str, allowed_types: Optional[set[str]] = None) -> Optional[str]:
+    if is_program_interest_question(text) or is_degree_availability_question(text):
+        return None
     q = normalize(text)
     padded_query = f" {q} "
     query_tokens = set(q.split())
@@ -2520,6 +2773,20 @@ def normalize_location_destination_for_response(destination_id: str, user_text: 
     if parent_id and parent_id in campus_location_by_id:
         return parent_id
     return destination_id
+
+NON_MAPPED_CAMPUS_ALIASES = {
+    "Kean Ocean": {"kean ocean", "ocean campus", "ocean county", "kean ocean campus"},
+    "Kean Skylands": {"kean skylands", "skylands campus", "skylands"},
+    "Wenzhou-Kean University (China)": {"china campus", "wenzhou", "wenzhou kean", "wenzhou-kean", "kean china", "china"},
+}
+
+def find_non_mapped_campus_name(text: str) -> Optional[str]:
+    q = normalize(text)
+    for campus_name, aliases in NON_MAPPED_CAMPUS_ALIASES.items():
+        for alias in aliases:
+            if alias in q:
+                return campus_name
+    return None
 
 def find_closest_parking_lot(reference_location_id: str) -> Optional[dict]:
     reference = get_effective_reference_location(reference_location_id)
@@ -2614,6 +2881,22 @@ def is_degree_availability_question(text: str) -> bool:
         for k in ("major", "bachelor", "undergrad", "undergraduate", "master", "graduate", "degree", "program", "carrera", "especialidad", "maestria", "maestría", "lisans", "yuksek lisans", "yüksek lisans", "전공", "학위", "硕士", "专业")
     )
     return asks_existence and asks_degree
+
+def is_program_interest_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    subject_tokens = program_subject_tokens_from_query(
+        extract_degree_subject_phrase(text) or extract_follow_up_subject_phrase(text) or text
+    )
+    asks_program = any(
+        keyword_in_text(q, q_tokens, k)
+        for k in (
+            "program", "programs", "degree", "degrees", "major", "majors",
+            "offer", "offers", "similar", "related", "looking for", "interested in",
+            "what program", "which program",
+        )
+    )
+    return asks_program and len(subject_tokens) > 0
 
 def is_program_follow_up_question(text: str) -> bool:
     q = normalize(text)
@@ -3296,6 +3579,13 @@ def _clean_fast_path_line(line: str) -> str:
     cleaned = re.sub(r"^Title:\s*Unknown\s*", "", cleaned, flags=re.IGNORECASE)
     cleaned = re.sub(r"^Description:\s*", "", cleaned, flags=re.IGNORECASE)
     cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    if cleaned and cleaned[0].islower():
+        sentence_candidates = re.split(r"(?<=[.!?])\s+", cleaned)
+        for candidate in sentence_candidates:
+            candidate = candidate.strip()
+            if candidate and re.match(r"^[A-Z0-9\"“(]", candidate):
+                cleaned = candidate
+                break
     return cleaned
 
 def _truncate_snippet(text: str, max_chars: int = 180) -> str:
@@ -3458,9 +3748,46 @@ async def chat(req: ChatRequest):
     faq_topic = detect_faq_intent(user_text)
     destination_id = find_location_destination_id(user_text)
     has_location_intent = is_location_question(user_text)
+    pending_calendar_category = conversation_state.get("pending_calendar_category")
+    location_context_requested = has_location_intent or (
+        destination_id and should_route_destination_without_location_keyword(user_text)
+    )
+    normalized_destination_id = (
+        normalize_location_destination_for_response(destination_id, user_text) if destination_id else None
+    )
+    non_mapped_campus_name = find_non_mapped_campus_name(user_text) if location_context_requested else None
+    use_current_location = should_use_current_location(user_text) if location_context_requested else False
+    location_mode = "directions" if use_current_location else "highlight"
 
     async def localized(answer: str) -> str:
         return await localize_answer_text(answer, lang)
+
+    def with_location(payload: dict) -> dict:
+        if not location_context_requested or payload.get("intent") == "location":
+            return payload
+        enriched = dict(payload)
+        enriched["destination_id"] = normalized_destination_id
+        enriched["use_current_location"] = use_current_location
+        enriched["location_mode"] = location_mode
+        map_target = campus_location_by_id.get(normalized_destination_id, {}) if normalized_destination_id else {}
+        if normalized_destination_id:
+            map_note_key = (
+                "map_attached_note_directions_specific"
+                if location_mode == "directions"
+                else "map_attached_note_highlight_specific"
+            )
+        else:
+            map_note_key = (
+                "map_attached_note_directions_generic"
+                if location_mode == "directions"
+                else "map_attached_note_highlight_generic"
+            )
+        map_note = trn(map_note_key, lang, name=map_target.get("name", "that location")).strip()
+        answer_text = str(enriched.get("answer") or "").strip()
+        if answer_text and map_note and map_note not in answer_text:
+            separator = "\n\n" if "\n" in answer_text else " "
+            enriched["answer"] = f"{answer_text}{separator}{map_note}"
+        return enriched
 
     if is_help_capabilities_question(user_text):
         return {
@@ -3519,132 +3846,140 @@ async def chat(req: ChatRequest):
         }
 
     if is_shuttle_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_shuttle_answer(lang)),
             "intent": "faq",
             "faq_topic": "parking_transport",
             "response_mode": "shuttle_direct",
-        }
+        })
 
     if is_hours_question(user_text):
         hours_target = detect_hours_target(user_text)
         if hours_target:
-            return {
+            return with_location({
                 "answer": await localized(build_target_hours_answer(hours_target, lang)),
                 "intent": "faq",
                 "faq_topic": "hours",
                 "response_mode": f"hours_{hours_target}",
-            }
-        return {
+            })
+        return with_location({
             "answer": trn("hours_target_prompt", lang),
             "intent": "faq",
             "faq_topic": "hours",
             "response_mode": "hours_target_prompt",
-        }
+        })
 
     if is_course_repeat_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_course_repeat_answer(lang)),
             "intent": "faq",
             "faq_topic": "policies",
             "response_mode": "course_repeat_policy",
-        }
+        })
 
     if is_admissions_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_admissions_answer(lang)),
             "intent": "faq",
             "faq_topic": "admissions",
             "response_mode": "admissions_direct",
-        }
+        })
 
     if is_graduation_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_graduation_answer(lang)),
             "intent": "faq",
             "faq_topic": "policies",
             "response_mode": "graduation_direct",
-        }
+        })
 
     if is_financial_aid_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_financial_aid_answer(lang)),
             "intent": "faq",
             "faq_topic": "financial_aid",
             "response_mode": "financial_aid_direct",
-        }
+        })
 
     if is_student_accounts_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_student_accounts_answer(lang)),
             "intent": "faq",
             "faq_topic": "student_accounts",
             "response_mode": "student_accounts_direct",
-        }
+        })
 
     if is_housing_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_housing_answer(lang)),
             "intent": "faq",
             "faq_topic": "housing",
             "response_mode": "housing_direct",
-        }
+        })
 
     if is_health_services_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_health_services_answer(lang)),
             "intent": "faq",
             "faq_topic": "health_services",
             "response_mode": "health_services_direct",
-        }
+        })
 
     if is_accessibility_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_accessibility_answer(lang)),
             "intent": "faq",
             "faq_topic": "accessibility",
             "response_mode": "accessibility_direct",
-        }
+        })
 
     if is_bookstore_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_bookstore_answer(lang)),
             "intent": "faq",
             "faq_topic": "bookstore",
             "response_mode": "bookstore_direct",
-        }
+        })
 
     if is_registrar_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_registrar_answer(lang)),
             "intent": "faq",
             "faq_topic": "registration",
             "response_mode": "registrar_direct",
-        }
+        })
 
     if is_one_stop_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_one_stop_answer(lang)),
             "intent": "faq",
             "faq_topic": "registration",
             "response_mode": "one_stop_direct",
-        }
+        })
 
     if is_dining_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_dining_answer(lang)),
             "intent": "faq",
             "faq_topic": "hours",
             "response_mode": "dining_direct",
-        }
+        })
 
     if is_smoking_policy_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_smoking_policy_answer(lang)),
             "intent": "faq",
             "faq_topic": "smoking_policy",
             "response_mode": "smoking_policy_direct",
-        }
+        })
+
+    if faq_topic == "policies":
+        return with_location({
+            "answer": await localized(build_general_policy_overview_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "policies",
+            "response_mode": "policy_overview_direct",
+        })
 
     if is_program_follow_up_question(user_text):
         current_subject = extract_degree_subject_phrase(user_text) or extract_follow_up_subject_phrase(user_text)
@@ -3665,19 +4000,19 @@ async def chat(req: ChatRequest):
             if follow_up_answer:
                 conversation_state["last_degree_subject"] = follow_up_subject
                 conversation_state["last_degree_level"] = follow_up_level
-                return {
+                return with_location({
                     "answer": await localized(follow_up_answer),
                     "intent": "faq",
                     "faq_topic": "programs",
                     "sources_used": len(context_blocks),
                     "response_mode": "program_follow_up",
-                }
-        return {
+                })
+        return with_location({
             "answer": trn("program_follow_up_prompt", lang),
             "intent": "faq",
             "faq_topic": "programs",
             "response_mode": "program_follow_up_prompt",
-        }
+        })
 
     if is_food_question(user_text):
         food_suggestions = find_food_suggestions(user_text, max_results=3)
@@ -3727,12 +4062,12 @@ async def chat(req: ChatRequest):
         }
 
     if is_parking_ticket_fee_question(user_text):
-        return {
+        return with_location({
             "answer": await localized(build_parking_ticket_fee_answer(lang)),
             "intent": "faq",
             "faq_topic": "parking_transport",
             "response_mode": "policy_fee_summary",
-        }
+        })
 
     if is_parking_location_question(user_text):
         audience = parking_audience(user_text)
@@ -3749,12 +4084,16 @@ async def chat(req: ChatRequest):
             "location_mode": "highlight",
         }
 
-    if has_location_intent or (destination_id and should_route_destination_without_location_keyword(user_text)):
-        use_current_location = should_use_current_location(user_text)
-        location_mode = "directions" if use_current_location else "highlight"
-        if destination_id:
-            destination_id = normalize_location_destination_for_response(destination_id, user_text)
-            destination = campus_location_by_id.get(destination_id, {})
+    if non_mapped_campus_name:
+        return {
+            "answer": trn("campus_map_in_development", lang, campus=non_mapped_campus_name),
+            "intent": "general",
+            "response_mode": "campus_map_in_development",
+        }
+
+    if location_context_requested and not faq_topic:
+        if normalized_destination_id:
+            destination = campus_location_by_id.get(normalized_destination_id, {})
             return {
                 "answer": trn(
                     "location_opening_specific",
@@ -3763,7 +4102,7 @@ async def chat(req: ChatRequest):
                     campus=destination.get("campus", "campus"),
                 ),
                 "intent": "location",
-                "destination_id": destination_id,
+                "destination_id": normalized_destination_id,
                 "use_current_location": use_current_location,
                 "location_mode": location_mode,
             }
@@ -3775,20 +4114,48 @@ async def chat(req: ChatRequest):
             "location_mode": location_mode,
         }
 
-    if is_calendar_question(user_text):
+    if is_calendar_question(user_text) or is_calendar_timing_question(user_text):
         term = extract_term_from_text(user_text)
         session = extract_session_from_text(user_text)
+        category = detect_event_category(user_text) or pending_calendar_category
         if term:
             matched = next((t for t in calendar_data if term in t), None)
-            category = detect_event_category(user_text)
             if matched and category:
                 best_event = find_best_calendar_event(calendar_data[matched], category, session=session)
                 if best_event:
+                    conversation_state["pending_calendar_category"] = None
                     event, date = best_event
-                    return {
+                    return with_location({
                         "answer": f"{localize_calendar_event_text(event, lang)}: {localize_date_text(date, lang)}",
                         "intent": "calendar",
-                    }
+                    })
+        elif category:
+            conversation_state["pending_calendar_category"] = category
+            return with_location({
+                "answer": build_calendar_clarification_prompt(category, lang),
+                "intent": "calendar",
+                "response_mode": "calendar_term_clarify",
+            })
+
+    if pending_calendar_category:
+        term = extract_term_from_text(user_text)
+        if term:
+            matched = next((t for t in calendar_data if term in t), None)
+            session = extract_session_from_text(user_text)
+            if matched:
+                best_event = find_best_calendar_event(
+                    calendar_data[matched],
+                    pending_calendar_category,
+                    session=session,
+                )
+                if best_event:
+                    conversation_state["pending_calendar_category"] = None
+                    event, date = best_event
+                    return with_location({
+                        "answer": f"{localize_calendar_event_text(event, lang)}: {localize_date_text(date, lang)}",
+                        "intent": "calendar",
+                        "response_mode": "calendar_term_follow_up",
+                    })
 
     if is_degree_availability_question(user_text):
         subject_phrase = extract_degree_subject_phrase(user_text)
@@ -3800,7 +4167,7 @@ async def chat(req: ChatRequest):
         exists = bool(matched_program) or degree_exists_in_records(subject_tokens, level)
         conversation_state["last_degree_subject"] = subject_label
         conversation_state["last_degree_level"] = level
-        return {
+        return with_location({
             "answer": await localized(
                 build_degree_availability_answer(
                     exists,
@@ -3813,7 +4180,7 @@ async def chat(req: ChatRequest):
             "intent": "faq",
             "faq_topic": "programs",
             "response_mode": "degree_availability",
-        }
+        })
 
     program_match = find_program_match(user_text)
     if program_match and (
@@ -3822,12 +4189,20 @@ async def chat(req: ChatRequest):
         or len(tokenize(user_text)) <= 5
     ):
         conversation_state["last_degree_subject"] = program_match["name"]
-        return {
+        return with_location({
             "answer": await localized(build_program_answer(program_match, lang)),
             "intent": "faq",
             "faq_topic": "programs",
             "response_mode": "program_catalog_direct",
-        }
+        })
+
+    if faq_topic == "programs" or is_program_interest_question(user_text):
+        return with_location({
+            "answer": await localized(build_program_discovery_reply(user_text, lang)),
+            "intent": "faq",
+            "faq_topic": "programs",
+            "response_mode": "program_discovery",
+        })
 
     retrieval_query = build_retrieval_query(user_text, lang, faq_topic)
     context_blocks = retrieve_rag_context(retrieval_query)
@@ -3840,31 +4215,31 @@ async def chat(req: ChatRequest):
         context_blocks = retrieve_fallback_context(fallback_query, faq_topic=faq_topic)
 
     if should_ask_for_clarification(user_text, context_blocks, faq_topic):
-        return {
+        return with_location({
             "answer": trn("faq_clarify_reply", lang),
             "intent": "faq" if faq_topic else "general",
             "faq_topic": faq_topic,
             "sources_used": len(context_blocks),
             "response_mode": "clarify_no_match",
-        }
+        })
 
     if FAQ_FAST_PATH_ENABLED and faq_topic and context_blocks:
         fast_answer = build_fast_path_answer(user_text, context_blocks, lang, faq_topic=faq_topic)
         if fast_answer:
-            return {
+            return with_location({
                 "answer": await localized(fast_answer),
                 "intent": "faq",
                 "faq_topic": faq_topic,
                 "sources_used": len(context_blocks),
                 "response_mode": "fast_path",
-            }
-        return {
-            "answer": await localized(trn("program_not_found", lang) if faq_topic == "programs" else trn("faq_no_exact_match", lang)),
+            })
+        return with_location({
+            "answer": await localized(build_program_discovery_reply(user_text, lang) if faq_topic == "programs" else trn("faq_no_exact_match", lang)),
             "intent": "faq",
             "faq_topic": faq_topic,
             "sources_used": len(context_blocks),
             "response_mode": "fast_path_no_match",
-        }
+        })
 
     prompt = build_rag_prompt(user_text, context_blocks, faq_topic)
 
@@ -3873,26 +4248,26 @@ async def chat(req: ChatRequest):
     except (httpx.HTTPError, asyncio.TimeoutError):
         fast_answer = build_fast_path_answer(user_text, context_blocks, lang, max_lines=2, faq_topic=faq_topic)
         if fast_answer:
-            return {
+            return with_location({
                 "answer": await localized(fast_answer),
                 "intent": "faq" if faq_topic else "general",
                 "faq_topic": faq_topic,
                 "sources_used": len(context_blocks),
                 "response_mode": "fast_path_timeout",
-            }
-        fallback_answer = trn("program_not_found", lang) if faq_topic == "programs" else build_fallback_answer(user_text, context_blocks, lang)
-        return {"answer": await localized(fallback_answer), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)}
+            })
+        fallback_answer = build_program_discovery_reply(user_text, lang) if faq_topic == "programs" else build_fallback_answer(user_text, context_blocks, lang)
+        return with_location({"answer": await localized(fallback_answer), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)})
     except Exception:
         fast_answer = build_fast_path_answer(user_text, context_blocks, lang, max_lines=2, faq_topic=faq_topic)
         if fast_answer:
-            return {
+            return with_location({
                 "answer": await localized(fast_answer),
                 "intent": "faq" if faq_topic else "general",
                 "faq_topic": faq_topic,
                 "sources_used": len(context_blocks),
                 "response_mode": "fast_path_timeout",
-            }
-        fallback_answer = trn("program_not_found", lang) if faq_topic == "programs" else build_fallback_answer(user_text, context_blocks, lang)
-        return {"answer": await localized(fallback_answer), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)}
+            })
+        fallback_answer = build_program_discovery_reply(user_text, lang) if faq_topic == "programs" else build_fallback_answer(user_text, context_blocks, lang)
+        return with_location({"answer": await localized(fallback_answer), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)})
 
-    return {"answer": await localized(reply), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)}
+    return with_location({"answer": await localized(reply), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)})

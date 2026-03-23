@@ -1,0 +1,343 @@
+DOCUMENT TITLE: Educational Opportunity Fund (EOF)
+SOURCE ORGANIZATION: Kean University
+SOURCE FILE: Educational Opportunity Fund - EOF.txt
+DOCUMENT TYPE: Student Support / EOF Program
+RAG_COLLECTION: eof_program
+LANGUAGE: English
+
+NOTES FOR RAG INGESTION:
+- Cleaned from source text for retrieval-augmented generation.
+- Normalized whitespace and common character encoding issues.
+- Headings and bullets were standardized where possible.
+# Educational Opportunity Fund - EOF
+
+## About the EOF Program
+The New Jersey Educational Opportunity Fund (EOF) provides financial assistance and comprehensive support services to motivated students who show strong potential for academic success but may come from educationally or economically disadvantaged backgrounds. Eligible applicants must meet state financial criteria and demonstrate the need for additional academic preparation or support. Because EOF is a limited-capacity program with several admission pathways, students must complete the application that aligns with their specific eligibility category.
+Early Support Through the EOF Summer Academy
+For many students, EOF support begins even before their first semester. The EOF Summer Academy is a month-long academic and transitional experience designed to prepare incoming students for the expectations of college while helping them adjust to campus life. This early foundation strengthens academic readiness and builds confidence as students enter their first year.
+## Comprehensive Student Support
+EOF provides a wide range of services that help students thrive academically, personally, and professionally. These include:
+- Regular guidance from a dedicated EOF counselor
+- Academic advising and counseling
+- Student leadership development opportunities
+- Opportunity to receive additionalfinancial aid during the academic year
+- Potential winter and/or summer financial support, depending on available funding
+These services complement the resources available to all Kean University students and support the institutions mission of access and academic excellence. EOF staff collaborate closely with campus departments to ensure students receive the academic and social support needed to succeed.
+Workshops and Development Opportunities
+EOF students participate in workshops designed to promote academic growth, self-development, and career readiness. Through group meetings, lectures, and experiential activities, students build essential skills and stay on track for timely graduation. Each semester, counselors host sessions tailored to students stage in their academic journey, creating opportunities for peer connection and shared learning.
+Support Throughout the College Journey
+As students progress through their undergraduate experience, EOF support evolves to meet their changing needs.Action plans are developed early in each students academic journey and are regularly monitored to ensure they remain on track for timely graduation.
+- Early stages:Students focus on adjusting to academic expectations, exploring majors, and developing self-awareness.
+- Middle stages:Students clarify career goals, create academic plans, and make informed decisions about their major.
+- Later stages:Students deepen career exploration, build professional skills, and prepare materials such as career portfolios.
+- Final stages:Students prepare for graduate school or enter the workforce, often through internships and hands-on experiences that support a smooth transition after graduation.
+EOF Application Process
+The New Jersey Educational Opportunity Fund (EOF) is designed to provide financial assistance and comprehensive support servicesincluding counseling, tutoring, and developmental courseworkto highly motivated students. These students come from educationally and economically disadvantaged backgrounds but exhibit strong potential for academic and personal success.
+Candidates for EOF must meet state financial eligibility requirements?and demonstrate the capability to succeed but did not demonstrate sufficient academic preparation to gain admission to Kean University under its regular standards of admission or have an educational background indicating the need for enhanced basic skills, additional academic support, or preparation tailored to their intended degree program.
+EOF is not a financial entitlement, and space in the program is limited. EOF offers several admission categories to accommodate students with varying circumstances and qualifications. To ensure the best fit, applicants must complete the specific application corresponding to their EOF admission category.
+## ?Freshman Admission
+Freshmen seeking admission into the Educational Opportunity Fund (EOF) program must complete the Kean Universityapplicationand indicate their interest in EOF by selecting EOF Freshman on the Common Application or the Kean University online application.
+For more details on EOF Freshman admission, clickhere. To learn more about our summer programming opportunities, visitwww.kean.edu/eofsummer.
+## Transfer Admission
+Transfer students applying to Kean University and seeking consideration for EOF must complete the Kean Universityapplicationand indicate their interest by selecting EOF Transfer status. This applies to:
+- Students who are or were EOF scholars at their previous institution.
+- Students transferring to Kean University who are interested in joining EOF for the first time.
+For additional information, visitwww.kean.edu/eoftransfer.
+## Current Kean Students
+Incoming freshmen who did not participate in an EOF Summer Program, as well as currently enrolled Kean University students (up to their junior year), may apply for available spots in the Kean University EOF Program. Applicants must complete the EOF Academic Year application for the year they plan to enroll in EOF for the first time.
+For more details and the current application, visitwww.kean.edu/eofayapp.
+EOF Re-Admit
+Previously enrolled Kean EOF students who have stopped out for at least one semester must complete the EOF Academic Year application for the year they plan to return to the program.
+For more information and the latest application, visitwww.kean.edu/eofayapp.
+## Graduate Student Admission
+The Educational Opportunity Fund (EOF) graduate program provides financial assistance to a select number of graduate students each year. Interested applicants must meet the state's income eligibility criteria; however, prior EOF participation as an undergraduate is not required.
+For more details, visitwww.kean.edu/eofgradgrant.
+EOF Freshman Admission
+EOF Freshman Eligibility
+In order to be considered for freshman admission into the EOF Program at Kean University, an applicant:
+- Must be a U.S. citizen or permanent resident.
+- Is required to be a New Jersey resident for at least one year prior to enrollment at Kean University.
+- Must fully complete the admissions application process.
+- Must meet the incomeeligibility guidelinesfor household income based on size as determined annually by the State of New Jersey, Office of the Secretary of Higher Education, Educational Opportunity Fund.
+- Has an educational background that shows need for improvement of academic skills.
+- Intends to enroll full-time (at least 12 credits per semester).
+- May attend a high school and/or live in a targeted socioeconomic area as identified by the State of New Jersey, Office of the Secretary of Higher Education, Educational Opportunity Fund.
+- May have successfully completed a New Jersey Gear UP/College Bound/Upward Bound Program.
+- May have a sibling who was or is enrolled in an EOF Program in New Jersey.
+- May be eligible for government assistance and/or educational programs for low-income or disadvantaged populations (TRIO programs, free and reduced breakfast/lunch, food stamps).
+- NJ Dreamers are eligible to apply for the EOF Program. Students must graduate from a New Jersey high school, have attended for three years and cannot be visiting the U.S. on a visa.
+Applying to the EOF Program
+- Fill out an undergraduate admissions application online atwww.kean.edu.
+- Make sure to indicate you are applying for the EOF Program by selecting EOF Freshman" on the Common Application or Kean University online application.
+- Complete theEOF Supplemental Applicationon your Kean Cougar Application Portal
+- If you did not request EOF at the time of application, emailEOFAdmissions@kean.eduand request to have the EOF Supplemental Application placed on your application portal
+- To be considered for admission as an EOF Freshman, you must be eligible for the EOF grant and meet the above household income guideline. To review your application for EOF eligibility, please complete and submit the following:
+- Proof of 2026-27FAFSA Completion
+- Please add Kean University as one of your college choices on your FAFSA
+- Proof of completion must show your name and could be any of the following:
+- screenshot of completion confirmation page (see below)
+- copy of email confirmation of completion
+- first page of 26-27Student Aid Report (SAR)
+- If you are an NJ DREAMER:
+- Complete theNew Jersey Alternative Financial Aid Applicationapplication and submit proof of completion
+
+- Video Personal Statement
+- Please provide a short ( five minutes max ) video of yourself talking about:
+- Your academic history by academic year ( Freshman year through today )
+- Your future educational and career goals
+- How can EOF assist you in achieving these goals
+- Anything else you want us to know about you (i.e., personal challenges overcome, motivation to earn a degree, sources of inspiration )
+- Note:Please begin by stating your name, current school, and year of graduation
+Upload items via your Cougar App Portal
+To securely upload the requested items, simply go to the Upload Materials section of the Application Information page of your Cougar App Portal.
+
+2026-2027 Academic YearEOF Income Guidelines
+## Household Size
+## Maximum Gross Household Income
+Maximum Asset Cap for ALL Students
+1
+$31,300
+$6,260
+2
+$42,300
+$8,460
+3
+$53,300
+$10,660
+4
+$64,300
+$12,860
+5
+$75,300
+$15,060
+6
+$86,300
+$17,260
+7
+$97,300
+$19,460
+8
+$108,300
+$21,660
+
+For each additional household member
+
+$11,000
+
+$2,200
+
+Your offer of admission into the EOF Program as a freshman is contingent upon the following:
+- Pay the Kean Universitytuition deposit
+- Schedule yourplacement testandacademic advising appointment
+- Attend the EOF Orientation -Saturday, June 6th
+- Attend and successfully complete the Summer 2026Summer Academy- June 28th(move-in date)- July 30th*
+- dates subject to change
+## Additional Questions?
+If you have any questions about EOF and/or the EOF application process, please email us atEOFAdmissions@kean.edu
+2026 EOF Summer Academy
+
+EOF Summer Academy Overview June 28- July 30, 2026*
+
+The Kean University EOF Summer Academy is a one-month residential pre-college summer program. As part of our academic support services, the EOF Summer Academy assists first-time, full-time college students with a head start on their college career while also assisting in transitioning from high school to college. Our traditionalAcademic AdvancementTrackprovides students the opportunity to earn three college credits by taking a credited college course needed for their major. Participants will also receive academic support to improve their foundational writing, reading, and math skills in preparation for their Fall courses in these subjects. All EOF Summer Academy participants will engage with their EOF academic counselors and classmates in a series of workshops and social events as they learn about and experience the support services of the EOF program and Kean University.
+
+## Summer Academy Orientation Saturday, June 6, 2026 *
+Incoming EOF Scholars and their parents will have an opportunity to learn more details and the expectations of the Summer Academy at the on-campus EOF Summer Academy OrientationonSaturday, June 6th.Scholars and parents will participate in information sessions from key Kean University partners ( Financial Aid, Residence Life, Health Services, etc. ). Scholars will meet and engage with their classmates, EOF Counselors, and Summer Residential Counselors. This orientation is specific to the upcoming EOF Summer Academy and mandatory for all Summer Academy participants. The EOF Summer Academy Orientation is mandatory for all Summer Academy participants.
+*dates subject to change
+
+## Application Procedure
+Space in the EOF program is limited. If you're interested and have not applied to Kean University as of yet, please complete the following steps:
+- Fill out a Kean Universityundergraduate admissions application.
+- Ensure you apply for the EOF Program by selecting"EOF (Educational Opportunity Fund)"as theAdmission Typeon the Common Application or Kean University online application.
+- After submitting your application, you will access theEOF Supplemental Applicationon the Kean University Application Portal.Complete the EOF SupplementalApplication andsubmit the following documentation* to verify financial eligibility.
+
+????? 1. Proof of 2026-27 FAFSA Completion
+- Students must submit the FAFSA or New Jersey Alternative Financial Aid Application to be eligible for consideration for participation in EOF. The Kean EOF Program will review the information reported on these financial aid applications to determine if applicants are meeting the 2026-27EOF financial eligibility requirements. Applicants must list Kean University as one of their colleges on the FAFSA form and submit proof of FAFSA of NJ Alternative Application submission. Please provide
+- Proof of2026-27FAFSAcompletion orNew Jersey Alternative Financial Aid Application
+- Screenshots with the applicant's name visible are acceptable ( see below for an example )
+- Note: Please be sure to list Kean University as one of your college choices
+
+2. Video Personal Statement
+- Please provide a short ( five minutes max ) video of yourself talking about:
+- Your academic history by academic year ( Freshman year through today )
+- Your future educational and career goals
+- How can EOF assist you in achieving these goals
+- Anything else you want us to know about you (i.e., personal challenges overcome, motivation to earn a degree, sources of inspiration )
+- Note:Please begin by stating your name, current school, and year of graduation
+*additional documentation and/or interviews may be requested to verify eligibility
+** Independent students will submit alternativedocumentation. For questions on required documentation, please emailEOFAdmissions@kean.edu
+Upload items via your Cougar App Portal
+To securely upload the requested items, simply go to theUpload Materialssection of the Application Information page of your Cougar App Portal.
+
+__________________________________________________________________________________________________________________________________________________________________________________________
+
+NOTE:If you have already applied to Kean but did not select "EOF (Educational Opportunity Fund)" as theadmission typeat the time of application, you can still be considered for EOF. Please email us atEOFAdmissions@kean.eduto receive access to theEOF Supplemental Application.
+
+Acceptance to EOF
+Space in the Kean University EOF Program is limited. Upon submitting the EOF Supplemental Application and supporting documentation, the EOF department will review the applicant's video submission and financial documents to determine eligibility and make EOF admissions decisions. Additional documentation and interviews may be needed to assist in determining eligibility. Official acceptances will be offered once the applicant's information is visible in the HESAA NJFAMS portal. If any discrepancies stemming from submitted documentation and information reported on FAFSA are discovered, we will contact the applicants for clarification.
+Students accepted into EOF and invited to participate in the EOF Summer Academy must do the following:
+- Secure your spot with Kean University and the EOF Program
+- Pay your non-refundable tuition deposit to reserve your Kean Class of 2030spot! Pay by mail or go to kean.edu/deposit using your KeanWISE ID and password provided in your acceptance letter. Students accepted to Kean University via the EOF program pay a reduced tuition deposit of $25.
+- Complete the KeanEOF CommitmentFormto secure your 2026EOF Summer Academy spot. This form will be available on your Kean Cougar Application Portal.
+- SIGN UP FOR YOUR COURSE PLACEMENT/PLACEMENT TESTING AND ACADEMIC ADVISEMENT, THEN REGISTER FOR CLASSES
+- Kean University assesses incoming students for placement in their appropriate levels of reading, writing, and math classes for their freshman year.
+- The KeanCenter for Advising, Persistence, and Success (CAPS), with the support of EOF Counselors, provides Advisement to incoming Fall 2026Freshmen Students. Appointment availability will be posted in Spring 2026
+- All EOF Summer Academy participants are expected to complete their class registration before the EOF Summer Academy Orientation.
+- ATTEND EOF SUMMER ACADEMY ORIENTATION Saturday, June 6, 2026*
+- Parents are invited to attend, hear from, and speak to representatives from Financial Aid, Student Accounting, Health Services, and more!
+- ATTEND THE EOF SUMMER ACADEMY June 28July 30, 2026*
+
+If you have any questions regarding the EOF Summer Academy, the application procedure, or your application status, please email us atEOFAdmissions@kean.edu
+- dates subject to change
+EOF Transfer Admissions
+EOF Transfer Application Process
+The Kean University EOF program welcomes transfer applications from former EOF scholars and transfer students applying to Kean looking to join EOF for the first time. Anyone transferring to Kean and interested in joining our EOF family should apply to Kean as an "EOF Transfer" student.
+
+Apply to Kean as an EOF Transfer student.
+Submit anonline applicationthrough Kean University Admissions Office and complete the transfer application process, including submission of official transcripts fromeverycollege and post-secondary school attended
+Indicate your intention toapply as an 'EOF Transfer' student. This applies to both current EOF scholars and applicants interested in joining EOF for the first time at Kean University
+Pay the transfer application fee or request a fee waiver code fromEOFtransfer@kean.edu
+After completing the Kean transfer application, you must complete theEOF Supplemental Application,located in the Kean Cougar Application Portal under the Forms area.
+Upon completing theEOF Supplemental Application, you will receive an email asking you to submit additional information based on your applicant type
+If you did not apply as an 'EOF Transfer Student' when you first applied and are interested in becoming part of EOF, please email us atEOFtransfer@kean.eduand ask us to add the EOF Supplemental Application to your Kean Cougar Application portal.
+
+Applicants with a History of EOF
+Any transfer applicant with a history of receiving at least one EOF grant must submit theirEOF Transfer Formfrom their previous EOF program.Please request the EOF transfer form from your previous/current EOF program and have them email it toEOFtransfer@kean.edu.Transfer forms sent to an alternative individual or email address may cause delays in your application review.
+
+Applicants without a History of EOF
+Any transfer student seeking to join the EOF program is welcome to apply and complete the EOF transfer process. Applicants need to meet theEOF statewide eligibility criteriafor the academic year they seek to participate in EOF. Depending on your anticipated term of entry, you will be required to submit the following items:
+- Spring 2026Term
+- Proof of 25-26FAFSA completion
+- Please add Kean University as one of your college choices on your FAFSA
+- Proof of completion must show your name and could be any of the following:
+- screenshot of completion confirmation page
+- copy of email confirmation of completion
+- first page of 25-26Student Aid Report (SAR)
+- Video Statement ( see below )
+
+## Personal Video Statement
+- Please provide a short ( five minutes max ) video of yourself talking about:
+- Your career goals and aspirations
+- Support services received at your previous institution
+- How did you hear about EOF, why are you applying now, and how can EOF help you achieve your goals?
+- Anything else you would like us to know about you
+- Note:Please begin by stating your name, current institution, and anticipated term of entry
+Submission of Requested Items
+Please submit all requested items via email toEOFtransfer@kean.edu.
+
+## Application Deadline
+The Spring 2026 deadline for EOF Transfer Applications isDecember 15, 2025
+
+EOF Acceptance
+Space and funding in EOF are limited. Transfer students with a history of EOF will receive priority consideration for available funding. If funding is unavailable, students with a history of EOF can be accepted and supported as 'Non-Funded' EOF students. Accepted EOF Transfer students will receive email correspondence from the EOF department with their Kean EOF Counselor's name and contact information.
+
+## Transfer Orientation
+Transfer Orientations will be held before or during the beginning of each semester. All EOF transfer accepted students are expected to attend an orientation session. At the transfer orientation, we will detail all the benefits, services, and expectations of being an EOF scholar at Kean University. Accepted EOF transfer students should look for correspondence from the EOF Office about the upcoming EOF Transfer Orientations. The Spring 2026 EOF Transfer Orientation will take place in early January 2026.
+
+EOF Academic Year Admission
+Currently enrolled Kean University students who did not participate in an EOF Summer Program or transferred directly from another EOF program are welcome to apply for available spots in the Kean University EOF Program. First-time EOF applicants must be:
+- Full-time ( minimum 12 credits ) in their first semester of EOF
+- New Jersey Resident for at least 12 months
+- Complete with theNew Jersey Higher Education Student Assistance Authority(HESAA) and eligible for NJ State Aid
+- Meet the currentEOF financial eligibility requirements
+- Maintain Financial AidSatisfactory Academic Progress(SAP)
+- Minimum GPA of 2.5
+- Freshman, Sophomore or Junior
+- Seniors cannot be first-time EOF recipients
+## Application Process
+Students Interested in becoming EOF must complete the2025-26 EOF Application, select "First Time EOF Applicant" under Application Status, andsubmit the following information toEOFAdmissions@kean.edu.
+Proof of 2025-26 FAFSA completion
+Financial eligibilityis based on the information you submitted on your FAFSA. Applicants must have completed their FAFSA by the annual EOF FAFSA deadline to be considered and must submit proof of completion.The following are acceptable proofs of completion.
+- Screenshot of your account fromwww.studentaid.gov
+- The first page of your most recent 2024-25Student Aid Report (SAR)
+- Screenshot from your HESAA NJFAMS account
+## Video Statement
+- Please provide a short ( five minutes max ) video of yourself talking about:
+- Your name, major, and current year in school ( i.e. Freshman, Sophomore )
+- Your career goals
+- How did you hear about EOF, and why are you applying now
+- How can EOF assist you in your journey at Kean towards a Bachelors Degree
+## Application Due Dates
+EOF is not a financial entitlement, and space in EOF every semester is limited. To be considered for the Kean EOF, interested students mustcomplete the applicationandsubmit all requesteditems by the following dates:
+## Fall 2025:
+- Sunday, August 18th( for earlyFall 2025consideration )
+- Friday, September 12th( final Fall deadline )
+## Spring 2025:
+- Friday, January 2nd
+Please reach out toEOFadmissions@kean.eduwith any questions about the application process.
+EOF Program Resources
+## LEARNING CENTER
+As an essential component of the EOF Program, the Learning Center is a multipurpose tutoring and mentoring center serving the academic and developmental needs of EOF students. The Learning Center coaches EOF students in the skills and strategies needed to become independent, active, and resourceful learners. The Learning Center also collaborates with counselors, mentors and faculty to provide individual and small-group tutoring, supervised study, supplemental instruction as well as skills workshops to promote learning and self-efficacy. Located on the third floor of Hutchinson Hall, J-306, academic coaches in the Learning Center are recruited for their academic excellence, outstanding communication skills and expertise in a myriad of study skills techniques aimed at bridging the gap for developing college students. Academic coaching offered in the Learning Center include Algebra, Calculus, Geometry, Chemistry, Psychology, History, Sociology, Literature and Writing among other disciplines. The aim is to provide quality tutoring services to students and encourage the development of learning strategies. Appointments are one-hour sessions that can be made via Tutortrac, phone or drop-in visit. The Learning Center also offers a book lending program of course textbooks from various sections offered during the academic year. Students can visit our Learning Center Library in Hutchinson Hall-301 (J-301) to borrow and utilize textbooks for their classes. In addition to the Book Lending Program and Tutoring/Mentoring Lab, Hutchinson 305-G is designated as an events space for EOF students and counselors where programs, lectures, meetings and workshops are conducted.
+## STUDENT AGREEMENT
+The services provided by the EOF Program include academic skill development; personal, social and financial aid counseling; tutoring; career development; academic advisement and financial aid assistance. This core of services is mandated and funded by the State of New Jersey to safeguard the participants' college success. Therefore, the EOF student's participation in prescribed activities is mandatory. EOF activities are comprehensive and meet students' needs in a multitude of areas. Therefore, all students who expect to maintain affiliation with the Program must do as follows:
+- Enroll and maintain full-time status throughout their academic career.
+- Allow priority to EOF developmental activities over alternate extracurricular activities.
+- Show consistent success in meeting program requirements.
+Although requirements are specifically outlined in the Student Agreement, there are other rules that must be observed by each EOF participant. The EOF student must do as follows:
+- Read and respond to all correspondence from the EOF office.
+- Maintain an above-average grade point average.
+- Exhibit behavior that exemplifies the high standards of EOF and Kean University.
+- Correspond with your counselor/advisor for change of address or telephone number, withdrawal from the University, or taking a medical leave of absence.
+Each student who expects to participate in the Program should read the Student Agreement carefully before signing it. Your signature acknowledges your acceptance of the terms and conditions stated in the Agreement. After signing, give the Agreement to your counselor who will review with you the terms and conditions cited in the Agreement and explain the Program's responsibilities in helping you achieve your academic goals.
+
+Support Services provided by the EOF Program include:
+1.Academic Advisement Sessions: Counselors assist students in selecting appropriate courses in both the General Education and major field of study. The combinations of courses recommended by the counselors are based on the student's performance history, professional goals, and his or her academic strengths and weaknesses.
+2.Counseling Conferences: Counseling conferences provide the student with the opportunity to discuss, identify and make choices for the solution of problems of personal concern. Any matters the student feels inhibits or relates to his or her effective functioning in the academic area may be discussed. These individualized sessions may take place through scheduled conferences, on-the-spot visitations or telephone contacts.
+3.Academic-Year-Level Programming: Programming addresses the needs of students by expanding their perspective and awareness through activities that motivate students to align their studies and career goals toward graduating in four years. These activities are integrated within the EOF counselor services, faculty major advisement and Kean University student service programs.
+4.Individual Tutoring: Tutoring services are designed for students in need of academic support beyond the classroom. The individualized coaching of specific academic skills is aimed at enhancing the student's grades and in-class performance. Students may request tutoring services or be referred to tutoring by a professor or his or her counselor.
+5.Supervised Group Tutoring Sessions: Developmental Studies students who are on probation are required to attend weekly, small-group tutoring sessions where tutors work with students in clarifying difficult concepts so that students will be successful in completing their developmental courses.
+6.Financial Aid Exit Interview: When student loan borrowers are no longer attending school at least half time, they are required to complete exit counseling. This can be done online athttps://studentloans.gov. Students who do not comply with this requirement will be placed on a financial aid hold, restricting the student from receiving grades, transcripts and/or diplomas. Perkins Loan Exit Interview needs to be done at the Student Accounting Office.
+7.EOF Exit Interview Form: Prior to graduation, each senior must meet with his or her EOF counselor to discuss post-graduation plans and remove the Exit Interview hold. The EOF program needs to report whether graduates are going directly into employment, graduate programs or professional schools.
+EOF Graduate Grant
+The Educational Opportunity Fund (EOF) graduate program provides financial assistance for a small, select number of students each year. The program's objective is to increase participation in graduate and professional study by New Jersey residents from backgrounds of historical economic disadvantage.
+EOF Graduate Application
+## Graduate Eligibility:
+- Must demonstrate an educationally and economically disadvantaged background.
+- Be a New Jersey resident for 12 consecutive months before receiving the award.
+- Apply and be accepted to a participating New Jersey college or university.
+- Must complete theFree Application for Federal Student Aid (FAFSA)or theNew Jersey Alternative Financial Aid Application
+- Must meet theincome eligibility criteriaas defined by the state.
+- Be in an official degree/certificate program with a minimum requirement of 24 equivalent semester hours and at least one academic year in duration.
+- Be a full-time graduate student as defined by the institution. At Kean University, that means a minimum of nine (9) or more credits per semester.
+Graduate EOF grants range from $200 to $3,400 annually and are renewable, provided that the student continues to meet the eligibility criteria. Interested students should contact the EOF Associate Director, Petal Gadsden, at 908-737-4037 or by email atpebritto@kean.edufor additional information. You can find the official application here:Kean EOF Graduate Grant Application
+## EOF FAQ
+Frequently Asked Questions (FAQs)
+1.Is EOF a financial aid program?
+EOF is a state-funded program designed to provide access to higher education and academic support. However, there is a small portion of financial aid in the form of the Educational Opportunity Fund (EOF) Grant that students may receive up to $975 a semester.
+2.Will EOF cover all my college expenses?
+EOF-awarded students receive an EOF financial aid grant of up to $975 a semester. Students mayreceive other financial aid as part of the financial aid package, such as federal (such as PELL or Student Work-Study) and/or state (such as TAG) grants, scholarships, or loans.
+3.How do I apply for admission as an EOF student?
+Students who apply for admission asEOF Freshmanare considered for EOF. Students must select this option from a drop-down list on the online admission application instead of selectingFreshman. Financial documentation is required to be submitted to the EOF Office to verify financial eligibility.Documentation consists of two previous years parent IRS Tax Return Transcripts or two previous years statements from each source of income (if no federal taxes were filed) along with the Student Aid Report (SAR) for the academic year you are looking to enroll If you are an Independent student, you will need to provide your previous two years' taxes if filed or an IRS letter of non-filing, along with the SAR. Additional documentation may be requested to verify eligibility.
+
+The State of New Jersey, Office of the Secretary of Higher Education, Educational Opportunity Fund determines the household size and income eligibility criteria for EOF, which is subject to change annually:http://www.state.nj.us/highereducation/EOF/EOF_Eligibility.shtml.
+
+4.Besides income, what other requirements are there to receive EOF?
+## Students:
+- Must be U.S. citizens or permanent residents.
+- Must be New Jersey residents 12 consecutive months prior to receiving the award.
+- Must meet the academic criteria as set by the institution of choice.
+- Must file a Free Application for Federal Student Aid (FAFSA).
+- Must demonstrate an educationally and economically disadvantaged background.
+- Must apply and be accepted to a participating New Jersey college or university.
+5.Do all EOF students receive the same amount for the EOF Grant?
+Full-time, financially eligible EOF students may receive up to $975 a semester. This amount is not guaranteed. The EOF Grant received each semester depends upon the students compliance with the student agreement they sign each year, compliance with the EOF Program procedures, rules and regulations (such as attending advisement sessions, workshops, tutoring, etc.), the academic progress the student is making, and also upon the amount of funding received by the State of New Jersey for the grant. EOF financially eligible students enrolled in 6-11 credits may be eligible for a part-time EOF grant. EOF part-time grants are limited, and award amounts depend on the number of credits the students are enrolled in that particular semester.
+6. Do I lose my EOF Grant if my parents income changes?
+Each year, you must file the FAFSA for the upcoming school year. If it is determined that you no longer meet the income guidelines for receiving EOF, you may remain a student in the EOF program, but you would be a non-funded student for EOF.
+7.If I fail a class, will I lose my EOF Grant?
+The answer depends on whether you are making satisfactory academic progress based on your cumulative GPA. To receive any type of financial aid, including the EOF Grant, students must be in good academic standing and make academic progress (pace) toward a degree in a reasonable amount of time. Satisfactory Academic Progress is monitored yearly.
+8. What must be done to finalize enrollment in the EOF Program and its Pre-Freshman Summer Academy?
+After you have been admitted to Kean University and the EOF Program, you must take the placement test, schedule your Fall courses with the CAPS department, submit all the required health records to Health Services, and complete the Residence Life housing application.
+9.What are the EOF Summer Academy Workshops?
+It is important for students to have a way to learn about how the University and the EOF Program work. Acquiring an understanding of the university and program mission, organizational structure, curricular/program design, and policies and procedures is essential to navigating the road ahead. As students are called to meet the challenges ahead they need to know what avenues can be accessed in addressing not only academic, career, personal, and financial issues but also issues of productive citizenship within the college community. The Workshops facilitated by our EOF Counselors/Advisors are meant to start this investigative process.
+10.What is living on campus like during the summer, and what monitoring is done to ensure students are adjusting to the EOF Pre-Freshman Summer Academy?
+To assist students with managing academically and socially, Residential Assistants, Residence Hall Directors in Residence Life, Faculty, EOF Counselors/Advisors, and Peer Counselors share information about each student. Faculty provide weekly course attendance and academic progress reports, academic coaching and advisement records are shared, and weekly residence life reports are reviewed. EOF Counselors meet with their students at least once weekly, and if there appears to be a situation calling for immediate attention, phone calls are made, and meetings are held.
+11.Are students able to go home during the Summer Academy?
+Students may be required to stay on certain weekends. Any required weekend will be discussed at the Summer Academy Orientation.
+12.Is working during the Summer Academy?
+Only weekend jobs can be held during the EOF Summer Academy when students are not expected to stay on campus. Academic work cannot be successfully managed while working a part-time job during the week.
+13.Can a student have a car on campus during the Summer Academy?
+Yes, but only if Residence Life has authorized the student under special circumstances.
+14.What kinds of assistance do EOF Counselors/Advisors provide students during orientation weekend and during the course of the Summer Academy?
+Each student is required to meet on a one-to-one basis with his/her assigned EOF Counselor/Advisor during the Summer Academy. Meeting schedules are set; time is taken to review background information provided by students to the program before their arrival on campus, and at all times, the student's adjustment to the challenges presented by the EOF Summer Academy is explored. Whether the challenges are academic, personal, social, career, or financial, the EOF Counselor/Advisor role provides guidance and, where appropriate, advocacy.
+Students are assisted with registering for their fall courses, faculty-provided student progress reports are reviewed, and strategies for addressing any concerns with course performance are identified.
+15.What types of extracurricular activities are available to students?
+Residence Life plans Numerous events for the EOF Summer Academy, including a barbecue, recreational activities, movies, etc.

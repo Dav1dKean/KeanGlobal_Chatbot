@@ -1,0 +1,51 @@
+DOCUMENT TITLE: SUPERA Spanish Speaking Program
+SOURCE ORGANIZATION: Kean University
+SOURCE FILE: Supera.txt
+DOCUMENT TYPE: Student Support / English Language Learners
+RAG_COLLECTION: supera_program
+LANGUAGE: English
+
+NOTES FOR RAG INGESTION:
+- Cleaned from source text for retrieval-augmented generation.
+- Normalized whitespace and common character encoding issues.
+- Headings and bullets were standardized where possible.
+# Supera - Spanish Speaking Program
+## Office: Hutchinson Hall 301
+## Telephone
+(908) 737-3940
+## Email
+ssp@kean.edu
+
+SUPERA Spanish Speaking Program, established in 1972, offersstudents who are English Language Learners (ELLs) access to higher education. Through SUPERA, students follow a structured study program designed to achieve full integration into university life. This includes taking courses in Spanish during their first years of study.
+Para obtener informacin en espaol, presioneaqu.
+As part of the General Education (GE) curriculum, Supera courses allow students to advance in their university career while acquiring the necessary knowledge of English through the ESL (English as a Second Language) program.
+Since its inception, the Spanish Speaking Program at Kean has successfully graduated a large number of students who today serve as highly qualified professionals working as productive members of society in the United States and other countries.
+
+## Program Objectives
+In order to integrate ELLs into the academic, social, and professional communities, the objectives of the SUPERA Spanish Speaking Program are to:
+
+- HELP students acquire the English language skills necessary to achieve academic and professional success.
+- ADVISE students and provide necessary services to ensure their retention and graduation.
+- ASSESS students progress in completing program requirements and objectives to facilitate an easy transition to the English-speaking society.
+- MOTIVATE and GUIDE students to freely choose a career that allows them to exercise their rights and obligations as citizens of a multicultural society.
+- PREPARE students to be academically and professionally self-sufficient.
+## Services Offered
+
+SUPERA is committed to opportunity and excellence through access to higher education for ELLs. The program offers an array of services designed to improve academic performance, including:
+- New Student Orientation
+- Academic advisement
+- Tutoring
+- Seminars, group discussions, focus groups and workshops
+- Networking opportunities
+- Cultural enrichment activities
+- Study abroad
+- Internship and career services
+- Guidance on student leadership opportunities
+- Translation of institutional documents
+## Supera Spanish Speaking Program
+## Office: Hutchinson Hall 301
+## Telephone
+
+(908) 737-3940
+## Program Mission
+The Mission of the Kean University SUPERA Spanish Speaking Program is to provide access to higher education to Spanish Speaking students who are English Language Learners (ELL).By making it possible for students to take ESL courses while completing General Education courses in their native language, the program provides easier access to higher education for these students. Our goal is the smooth transition of students with limited English skills into mainstream education and community life. Through the many services offered to English Language Learners, the program seeks to improve its retention and graduation rates in accordance with the university's goal. In conjunction with other programs and student support services, the Supera Spanish Speaking Program seeks to contribute to Kean Universitys commitment to opportunity.

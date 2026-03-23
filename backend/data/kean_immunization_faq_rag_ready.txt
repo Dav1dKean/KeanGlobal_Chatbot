@@ -1,0 +1,218 @@
+SOURCE_TITLE: Kean Wellness Center Immunization FAQs
+SOURCE_TYPE: PDF converted to RAG-ready text
+SOURCE_FILE: document.pdf
+ORGANIZATION: Kean University Wellness Center / Student Health Services
+TOPIC: Immunization requirements FAQ
+REVISION_DATE: 2023-05
+PAGES: 5
+CONVERSION_NOTE: Converted from a scanned/image-based PDF into structured text for retrieval-augmented generation (RAG). Content organized by FAQ item for chunking.
+
+# Kean Wellness Center - Immunization FAQs
+
+Contact for questions or concerns:
+- Email: studenthealthservices@kean.edu
+- Phone: (908) 737-4880
+
+## Overview
+This document contains frequently asked questions about immunization requirements for students, records submission, deadlines, exemptions, insurance, holds, and related procedures at Kean University.
+
+## FAQ 1 - Age 30 and older
+Question: I am over 30 years of age, do I need to submit my immunization records?
+
+Answer:
+No. NJDOH does not require a college student over 30 years of age to present proof of vaccine or immunity for any of the required college vaccines. However, NJDOH still highly recommends that students are age appropriately immunized.
+
+## FAQ 2 - Submission deadlines
+Question: What is the deadline for submitting immunization requirements?
+
+Answer:
+- Fall semester start: August 1
+- Spring semester start: January 6
+
+## FAQ 3 - COVID-19 vaccine requirement
+Question: Is the COVID-19 vaccine a requirement?
+
+Answer:
+Kean University strongly recommends, but no longer requires, employees and students to be vaccinated against COVID-19, effective June 1, 2023. The document states this change follows the end of the COVID-19 national health emergency and the scaling back of certain health protocols in New Jersey, including mask mandates in healthcare settings, amid declines in cases.
+
+## FAQ 4 - Where to get vaccinated for COVID-19
+Question: Where can I get vaccinated for COVID-19?
+
+Answer:
+Vaccinations are widely available in communities across New Jersey and throughout the United States. For more information about the COVID-19 vaccine, visit the #VaxUpKean website.
+
+## FAQ 5 - Locating immunization records
+Question: Where can I locate my record?
+
+Answer:
+You may be able to find your record from:
+- Any prior school you attended
+- Your pediatrician
+- Your physician
+- Your health department
+- Your parent or guardian
+- Military records, if you served
+- Healthcare employer records, if you worked in healthcare
+- Immigration-related records, if applicable
+
+Students should review their records and confirm they fulfill the Department of Health and Senior Services requirements.
+
+## FAQ 6 - Missing or incomplete records
+Question: I can't locate my records / my record is incomplete - what should I do?
+
+Answer:
+You may need to re-vaccinate or take a blood test to prove immunity. If you are non-immune, the state requires that you receive the appropriate vaccine or vaccines.
+
+## FAQ 7 - Record available but form incomplete
+Question: I have a record, but no one is available to complete Kean's immunization form - what should I do?
+
+Answer:
+Complete the top box of the form and upload that with a copy of your record.
+
+## FAQ 8 - Where to submit the record
+Question: Where should I submit my record?
+
+Answer:
+Once the immunization form is completed, signed, and stamped by your healthcare provider:
+1. Register for an account on the Student Health Portal.
+2. Enter your immunization dates into the Immunization History form in the My Forms tab.
+3. Upload your form for verification in the Document Upload tab.
+
+## FAQ 9 - Prior professions or prior institutions
+Question: I'm a teacher / have worked in healthcare / served in the military / attended public schools / received immigration papers / etc. Wouldn't I have already been prevented from doing the aforementioned without these vaccines?
+
+Answer:
+Not necessarily. Different agencies have different requirements. What you submitted previously may not match the current higher-education requirement. Regardless, the state still requires submission of the record.
+
+## FAQ 10 - Off-campus, part-time, or one-class students
+Question: I'm off-campus / part-time / only take one class - why does this requirement apply to me?
+
+Answer:
+Regardless of credit status or location, the requirement is still the law. Places of congregation, including classrooms, are high-risk areas for spreading infectious diseases, so ensuring immunity is the safest action. The law exists for both your protection and the protection of others.
+
+## FAQ 11 - Returning students and old records
+Question: I'm a returning student and I think I've submitted these records in the past - do I need to re-submit them?
+
+Answer:
+The state gives universities permission to destroy records after 10 years, and new laws may arise. Students should contact Student Health Services to see what records, if any, are on file.
+- Phone: (908) 737-4880
+- Email: studenthealthservices@kean.edu
+
+## FAQ 12 - Why prior Kean records may not be on file
+Question: I attended Kean in the past - why aren't my records on file?
+
+Answer:
+Your account may fall into one of the following categories:
+- If you attended classes prior to 1995, the state did not require submission of immunization records.
+- If you attended classes after 1995, you may have been "grandfathered" into the university's database without submitting or resubmitting records. The Department of Health and Senior Services no longer allows that exemption.
+- If you submitted records over 10 years ago, the state allows schools to destroy them, so they may no longer be on file.
+- If you submitted records before 2018, your records may be in a previous medical record system.
+- The Hepatitis B law did not come into effect until Fall 2008, so the university does not have hepatitis B information prior to that date.
+
+## FAQ 13 - Annual submission for current students
+Question: I'm a current student - do I need to submit my records every year?
+
+Answer:
+No. Once records are submitted, they are entered into the university's database and stored for 10 years.
+
+## FAQ 14 - Why Kean asks if prior school did not
+Question: My prior school didn't require these records - why is Kean asking for them?
+
+Answer:
+The state requires that all four-year schools follow these guidelines. If you attended a two-year school, the requirements differ. You may also have attended school before the Department of Health and Senior Services regulation applied.
+
+## FAQ 15 - Ocean County College and Kean Ocean
+Question: I attended Ocean County College for two years, and now I'm taking Kean Ocean classes in the same location - shouldn't Student Health Services have these records?
+
+Answer:
+No. Ocean County College does not require the records because it is a two-year school. Kean University is a four-year school, so the state requires that you submit them to Student Health Services.
+
+## FAQ 16 - Where to receive vaccines or blood tests
+Question: Where can I receive the vaccines or blood tests? At Kean University?
+
+Answer:
+Options listed in the document include:
+- Student Health Services can perform the blood test. Insurance is required to complete testing at the campus facility. Appointments can be scheduled by calling (908) 737-4880, visiting Downs Hall, Room 126, or logging into the Student Health Portal and scheduling an appointment under "Labs."
+- Nearby health care providers may provide vaccines and blood tests. Students are advised to call beforehand to verify vaccine availability and pricing. These providers are posted only as a convenience and are not affiliated with Student Health Services.
+- The Woodbridge Department of Health and Human Services Nursing Division offers discounted vaccines. For prices and appointments, call 732-855-0600 x5011.
+- For Kean Ocean students, Kean University Health Services has partnered with the Doctor's Office of Brick, located on 686 Route 70, Brick, NJ, phone 732-262-8200. Students must first call Student Health Services to receive a referral to avoid being charged for the office visit.
+- For the visit, students should bring their insurance card. The university does not cover laboratory results or vaccines.
+
+## FAQ 17 - Insurance coverage
+Question: Does my insurance cover the vaccines or blood tests?
+
+Answer:
+Students should contact their insurance carrier. Coverage may be available because the vaccines are recommended by the Advisory Committee on Immunization Practices (ACIP), but students must verify this with their insurance company.
+
+## FAQ 18 - No insurance or inadequate coverage
+Question: I don't have insurance / my insurance doesn't cover these requirements / I don't have any money - what can I do?
+
+Answer:
+The office has a Vaccine Assistance Program through Merck where uninsured students can receive MMR and Hepatitis B vaccines through Student Health Services.
+Students may also contact their city or town health department to see whether free or discounted vaccinations are available. For other affordable options, the document refers back to FAQ 12 or advises contacting Student Health Services at (908) 737-4880.
+
+## FAQ 19 - Extension before a hold
+Question: My records will take some time to receive - can I have an extension from receiving a hold?
+
+Answer:
+No. According to the document, state law does not allow schools of higher education to permit students to register for their second semester until receiving the complete record.
+
+## FAQ 20 - Hold removal timeline
+Question: How long does it take for Student Health Services to remove my hold?
+
+Answer:
+The time frame for hold removal depends on the volume of records being processed. Students may call (908) 737-4880 or email studenthealthservices@kean.edu to ask how long removal is expected to take.
+
+## FAQ 21 - Temporary hold removal
+Question: If I have a hold, can Student Health Services remove it first so that I can register for my classes and then either return or put it back on if I don't submit the record?
+
+Answer:
+No. A hold can only be removed with the compliant record.
+
+## FAQ 22 - Whether a hold drops current classes
+Question: Will a hold drop me from classes that I'm already registered for?
+
+Answer:
+No. It will only prevent you from registering for the following semester and receiving grades.
+
+## FAQ 23 - How to confirm Student Health Services received the record
+Question: Did Student Health Services receive my record?
+
+Answer:
+Students can verify receipt in the following ways:
+- After the submission deadline, check whether there is a hold on the KeanWISE account. If there is a hold, the record is either not on file or incomplete.
+- All incomplete record submissions receive a secure message on the patient portal.
+- Once a record is processed, Student Health Services sends a message to the student's Kean email account instructing the student to click the portal link. After logging in, the student should click the Messages menu on the top left to read a message regarding immunization records.
+
+## FAQ 24 - Taking vaccines again
+Question: If I've already received these vaccines but take them again, will that hurt me?
+
+Answer:
+No. Receiving the vaccine again will only boost immunity. The document also notes that vaccine effects may diminish over time, so a booster may be recommended. Students are directed to the "Immunization & Related Diseases Information" section for concerns.
+
+## FAQ 25 - Risks of receiving vaccines
+Question: I'm uncomfortable with receiving vaccines - are there any risks with taking it?
+
+Answer:
+The document states that, according to the CDC, the risks associated with the MMR vaccine are "extremely minimal." It also states that people face risks by not getting vaccinated, and notes that getting the MMR vaccine is much safer than getting any of the three diseases. Students are directed to the "Immunization & Related Diseases Information" section on the website for further information about immunizations and related diseases.
+
+## FAQ 26 - Age exemption
+Question: Is there an age exemption for the vaccine requirements?
+
+Answer:
+Yes. The state grants age exemptions for the MMR vaccine to all students born before 1/1/57 or over age 30.
+
+## FAQ 27 - Other exemptions for new students
+Question: Are there exemptions to the other vaccination requirements for new students?
+
+Answer:
+New students should share the Immunization History Form with their healthcare provider to determine whether prior vaccinations exist and submit any vaccine information that is available.
+Medical, religious, and Kean Online exemptions for other immunization requirements are available in the Student Health Portal. In the My Forms tab, students should select the Immunizations History Form, choose an exemption or waiver, and submit the form.
+
+## Suggested chunking for RAG
+- Chunk by individual FAQ number.
+- Keep contact information duplicated in a separate support-services chunk.
+- Consider a separate chunk for deadlines, a separate chunk for holds, and a separate chunk for exemptions for higher retrieval accuracy.
+
+## Keywords
+Kean University, Wellness Center, Student Health Services, immunization, vaccines, MMR, hepatitis B, COVID-19, immunization history form, student health portal, record submission, hold, KeanWISE, exemptions, insurance, Kean Ocean

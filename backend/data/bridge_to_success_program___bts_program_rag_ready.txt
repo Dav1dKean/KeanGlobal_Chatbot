@@ -1,0 +1,63 @@
+DOCUMENT TITLE: Bridge to Success Program (BTS)
+SOURCE ORGANIZATION: Kean University
+SOURCE FILE: Bridge to Success Program - BTS Program.txt
+DOCUMENT TYPE: Student Support Program
+RAG_COLLECTION: bridge_to_success
+LANGUAGE: English
+
+NOTES FOR RAG INGESTION:
+- Cleaned from source text for retrieval-augmented generation.
+- Normalized whitespace and common character encoding issues.
+- Headings and bullets were standardized where possible.
+# Bridge to Success Program (BTS)
+Bridge to Success
+The mission of the Bridge to Success Program is to provide support for higher education and academic success to students matriculated at Kean University. Freshman applicants who do not fully meet University admission requirements, but show a potential to succeed, are admitted by the Undergraduate Admissions Office into the Bridge to Success Program.
+## Counselor Internship Experience
+The Counselor Education Department at Kean University has partnered with theBridge to Success Programto provide counseling support to our students. Students are required to meet with counselor interns on an individual basis as well as attend small group roundtables, workshops and special meetings.
+Personal and Social Counseling
+Although the University has a counseling center on campus, we find it critical to offer assistance to our students by completing the following:
+- Providing an assessment program to identify student needs.
+- Offering appropriate services and referrals based on student needs.
+- Providing individual and group counseling in the area of personal and interpersonal relationships.
+- Providing structured counseling services for personal, academic and professional development.
+- Maintaining cooperative relationships with Human Resources, Counseling Center, Cougar Connections Center for Social Work, Office of Accessibility Services and Health Services.
+## Academic Advisement
+The goals in this area are:
+- Respond to the academic and nonacademic needs of individual students.
+- Develop individual Academic Development Plans for students, which assists in meeting their major or career aspirations.
+- Develop curricula that ensure that students complete their developmental requirements within their first three semesters and their General Education requirements within the first four semesters.
+- Provide advisors with data about students academic needs, classroom performance, aspirations and developmental concerns.
+- Develop interventions associated with academic departments and deans.
+## Career Counseling
+Kean University wants its graduates to be employed after graduation. Career Counseling is one of the vital components geared towards this initiative.
+- Maintain a cooperative relationship with the Office of Career Services and Placement.
+- Assist students to make informed career decisions.
+- Assist students in setting short- and long-term goals.
+- Encourage students to declare majors by the end of their sophomore year.
+- Encourage students to continue their education beyond the undergraduate level.
+- Audit students academic progress in keeping with major department requirements.
+- Write letters of recommendation for students.
+- Attend annual career open houses offered by the University.
+- Bridge to Success Staff
+*
+- Billie J. Baileyserves as Director of Bridge to Success.Dr. Bailey is a proud Kean University alumna with two degrees: Master of Public Administration (Class of 2002) and Master of Arts in Counselor Education (Class of 2006). She earned a Ph.D. in Counselor Education and Supervision from Montclair State University.She earned a Bachelor of Science in Business Administration from Thomas Edison University.
+- Prior to becoming Director, Mrs. Bailey was an Educational Opportunity Fund (EOF) Counselor at Kean University. She served in this role for 16 years. She is very proud of the legacy she left behind in the EOF Program. She is extremely passionate about serving Opportunity and First Generation populations. Her scholars/students graduate and become educators, politicians, lawyers, healthcare professionals, entrepreneurs and so much more. She is an adjunct instructor teaching in two disciplines, Public Administration and Counselor Education. She serves as an advisor to two Greek organizations, Zeta Lambda of Zeta Phi Beta Sorority, Incorporated and Lambda Theta Alpha Sorority, Incorporated. She is also a Hearing Officer for Community Standards and Student Conduct.
+- Billie spends her free time with family, friends and her sisters of Zeta Phi Beta Sorority, Incorporated. She enjoys singing, cooking, baking and sharing her gifts/talents with the community.
+*
+*
+- Christina Reillyis Acting Associate Director for the Bridge to Success Program. Christina currently holds a Master's degree from Stockton University Advanced Standing Program, a program which she completed in 2017. Christina oversees the Gamma Beta Phi Honor Society as the Chapter Advisor as well as coordinates Bridge to Success programming for Juniors and Seniors.
+- Prior to joining Bridge to Success, Christina Spent 3 years working for an educational development program for at-risk youth, assisting adolescents between the ages of 16-23 to reach their academic and career goals. Christina has also worked in a variety of other settings such as prisons and -public schools which lead to her increasing interest in improving the access to higher education.
+*
+*
+- Tushawn Jerniganserves as a Student Development Specialist with the Bridge to Success Program at Kean University. He was aPresidential Scholar and graduate of William Paterson University, where he earned a Bachelor of Arts in English and a teacher certification in Secondary Education. He then went on to earn a Master of Education degree at Montclair State University. A believer in social justice and equity, Mr. Jernigan holds two certificates in Diversity, Equity, & Inclusion (DEI) from the University of South Florida: (1) DE&I Inclusion in the Workplace and (2) Inclusive & Ethical Leadership.
+- Prior to joining Kean University, Mr. Jernigan served as a Student Development Specialist with the Educational Opportunity Fund Program at Ramapo College of New Jersey, where he worked closely with undergraduate students, facilitated initiatives, and coordinated programs geared toward supporting students in their efforts to persist to graduation and achieve their goals. While at Ramapo College, Mr. Jernigan also held a number of part-time positions, including Alternative Testing Proctor, Assistant Title IX Investigator, and Writing Consultant.
+- Before transitioning to higher education, Mr. Jernigan taught English Language Arts at a New Jersey high school for over ten years and also served as an Advocate/Counselor to aspiring college students in Seton Hall Universitys Upward Bound Program. In all of his years and various roles as an educator, Mr. Jernigans goal has been to help his students develop into responsible, accountable, self-sufficient adults with a healthy sense of self and compassion for humanity.
+*
+*
+- Angelica Villaltaserves as a Student Development Specialist for the Bridge to Success Program. She is a first-generation collegegraduate from William Paterson University, where she earned a Bachelors degree in Communication Disorders, followed by a Masters degree in Higher Education Administration with a Leadership concentration. In addition to managing her caseload, she oversees Bridge to Success programming for Sophomores and assists with assessment outcomes.
+- Before joining Kean University, Angelica spent over 4 years at Hudson County Community College where she worked for Enrollment Services, taught first-year seminar classes, and served as an Academic Counselor for Advisement and Transfer. She has learned the struggles students face, especially those from marginalized communities, and is passionate about teaching students how to advocate for themselves and find their voice. Outside of work, Angelica enjoys photography, sunsets and spending time with loved ones.
+*
+*
+- Ryanne Boyerserves as a Student Development Specialist in the Bridge to Success Program at Kean University. She was a graduate of Seton Hall University(SHU) where she earned a Bachelor of Arts in Journalism and Public Relations. She then earned a Masters of Public Administration from Seton Hall University as well. During her time at SHU, she served as the President and Graduate Advisor of the Black Student Union as well as an active member in the National Society of Collegiate Scholars. During her senior year, Ryanne was also invited to the highly selective Leadership Fellows program at the university.
+- Prior to Kean University, Ryanne was the Chair of Special Projects as well as a Resident Director in the Office of Residential Education at Stevens Institue of Technology in Hoboken, NJ. In this role, she coordinated Resident Assistant Selection for both new and returning staff as well as managing two first-year residence halls. She served as a Hearing Officer for the Office of Community Standards for residential infractions as well.
+- Ryanne is currently a doctoral student at Seton Hall University in the Higher Education program where she researches the effectiveness of diversity efforts in colleges and universities.

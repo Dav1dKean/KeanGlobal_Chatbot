@@ -1,1 +1,565 @@
-{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"id": "administration_lot", "name": "Administration Lot", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.236384, 40.680146]}}, {"type": "Feature", "properties": {"id": "cougar_hall_lot", "name": "Cougar Hall Lot", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.237648, 40.678616]}}, {"type": "Feature", "properties": {"id": "d_angola_lot", "name": "D'Angola Lot", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.23875, 40.679394]}}, {"type": "Feature", "properties": {"id": "east_campus_lot", "name": "East Campus Lot", "campus": "East", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.224403, 40.680689]}}, {"type": "Feature", "properties": {"id": "east_campus_upper_lot", "name": "East Campus Upper Lot", "campus": "East", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.223294, 40.680227]}}, {"type": "Feature", "properties": {"id": "glab_lot", "name": "GLAB Lot", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.237025, 40.682491]}}, {"type": "Feature", "properties": {"id": "harwood_lot", "name": "Harwood Lot", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.23704, 40.680893]}}, {"type": "Feature", "properties": {"id": "hynes_hall_lot", "name": "Hynes Hall Lot", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.23179, 40.683246]}}, {"type": "Feature", "properties": {"id": "kean_hall_lot", "name": "Kean Hall Lot", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.235855, 40.681925]}}, {"type": "Feature", "properties": {"id": "lhac_lot", "name": "LHAC Lot", "campus": "Liberty Hall", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.229507, 40.680404]}}, {"type": "Feature", "properties": {"id": "liberty_hall_visitor_parking", "name": "Liberty Hall Visitor Parking Only", "campus": "Liberty Hall", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.225091, 40.680593]}}, {"type": "Feature", "properties": {"id": "morris avenue lot", "name": "Morris Avenue Lot", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.232546, 40.679702]}}, {"type": "Feature", "properties": {"id": "overflow_parking", "name": "Overflow Parking", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.230129, 40.682698]}}, {"type": "Feature", "properties": {"id": "overnight_lot", "name": "Overnight Lot", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.229338, 40.675734]}}, {"type": "Feature", "properties": {"id": "stem_lot", "name": "STEM Lot", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.229507, 40.680404]}}, {"type": "Feature", "properties": {"id": "vaughn_eames_lot", "name": "Vaughn-Eames Lot", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.230852, 40.677057]}}, {"type": "Feature", "properties": {"id": "wilkins_lot", "name": "Wilkins Theater Lot", "campus": "East", "routable": "yes", "parent": null, "accessibility": "yes", "type": "parking"}, "geometry": {"type": "Point", "coordinates": [-74.231402, 40.678871]}}]}
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "administration_lot",
+        "name": "Administration Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.236384, 40.680146]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "cougar_hall_lot",
+        "name": "Cougar Hall Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.237648, 40.678616]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "d_angola_lot",
+        "name": "D'Angola Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.23875, 40.679394]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "east_campus_lot",
+        "name": "East Campus Lot",
+        "campus": "East",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.224403, 40.680689]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "east_campus_upper_lot",
+        "name": "East Campus Upper Lot",
+        "campus": "East",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.223294, 40.680227]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "glab_lot",
+        "name": "GLAB Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.237025, 40.682491]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "harwood_lot",
+        "name": "Harwood Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.23704, 40.680893]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hynes_hall_lot",
+        "name": "Hynes Hall Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.23179, 40.683246]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "kean_hall_lot",
+        "name": "Kean Hall Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.235855, 40.681925]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "lhac_lot",
+        "name": "LHAC Lot",
+        "campus": "Liberty Hall",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.229507, 40.680404]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "liberty_hall_visitor_parking",
+        "name": "Liberty Hall Visitor Parking Only",
+        "campus": "Liberty Hall",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.225091, 40.680593]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "morris avenue lot",
+        "name": "Morris Avenue Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.232546, 40.679702]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "overflow_parking",
+        "name": "Overflow Parking",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.230129, 40.682698]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "overnight_lot",
+        "name": "Overnight Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.229338, 40.675734]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "stem_lot",
+        "name": "STEM Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.229507, 40.680404]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "vaughn_eames_lot",
+        "name": "Vaughn-Eames Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.230852, 40.677057]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "wilkins_lot",
+        "name": "Wilkins Theater Lot",
+        "campus": "East",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.231402, 40.678871]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "kean_parking_garage_near_hynes",
+        "name": "Kean Parking Garage Near Hynes",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.231552, 40.682359]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "visitors_parking_lot",
+        "name": "Visitors Parking Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.236273, 40.680431]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "morris_ave_student_lot",
+        "name": "Morris Ave Student Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.233304, 40.680191]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "kean_hall_student_lot",
+        "name": "Kean Hall Student Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.236123, 40.68173]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "kean_hall_faculty_staff_lot",
+        "name": "Kean Hall Faculty/Staff Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.2345, 40.680814]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "morris_ave_faculty_staff_lot",
+        "name": "Morris Ave Faculty/Staff Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.232266, 40.679373]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hynes_hall_lot_overflow_lot",
+        "name": "Hynes Hall Lot Overflow Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.230489, 40.683159]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "kean_parking_garage",
+        "name": "Kean Parking Garage",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.231552, 40.682359]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "liberty_hall_lot",
+        "name": "Liberty Hall Lot",
+        "campus": "Liberty Hall",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.227596, 40.680171]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "east_campus_lower_lot",
+        "name": "East Campus Lower Lot",
+        "campus": "East",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.224894, 40.680874]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "east_campus_overflow_lot",
+        "name": "East Campus Overflow Lot",
+        "campus": "East",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.225542, 40.681733]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "east_campus_faculty_lot",
+        "name": "East Campus Faculty Lot",
+        "campus": "East",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.22339, 40.680189]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "admissions_faculty_lot",
+        "name": "Admissions Faculty Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.233794, 40.680773]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "admissions_student_lot",
+        "name": "Admissions Student Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.234782, 40.680909]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "overnight_parking_lot",
+        "name": "Overnight Parking Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.229726, 40.675906]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "naab_faculty_staff_lot",
+        "name": "NAAB Faculty/Staff Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.229338, 40.67672]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "cougar_hall_faculty_staff_lot",
+        "name": "Cougar Hall Faculty/Staff Lot",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.23762, 40.678646]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "d_angola_gym_lot_2",
+        "name": "D'Angola Gym Lot 2",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "parking"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.238682, 40.679377]
+      }
+    }
+  ]
+}
