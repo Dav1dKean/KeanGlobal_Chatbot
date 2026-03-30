@@ -532,13 +532,13 @@
       "type": "Feature",
       "properties": {
         "parking_id": "P021",
-        "name": "NAAB Faculty/Staff Lot",
-        "parking_type": "faculty_staff",
+        "name": "NAAB Student Lot",
+        "parking_type": "student",
         "geometry_type": "Polygon",
         "description": null,
         "notes": null,
         "source": null,
-        "last_updated": null
+        "last_updated": "2026-03-27"
       },
       "geometry": {
         "type": "Polygon",
@@ -601,6 +601,37 @@
             [-74.2383881, 40.6791519],
             [-74.2383388, 40.6792247],
             [-74.2389337, 40.6796114]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parking_id": "P024",
+        "name": "STEM Lot",
+        "parking_type": "student",
+        "geometry_type": "Polygon",
+        "description": null,
+        "notes": "Added from provided coordinates.",
+        "source": null,
+        "last_updated": "2026-03-23"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-74.23021259798868, 40.680607043973765],
+            [-74.22928763753266, 40.67987794830452],
+            [-74.22885477426476, 40.6801474727514],
+            [-74.22878642743312, 40.680340976809816],
+            [-74.22883199198753, 40.68055175737797],
+            [-74.22954279903786, 40.68105624586596],
+            [-74.22960658941406, 40.68102169198178],
+            [-74.22967037979019, 40.68107352280131],
+            [-74.23023082381044, 40.68067615215412],
+            [-74.23016703343428, 40.680648508890584],
+            [-74.23021259798868, 40.680607043973765]
           ]
         ]
       }

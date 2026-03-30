@@ -84,6 +84,16 @@
     "departments": ["Nancy Thompson Library", "Research support"],
     "notes": "Study spaces, collections, and academic research services."
   },
+  "learning_plaza": {
+    "usage": "Outdoor academic commons and gathering space.",
+    "departments": ["Campus Directory"],
+    "notes": "Open plaza area used for circulation, meetups, and everyday campus wayfinding."
+  },
+  "little_theater": {
+    "usage": "Performance and event venue for smaller productions and presentations.",
+    "departments": ["Performing Arts", "Campus Events"],
+    "notes": "Used for theater-related programming, rehearsals, and small audience events."
+  },
   "miron_center": {
     "usage": "Student life and engagement hub.",
     "departments": ["Student activities", "Dining and lounge spaces"],
@@ -143,6 +153,16 @@
     "usage": "Campus bookstore and retail student services.",
     "departments": ["Bookstore services", "Academic materials support"],
     "notes": "Student textbook and branded merchandise location."
+  },
+  "burger_art_gallery": {
+    "usage": "Gallery and exhibition space for visual arts programming.",
+    "departments": ["Art", "Campus Exhibitions"],
+    "notes": "Displays artwork and supports gallery visits, showcases, and related events."
+  },
+  "kean_beach_volleyball_court": {
+    "usage": "Outdoor recreation and athletics court for beach volleyball.",
+    "departments": ["Athletics", "Campus Recreation"],
+    "notes": "Sand volleyball court used for recreation, practice, and student activity."
   },
   "bartlett_hall": {
     "usage": "Residential housing for students.",

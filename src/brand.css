@@ -302,15 +302,76 @@ input:focus {
 
 .leaflet-wrapper {
   flex: 1;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--border-light) 70%, var(--kean-blue) 30%);
+  border-radius: 18px;
   overflow: hidden;
   min-height: 360px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.42), transparent 34%),
+    linear-gradient(180deg, rgba(10, 54, 110, 0.08), rgba(10, 54, 110, 0.02));
+  box-shadow:
+    0 18px 38px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 
 .leaflet-map {
   height: 100%;
   width: 100%;
+}
+
+.leaflet-map .leaflet-tile-pane {
+  filter: saturate(1.12) contrast(1.08);
+}
+
+.leaflet-map .leaflet-control-zoom {
+  border: none;
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.18);
+}
+
+.leaflet-map .leaflet-control-zoom a {
+  width: 38px;
+  height: 38px;
+  line-height: 38px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.94);
+  color: #0f172a;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.leaflet-map .leaflet-control-zoom a:hover {
+  background: #0b4ea2;
+  color: #ffffff;
+}
+
+.leaflet-map .leaflet-control-attribution {
+  border-radius: 10px 0 0 0;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(6px);
+  font-size: 11px;
+}
+
+.leaflet-map .leaflet-popup-content-wrapper,
+.leaflet-map .leaflet-popup-tip {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.18);
+}
+
+.leaflet-map .parking-lot-label {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14);
+  color: #0f172a;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+.leaflet-map .parking-lot-label::before {
+  display: none;
 }
 
 /* ---------- GRID ---------- */
@@ -351,11 +412,34 @@ input:focus {
   max-width: 520px;
 }
 
+.main-layout.map-only {
+  grid-template-columns: 1fr;
+  height: 100%;
+}
+
 /* ---------- MAP SLIDE ANIMATION ---------- */
 
 .map-panel {
   animation: slideIn 0.3s ease-in-out;
   min-width: 0;
+  gap: 10px;
+}
+
+.main-layout.two-col .map-panel,
+.main-layout.map-only .map-panel {
+  padding-top: 14px;
+}
+
+.main-layout.two-col .leaflet-wrapper {
+  min-height: 490px;
+}
+
+.main-layout.map-only .map-panel {
+  height: 100%;
+}
+
+.main-layout.map-only .leaflet-wrapper {
+  min-height: calc(100vh - 290px);
 }
 
 @keyframes slideIn {
@@ -390,13 +474,13 @@ input:focus {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  margin-bottom: 8px;
 }
 
 .map-header-actions {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .route-controls {
@@ -404,7 +488,7 @@ input:focus {
   grid-template-columns: 1fr auto 1fr;
   gap: 10px;
   align-items: end;
-  margin-bottom: 10px;
+  margin-top: -2px;
 }
 
 .route-field {
@@ -432,8 +516,8 @@ input:focus {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 10px;
   flex-wrap: wrap;
+  margin-top: -2px;
 }
 
 .route-note {
@@ -443,7 +527,7 @@ input:focus {
 
 .route-summary {
   font-size: 14px;
-  margin-bottom: 10px;
+  padding: 0 0 2px;
 }
 
 .map-legend {
@@ -530,7 +614,6 @@ input:focus {
   border: 1px solid var(--border-light);
   border-radius: 8px;
   padding: 10px;
-  margin-bottom: 10px;
   background: #f8fafc;
 }
 
@@ -707,6 +790,44 @@ body.dark .building-popup-placeholder {
   color: #e0f2fe;
 }
 
+body.dark .leaflet-wrapper {
+  border-color: rgba(147, 197, 253, 0.24);
+  background:
+    radial-gradient(circle at top left, rgba(147, 197, 253, 0.16), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.68));
+  box-shadow:
+    0 18px 38px rgba(2, 6, 23, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+body.dark .leaflet-map .leaflet-control-zoom a {
+  border-color: rgba(148, 163, 184, 0.22);
+  background: rgba(15, 23, 42, 0.92);
+  color: #e2e8f0;
+}
+
+body.dark .leaflet-map .leaflet-control-zoom a:hover {
+  background: #60a5fa;
+  color: #0f172a;
+}
+
+body.dark .leaflet-map .leaflet-control-attribution,
+body.dark .leaflet-map .leaflet-popup-content-wrapper,
+body.dark .leaflet-map .leaflet-popup-tip {
+  background: rgba(15, 23, 42, 0.94);
+  color: #e2e8f0;
+}
+
+body.dark .leaflet-map .parking-lot-label {
+  background: rgba(15, 23, 42, 0.88);
+  border-color: rgba(148, 163, 184, 0.28);
+  color: #f8fafc;
+}
+
+body.dark .leaflet-map .leaflet-tile-pane {
+  filter: saturate(1.06) contrast(1.12) brightness(0.92);
+}
+
 .map-symbol-marker {
   background: transparent;
   border: none;
@@ -765,6 +886,10 @@ body.dark .building-popup-placeholder {
 }
 
 @media (max-width: 900px) {
+  .main-layout.map-only .leaflet-wrapper {
+    min-height: 62vh;
+  }
+
   .map-header {
     align-items: flex-start;
     flex-direction: column;
@@ -840,6 +965,35 @@ body.dark .building-popup-placeholder {
   justify-content: center;
   pointer-events: none; /* avoid overlay */
 }
+
+.hero-brand-mark {
+  position: absolute;
+  top: 32px;
+  left: 32px;
+}
+
+.hero-brand-logo {
+  display: block;
+  width: clamp(110px, 14vw, 180px);
+  height: auto;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35));
+  opacity: 0;
+  transform: translateY(-6px);
+  animation: hero-logo-fade-in 700ms ease-out 180ms forwards;
+}
+
+@keyframes hero-logo-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .hero-title {
   margin: 0;
   color: #fff;
@@ -875,6 +1029,30 @@ body.dark .building-popup-placeholder {
   padding: 10px 16px;
   color: rgba(255,255,255,0.75);
   font-size: 12px;
+}
+
+@media (max-width: 720px) {
+  .hero-video {
+    height: 58vh;
+  }
+
+  .hero-brand-mark {
+    top: 18px;
+    left: 18px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: min(320px, calc(100vw - 32px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-brand-logo {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .home-chat-launcher {

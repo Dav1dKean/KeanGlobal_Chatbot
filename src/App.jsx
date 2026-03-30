@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import MapPage from "./pages/MapPage";
 import ProgPage from "./pages/ProgPage";
 import ProgDetail from "./pages/ProgDetail";
+
 function App() {
   return (
     <div className="app">
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/chat" element={<MapPage />} />
+        <Route path="/map" element={<MapPage standalone />} />
         <Route path="/programs" element={<ProgPage />} />
         <Route path="/program/:id" element={<ProgDetail />} />
         <Route path="*" element={<Navigate to="/" replace />} />

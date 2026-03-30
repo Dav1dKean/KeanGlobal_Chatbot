@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import L from "leaflet";
-import { CircleMarker, MapContainer, Marker, Polygon, Polyline, Popup, TileLayer, useMap } from "react-leaflet";
+import { CircleMarker, MapContainer, Marker, Polygon, Polyline, Popup, TileLayer, Tooltip, useMap } from "react-leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
@@ -19,6 +19,10 @@ const buildingImageModules = import.meta.glob("../assets/buildings/*.{png,jpg,jp
 });
 
 const KEAN_MAIN_CAMPUS = [40.6798, -74.2341];
+const MAP_DEFAULT_ZOOM = 18;
+const MAP_DETAIL_ZOOM = 19.5;
+const MAP_FOCUS_ZOOM = 20;
+const MAP_TILE_NATIVE_MAX_ZOOM = 19;
 const CAMPUS_BOUNDS = {
   north: 40.6825,
   south: 40.6772,
@@ -101,15 +105,20 @@ const BUILDING_IMAGE_ALIASES = {
   hennings_research: ["george hennings research", "hennings research building"],
   hutchinson_hall: ["hutchinson hall"],
   kean_hall: ["kean hall"],
+  kean_beach_volleyball_court: ["kean beach volleyball court", "beach volleyball court", "miron beach volleyball court"],
   kean_east_soccer_field_1: ["kean east soccer field 1", "kean soccer field east campus 1"],
   kean_east_soccer_field_2: ["kean east soccer field 2", "kean soccer field east campus 2"],
   kean_shuttle_bus: ["kean shuttle bus", "shuttle bus", "campus shuttle"],
+  emergency_phone: ["emergency phone"],
   library: ["nancy thompson library", "library"],
   learning_plaza: ["learning plaza"],
+  little_theater: ["little theater", "little theatre"],
   miron_center: ["miron student center", "miron center"],
   msc_turf_field: ["miron turf field", "msc turf field", "miron student center turf field", "turf field"],
   naab: ["naab", "north avenue academic building"],
   nathan_weiss_building: ["nathan weiss east campus", "nathan weiss building"],
+  starbucks_at_library: ["starbucks at nancy thompson library", "starbucks near library", "library starbucks", "starbucks"],
+  burger_art_gallery: ["burger art gallery"],
   one_mans_search: ["one mans", "one mans search", "one man's search"],
   rogers_hall: ["rogers hall"],
   sozio_hall: ["sozio hall"],
@@ -126,7 +135,7 @@ const BUILDING_IMAGE_ALIASES = {
 const parkingLotsGeoJson = JSON.parse(parkingLotsGeoJsonRaw);
 const pathsGeoJson = JSON.parse(pathsGeoJsonRaw);
 const buildingImageRecords = buildBuildingImageRecords(buildingImageModules);
-const HIDDEN_BUILDING_MARKER_IDS = new Set(["george_hennings_research"]);
+const HIDDEN_BUILDING_MARKER_IDS = new Set(["george_hennings_research", "kean_east_soccer_field", "msc_game_room"]);
 
 const campusMarkerIcon = L.icon({
   iconRetinaUrl: markerIcon2x,
@@ -425,7 +434,7 @@ function getLocationImage(location) {
     return getBuildingImage({ id: "kean_shuttle_bus", name: "Kean Shuttle Bus" });
   }
   if (location.type === "emergency_phone") {
-    return phoneIconImage;
+    return getBuildingImage({ id: "emergency_phone", name: "Emergency Phone" });
   }
   return getBuildingImage(location);
 }
@@ -800,7 +809,7 @@ function RouteViewport({ routeCoordinates }) {
         window.setTimeout(() => map.invalidateSize({ pan: false }), 60);
       };
       map.once("moveend", handleMoveEnd);
-      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 18, animate: false });
+      map.fitBounds(bounds, { padding: [40, 40], maxZoom: MAP_DETAIL_ZOOM, animate: false });
     }, 180);
     return () => window.clearTimeout(timer);
   }, [map, routeCoordinates]);
@@ -819,7 +828,7 @@ function HighlightViewport({ destination, enabled }) {
         window.setTimeout(() => map.invalidateSize({ pan: false }), 60);
       };
       map.once("moveend", handleMoveEnd);
-      map.setView(destination, 20, { animate: false });
+      map.setView(destination, MAP_FOCUS_ZOOM, { animate: false });
     }, 180);
     return () => window.clearTimeout(timer);
   }, [destination, enabled, map]);
@@ -866,7 +875,7 @@ function MapResizeObserver() {
   return null;
 }
 
-function MapPanel({ setShowMap, routeRequest }) {
+function MapPanel({ setShowMap, routeRequest, standalone = false }) {
   const [startId, setStartId] = useState("");
   const [endId, setEndId] = useState("");
   const [userPosition, setUserPosition] = useState(null);
@@ -1010,27 +1019,7 @@ function MapPanel({ setShowMap, routeRequest }) {
     [locations]
   );
 
-  const supplementalParkingLots = useMemo(() => {
-    if (parkingLots.length > 0) {
-      return [];
-    }
-
-    const existingNames = new Set(parkingLots.map(lot => normalizeId(lot.name)));
-    const existingIds = new Set(parkingLots.map(lot => normalizeId(lot.id)));
-
-    return locations
-      .filter(location => location.type === "parking")
-      .filter(location => !existingNames.has(normalizeId(location.name)) && !existingIds.has(normalizeId(location.id)))
-      .map(location => ({
-        id: `supp_${location.id}`,
-        name: location.name,
-        parkingType: inferParkingTypeFromName(location.name),
-        polygon: createSquareAroundPoint(location.position),
-        approximate: true
-      }));
-  }, [locations, parkingLots]);
-
-  const allParkingLots = useMemo(() => [...parkingLots, ...supplementalParkingLots], [parkingLots, supplementalParkingLots]);
+  const allParkingLots = useMemo(() => parkingLots, [parkingLots]);
 
   const directoryPlaces = useMemo(() => {
     return locations
@@ -1217,6 +1206,10 @@ function MapPanel({ setShowMap, routeRequest }) {
 
     const requestedDestination = routeRequest.destinationId ? getLocationById(routeRequest.destinationId, locationsById) : null;
     const mappedDestination = resolveRoutableId(routeRequest.destinationId);
+    const mappedStart = resolveRoutableId(routeRequest.startId);
+    if (mappedStart) {
+      setStartId(mappedStart);
+    }
     if (mappedDestination) {
       setEndId(mappedDestination);
     }
@@ -1228,6 +1221,9 @@ function MapPanel({ setShowMap, routeRequest }) {
     if (routeRequest.useCurrentLocation || nextMode === "directions") {
       setLocationMode("directions");
       setMyLocationAsStart();
+    } else if (mappedStart && mappedDestination) {
+      setStartId(mappedStart);
+      setLocationStatus("Loaded route in standalone map view.");
     } else if (mappedDestination) {
       const destination = requestedDestination || getLocationById(mappedDestination, locationsById);
       if (destination) {
@@ -1237,11 +1233,33 @@ function MapPanel({ setShowMap, routeRequest }) {
     }
   }, [locationsById, resolveRoutableId, routeRequest, setMyLocationAsStart]);
 
+  const standaloneMapUrl = useMemo(() => {
+    const params = new URLSearchParams();
+    if (startId) params.set("start", startId);
+    if (highlightTarget?.id) {
+      params.set("destination", highlightTarget.id);
+    } else if (endId) {
+      params.set("destination", endId);
+    }
+    params.set("mode", locationMode === "highlight" ? "highlight" : "directions");
+    const query = params.toString();
+    return query ? `/map?${query}` : "/map";
+  }, [endId, highlightTarget?.id, locationMode, startId]);
+
   return (
     <div className="panel map-panel">
       <div className="map-header">
         <h3 className="panel-title">Campus Map</h3>
         <div className="map-header-actions">
+          {!standalone && (
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => window.open(standaloneMapUrl, "_blank", "noopener,noreferrer")}
+            >
+              Open in New Tab
+            </button>
+          )}
           <button
             type="button"
             className="btn-secondary"
@@ -1249,12 +1267,14 @@ function MapPanel({ setShowMap, routeRequest }) {
           >
             {showBuildingList ? "Hide Directions" : "Show Directions"}
           </button>
-          <button
-            className="btn-secondary"
-            onClick={() => setShowMap(false)}
-          >
-            Close Map
-          </button>
+          {!standalone && (
+            <button
+              className="btn-secondary"
+              onClick={() => setShowMap(false)}
+            >
+              Close Map
+            </button>
+          )}
         </div>
       </div>
 
@@ -1308,6 +1328,155 @@ function MapPanel({ setShowMap, routeRequest }) {
           ? `${Math.round(routeDistanceMeters)} m estimated path`
           : "No route found in campus graph"}
       </div>
+
+      <div className="leaflet-wrapper">
+        <MapContainer
+          center={KEAN_MAIN_CAMPUS}
+          zoom={MAP_DEFAULT_ZOOM}
+          minZoom={17}
+          maxZoom={MAP_FOCUS_ZOOM}
+          zoomSnap={0.5}
+          zoomDelta={0.5}
+          className="leaflet-map"
+        >
+          <MapSizeInvalidator />
+          <MapResizeObserver />
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            maxNativeZoom={MAP_TILE_NATIVE_MAX_ZOOM}
+            maxZoom={MAP_FOCUS_ZOOM}
+          />
+          {allParkingLots.map(lot => (
+            <Polygon
+              key={lot.id}
+              positions={lot.polygon}
+              pathOptions={{
+                color: PARKING_TYPE_COLORS[lot.parkingType] || "#64748b",
+                fillColor: PARKING_TYPE_COLORS[lot.parkingType] || "#64748b",
+                fillOpacity: 0.34,
+                opacity: 0.95,
+                weight: 3
+              }}
+            >
+              <Tooltip permanent direction="center" className="parking-lot-label" opacity={1}>
+                {lot.name}
+              </Tooltip>
+              <Popup>
+                <strong>{lot.name}</strong>
+                <br />
+                {formatParkingTypeLabel(lot.parkingType)}
+                {lot.approximate ? " (approximate)" : ""}
+              </Popup>
+            </Polygon>
+          ))}
+          {pointMarkers.map(location => {
+            const profile = getLocationProfile(location);
+            const imageSrc = getLocationImage(location);
+            const imagePlaceholder = getLocationImagePlaceholder(location);
+            return (
+              <Marker key={location.id} position={location.position} icon={getLocationMarkerIcon(location)}>
+                <Popup>
+                  <div className="building-popup">
+                    {imageSrc ? (
+                      <img
+                        src={imageSrc}
+                        alt={location.name}
+                        className="building-popup-image"
+                        loading="lazy"
+                      />
+                    ) : imagePlaceholder ? (
+                      <div className="building-popup-placeholder">
+                        Image placeholder: <code>{imagePlaceholder}</code>
+                      </div>
+                    ) : null}
+                    <h4 className="building-popup-title">{location.name}</h4>
+                    <div className="building-popup-campus">
+                      {location.campus || "Main"} Campus · {LOCATION_TYPE_LABELS[location.type] || "Location"}
+                    </div>
+                    <div className="building-popup-section">
+                      <div className="building-popup-label">About</div>
+                      <div className="building-popup-text">{profile?.usage}</div>
+                    </div>
+                    {profile?.departments?.length ? (
+                      <div className="building-popup-section">
+                        <div className="building-popup-label">Related</div>
+                        <ul className="building-popup-list">
+                          {profile.departments.map(department => (
+                            <li key={department}>{department}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                    {profile?.notes ? (
+                      <div className="building-popup-section">
+                        <div className="building-popup-label">Relevant Info</div>
+                        <div className="building-popup-text">{profile.notes}</div>
+                      </div>
+                    ) : null}
+                    {imagePlaceholder && !imageSrc ? (
+                      <div className="building-popup-section">
+                        <div className="building-popup-label">Add Image Later</div>
+                        <div className="building-popup-text">
+                          Add a file with this name and it will be picked up automatically.
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                </Popup>
+              </Marker>
+            );
+          })}
+          {entranceMarkers.map(entrance => (
+            <CircleMarker
+              key={entrance.id}
+              center={entrance.position}
+              radius={5}
+              pathOptions={{ color: "#ffffff", fillColor: "#0b4ea2", fillOpacity: 1, opacity: 1, weight: 2 }}
+            >
+              <Popup>{entrance.name}</Popup>
+            </CircleMarker>
+          ))}
+          <RouteViewport routeCoordinates={displayRouteCoordinates} />
+          <HighlightViewport destination={highlightTarget?.position} enabled={locationMode === "highlight"} />
+          {displayRouteVariants.length > 0 && (
+            <Fragment key={routeOverlayKey}>
+              {displayRouteVariants.map((variant, index) => (
+                <Polyline
+                  key={`route-${variant.routeIds.join("-")}`}
+                  positions={variant.coordinates}
+                  pathOptions={{
+                    color: ROUTE_LINE_COLORS[index] || ROUTE_LINE_COLORS[ROUTE_LINE_COLORS.length - 1],
+                    weight: index === 0 ? 8 : 6,
+                    opacity: index === 0 ? 0.96 : 0.82
+                  }}
+                />
+              ))}
+              <CircleMarker center={displayRouteVariants[0].coordinates[0]} radius={8} pathOptions={{ color: "#16a34a", fillOpacity: 1 }}>
+                <Popup>Route Start</Popup>
+              </CircleMarker>
+              <CircleMarker
+                center={displayRouteVariants[0].coordinates[displayRouteVariants[0].coordinates.length - 1]}
+                radius={8}
+                pathOptions={{ color: "#dc2626", fillOpacity: 1 }}
+              >
+                <Popup>Route Destination</Popup>
+              </CircleMarker>
+            </Fragment>
+          )}
+          {locationMode === "highlight" && highlightTarget?.position && (
+            <CircleMarker center={highlightTarget.position} radius={12} pathOptions={{ color: "#dc2626", fillOpacity: 0.25, weight: 3 }}>
+              <Popup>{highlightTarget.name}</Popup>
+            </CircleMarker>
+          )}
+          {userPosition && (
+            <CircleMarker center={userPosition} radius={7} pathOptions={{ color: "#fdb813", fillOpacity: 0.9 }}>
+              <Popup>Your current location</Popup>
+            </CircleMarker>
+          )}
+        </MapContainer>
+      </div>
+
       <div className="map-legend" aria-label="Parking map legend">
         <span className="map-legend-title">Parking Legend</span>
         <div className="map-legend-items">
@@ -1381,140 +1550,6 @@ function MapPanel({ setShowMap, routeRequest }) {
             </div>
           </>
         )}
-      </div>
-
-      <div className="leaflet-wrapper">
-        <MapContainer center={KEAN_MAIN_CAMPUS} zoom={18} className="leaflet-map">
-          <MapSizeInvalidator />
-          <MapResizeObserver />
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {allParkingLots.map(lot => (
-            <Polygon
-              key={lot.id}
-              positions={lot.polygon}
-              pathOptions={{
-                color: PARKING_TYPE_COLORS[lot.parkingType] || "#64748b",
-                fillColor: PARKING_TYPE_COLORS[lot.parkingType] || "#64748b",
-                fillOpacity: 0.22,
-                weight: 2
-              }}
-            >
-              <Popup>
-                <strong>{lot.name}</strong>
-                <br />
-                {formatParkingTypeLabel(lot.parkingType)}
-                {lot.approximate ? " (approximate)" : ""}
-              </Popup>
-            </Polygon>
-          ))}
-          {pointMarkers.map(location => {
-            const profile = getLocationProfile(location);
-            const imageSrc = getLocationImage(location);
-            const imagePlaceholder = getLocationImagePlaceholder(location);
-            return (
-              <Marker key={location.id} position={location.position} icon={getLocationMarkerIcon(location)}>
-                <Popup>
-                  <div className="building-popup">
-                    {imageSrc ? (
-                      <img
-                        src={imageSrc}
-                        alt={location.name}
-                        className="building-popup-image"
-                        loading="lazy"
-                      />
-                    ) : imagePlaceholder ? (
-                      <div className="building-popup-placeholder">
-                        Image placeholder: <code>{imagePlaceholder}</code>
-                      </div>
-                    ) : null}
-                    <h4 className="building-popup-title">{location.name}</h4>
-                    <div className="building-popup-campus">
-                      {location.campus || "Main"} Campus · {LOCATION_TYPE_LABELS[location.type] || "Location"}
-                    </div>
-                    <div className="building-popup-section">
-                      <div className="building-popup-label">About</div>
-                      <div className="building-popup-text">{profile?.usage}</div>
-                    </div>
-                    {profile?.departments?.length ? (
-                      <div className="building-popup-section">
-                        <div className="building-popup-label">Related</div>
-                        <ul className="building-popup-list">
-                          {profile.departments.map(department => (
-                            <li key={department}>{department}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    ) : null}
-                    {profile?.notes ? (
-                      <div className="building-popup-section">
-                        <div className="building-popup-label">Relevant Info</div>
-                        <div className="building-popup-text">{profile.notes}</div>
-                      </div>
-                    ) : null}
-                    {imagePlaceholder && !imageSrc ? (
-                      <div className="building-popup-section">
-                        <div className="building-popup-label">Add Image Later</div>
-                        <div className="building-popup-text">
-                          Add a file with this name and it will be picked up automatically.
-                        </div>
-                      </div>
-                    ) : null}
-                  </div>
-                </Popup>
-              </Marker>
-            );
-          })}
-          {entranceMarkers.map(entrance => (
-            <CircleMarker
-              key={entrance.id}
-              center={entrance.position}
-              radius={4}
-              pathOptions={{ color: "#0f172a", fillColor: "#f8fafc", fillOpacity: 1, weight: 1 }}
-            >
-              <Popup>{entrance.name}</Popup>
-            </CircleMarker>
-          ))}
-          <RouteViewport routeCoordinates={displayRouteCoordinates} />
-          <HighlightViewport destination={highlightTarget?.position} enabled={locationMode === "highlight"} />
-          {displayRouteVariants.length > 0 && (
-            <Fragment key={routeOverlayKey}>
-              {displayRouteVariants.map((variant, index) => (
-                <Polyline
-                  key={`route-${variant.routeIds.join("-")}`}
-                  positions={variant.coordinates}
-                  pathOptions={{
-                    color: ROUTE_LINE_COLORS[index] || ROUTE_LINE_COLORS[ROUTE_LINE_COLORS.length - 1],
-                    weight: index === 0 ? 7 : 5,
-                    opacity: index === 0 ? 0.95 : 0.75
-                  }}
-                />
-              ))}
-              <CircleMarker center={displayRouteVariants[0].coordinates[0]} radius={8} pathOptions={{ color: "#16a34a", fillOpacity: 1 }}>
-                <Popup>Route Start</Popup>
-              </CircleMarker>
-              <CircleMarker
-                center={displayRouteVariants[0].coordinates[displayRouteVariants[0].coordinates.length - 1]}
-                radius={8}
-                pathOptions={{ color: "#dc2626", fillOpacity: 1 }}
-              >
-                <Popup>Route Destination</Popup>
-              </CircleMarker>
-            </Fragment>
-          )}
-          {locationMode === "highlight" && highlightTarget?.position && (
-            <CircleMarker center={highlightTarget.position} radius={12} pathOptions={{ color: "#dc2626", fillOpacity: 0.25, weight: 3 }}>
-              <Popup>{highlightTarget.name}</Popup>
-            </CircleMarker>
-          )}
-          {userPosition && (
-            <CircleMarker center={userPosition} radius={7} pathOptions={{ color: "#fdb813", fillOpacity: 0.9 }}>
-              <Popup>Your current location</Popup>
-            </CircleMarker>
-          )}
-        </MapContainer>
       </div>
     </div>
   );

@@ -2656,6 +2656,54 @@
     ]
   },
   {
+    "id": "little_theater",
+    "name": "Little Theater",
+    "latlng": "40.67763782548457, -74.2347529104569",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67763782548457,
+    "longitude": -74.2347529104569,
+    "coordinates": [
+      -74.2347529104569,
+      40.67763782548457
+    ]
+  },
+  {
+    "id": "burger_art_gallery",
+    "name": "Burger Art Gallery",
+    "latlng": "40.67852161773807, -74.23433924892579",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67852161773807,
+    "longitude": -74.23433924892579,
+    "coordinates": [
+      -74.23433924892579,
+      40.67852161773807
+    ]
+  },
+  {
+    "id": "kean_beach_volleyball_court",
+    "name": "Kean Beach Volleyball Court",
+    "latlng": "40.67734412866824, -74.23437037201894",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "field",
+    "latitude": 40.67734412866824,
+    "longitude": -74.23437037201894,
+    "coordinates": [
+      -74.23437037201894,
+      40.67734412866824
+    ]
+  },
+  {
     "id": "one_mans_search",
     "name": "One Mans Search",
     "latlng": "40.67846411846568, -74.23484864112324",

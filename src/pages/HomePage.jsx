@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import ChatLauncher from "../components/ChatLauncher";
+import keanLogo from "../assets/Kean_Seal-2018-white.gif";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -19,6 +20,9 @@ export default function HomePage() {
               preload="auto"
             />
             <div className="hero-overlay">
+              <div className="hero-brand-mark">
+                <img src={keanLogo} alt="Kean University seal" className="hero-brand-logo" />
+              </div>
               <div className="hero-actions">
                 <button className="hero-btn" onClick={() => navigate("/programs")}>
                   Majors &amp; Degree Programs

@@ -25,7 +25,7 @@ load_dotenv(BACKEND_DIR / ".env")
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://127.0.0.1:11434/api/chat")
 OLLAMA_HEALTH_URL = os.getenv("OLLAMA_HEALTH_URL", "http://127.0.0.1:11434/api/tags")
-MODEL_NAME = os.getenv("OLLAMA_MODEL", "mistral")
+MODEL_NAME = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
 OLLAMA_CONNECT_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_CONNECT_TIMEOUT_SECONDS", "5"))
 OLLAMA_READ_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_READ_TIMEOUT_SECONDS", "30"))
 OLLAMA_TOTAL_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_TOTAL_TIMEOUT_SECONDS", "35"))
@@ -484,6 +484,7 @@ def is_calendar_question(text: str) -> bool:
 
 NYC_TIMEZONE = ZoneInfo("America/New_York")
 LOCATION_KEYWORDS = (
+    "show me",
     "where is",
     "where's",
     "wheres",
@@ -638,6 +639,9 @@ LOCATION_ALIAS_OVERRIDES = {
     "miron_center": (
         "student center",
         "miron",
+        "myron",
+        "meeron",
+        "miran",
         "msc",
         "miron student center",
         "campus center"
@@ -645,7 +649,9 @@ LOCATION_ALIAS_OVERRIDES = {
     "library": (
         "library",
         "nancy thompson library",
-        "thompson library"
+        "thompson library",
+        "nancy library",
+        "thomson library"
     ),
     "starbucks_at_library": (
         "starbucks",
@@ -702,6 +708,8 @@ LOCATION_ALIAS_OVERRIDES = {
     ),
     "naab": (
         "naab",
+        "nab",
+        "n a a b",
         "north avenue academic building",
         "north avenue building"
     ),
@@ -719,6 +727,8 @@ LOCATION_ALIAS_OVERRIDES = {
     "wilkins_theatre": (
         "wilkins",
         "wilkins theatre",
+        "wilkins theater",
+        "wilkens theater",
         "theater",
         "theatre"
     ),
@@ -2496,9 +2506,47 @@ def build_location_aliases(place: dict) -> list[str]:
 
     return [normalize(alias) for alias in aliases if normalize(alias)]
 
+def best_location_alias_fuzzy_score(alias: str, query_tokens: set[str], ordered_query_tokens: list[str]) -> int:
+    alias_tokens = alias.split()
+    informative_alias_tokens = [t for t in alias_tokens if len(t) >= 3 and t not in GENERIC_LOCATION_WORDS]
+    if not informative_alias_tokens:
+        return 0
+
+    alias_basis = " ".join(informative_alias_tokens)
+    if len(alias_basis) < 4:
+        return 0
+
+    candidates = set()
+    window_sizes = {len(alias_tokens), len(informative_alias_tokens)}
+    for window_size in window_sizes:
+        if window_size <= 0 or len(ordered_query_tokens) < window_size:
+            continue
+        for index in range(len(ordered_query_tokens) - window_size + 1):
+            window = " ".join(ordered_query_tokens[index:index + window_size]).strip()
+            if window:
+                candidates.add(window)
+
+    candidates.update(token for token in query_tokens if len(token) >= 4)
+
+    best_score = 0
+    for candidate in candidates:
+        ratio = SequenceMatcher(None, alias_basis, candidate).ratio()
+        if ratio >= 0.92:
+            best_score = max(best_score, 138)
+        elif ratio >= 0.88:
+            best_score = max(best_score, 116)
+        elif ratio >= 0.84 and len(alias_basis) >= 6:
+            best_score = max(best_score, 98)
+        elif ratio >= 0.80 and len(alias_basis) >= 8:
+            best_score = max(best_score, 84)
+
+    return best_score
+
 def is_location_question(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
+    if is_current_datetime_question(text):
+        return False
     return any(keyword_in_text(q, q_tokens, keyword) for keyword in LOCATION_KEYWORDS)
 
 def should_use_current_location(text: str) -> bool:
@@ -2701,11 +2749,12 @@ def should_route_destination_without_location_keyword(text: str) -> bool:
     return False
 
 def find_location_destination_id(text: str, allowed_types: Optional[set[str]] = None) -> Optional[str]:
-    if is_program_interest_question(text) or is_degree_availability_question(text):
+    if is_program_interest_question(text) or is_degree_availability_question(text) or is_current_datetime_question(text):
         return None
     q = normalize(text)
     padded_query = f" {q} "
     query_tokens = set(q.split())
+    ordered_query_tokens = q.split()
     query_requests_primary_building = any(token in query_tokens for token in {"center", "hall", "building"})
     best_place = None
     best_score = 0
@@ -2733,6 +2782,11 @@ def find_location_destination_id(text: str, allowed_types: Optional[set[str]] = 
                 score = max(score, 125)
             elif overlap > 0:
                 score = max(score, 52 + overlap * 18 + int(precision * 24))
+
+            if score < 150:
+                fuzzy_score = best_location_alias_fuzzy_score(alias, query_tokens, ordered_query_tokens)
+                if fuzzy_score:
+                    score = max(score, fuzzy_score)
 
             if query_requests_primary_building and any(token in alias_tokens for token in SECONDARY_PLACE_WORDS):
                 score -= 28
@@ -2782,11 +2836,52 @@ NON_MAPPED_CAMPUS_ALIASES = {
 
 def find_non_mapped_campus_name(text: str) -> Optional[str]:
     q = normalize(text)
+    q_tokens = q.split()
     for campus_name, aliases in NON_MAPPED_CAMPUS_ALIASES.items():
         for alias in aliases:
             if alias in q:
                 return campus_name
+
+    for campus_name, aliases in NON_MAPPED_CAMPUS_ALIASES.items():
+        best_ratio = 0.0
+        for alias in aliases:
+            alias_norm = normalize(alias)
+            alias_tokens = alias_norm.split()
+            if not alias_tokens:
+                continue
+
+            window_sizes = {len(alias_tokens)}
+            if len(alias_tokens) > 1:
+                window_sizes.add(len(alias_tokens) + 1)
+
+            candidates = [q]
+            for window_size in window_sizes:
+                if len(q_tokens) < window_size:
+                    continue
+                for index in range(len(q_tokens) - window_size + 1):
+                    candidates.append(" ".join(q_tokens[index:index + window_size]))
+
+            for candidate in candidates:
+                ratio = SequenceMatcher(None, alias_norm, candidate).ratio()
+                if ratio > best_ratio:
+                    best_ratio = ratio
+
+        if best_ratio >= 0.84:
+            return campus_name
     return None
+
+def build_non_mapped_campus_answer(campus_name: str, lang: str) -> str:
+    campus_query = f"{campus_name} campus location address information"
+    context_blocks = retrieve_fallback_context(campus_query)
+    fast_answer = build_fast_path_answer(campus_query, context_blocks, lang, max_lines=2)
+    map_note = trn("campus_map_in_development", lang, campus=campus_name).strip()
+
+    if fast_answer:
+        if map_note in fast_answer:
+            return fast_answer
+        separator = "\n\n" if "\n" in fast_answer else " "
+        return f"{fast_answer}{separator}{map_note}"
+    return map_note
 
 def find_closest_parking_lot(reference_location_id: str) -> Optional[dict]:
     reference = get_effective_reference_location(reference_location_id)
@@ -3029,6 +3124,60 @@ def is_help_capabilities_question(text: str) -> bool:
         )
     )
 
+def is_other_campuses_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    asks_campuses = any(
+        keyword_in_text(q, q_tokens, k)
+        for k in (
+            "how many campus",
+            "how many campuses",
+            "other campuses",
+            "what campuses",
+            "what other campuses",
+            "which campuses",
+            "campuses does kean have",
+            "does kean have other campuses",
+            "kean campuses",
+            "only campus",
+            "main campus",
+        )
+    )
+    asks_if_union_is_only = "union" in q_tokens and (
+        keyword_in_text(q, q_tokens, "only campus")
+        or ("only" in q_tokens and "campus" in q_tokens)
+    )
+    return asks_campuses or asks_if_union_is_only
+
+def build_other_campuses_answer(lang: str) -> str:
+    answers = {
+        "en": (
+            "Kean has one main campus in Union, New Jersey, plus other locations including "
+            "Kean Ocean, Kean Skylands, and Wenzhou-Kean University in China."
+        ),
+        "tr": (
+            "Kean'in Union, New Jersey'de bir ana kampüsü vardır. Diğer Kean yerleşkeleri arasında "
+            "Kean Ocean, Kean Skylands ve Çin'deki Wenzhou-Kean University bulunur."
+        ),
+        "es": (
+            "Kean tiene un campus principal en Union, Nueva Jersey. Otras sedes de Kean incluyen "
+            "Kean Ocean, Kean Skylands y Wenzhou-Kean University en China."
+        ),
+        "zh": (
+            "Kean 在新泽西州 Union 有一个主校区。其他校区或教学地点包括 Kean Ocean、Kean Skylands，"
+            "以及中国的温州肯恩大学。"
+        ),
+        "ur": (
+            "Kean کا ایک مرکزی کیمپس Union, New Jersey میں ہے۔ دیگر مقامات میں Kean Ocean، "
+            "Kean Skylands، اور چین میں Wenzhou-Kean University شامل ہیں۔"
+        ),
+        "ko": (
+            "Kean에는 뉴저지 Union에 메인 캠퍼스가 있습니다. 다른 캠퍼스/거점으로는 "
+            "Kean Ocean, Kean Skylands, 그리고 중국의 Wenzhou-Kean University가 있습니다."
+        ),
+    }
+    return answers.get(lang, answers["en"])
+
 def is_acknowledgment(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
@@ -3077,16 +3226,14 @@ def is_frustration(text: str) -> bool:
 def is_hours_question(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
-    return any(
+    has_hours_keyword = any(
         keyword_in_text(q, q_tokens, k)
         for k in (
             "hours",
             "open hours",
             "opening hours",
-            "what time",
             "schedule",
             "horario",
-            "hora",
             "abierto",
             "saat",
             "acik",
@@ -3099,6 +3246,12 @@ def is_hours_question(text: str) -> bool:
             "اوقات",
         )
     )
+    asks_what_time = any(
+        keyword_in_text(q, q_tokens, k)
+        for k in ("what time", "hora", "que hora", "qué hora", "saat kac", "saat kaç", "几点", "몇 시", "کیا وقت")
+    )
+    has_target = detect_hours_target(text) is not None
+    return has_hours_keyword or (asks_what_time and has_target)
 
 def is_library_target(text: str) -> bool:
     q = normalize(text)
@@ -3119,6 +3272,74 @@ def detect_hours_target(text: str) -> Optional[str]:
     if any(keyword_in_text(q, q_tokens, k) for k in ("pool", "swimming pool", "natatorium", "aquatic", "piscina", "havuz", "수영장", "游泳池")):
         return "pool"
     return None
+
+def is_current_datetime_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+
+    asks_current_time = any(
+        keyword_in_text(q, q_tokens, k)
+        for k in (
+            "what time is it",
+            "time is it",
+            "current time",
+            "time in new york",
+            "time in ny",
+            "hora actual",
+            "que hora es",
+            "qué hora es",
+            "simdi saat kac",
+            "şimdi saat kaç",
+            "现在几点",
+            "지금 몇 시",
+            "ابھی کیا وقت ہے",
+        )
+    )
+    asks_current_day = any(
+        keyword_in_text(q, q_tokens, k)
+        for k in (
+            "what day is it",
+            "todays day",
+            "today day",
+            "current day",
+            "day today",
+            "que dia es hoy",
+            "qué día es hoy",
+            "bugun gunlerden ne",
+            "bugün günlerden ne",
+            "今天星期几",
+            "오늘 무슨 요일",
+            "آج کون سا دن ہے",
+        )
+    )
+    asks_current_date = any(
+        keyword_in_text(q, q_tokens, k)
+        for k in (
+            "what is todays date",
+            "what's todays date",
+            "todays date",
+            "current date",
+            "date today",
+            "fecha de hoy",
+            "bugunun tarihi",
+            "bugünün tarihi",
+            "今天几号",
+            "오늘 날짜",
+            "آج کی تاریخ",
+        )
+    )
+
+    return asks_current_time or asks_current_day or asks_current_date
+
+def build_current_datetime_answer(text: str) -> str:
+    q = normalize(text)
+    now = datetime.now(NYC_TIMEZONE)
+
+    if any(token in q for token in ("date", "fecha", "tarih", "日期", "날짜", "تاریخ")):
+        return f"Today's date in New York is {now.strftime('%B %-d, %Y')}."
+    if any(token in q for token in ("day", "dia", "día", "gun", "gün", "星期", "요일", "دن")):
+        return f"Today in New York is {now.strftime('%A')}."
+    return f"The current time in New York is {now.strftime('%I:%M %p')}."
 
 def build_library_hours_answer(lang: str) -> str:
     hours_file = DATA_FOLDER / "Hours of Operation.txt"
@@ -3745,6 +3966,7 @@ def health():
 async def chat(req: ChatRequest):
     user_text = req.message.strip()
     lang = detect_language(user_text)
+    current_datetime_answer = build_current_datetime_answer(user_text) if is_current_datetime_question(user_text) else None
     faq_topic = detect_faq_intent(user_text)
     destination_id = find_location_destination_id(user_text)
     has_location_intent = is_location_question(user_text)
@@ -3794,6 +4016,20 @@ async def chat(req: ChatRequest):
             "answer": trn("capabilities_reply", lang),
             "intent": "general",
             "response_mode": "capabilities",
+        }
+
+    if current_datetime_answer:
+        return {
+            "answer": current_datetime_answer,
+            "intent": "general",
+            "response_mode": "current_datetime",
+        }
+
+    if is_other_campuses_question(user_text):
+        return {
+            "answer": await localized(build_other_campuses_answer(lang)),
+            "intent": "general",
+            "response_mode": "other_campuses_direct",
         }
 
     if is_identity_question(user_text):
@@ -4086,7 +4322,7 @@ async def chat(req: ChatRequest):
 
     if non_mapped_campus_name:
         return {
-            "answer": trn("campus_map_in_development", lang, campus=non_mapped_campus_name),
+            "answer": await localized(build_non_mapped_campus_answer(non_mapped_campus_name, lang)),
             "intent": "general",
             "response_mode": "campus_map_in_development",
         }
