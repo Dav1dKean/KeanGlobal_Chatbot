@@ -799,6 +799,8 @@ conversation_state = {
     "last_degree_subject": None,
     "last_degree_level": None,
     "pending_calendar_category": None,
+    "last_answer": None,
+    "last_faq_topic": None,
 }
 KEAN_MAIN_URL = "https://www.kean.edu"
 KEAN_PROGRAMS_URL = "https://www.kean.edu/academics"
@@ -3208,6 +3210,44 @@ def is_clarification_request(text: str) -> bool:
         )
     )
 
+def is_last_answer_follow_up_request(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, k)
+        for k in (
+            "explain that",
+            "explain that more simply",
+            "more simply",
+            "simpler",
+            "summarize that",
+            "summarise that",
+            "what about that policy",
+            "what about that",
+            "can you explain that",
+            "could you explain that",
+            "bunu daha basit anlat",
+            "bunu acikla",
+            "bunu açıkla",
+            "bunu ozetle",
+            "bunu özetle",
+            "peki ya bu politika",
+            "eso explica",
+            "explica eso",
+            "resume eso",
+            "y esa politica",
+            "解释一下那个",
+            "总结一下那个",
+            "那那个政策呢",
+            "اسے آسان الفاظ میں سمجھاؤ",
+            "اسے سمجھاؤ",
+            "اس کا خلاصہ",
+            "그걸 쉽게 설명",
+            "그거 요약",
+            "그 정책은",
+        )
+    )
+
 def is_frustration(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
@@ -3760,6 +3800,42 @@ def build_rag_prompt(user_text: str, context_blocks: list[str], faq_topic: Optio
         f"User question: {user_text}"
     )
 
+async def answer_from_last_response(user_text: str, lang: str) -> Optional[str]:
+    last_answer = str(conversation_state.get("last_answer") or "").strip()
+    if not last_answer:
+        return None
+
+    lang_name = LANGUAGE_NAMES.get(lang, "English")
+    prompt = (
+        "Previous assistant answer:\n"
+        f"{last_answer}\n\n"
+        "User follow-up request:\n"
+        f"{user_text}\n\n"
+        "Based only on the previous assistant answer, respond to the follow-up request. "
+        "If the user asks for a simpler explanation, simplify it. "
+        "If the user asks for a summary, summarize it. "
+        "If the user says 'what about that policy', briefly restate the policy topic from the previous answer. "
+        "Do not invent new facts and keep the answer concise."
+    )
+    try:
+        return await call_ollama(
+            [
+                {
+                    "role": "system",
+                    "content": (
+                        "You are the Kean Global concierge assistant for the Kean University website. "
+                        f"Respond only in {lang_name}. "
+                        "Use only the previous assistant answer provided by the user prompt. "
+                        "Do not invent missing details. "
+                        "Keep the reply short and clear."
+                    ),
+                },
+                {"role": "user", "content": prompt},
+            ],
+        )
+    except Exception:
+        return None
+
 def build_fallback_answer(question: str, context_blocks: list[str], lang: str) -> str:
     if not context_blocks:
         return trn("faq_no_exact_match", lang)
@@ -3984,9 +4060,20 @@ async def chat(req: ChatRequest):
     async def localized(answer: str) -> str:
         return await localize_answer_text(answer, lang)
 
+    def remember_response(payload: dict) -> dict:
+        answer_text = str(payload.get("answer") or "").strip()
+        if answer_text:
+            conversation_state["last_answer"] = answer_text[:1200]
+        topic = payload.get("faq_topic")
+        if topic:
+            conversation_state["last_faq_topic"] = topic
+        elif payload.get("intent") == "calendar":
+            conversation_state["last_faq_topic"] = "calendar_deadline"
+        return payload
+
     def with_location(payload: dict) -> dict:
         if not location_context_requested or payload.get("intent") == "location":
-            return payload
+            return remember_response(payload)
         enriched = dict(payload)
         enriched["destination_id"] = normalized_destination_id
         enriched["use_current_location"] = use_current_location
@@ -4009,7 +4096,7 @@ async def chat(req: ChatRequest):
         if answer_text and map_note and map_note not in answer_text:
             separator = "\n\n" if "\n" in answer_text else " "
             enriched["answer"] = f"{answer_text}{separator}{map_note}"
-        return enriched
+        return remember_response(enriched)
 
     if is_help_capabilities_question(user_text):
         return {
@@ -4059,6 +4146,16 @@ async def chat(req: ChatRequest):
             "intent": "general",
             "response_mode": "farewell",
         }
+
+    if is_last_answer_follow_up_request(user_text):
+        follow_up_answer = await answer_from_last_response(user_text, lang)
+        if follow_up_answer:
+            return remember_response({
+                "answer": follow_up_answer.strip(),
+                "intent": "general",
+                "faq_topic": conversation_state.get("last_faq_topic"),
+                "response_mode": "last_answer_follow_up",
+            })
 
     if is_clarification_request(user_text):
         return {
