@@ -74,10 +74,9 @@ const ProgPage = () => {
   }
 
   return (
-    // 1. 最外層的母容器
+
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
       
-      {/* 2. 現代感導覽列 - 讓搜尋功能在最上方隨時可用 */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 py-4 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
@@ -109,7 +108,7 @@ const ProgPage = () => {
         </div>
       </nav>
 
-      {/* 3. 新增區塊 1：Hero 主視覺橫幅 */}
+
       <div className="bg-[#002B49] text-white py-24 px-6 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-400 rounded-full blur-3xl"></div>
@@ -125,7 +124,7 @@ const ProgPage = () => {
         </div>
       </div>
 
-      {/* 4. 新增區塊 2：數據與亮點卡片 */}
+
       <div className="max-w-5xl mx-auto px-6 relative -mt-12 z-20 mb-16">
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-gray-100">
           <div className="text-center px-4">
@@ -146,10 +145,10 @@ const ProgPage = () => {
         </div>
       </div>
 
-      {/* 5. 主內容區 */}
+
       <main className="max-w-7xl mx-auto px-6 pb-20">
         
-        {/* 6. 新增區塊 3：AI 專屬推薦區 */}
+
         <div className="mb-16 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-3xl p-8 md:p-10 border border-blue-100 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
           <div className="max-w-xl">
             <div className="flex items-center gap-2 text-indigo-600 font-bold tracking-wider uppercase text-sm mb-3">
@@ -170,7 +169,7 @@ const ProgPage = () => {
           </button>
         </div>
 
-        {/* 7. 原本的列表區塊 */}
+
         <header className="mb-10 border-b border-gray-200 pb-6">
           <h2 className="text-3xl font-extrabold text-[#002B49]">All Programs ({filtered.length})</h2>
         </header>
@@ -225,6 +224,10 @@ const ProgPage = () => {
           </div>
         )}
       </main>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     </div>
   );
 }

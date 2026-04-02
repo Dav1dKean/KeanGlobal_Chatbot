@@ -23,6 +23,18 @@ OLLAMA_CONNECT_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_CONNECT_TIMEOUT_SECONDS
 OLLAMA_READ_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_READ_TIMEOUT_SECONDS", "30"))
 OLLAMA_HEALTH_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_HEALTH_TIMEOUT_SECONDS", "5"))
 OLLAMA_MAX_RETRIES = int(os.getenv("OLLAMA_MAX_RETRIES", "1"))
+<<<<<<< Updated upstream
+=======
+OLLAMA_NUM_PREDICT = int(os.getenv("OLLAMA_NUM_PREDICT", "160"))
+OLLAMA_TEMPERATURE = float(os.getenv("OLLAMA_TEMPERATURE", "0.2"))
+OLLAMA_NUM_CTX = int(os.getenv("OLLAMA_NUM_CTX", "2048"))
+RAG_MAX_RESULTS = int(os.getenv("RAG_MAX_RESULTS", "5"))
+RAG_FALLBACK_MAX_RESULTS = int(os.getenv("RAG_FALLBACK_MAX_RESULTS", "3"))
+RAG_MAX_CHARS_PER_BLOCK = int(os.getenv("RAG_MAX_CHARS_PER_BLOCK", "650"))
+RAG_MAX_PROMPT_CONTEXT_CHARS = int(os.getenv("RAG_MAX_PROMPT_CONTEXT_CHARS", "2200"))
+FAQ_FAST_PATH_ENABLED = os.getenv("FAQ_FAST_PATH_ENABLED", "1").strip().lower() in {"1", "true", "yes", "on"}
+FAQ_FAST_PATH_MAX_LINES = int(os.getenv("FAQ_FAST_PATH_MAX_LINES", "3"))
+>>>>>>> Stashed changes
 ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
     "http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:8000,http://localhost:8000",
@@ -101,10 +113,18 @@ def get_time_response(prompt: str):
     if not any(token in lowered for token in ["time", "date", "day", "today"]):
         return None
 
+<<<<<<< Updated upstream
     is_local_time_question = any(pattern.search(prompt) for pattern in LOCAL_TIME_PATTERNS)
     is_generic_time_question = lowered.strip() in {"what time is it", "what time is it?"}
     if not is_local_time_question and not is_generic_time_question:
         return None
+=======
+campus_locations = load_campus_locations()
+campus_location_by_id = {place["id"]: place for place in campus_locations}
+fallback_rag_docs = []
+program_catalog = load_program_catalog()
+FAQ_INTENT_KEYWORDS = load_faq_intent_keywords()
+>>>>>>> Stashed changes
 
     location_label = "New York City"
     if any(token in lowered for token in ["newark", "new jersey", " nj"]):
@@ -169,6 +189,7 @@ def build_ollama_timeout() -> httpx.Timeout:
         pool=OLLAMA_CONNECT_TIMEOUT_SECONDS,
     )
 
+<<<<<<< Updated upstream
 
 async def query_ollama(prompt: str):
     payload = {
@@ -176,6 +197,28 @@ async def query_ollama(prompt: str):
         "messages": [
             {"role": "system", "content": "You are a helpful university policy assistant."},
             {"role": "user", "content": prompt}
+=======
+async def query_ollama(prompt: str, lang: str):
+    lang_name = LANGUAGE_NAMES.get(lang, "English")
+    return await call_ollama(
+        [
+            {
+                "role": "system",
+                "content": (
+                    "You are the Kean Global concierge assistant for the Kean University website. "
+                    f"Respond only in {lang_name}. "
+                    "Use simple, easy-to-understand language. "
+                    "Be concise, factual, polite, and friendly. "
+                    "Default to English unless the user asks in another language. "
+                    "Do not invent policy or calendar facts. "
+                    "Do not cite sources or filenames. "
+                    "If the user asks about a specific program, major, or degree, act as an academic advisor. "
+                    "Clearly list the required credits and core courses using a numbered list (1., 2., 3.) with line breaks if that information is in the context."
+                    "Keep the response short and easy to read (max 9 sentences)."
+                ),
+            },
+            {"role": "user", "content": prompt},
+>>>>>>> Stashed changes
         ],
         "stream": False,
         "options": {
@@ -415,5 +458,490 @@ async def chat(req: ChatRequest):
     if location_response:
         return location_response
 
+<<<<<<< Updated upstream
     reply = await query_ollama(req.message)
     return {"answer": reply, "reply": reply, "intent": "general"}
+=======
+    if is_help_capabilities_question(user_text):
+        return {
+            "answer": trn("capabilities_reply", lang),
+            "intent": "general",
+            "response_mode": "capabilities",
+        }
+
+    if is_identity_question(user_text):
+        return {
+            "answer": trn("bot_identity_intro", lang),
+            "intent": "general",
+            "response_mode": "identity",
+        }
+
+    if is_greeting(user_text):
+        return {
+            "answer": trn("greeting_intro", lang),
+            "intent": "general",
+            "response_mode": "greeting",
+        }
+
+    if is_thanks(user_text):
+        return {
+            "answer": trn("thanks_reply", lang),
+            "intent": "general",
+            "response_mode": "thanks",
+        }
+
+    if is_farewell(user_text):
+        return {
+            "answer": trn("farewell_reply", lang),
+            "intent": "general",
+            "response_mode": "farewell",
+        }
+
+    if is_clarification_request(user_text):
+        return {
+            "answer": trn("clarify_reply", lang),
+            "intent": "general",
+            "response_mode": "clarify",
+        }
+
+    if is_acknowledgment(user_text):
+        return {
+            "answer": trn("acknowledgment_reply", lang),
+            "intent": "general",
+            "response_mode": "acknowledgment",
+        }
+
+    if is_frustration(user_text):
+        return {
+            "answer": trn("frustration_reply", lang),
+            "intent": "general",
+            "response_mode": "frustration",
+        }
+
+    if is_shuttle_question(user_text):
+        return with_location({
+            "answer": await localized(build_shuttle_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "parking_transport",
+            "response_mode": "shuttle_direct",
+        })
+
+    if is_hours_question(user_text):
+        hours_target = detect_hours_target(user_text)
+        if hours_target:
+            return with_location({
+                "answer": await localized(build_target_hours_answer(hours_target, lang)),
+                "intent": "faq",
+                "faq_topic": "hours",
+                "response_mode": f"hours_{hours_target}",
+            })
+        return with_location({
+            "answer": trn("hours_target_prompt", lang),
+            "intent": "faq",
+            "faq_topic": "hours",
+            "response_mode": "hours_target_prompt",
+        })
+
+    if is_course_repeat_question(user_text):
+        return with_location({
+            "answer": await localized(build_course_repeat_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "policies",
+            "response_mode": "course_repeat_policy",
+        })
+
+    if is_admissions_question(user_text):
+        return with_location({
+            "answer": await localized(build_admissions_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "admissions",
+            "response_mode": "admissions_direct",
+        })
+
+    if is_graduation_question(user_text):
+        return with_location({
+            "answer": await localized(build_graduation_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "policies",
+            "response_mode": "graduation_direct",
+        })
+
+    if is_financial_aid_question(user_text):
+        return with_location({
+            "answer": await localized(build_financial_aid_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "financial_aid",
+            "response_mode": "financial_aid_direct",
+        })
+
+    if is_student_accounts_question(user_text):
+        return with_location({
+            "answer": await localized(build_student_accounts_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "student_accounts",
+            "response_mode": "student_accounts_direct",
+        })
+
+    if is_housing_question(user_text):
+        return with_location({
+            "answer": await localized(build_housing_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "housing",
+            "response_mode": "housing_direct",
+        })
+
+    if is_health_services_question(user_text):
+        return with_location({
+            "answer": await localized(build_health_services_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "health_services",
+            "response_mode": "health_services_direct",
+        })
+
+    if is_accessibility_question(user_text):
+        return with_location({
+            "answer": await localized(build_accessibility_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "accessibility",
+            "response_mode": "accessibility_direct",
+        })
+
+    if is_bookstore_question(user_text):
+        return with_location({
+            "answer": await localized(build_bookstore_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "bookstore",
+            "response_mode": "bookstore_direct",
+        })
+
+    if is_registrar_question(user_text):
+        return with_location({
+            "answer": await localized(build_registrar_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "registration",
+            "response_mode": "registrar_direct",
+        })
+
+    if is_one_stop_question(user_text):
+        return with_location({
+            "answer": await localized(build_one_stop_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "registration",
+            "response_mode": "one_stop_direct",
+        })
+
+    if is_dining_question(user_text):
+        return with_location({
+            "answer": await localized(build_dining_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "hours",
+            "response_mode": "dining_direct",
+        })
+
+    if is_smoking_policy_question(user_text):
+        return with_location({
+            "answer": await localized(build_smoking_policy_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "smoking_policy",
+            "response_mode": "smoking_policy_direct",
+        })
+
+    if faq_topic == "policies":
+        return with_location({
+            "answer": await localized(build_general_policy_overview_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "policies",
+            "response_mode": "policy_overview_direct",
+        })
+
+    if is_program_follow_up_question(user_text):
+        current_subject = extract_degree_subject_phrase(user_text) or extract_follow_up_subject_phrase(user_text)
+        current_level = detect_degree_level(user_text)
+        follow_up_subject = (current_subject or conversation_state.get("last_degree_subject") or "").strip()
+        follow_up_level = current_level if current_subject else (conversation_state.get("last_degree_level") or current_level)
+
+        if follow_up_subject:
+            follow_up_query = f"{follow_up_subject} {follow_up_level or ''} degree program details".strip()
+            context_blocks = retrieve_fallback_context(follow_up_query, faq_topic="programs")
+            follow_up_answer = build_fast_path_answer(
+                follow_up_query,
+                context_blocks,
+                lang,
+                max_lines=3,
+                faq_topic="programs",
+            )
+            if follow_up_answer:
+                conversation_state["last_degree_subject"] = follow_up_subject
+                conversation_state["last_degree_level"] = follow_up_level
+                return with_location({
+                    "answer": await localized(follow_up_answer),
+                    "intent": "faq",
+                    "faq_topic": "programs",
+                    "sources_used": len(context_blocks),
+                    "response_mode": "program_follow_up",
+                })
+        return with_location({
+            "answer": trn("program_follow_up_prompt", lang),
+            "intent": "faq",
+            "faq_topic": "programs",
+            "response_mode": "program_follow_up_prompt",
+        })
+
+    if is_food_question(user_text):
+        food_suggestions = find_food_suggestions(user_text, max_results=3)
+        if food_suggestions:
+            primary = food_suggestions[0]
+            suggestion_lines = [trn("food_suggestions_intro", lang)]
+            for index, place in enumerate(food_suggestions, start=1):
+                suggestion_lines.append(f"{index}. {place.get('name', 'Food location')} ({place.get('campus', 'Main')})")
+            return {
+                "answer": "\n".join(suggestion_lines),
+                "intent": "location",
+                "destination_id": primary.get("id"),
+                "food_suggestions": [
+                    {
+                        "id": place.get("id"),
+                        "name": place.get("name"),
+                        "campus": place.get("campus", "Main"),
+                    }
+                    for place in food_suggestions
+                ],
+                "use_current_location": False,
+                "location_mode": "highlight",
+            }
+
+    if is_closest_parking_question(user_text):
+        reference_id = find_location_destination_id(
+            user_text,
+            allowed_types={"building", "entrance"},
+        )
+        if not reference_id:
+            return {"answer": trn("closest_parking_unknown_target", lang), "intent": "general"}
+
+        reference = get_effective_reference_location(reference_id)
+        closest_lot = find_closest_parking_lot(reference_id)
+        if not reference or not closest_lot:
+            return {
+                "answer": trn("closest_parking_not_found", lang, target=(reference or {}).get("name", "that location")),
+                "intent": "general",
+            }
+
+        return {
+            "answer": trn("closest_parking_found", lang, target=reference["name"], lot=closest_lot["name"]),
+            "intent": "location",
+            "destination_id": closest_lot["id"],
+            "use_current_location": False,
+            "location_mode": "highlight",
+        }
+
+    if is_parking_ticket_fee_question(user_text):
+        return with_location({
+            "answer": await localized(build_parking_ticket_fee_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "parking_transport",
+            "response_mode": "policy_fee_summary",
+        })
+
+    if is_parking_location_question(user_text):
+        audience = parking_audience(user_text)
+        key = {
+            "student": "parking_guidance_student",
+            "faculty": "parking_guidance_faculty",
+            "overnight": "parking_guidance_overnight",
+        }.get(audience, "parking_guidance_general")
+        return {
+            "answer": trn(key, lang),
+            "intent": "location",
+            "destination_id": None,
+            "use_current_location": False,
+            "location_mode": "highlight",
+        }
+
+    if non_mapped_campus_name:
+        return {
+            "answer": trn("campus_map_in_development", lang, campus=non_mapped_campus_name),
+            "intent": "general",
+            "response_mode": "campus_map_in_development",
+        }
+
+    if location_context_requested and not faq_topic:
+        if normalized_destination_id:
+            destination = campus_location_by_id.get(normalized_destination_id, {})
+            return {
+                "answer": trn(
+                    "location_opening_specific",
+                    lang,
+                    name=destination.get("name", "That location"),
+                    campus=destination.get("campus", "campus"),
+                ),
+                "intent": "location",
+                "destination_id": normalized_destination_id,
+                "use_current_location": use_current_location,
+                "location_mode": location_mode,
+            }
+        return {
+            "answer": trn("location_opening_generic", lang),
+            "intent": "location",
+            "destination_id": None,
+            "use_current_location": use_current_location,
+            "location_mode": location_mode,
+        }
+
+    if is_calendar_question(user_text) or is_calendar_timing_question(user_text):
+        term = extract_term_from_text(user_text)
+        session = extract_session_from_text(user_text)
+        category = detect_event_category(user_text) or pending_calendar_category
+        if term:
+            matched = next((t for t in calendar_data if term in t), None)
+            if matched and category:
+                best_event = find_best_calendar_event(calendar_data[matched], category, session=session)
+                if best_event:
+                    conversation_state["pending_calendar_category"] = None
+                    event, date = best_event
+                    return with_location({
+                        "answer": f"{localize_calendar_event_text(event, lang)}: {localize_date_text(date, lang)}",
+                        "intent": "calendar",
+                    })
+        elif category:
+            conversation_state["pending_calendar_category"] = category
+            return with_location({
+                "answer": build_calendar_clarification_prompt(category, lang),
+                "intent": "calendar",
+                "response_mode": "calendar_term_clarify",
+            })
+
+    if pending_calendar_category:
+        term = extract_term_from_text(user_text)
+        if term:
+            matched = next((t for t in calendar_data if term in t), None)
+            session = extract_session_from_text(user_text)
+            if matched:
+                best_event = find_best_calendar_event(
+                    calendar_data[matched],
+                    pending_calendar_category,
+                    session=session,
+                )
+                if best_event:
+                    conversation_state["pending_calendar_category"] = None
+                    event, date = best_event
+                    return with_location({
+                        "answer": f"{localize_calendar_event_text(event, lang)}: {localize_date_text(date, lang)}",
+                        "intent": "calendar",
+                        "response_mode": "calendar_term_follow_up",
+                    })
+
+    if is_degree_availability_question(user_text):
+        subject_phrase = extract_degree_subject_phrase(user_text)
+        subject_tokens = program_subject_tokens_from_query(subject_phrase or user_text)
+        level = detect_degree_level(user_text)
+        localized_level = localize_degree_level(level, lang)
+        subject_label = (subject_phrase or "that subject").strip()
+        matched_program = find_program_match(subject_phrase or user_text)
+        exists = bool(matched_program) or degree_exists_in_records(subject_tokens, level)
+        conversation_state["last_degree_subject"] = subject_label
+        conversation_state["last_degree_level"] = level
+        return with_location({
+            "answer": await localized(
+                build_degree_availability_answer(
+                    exists,
+                    matched_program["name"] if matched_program else subject_label,
+                    localized_level,
+                    lang,
+                    matched_program,
+                )
+            ),
+            "intent": "faq",
+            "faq_topic": "programs",
+            "response_mode": "degree_availability",
+        })
+
+    # program_match = find_program_match(user_text)
+    # if program_match and (
+    #     faq_topic == "programs"
+    #     or any(token in normalize(user_text) for token in ("major", "program", "degree", "curriculum"))
+    #     or len(tokenize(user_text)) <= 5
+    # ):
+    #     conversation_state["last_degree_subject"] = program_match["name"]
+    #     return with_location({
+    #         "answer": await localized(build_program_answer(program_match, lang)),
+    #         "intent": "faq",
+    #         "faq_topic": "programs",
+    #         "response_mode": "program_catalog_direct",
+    #     })
+
+    if faq_topic == "programs" or is_program_interest_question(user_text):
+        return with_location({
+            "answer": await localized(build_program_discovery_reply(user_text, lang)),
+            "intent": "faq",
+            "faq_topic": "programs",
+            "response_mode": "program_discovery",
+        })
+
+    retrieval_query = build_retrieval_query(user_text, lang, faq_topic)
+    context_blocks = retrieve_rag_context(retrieval_query)
+    if not context_blocks:
+        fallback_query = build_retrieval_query(
+            f"{user_text} {faq_topic.replace('_', ' ') if faq_topic else ''}".strip(),
+            lang,
+            faq_topic=faq_topic,
+        )
+        context_blocks = retrieve_fallback_context(fallback_query, faq_topic=faq_topic)
+
+    if should_ask_for_clarification(user_text, context_blocks, faq_topic):
+        return with_location({
+            "answer": trn("faq_clarify_reply", lang),
+            "intent": "faq" if faq_topic else "general",
+            "faq_topic": faq_topic,
+            "sources_used": len(context_blocks),
+            "response_mode": "clarify_no_match",
+        })
+
+    if FAQ_FAST_PATH_ENABLED and faq_topic and context_blocks:
+        fast_answer = build_fast_path_answer(user_text, context_blocks, lang, faq_topic=faq_topic)
+        if fast_answer:
+            return with_location({
+                "answer": await localized(fast_answer),
+                "intent": "faq",
+                "faq_topic": faq_topic,
+                "sources_used": len(context_blocks),
+                "response_mode": "fast_path",
+            })
+        return with_location({
+            "answer": await localized(build_program_discovery_reply(user_text, lang) if faq_topic == "programs" else trn("faq_no_exact_match", lang)),
+            "intent": "faq",
+            "faq_topic": faq_topic,
+            "sources_used": len(context_blocks),
+            "response_mode": "fast_path_no_match",
+        })
+
+    prompt = build_rag_prompt(user_text, context_blocks, faq_topic)
+
+    try:
+        reply = await query_ollama(prompt, lang)
+    except (httpx.HTTPError, asyncio.TimeoutError):
+        fast_answer = build_fast_path_answer(user_text, context_blocks, lang, max_lines=2, faq_topic=faq_topic)
+        if fast_answer:
+            return with_location({
+                "answer": await localized(fast_answer),
+                "intent": "faq" if faq_topic else "general",
+                "faq_topic": faq_topic,
+                "sources_used": len(context_blocks),
+                "response_mode": "fast_path_timeout",
+            })
+        fallback_answer = build_program_discovery_reply(user_text, lang) if faq_topic == "programs" else build_fallback_answer(user_text, context_blocks, lang)
+        return with_location({"answer": await localized(fallback_answer), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)})
+    except Exception:
+        fast_answer = build_fast_path_answer(user_text, context_blocks, lang, max_lines=2, faq_topic=faq_topic)
+        if fast_answer:
+            return with_location({
+                "answer": await localized(fast_answer),
+                "intent": "faq" if faq_topic else "general",
+                "faq_topic": faq_topic,
+                "sources_used": len(context_blocks),
+                "response_mode": "fast_path_timeout",
+            })
+        fallback_answer = build_program_discovery_reply(user_text, lang) if faq_topic == "programs" else build_fallback_answer(user_text, context_blocks, lang)
+        return with_location({"answer": await localized(fallback_answer), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)})
+
+    return with_location({"answer": await localized(reply), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)})
+>>>>>>> Stashed changes

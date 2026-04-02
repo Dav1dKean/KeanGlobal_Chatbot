@@ -1,0 +1,98 @@
+KEAN UNIVERSITY
+COMPUTER RELATED ACCEPTABLE USE POLICY
+
+PREAMBLE
+Kean University is committed to protecting and ensuring the availability and integrity of its data, information systems, and computer networks through appropriate security measures and controls.
+
+All users share responsibility for maintaining security and must follow established guidelines.
+
+OVERVIEW
+This policy outlines acceptable use of University information systems and equipment. Improper use may expose the University to risks including:
+- Security breaches
+- Network compromise
+- Virus attacks
+- Legal liability
+
+The University may monitor and record system usage. Users expressly consent to monitoring. Evidence of criminal activity may be referred to law enforcement.
+
+AUTHORIZED USERS
+University computer resources are restricted to:
+- Registered students
+- Faculty
+- Staff
+
+Violations may result in:
+- Suspension of computer privileges
+- Referral to Student Accountability (students)
+- Referral to Human Resources (employees)
+- Criminal prosecution where applicable
+
+GENERAL ACCEPTABLE USE POLICIES
+
+Users MUST NOT:
+
+1. Use an ID not assigned to them.
+2. Share passwords or access credentials.
+3. Attempt to obtain another user’s password.
+4. Disguise account identity.
+5. Gain unauthorized access to remote computers.
+6. Disrupt network or system operations.
+7. Install or distribute malicious software (viruses, worms, Trojan horses).
+8. Circumvent security protections.
+9. Perform port scanning or security scanning.
+10. Violate copyright, intellectual property, or software licenses.
+11. Send spam, chain letters, or excessive mass emails.
+12. Harass others through threatening, abusive, or offensive messages.
+13. Monitor, read, copy, or alter another user's data without permission.
+14. Use university systems for personal financial gain.
+15. Place prohibited content on university systems.
+
+PROHIBITED CONTENT
+The following may not be stored or distributed on University systems:
+- Infringing material
+- Abusive or sexually offensive material
+- Pornographic content
+- Pirated software
+- Destructive software
+- Libelous statements
+- Commercial advertisements
+
+USE OF GENERATIVE AI TOOLS
+
+Kean University supports responsible AI use but recognizes security and intellectual property risks.
+
+GENERAL AI REQUIREMENTS:
+- AI use must be disclosed when assisting with tasks.
+- AI-generated content must be fact-checked.
+- AI tools may not be used to make employment decisions.
+- Confidential or sensitive information must never be input into unauthorized AI systems.
+
+SANCTIONED AI TOOL (As of June 23, 2025):
+- Microsoft Copilot Chat (via Microsoft Teams or Office.com)
+
+ChatGPT or other generative AI tools are NOT authorized for University business unless officially approved.
+
+RESTRICTIONS FOR NON-SANCTIONED AI TOOLS:
+Users must NOT input:
+- Personal information
+- Student records subject to FERPA
+- Protected health information
+- Personnel records
+- Passwords or ID numbers
+- Confidential University information
+- The name of Kean University or departments
+
+AI tools may not be used for:
+- Illegal or fraudulent activities
+- Recording meetings without consent
+- Personnel or sensitive matter transcription
+
+Violations may result in disciplinary action up to termination.
+
+EXTERNAL NETWORK USE
+Users connecting to external networks must comply with:
+- Kean University policies
+- Policies of the external network
+
+POLICY ADOPTION
+Revisions Adopted: June 23, 2025

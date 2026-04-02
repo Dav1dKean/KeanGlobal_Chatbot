@@ -1,17 +1,19 @@
-import { useState } from "react";
-import ChatPanel from "../components/ChatPanel";
+import { useNavigate } from "react-router-dom";
 import MapPanel from "../components/MapPanel";
 
-export default function MapPage() {
-  const [showMap, setShowMap] = useState(false);
-  const [routeRequest, setRouteRequest] = useState(null);
+export default function MapPage({ routeRequest }) {
+  const navigate = useNavigate();
 
   return (
-    <div className={showMap ? "main-layout two-col" : "main-layout one-col"}>
-      <ChatPanel setShowMap={setShowMap} setRouteRequest={setRouteRequest} />
-      {showMap && (
-        <MapPanel setShowMap={setShowMap} routeRequest={routeRequest} />
-      )}
+    <div className="main-layout">
+      <MapPanel 
+        routeRequest={routeRequest} 
+        setShowMap={(show) => {
+          if (!show) {
+            navigate("/");
+          }
+        }} 
+      />
     </div>
   );
 }

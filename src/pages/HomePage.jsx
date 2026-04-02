@@ -1,4 +1,8 @@
 import { useNavigate } from "react-router-dom";
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -44,6 +48,24 @@ export default function HomePage() {
                 </button>
             </div>
         </div>
+<<<<<<< Updated upstream
+=======
+      </section>
+
+      <div className="panel" style={{ margin: 20, borderRadius: 12 }}>
+        <h2 className="panel-title">KeanGlobal Home</h2>
+        <p style={{ color: "var(--text-secondary)" }}>
+          Welcome. Choose a feature from the navigation bar, or start with Chat.
+        </p>
+
+        <div style={{ display: "flex", gap: 12, marginTop: 12 }}>
+          <button className="btn-secondary" onClick={() => navigate("/chat")}>
+            Go to Chat
+          </button>
+        </div>
+      </div>
+
+>>>>>>> Stashed changes
     </div>
   );
 }
