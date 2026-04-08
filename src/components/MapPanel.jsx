@@ -1250,32 +1250,9 @@ function MapPanel({ setShowMap, routeRequest, standalone = false }) {
     <div className="panel map-panel">
       <div className="map-header">
         <h3 className="panel-title">Campus Map</h3>
-        <div className="map-header-actions">
-          {!standalone && (
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={() => window.open(standaloneMapUrl, "_blank", "noopener,noreferrer")}
-            >
-              Open in New Tab
-            </button>
-          )}
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={() => setShowBuildingList(prev => !prev)}
-          >
-            {showBuildingList ? "Hide Directions" : "Show Directions"}
-          </button>
-          {!standalone && (
-            <button
-              className="btn-secondary"
-              onClick={() => setShowMap(false)}
-            >
-              Close Map
-            </button>
-          )}
-        </div>
+        <button type="button" className="btn-secondary" onClick={() => setShowBuildingList(prev => !prev)}>
+          {showBuildingList ? "Hide Directions" : "Show Directions"}
+        </button>
       </div>
 
       {showBuildingList && (
@@ -1305,6 +1282,7 @@ function MapPanel({ setShowMap, routeRequest, standalone = false }) {
               ))}
             </select>
           </label>
+
         </div>
       )}
 

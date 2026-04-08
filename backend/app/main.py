@@ -39,6 +39,7 @@ RAG_FALLBACK_MAX_RESULTS = int(os.getenv("RAG_FALLBACK_MAX_RESULTS", "3"))
 RAG_MAX_CHARS_PER_BLOCK = int(os.getenv("RAG_MAX_CHARS_PER_BLOCK", "650"))
 RAG_MAX_PROMPT_CONTEXT_CHARS = int(os.getenv("RAG_MAX_PROMPT_CONTEXT_CHARS", "2200"))
 FAQ_FAST_PATH_ENABLED = os.getenv("FAQ_FAST_PATH_ENABLED", "1").strip().lower() in {"1", "true", "yes", "on"}
+FAQ_FAST_PATH_ENABLED = False
 FAQ_FAST_PATH_MAX_LINES = int(os.getenv("FAQ_FAST_PATH_MAX_LINES", "3"))
 ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
@@ -4515,27 +4516,27 @@ async def chat(req: ChatRequest):
             "response_mode": "degree_availability",
         })
 
-    program_match = find_program_match(user_text)
-    if program_match and (
-        faq_topic == "programs"
-        or any(token in normalize(user_text) for token in ("major", "program", "degree", "curriculum"))
-        or len(tokenize(user_text)) <= 5
-    ):
-        conversation_state["last_degree_subject"] = program_match["name"]
-        return with_location({
-            "answer": await localized(build_program_answer(program_match, lang)),
-            "intent": "faq",
-            "faq_topic": "programs",
-            "response_mode": "program_catalog_direct",
-        })
+    # program_match = find_program_match(user_text)
+    # if program_match and (
+    #     faq_topic == "programs"
+    #     or any(token in normalize(user_text) for token in ("major", "program", "degree", "curriculum"))
+    #     or len(tokenize(user_text)) <= 5
+    # ):
+    #     conversation_state["last_degree_subject"] = program_match["name"]
+    #     return with_location({
+    #         "answer": await localized(build_program_answer(program_match, lang)),
+    #         "intent": "faq",
+    #         "faq_topic": "programs",
+    #         "response_mode": "program_catalog_direct",
+    #     })
 
-    if faq_topic == "programs" or is_program_interest_question(user_text):
-        return with_location({
-            "answer": await localized(build_program_discovery_reply(user_text, lang)),
-            "intent": "faq",
-            "faq_topic": "programs",
-            "response_mode": "program_discovery",
-        })
+    # if faq_topic == "programs" or is_program_interest_question(user_text):
+    #     return with_location({
+    #         "answer": await localized(build_program_discovery_reply(user_text, lang)),
+    #         "intent": "faq",
+    #         "faq_topic": "programs",
+    #         "response_mode": "program_discovery",
+    #     })
 
     retrieval_query = build_retrieval_query(user_text, lang, faq_topic)
     context_blocks = retrieve_rag_context(retrieval_query)
@@ -4602,5 +4603,4 @@ async def chat(req: ChatRequest):
             })
         fallback_answer = build_program_discovery_reply(user_text, lang) if faq_topic == "programs" else build_fallback_answer(user_text, context_blocks, lang)
         return with_location({"answer": await localized(fallback_answer), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)})
-
     return with_location({"answer": await localized(reply), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)})

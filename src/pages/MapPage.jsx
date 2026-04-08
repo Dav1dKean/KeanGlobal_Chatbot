@@ -1,6 +1,5 @@
-import { useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
-import ChatPanel from "../components/ChatPanel";
+import { useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import MapPanel from "../components/MapPanel";
 
 function buildRouteRequestFromSearch(search) {
@@ -19,18 +18,25 @@ function buildRouteRequestFromSearch(search) {
   };
 }
 
-export default function MapPage({ standalone = false }) {
+export default function MapPage({ standalone = false, routeRequest = null }) {
   const location = useLocation();
-  const initialRouteRequest = useMemo(() => buildRouteRequestFromSearch(location.search), [location.search]);
-  const [showMap, setShowMap] = useState(standalone || Boolean(initialRouteRequest));
-  const [routeRequest, setRouteRequest] = useState(initialRouteRequest);
+  const navigate = useNavigate();
+  
+  const activeRouteRequest = useMemo(() => {
+    return routeRequest || buildRouteRequestFromSearch(location.search);
+  }, [routeRequest, location.search]);
 
   return (
-    <div className={standalone ? "main-layout map-only" : showMap ? "main-layout two-col" : "main-layout one-col"}>
-      {!standalone && <ChatPanel setShowMap={setShowMap} setRouteRequest={setRouteRequest} />}
-      {(showMap || standalone) && (
-        <MapPanel setShowMap={setShowMap} routeRequest={routeRequest} standalone={standalone} />
-      )}
+    <div className={standalone ? "main-layout map-only" : "main-layout"}>
+      <MapPanel 
+        routeRequest={activeRouteRequest} 
+        standalone={standalone}
+        setShowMap={(show) => {
+          if (!show && !standalone) {
+            navigate("/");
+          }
+        }} 
+      />
     </div>
   );
 }

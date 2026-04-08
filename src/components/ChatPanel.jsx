@@ -1,6 +1,9 @@
 import { Mic, Square } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-
+import chatbotButtonImage from "../assets/Chatbot button.png";
+// ==============================
+// CONSTANTS & CONFIGURATION
+// ==============================
 const ENV_API_BASE_URL = import.meta.env.VITE_API_URL?.trim();
 const API_BASE_URLS = ENV_API_BASE_URL
   ? [ENV_API_BASE_URL]
@@ -84,7 +87,7 @@ function renderLinkedText(text) {
         href={url}
         target={url.startsWith("/") ? undefined : "_blank"}
         rel={url.startsWith("/") ? undefined : "noreferrer"}
-        className="chat-link"
+        className="text-blue-200 underline hover:text-blue-300 break-all"
       >
         {url}
       </a>
@@ -133,17 +136,18 @@ function renderBotMessage(message, onSelectSuggestion) {
   }
 
   if (currentItem) listItems.push(currentItem);
+  
   if (!listItems.length) {
     return (
       <>
-        <div>{renderLinkedText(text)}</div>
+        <div className="whitespace-pre-wrap leading-relaxed">{renderLinkedText(text)}</div>
         {foodSuggestions.length > 0 && (
-          <div className="chat-suggestion-group">
+          <div className="mt-3 flex flex-wrap gap-2">
             {foodSuggestions.map(suggestion => (
               <button
                 key={suggestion.id}
                 type="button"
-                className="btn-secondary chat-suggestion-btn"
+                className="bg-[#004a80] text-white border border-[#003a66] hover:bg-[#003a66] text-xs px-3 py-1.5 rounded-full transition-colors focus:outline-none"
                 onClick={() => onSelectSuggestion(suggestion)}
               >
                 {suggestion.name}
@@ -156,22 +160,22 @@ function renderBotMessage(message, onSelectSuggestion) {
   }
 
   return (
-    <div className="bot-rich-msg">
-      <div className="bot-rich-intro">{renderLinkedText(lines[0])}</div>
-      <ol className="bot-rich-list">
+    <div className="flex flex-col gap-2">
+      <div className="whitespace-pre-wrap leading-relaxed">{renderLinkedText(lines[0])}</div>
+      <ol className="list-decimal list-inside space-y-1 ml-1">
         {listItems.map((item, index) => (
-          <li key={`${item.body}-${index}`} className="bot-rich-item">
-            <div>{renderLinkedText(item.body)}</div>
+          <li key={`${item.body}-${index}`} className="leading-relaxed">
+            <span>{renderLinkedText(item.body)}</span>
           </li>
         ))}
       </ol>
       {foodSuggestions.length > 0 && (
-        <div className="chat-suggestion-group">
+        <div className="mt-3 flex flex-wrap gap-2">
           {foodSuggestions.map(suggestion => (
             <button
               key={suggestion.id}
               type="button"
-              className="btn-secondary chat-suggestion-btn"
+              className="bg-[#004a80] text-white border border-[#003a66] hover:bg-[#003a66] text-xs px-3 py-1.5 rounded-full transition-colors focus:outline-none"
               onClick={() => onSelectSuggestion(suggestion)}
             >
               {suggestion.name}
@@ -183,8 +187,14 @@ function renderBotMessage(message, onSelectSuggestion) {
   );
 }
 
-
+// ==============================
+// MAIN COMPONENT
+// ==============================
 function ChatPanel({ setShowMap, setRouteRequest }) {
+  // Widget Open State
+  const [isOpen, setIsOpen] = useState(false);
+  const [hideCopy, setHideCopy] = useState(false);
+
   const [messages, setMessages] = useState(() => {
     try {
       const saved = localStorage.getItem(CHAT_STORAGE_KEY);
@@ -210,6 +220,7 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
   const shouldAutoSendVoiceRef = useRef(false);
   const speechAttemptRef = useRef(0);
   const shouldRestartVoiceRef = useRef(false);
+  const chatBoxRef = useRef(null);
 
   function applyRecognitionLanguage(recognition, sampleText = "") {
     const language = getActiveSpeechLanguage(sampleText);
@@ -340,6 +351,17 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
     localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
   }, [messages]);
 
+  // Auto-scroll
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [messages, isOpen, loading, listening]);
+
+  useEffect(() => {
+    sendMessageRef.current = sendMessage;
+  }, [sendMessage]);
+
   async function sendMessage(messageOverride) {
     const userMessage = String(messageOverride ?? input).trim();
     if (!userMessage || loadingRef.current) return;
@@ -358,11 +380,12 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
 
       for (const baseUrl of API_BASE_URLS) {
         try {
+          const signal = abortControllerRef.current?.signal;
           response = await fetch(`${baseUrl}/chat`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: userMessage }),
-            signal: abortControllerRef.current.signal
+            signal: signal
           });
           data = await response.json().catch(() => ({}));
           lastNetworkError = null;
@@ -390,8 +413,8 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
         }
       ]);
       const openMap = shouldOpenMapFromResponse(data, answerText);
-      setShowMap(openMap);
       if (openMap) {
+        setShowMap(true);
         setRouteRequest({
           destinationId: data.destination_id || null,
           useCurrentLocation: Boolean(data.use_current_location),
@@ -423,10 +446,6 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
       pendingUserMessageRef.current = "";
     }
   }
-
-  useEffect(() => {
-    sendMessageRef.current = sendMessage;
-  }, [sendMessage]);
 
   function cancelSend() {
     if (!loading) return;
@@ -518,66 +537,164 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
   }
 
   return (
-    <div className="panel chat-panel">
-      <div className="map-header">
-        <h3 className="panel-title">Campus Concierge</h3>
-        <button className="btn-secondary" type="button" onClick={clearHistory}>
-          Clear Chat
-        </button>
-      </div>
-
-      <div className="chat-box">
-        {loading && <div className="spinner"></div>}
-
-        {messages.map((m, i) => (
-          <div key={i} className={m.sender === "user" ? "msg-user" : "msg-bot"}>
-            {m.sender === "bot" ? renderBotMessage(m, selectFoodSuggestion) : m.text}
+    <div className="fixed bottom-5 right-5 z-[9999] flex flex-col items-end font-sans">
+      
+      {/* Floating Chat Window */}
+      {isOpen && (
+        <div className="w-[350px] sm:w-[400px] h-[550px] bg-white rounded-2xl shadow-2xl mb-4 flex flex-col overflow-hidden border border-gray-200">
+          
+          {/* Header */}
+          <div className="bg-[#005A9C] text-white px-4 py-3 flex justify-between items-center shadow-md z-10">
+            <h3 className="font-bold text-lg m-0">Campus Concierge</h3>
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={clearHistory} 
+                className="text-xs bg-white/20 hover:bg-white/30 px-2 py-1 rounded transition-colors focus:outline-none"
+              >
+                Clear
+              </button>
+              <button 
+                onClick={() => setIsOpen(false)} 
+                className="hover:text-gray-200 text-xl font-bold transition-transform hover:scale-110 focus:outline-none"
+              >
+                ✖
+              </button>
+            </div>
           </div>
-        ))}
-      </div>
 
-      <div className="input-row">
-        <input
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask about Kean University..."
-        />
+          {/* Chat Messages Area */}
+          <div 
+            ref={chatBoxRef}
+            className="flex-1 p-4 overflow-y-auto bg-gray-50 flex flex-col gap-4"
+          >
+            {messages.map((m, i) => (
+              <div 
+                key={i} 
+                className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}
+              >
+                <div 
+                  className={`max-w-[85%] p-3 rounded-2xl text-sm shadow-sm ${
+                    m.sender === "user" 
+                      ? "bg-[#005A9C] text-white rounded-tr-sm" 
+                      : "bg-white text-gray-800 border border-gray-200 rounded-tl-sm"
+                  }`}
+                >
+                  {m.sender === "bot" ? renderBotMessage(m, selectFoodSuggestion) : m.text}
+                </div>
+              </div>
+            ))}
+            
+            {/* Loading Indicator */}
+            {loading && (
+              <div className="flex justify-start">
+                <div className="bg-white border border-gray-200 p-3 rounded-2xl rounded-tl-sm shadow-sm flex items-center gap-1.5">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                </div>
+              </div>
+            )}
+          </div>
 
-        <select
-          className="voice-lang-select"
-          value={voiceLanguage}
-          onChange={event => setVoiceLanguage(event.target.value)}
-          disabled={listening || loading}
-          aria-label="Voice input language"
-        >
-          {VOICE_LANGUAGE_OPTIONS.map(option => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <button
-          className={`btn-secondary voice-btn${listening ? " voice-btn-active" : ""}`}
-          type="button"
-          onClick={toggleVoiceInput}
-          disabled={loading}
-          aria-pressed={listening}
-          title={voiceSupported ? "Use voice input" : "Voice input is unavailable in this browser"}
-        >
-          {listening ? <Square size={16} aria-hidden="true" /> : <Mic size={16} aria-hidden="true" />}
-        </button>
-        <button className="btn-primary" onClick={() => sendMessage()} disabled={loading}>
-          Send
-        </button>
-        {loading && (
-          <button className="btn-secondary" type="button" onClick={cancelSend}>
-            Cancel
-          </button>
+          {/* Input Area */}
+          <div className="bg-white border-t border-gray-200 flex flex-col">
+            
+            {/* Input & Buttons Row */}
+            <div className="p-3 flex items-center gap-2">
+              <input
+                className="flex-1 bg-gray-100 focus:bg-white border border-transparent focus:border-[#005A9C] rounded-full px-4 py-2 text-sm outline-none transition-colors"
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Ask about Kean University..."
+              />
+              
+              {/* Mic Toggle Button */}
+              <button
+                className={`p-2.5 rounded-full flex-shrink-0 transition-colors focus:outline-none ${
+                  listening 
+                    ? "bg-red-500 text-white animate-pulse shadow-md" 
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+                type="button"
+                onClick={toggleVoiceInput}
+                disabled={loading}
+                title={voiceSupported ? "Use voice input" : "Voice input is unavailable"}
+              >
+                {listening ? <Square size={18} /> : <Mic size={18} />}
+              </button>
+
+              {/* Send / Cancel Button */}
+              {loading ? (
+                <button 
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex-shrink-0" 
+                  onClick={cancelSend}
+                >
+                  Stop
+                </button>
+              ) : (
+                <button 
+                  className="bg-[#005A9C] hover:bg-[#004a80] text-white px-4 py-2 rounded-full text-sm font-medium transition-colors disabled:opacity-50 flex-shrink-0" 
+                  onClick={() => sendMessage()} 
+                  disabled={!input.trim()}
+                >
+                  Send
+                </button>
+              )}
+            </div>
+
+            {/* Sub-controls: Language Select & Voice Status */}
+            <div className="px-4 pb-2 flex justify-between items-center gap-2">
+              <select
+                className="text-xs bg-gray-50 border border-gray-200 text-gray-600 rounded px-2 py-1 outline-none focus:border-blue-400"
+                value={voiceLanguage}
+                onChange={event => setVoiceLanguage(event.target.value)}
+                disabled={listening || loading}
+                aria-label="Voice input language"
+              >
+                {VOICE_LANGUAGE_OPTIONS.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              
+              <span className="text-[11px] text-gray-400 truncate">
+                {voiceSupported ? voiceStatus : "Voice input unavailable"}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Bubble Button Area */}
+      <div className="flex items-end gap-3">
+        {!isOpen && !hideCopy && (
+          <div 
+            className="bg-white border border-gray-200 shadow-lg rounded-2xl rounded-br-sm p-3 max-w-[260px] animate-bounce-slow cursor-pointer hover:bg-gray-50 transition-colors"
+            onClick={() => setHideCopy(true)}
+            title="Click to hide"
+          >
+            <p className="text-sm text-gray-700 m-0 leading-relaxed">
+              Hello! How can I help you today? I am KeanGlobal Chatbot and I can answer questions about Kean University and campus locations/directions.
+            </p>
+          </div>
         )}
-      </div>
-      <div className="voice-status" aria-live="polite">
-        {voiceSupported ? voiceStatus : "Voice input is available in supported browsers like Chrome."}
+
+        <button 
+          className="w-14 h-14 shrink-0 rounded-full bg-[#005A9C] text-white flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 focus:outline-none overflow-hidden"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+          ) : (
+            <img 
+              src={chatbotButtonImage} 
+              alt="Chatbot" 
+              className="w-full h-full object-cover" 
+            />
+          )}
+        </button>
       </div>
     </div>
   );
