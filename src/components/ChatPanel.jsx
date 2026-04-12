@@ -184,7 +184,7 @@ function renderBotMessage(message, onSelectSuggestion) {
 }
 
 
-function ChatPanel({ setShowMap, setRouteRequest }) {
+function ChatPanel({ setShowMap, setRouteRequest, externalBotMessage = null }) {
   const [messages, setMessages] = useState(() => {
     try {
       const saved = localStorage.getItem(CHAT_STORAGE_KEY);
@@ -210,6 +210,8 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
   const shouldAutoSendVoiceRef = useRef(false);
   const speechAttemptRef = useRef(0);
   const shouldRestartVoiceRef = useRef(false);
+  const lastExternalMessageIdRef = useRef(null);
+  const routeRequestCounterRef = useRef(0);
 
   function applyRecognitionLanguage(recognition, sampleText = "") {
     const language = getActiveSpeechLanguage(sampleText);
@@ -392,7 +394,10 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
       const openMap = shouldOpenMapFromResponse(data, answerText);
       setShowMap(openMap);
       if (openMap) {
+        routeRequestCounterRef.current += 1;
         setRouteRequest({
+          requestId: `${Date.now()}-${routeRequestCounterRef.current}`,
+          startId: data.start_id || null,
           destinationId: data.destination_id || null,
           useCurrentLocation: Boolean(data.use_current_location),
           locationMode: data.location_mode || "highlight"
@@ -427,6 +432,19 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
   useEffect(() => {
     sendMessageRef.current = sendMessage;
   }, [sendMessage]);
+
+  useEffect(() => {
+    if (!externalBotMessage?.id || !externalBotMessage?.text) return;
+    if (lastExternalMessageIdRef.current === externalBotMessage.id) return;
+    lastExternalMessageIdRef.current = externalBotMessage.id;
+    setMessages(prev => [
+      ...prev,
+      {
+        text: externalBotMessage.text,
+        sender: "bot"
+      }
+    ]);
+  }, [externalBotMessage]);
 
   function cancelSend() {
     if (!loading) return;
@@ -510,7 +528,9 @@ function ChatPanel({ setShowMap, setRouteRequest }) {
   function selectFoodSuggestion(suggestion) {
     if (!suggestion?.id) return;
     setShowMap(true);
+    routeRequestCounterRef.current += 1;
     setRouteRequest({
+      requestId: `${Date.now()}-${routeRequestCounterRef.current}`,
       destinationId: suggestion.id,
       useCurrentLocation: false,
       locationMode: "highlight"

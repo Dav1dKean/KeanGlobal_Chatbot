@@ -343,6 +343,20 @@ def sort_calendar_term_keys(term_keys: list[str]) -> list[str]:
 
     return sorted(term_keys, key=sort_key)
 
+def calendar_term_sort_key(term_key: str) -> tuple[int, int, str]:
+    season_order = {"winter": 0, "spring": 1, "summer": 2, "fall": 3}
+    q = normalize(term_key)
+    year_match = re.search(r"(20\d{2})", q)
+    year = int(year_match.group(1)) if year_match else 9999
+    season = next((name for name in season_order if name in q), "")
+    return (year, season_order.get(season, 99), q)
+
+def extract_season_year_from_term(term_key: str) -> tuple[Optional[str], Optional[int]]:
+    q = normalize(term_key)
+    season = next((name for name in ("winter", "spring", "summer", "fall") if name in q), None)
+    year_match = re.search(r"(20\d{2})", q)
+    return season, int(year_match.group(1)) if year_match else None
+
 def get_calendar_term_examples(max_terms: int = 3) -> list[str]:
     sorted_terms = sort_calendar_term_keys(list(calendar_data.keys()))
     return [format_calendar_term_label(term) for term in sorted_terms[:max_terms]]
@@ -473,6 +487,46 @@ def find_best_calendar_event(events: dict[str, str], category: str, session: Opt
     if best_event is None:
         return None
     return best_event, best_date
+
+def find_related_registration_event(term_key: str) -> Optional[tuple[str, str, str]]:
+    target_season, target_year = extract_season_year_from_term(term_key)
+    if not target_season:
+        return None
+
+    target_sort_key = calendar_term_sort_key(term_key)
+    best_match = None
+    best_score = -10**9
+
+    for source_term, events in calendar_data.items():
+        source_sort_key = calendar_term_sort_key(source_term)
+        for event, date in events.items():
+            event_norm = normalize(event)
+            if "registration" not in event_norm:
+                continue
+
+            score = 0
+            if target_season in event_norm:
+                score += 140
+            if "begins" in event_norm:
+                score += 40
+
+            source_season, source_year = extract_season_year_from_term(source_term)
+            if target_year is not None and source_year is not None:
+                score -= abs(target_year - source_year) * 20
+            if source_sort_key <= target_sort_key:
+                score += 20
+            if source_sort_key > target_sort_key:
+                score -= 40
+            if source_season == "fall" and target_season in {"winter", "spring"}:
+                score += 15
+            if source_season == "spring" and target_season in {"summer", "fall"}:
+                score += 15
+
+            if score > best_score:
+                best_score = score
+                best_match = (source_term, event, date)
+
+    return best_match if best_score >= 120 else None
 
 def is_calendar_question(text: str) -> bool:
     q = normalize(text)
@@ -728,9 +782,7 @@ LOCATION_ALIAS_OVERRIDES = {
         "wilkins",
         "wilkins theatre",
         "wilkins theater",
-        "wilkens theater",
-        "theater",
-        "theatre"
+        "wilkens theater"
     ),
     "lhac": (
         "lhac",
@@ -796,11 +848,20 @@ campus_locations = []
 campus_location_by_id = {}
 fallback_rag_docs = []
 conversation_state = {
+    "turn_id": 0,
     "last_degree_subject": None,
     "last_degree_level": None,
+    "last_tuition_level": None,
+    "last_tuition_turn_id": None,
     "pending_calendar_category": None,
     "last_answer": None,
     "last_faq_topic": None,
+    "last_destination_id": None,
+    "last_destination_turn_id": None,
+    "last_service_destination_id": None,
+    "last_service_destination_turn_id": None,
+    "last_intent": None,
+    "last_response_mode": None,
 }
 KEAN_MAIN_URL = "https://www.kean.edu"
 KEAN_PROGRAMS_URL = "https://www.kean.edu/academics"
@@ -884,6 +945,14 @@ TRANSLATIONS = {
         "zh": "{name} 位于 {campus}。正在打开地图。",
         "ur": "{name} {campus} میں ہے۔ نقشہ کھولا جا رہا ہے۔",
         "ko": "{name}은(는) {campus}에 있습니다. 지도를 여는 중입니다.",
+    },
+    "location_opening_directions_specific": {
+        "en": "Opening directions to {name}.",
+        "tr": "{name} için yol tarifi açılıyor.",
+        "es": "Abriendo indicaciones para llegar a {name}.",
+        "zh": "正在打开前往 {name} 的路线。",
+        "ur": "{name} کے لیے راستہ کھولا جا رہا ہے۔",
+        "ko": "{name}까지 가는 길을 여는 중입니다.",
     },
     "location_opening_generic": {
         "en": "Opening campus map. Please pick a destination or search the directory.",
@@ -1245,9 +1314,46 @@ TRANSLATIONS = {
     },
     "registrar_summary": {
         "en": "Here’s what I found about the Registrar’s Office:\n1. The office handles registration, transcripts, grade recalculation, graduation evaluation, and enrollment verification.\n2. Location: Administration Building, 1st Floor.\n3. Hours: Monday to Thursday 8 a.m. to 6 p.m.; Friday 8 a.m. to 5 p.m.\n4. Contact: regme@kean.edu or (908) 737-0400.",
+        "tr": "Kayıt Ofisi hakkında bulduklarım:\n1. Ofis kayıt, transkript, not yeniden hesaplama, mezuniyet değerlendirmesi ve öğrenci durum belgesi işlemlerini yürütür.\n2. Konum: Administration Building, 1. kat.\n3. Saatler: Pazartesi-Perşembe 08:00-18:00; Cuma 08:00-17:00.\n4. İletişim: regme@kean.edu veya (908) 737-0400.",
+        "es": "Esto es lo que encontré sobre la Oficina del Registrador:\n1. La oficina gestiona inscripción, transcripciones, recálculo de notas, evaluación de graduación y verificación de matrícula.\n2. Ubicación: Administration Building, 1.er piso.\n3. Horario: lunes a jueves de 8 a. m. a 6 p. m.; viernes de 8 a. m. a 5 p. m.\n4. Contacto: regme@kean.edu o (908) 737-0400.",
+        "zh": "以下是我找到的注册办公室信息：\n1. 该办公室负责注册、成绩单、成绩重算、毕业审核和在读证明。\n2. 地点：Administration Building 一层。\n3. 时间：周一至周四上午 8 点到下午 6 点；周五上午 8 点到下午 5 点。\n4. 联系方式：regme@kean.edu 或 (908) 737-0400。",
+        "ur": "رجسٹرار آفس کے بارے میں یہ معلومات ملیں:\n1. یہ دفتر رجسٹریشن، ٹرانسکرپٹ، گریڈ ری کیلکولیشن، گریجویشن ایویلیوایشن اور انرولمنٹ ویریفکیشن سنبھالتا ہے۔\n2. مقام: Administration Building، پہلی منزل۔\n3. اوقات: پیر تا جمعرات صبح 8 بجے سے شام 6 بجے تک؛ جمعہ صبح 8 بجے سے شام 5 بجے تک۔\n4. رابطہ: regme@kean.edu یا (908) 737-0400۔",
+        "ko": "Registrar Office에 대해 찾은 내용입니다:\n1. 이 부서는 수강신청, 성적표, 성적 재계산, 졸업 심사, 재학 확인을 담당합니다.\n2. 위치: Administration Building 1층.\n3. 운영 시간: 월요일-목요일 오전 8시-오후 6시, 금요일 오전 8시-오후 5시.\n4. 연락처: regme@kean.edu 또는 (908) 737-0400.",
     },
     "one_stop_summary": {
         "en": "Here’s what I found about the One Stop Service Center:\n1. One Stop helps with forms such as change of major, graduation applications, registration petitions, grade recalculations, and residency petitions.\n2. Location: CAS Lobby.\n3. Hours: Monday to Thursday 9 a.m. to 8 p.m.; Friday 9 a.m. to 5 p.m.; Saturday 9:30 a.m. to 2 p.m.\n4. Contact: regme@kean.edu or (908) 737-0400.",
+    },
+    "registration_help_summary": {
+        "en": "Here is the general registration path I found:\n1. Register through KeanWise when registration opens.\n2. It is recommended that you meet with your academic advisor before registration.\n3. If you have registration problems, contact the Office of the Registrar at regme@kean.edu or (908) 737-0400.\n4. Registrar location: Administration Building, 1st Floor.",
+        "tr": "Bulduğum genel kayıt süreci şöyle:\n1. Kayıt açıldığında KeanWise üzerinden kayıt olun.\n2. Kayıttan önce akademik danışmanınızla görüşmeniz önerilir.\n3. Kayıtla ilgili sorun yaşarsanız regme@kean.edu veya (908) 737-0400 üzerinden Kayıt Ofisi ile iletişime geçin.\n4. Kayıt Ofisi konumu: Administration Building, 1. kat.",
+        "es": "Esta es la ruta general de inscripción que encontré:\n1. Inscríbete en KeanWise cuando se abra la inscripción.\n2. Se recomienda hablar con tu asesor académico antes de inscribirte.\n3. Si tienes problemas con la inscripción, contacta a la Oficina del Registrador en regme@kean.edu o al (908) 737-0400.\n4. Ubicación del Registrador: Administration Building, 1.er piso.",
+        "zh": "我找到的一般注册流程如下：\n1. 注册开放后，通过 KeanWise 进行注册。\n2. 建议你在注册前先与学术顾问沟通。\n3. 如果你在注册时遇到问题，请联系注册办公室：regme@kean.edu 或 (908) 737-0400。\n4. 注册办公室地点：Administration Building 一层。",
+        "ur": "مجھے عمومی رجسٹریشن کا طریقہ یہ ملا:\n1. جب رجسٹریشن کھلے تو KeanWise کے ذریعے رجسٹر کریں۔\n2. رجسٹریشن سے پہلے اپنے تعلیمی مشیر سے بات کرنا بہتر ہے۔\n3. اگر رجسٹریشن میں مسئلہ ہو تو Office of the Registrar سے regme@kean.edu یا (908) 737-0400 پر رابطہ کریں۔\n4. رجسٹرار آفس کا مقام: Administration Building، پہلی منزل۔",
+        "ko": "확인한 일반적인 등록 절차는 다음과 같습니다:\n1. 등록이 열리면 KeanWise를 통해 등록하세요.\n2. 등록 전에 지도교수와 상담하는 것이 권장됩니다.\n3. 등록 문제는 Registrar Office(regme@kean.edu / (908) 737-0400)로 문의하세요.\n4. Registrar Office 위치: Administration Building 1층.",
+    },
+    "calendar_registration_related_term": {
+        "en": "For {term}, the related registration date I found is: {event}: {date}",
+        "tr": "{term} için bulduğum ilgili kayıt tarihi: {event}: {date}",
+        "es": "Para {term}, la fecha de inscripción relacionada que encontré es: {event}: {date}",
+        "zh": "对于 {term}，我找到的相关注册日期是：{event}：{date}",
+        "ur": "{term} کے لیے متعلقہ رجسٹریشن تاریخ جو مجھے ملی وہ یہ ہے: {event}: {date}",
+        "ko": "{term}에 대해 찾은 관련 등록 날짜는 다음과 같습니다: {event}: {date}",
+    },
+    "calendar_missing_registration_event": {
+        "en": "I found {term} in the academic calendar, but I do not see a registration-begins date for that term in the current source. Please check KeanWise or contact the Office of the Registrar at regme@kean.edu or (908) 737-0400 for the registration opening date.",
+        "tr": "{term} dönemini akademik takvimde buldum, ancak mevcut kaynakta bu dönem için kayıt başlangıç tarihi görünmüyor. Kayıt açılış tarihi için KeanWise'ı kontrol edin veya regme@kean.edu ya da (908) 737-0400 üzerinden Kayıt Ofisi ile iletişime geçin.",
+        "es": "Encontré {term} en el calendario académico, pero no veo una fecha de inicio de inscripción para ese período en la fuente actual. Revisa KeanWise o contacta a la Oficina del Registrador en regme@kean.edu o al (908) 737-0400 para confirmar la apertura de inscripción.",
+        "zh": "我在校历中找到了 {term}，但当前资料里没有看到该学期的注册开放日期。请查看 KeanWise，或联系注册办公室：regme@kean.edu / (908) 737-0400。",
+        "ur": "مجھے {term} تعلیمی کیلنڈر میں ملا، لیکن موجودہ ریکارڈ میں اس سمسٹر کے لیے رجسٹریشن شروع ہونے کی تاریخ نظر نہیں آ رہی۔ رجسٹریشن کھلنے کی تاریخ کے لیے KeanWise دیکھیں یا Office of the Registrar سے regme@kean.edu یا (908) 737-0400 پر رابطہ کریں۔",
+        "ko": "{term} 학기는 학사 일정에서 확인했지만, 현재 자료에는 해당 학기의 등록 시작일이 보이지 않습니다. 등록 시작일은 KeanWise를 확인하거나 Registrar Office(regme@kean.edu / (908) 737-0400)로 문의해 주세요.",
+    },
+    "calendar_missing_generic_event": {
+        "en": "I found {term} in the academic calendar, but I do not see that specific date in the current source.",
+        "tr": "{term} dönemini akademik takvimde buldum, ancak mevcut kaynakta bu belirli tarih görünmüyor.",
+        "es": "Encontré {term} en el calendario académico, pero no veo esa fecha específica en la fuente actual.",
+        "zh": "我在校历中找到了 {term}，但当前资料里没有看到这个具体日期。",
+        "ur": "مجھے {term} تعلیمی کیلنڈر میں ملا، لیکن موجودہ ریکارڈ میں یہ مخصوص تاریخ نظر نہیں آ رہی۔",
+        "ko": "{term} 학기는 학사 일정에서 확인했지만, 현재 자료에는 그 특정 날짜가 보이지 않습니다.",
     },
     "dining_summary": {
         "en": "Here are the main dining locations and hours I found:\n1. Marketplace: Mon-Thu 9 a.m. to 11 p.m.; Fri 9 a.m. to 9 p.m.; Sat 12 p.m. to 6 p.m.; Sun 1 p.m. to 6 p.m.\n2. MSC Food Court: Mon-Thu 7:30 a.m. to 7 p.m.; Fri 7:30 a.m. to 3 p.m.; Sat 8 a.m. to 3 p.m.; Sun closed.\n3. Cougar’s Den: Mon-Thu 11 a.m. to 11 p.m.; Fri 11 a.m. to 5 p.m.; Sat-Sun closed.\n4. CAS Starbucks: Mon-Thu 7:30 a.m. to 5 p.m.; Fri-Sun closed.\n5. Library Starbucks: Mon-Thu 8 a.m. to 10 p.m.; Fri-Sat 8 a.m. to 4 p.m.; Sun 1 p.m. to 8 p.m.",
@@ -1720,11 +1826,10 @@ def is_admissions_question(text: str) -> bool:
 def is_graduation_question(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
-    return any(
+    asks_graduation = any(
         keyword_in_text(q, q_tokens, keyword)
         for keyword in (
             "graduation",
-            "graduate",
             "commencement",
             "diploma",
             "degree conferral",
@@ -1738,7 +1843,9 @@ def is_graduation_question(text: str) -> bool:
             "졸업",
             "毕业",
         )
-    ) and not is_degree_availability_question(text)
+    )
+    asks_tuition = is_student_accounts_question(text)
+    return asks_graduation and not asks_tuition and not is_degree_availability_question(text)
 
 def is_financial_aid_question(text: str) -> bool:
     q = normalize(text)
@@ -1815,6 +1922,95 @@ def is_one_stop_question(text: str) -> bool:
             "转专业",
         )
     )
+
+def is_registration_related(text: str, faq_topic: Optional[str] = None) -> bool:
+    normalized_topic = faq_topic or detect_faq_intent(text)
+    return (
+        normalized_topic == "registration"
+        or detect_event_category(text) == "registration"
+        or is_registrar_question(text)
+        or is_one_stop_question(text)
+    )
+
+def asks_location_or_office_details(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "where",
+            "where is",
+            "office",
+            "building",
+            "location",
+            "floor",
+            "room",
+            "map",
+            "nerede",
+            "nerde",
+            "ofis",
+            "office",
+            "bina",
+            "konum",
+            "kat",
+            "donde",
+            "oficina",
+            "edificio",
+            "ubicacion",
+            "ubicación",
+            "在哪里",
+            "办公室",
+            "建筑",
+            "어디",
+            "사무실",
+            "건물",
+            "کہاں",
+            "دفتر",
+            "عمارت",
+        )
+    )
+
+def is_registration_location_request(text: str, faq_topic: Optional[str], last_topic: Optional[str]) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    if is_registrar_question(text) or is_one_stop_question(text):
+        return True
+    if is_registration_related(text, faq_topic) and asks_location_or_office_details(text):
+        return True
+    return last_topic == "registration" and len(q_tokens) <= 4 and asks_location_or_office_details(text)
+
+def is_registration_process_request(text: str, faq_topic: Optional[str]) -> bool:
+    if not is_registration_related(text, faq_topic):
+        return False
+    if is_calendar_timing_question(text):
+        return False
+
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    asks_how = any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "how",
+            "how do i",
+            "how can i",
+            "steps",
+            "process",
+            "can i",
+            "nasil",
+            "nasıl",
+            "nasil yap",
+            "nasıl yap",
+            "como",
+            "cómo",
+            "pasos",
+            "proceso",
+            "怎么",
+            "如何",
+            "어떻게",
+            "کیسے",
+        )
+    )
+    return asks_how or asks_location_or_office_details(text)
 
 def is_dining_question(text: str) -> bool:
     q = normalize(text)
@@ -1907,6 +2103,65 @@ def is_student_accounts_question(text: str) -> bool:
             "분할 납부",
             "学费",
             "付款计划",
+        )
+    )
+
+def detect_tuition_level(text: str) -> str:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    if any(keyword_in_text(q, q_tokens, keyword) for keyword in ("graduate", "masters", "master", "graduate student", "grad")):
+        return "graduate"
+    if any(keyword_in_text(q, q_tokens, keyword) for keyword in ("undergraduate", "undergrad", "bachelor", "freshman")):
+        return "undergraduate"
+    return "general"
+
+def detect_tuition_residency(text: str) -> str:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    if any(keyword_in_text(q, q_tokens, keyword) for keyword in ("in state", "in-state", "resident", "nj", "new jersey")):
+        return "in_state"
+    if any(keyword_in_text(q, q_tokens, keyword) for keyword in ("out of state", "out-of-state", "nonresident", "international")):
+        return "out_of_state"
+    return "general"
+
+def detect_tuition_load(text: str) -> str:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    if any(keyword_in_text(q, q_tokens, keyword) for keyword in ("part time", "part-time", "per credit", "less than 12 credits")):
+        return "part_time"
+    if any(keyword_in_text(q, q_tokens, keyword) for keyword in ("full time", "full-time", "semester", "12 credits", "12 19 credits")):
+        return "full_time"
+    if any(keyword_in_text(q, q_tokens, keyword) for keyword in ("online", "kean online")):
+        return "online"
+    return "general"
+
+def is_tuition_rate_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    asks_tuition = any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in ("tuition", "how much", "cost", "per credit", "rate", "fee", "fees")
+    )
+    return asks_tuition and not any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in ("payment plan", "payment plans", "monthly payment", "installment plan", "refund", "late fee")
+    )
+
+def is_tuition_follow_up_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    if conversation_state.get("last_faq_topic") != "student_accounts":
+        return False
+    last_tuition_turn_id = conversation_state.get("last_tuition_turn_id")
+    current_turn_id = int(conversation_state.get("turn_id") or 0)
+    if last_tuition_turn_id is None or current_turn_id - int(last_tuition_turn_id) > 3:
+        return False
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "in state", "in-state", "out of state", "out-of-state", "resident", "international",
+            "part time", "part-time", "full time", "full-time", "per credit", "semester", "online",
+            "what about", "and for", "how about",
         )
     )
 
@@ -2097,6 +2352,15 @@ def build_registrar_answer(lang: str) -> str:
 def build_one_stop_answer(lang: str) -> str:
     return trn("one_stop_summary", lang)
 
+def build_registration_help_answer(lang: str) -> str:
+    return trn("registration_help_summary", lang)
+
+def build_missing_calendar_event_answer(term_key: str, category: str, lang: str) -> str:
+    label = format_calendar_term_label(term_key)
+    if category == "registration":
+        return trn("calendar_missing_registration_event", lang, term=label)
+    return trn("calendar_missing_generic_event", lang, term=label)
+
 def build_dining_answer(lang: str) -> str:
     return trn("dining_summary", lang)
 
@@ -2108,6 +2372,73 @@ def build_student_accounts_answer(lang: str) -> str:
         "3. Plans are set up directly with Kean through your Student Account Suite in KeanWISE under View/Pay My Bill > Payment Plan Management.\n"
         "4. A non-refundable $40 plan initiation fee applies.\n"
         "5. More information: https://www.kean.edu/offices/student-accounting"
+    )
+
+def build_tuition_answer(text: str, lang: str) -> str:
+    detected_level = detect_tuition_level(text)
+    level = detected_level if detected_level != "general" else (conversation_state.get("last_tuition_level") or "general")
+    residency = detect_tuition_residency(text)
+    load = detect_tuition_load(text)
+
+    if level == "graduate":
+        if residency == "in_state":
+            return "For 2025-2026 general graduate tuition, the in-state rate is $929.20 tuition + $90.34 mandatory fees = $1,019.54 total per credit."
+        if residency == "out_of_state":
+            return "For 2025-2026 general graduate tuition, the out-of-state rate is $1,116.30 tuition + $90.34 mandatory fees = $1,206.64 total per credit."
+        if load == "online":
+            return (
+                "For 2025-2026 Kean Online graduate tuition, the online rate is the same for in-state and out-of-state students:\n"
+                "1. Tuition: $929.20 per credit.\n"
+                "2. Mandatory fees: $90.34 per credit.\n"
+                "3. Total: $1,019.54 per credit."
+            )
+        return (
+            "For 2025-2026 graduate tuition, the general graduate per-credit rate is:\n"
+            "1. In-State: $929.20 tuition + $90.34 mandatory fees = $1,019.54 total per credit.\n"
+            "2. Out-of-State: $1,116.30 tuition + $90.34 mandatory fees = $1,206.64 total per credit.\n"
+            "3. Some special cohort graduate programs have different rates.\n"
+            "4. Source used: Kean Bursar tuition schedule for 2025-2026."
+        )
+
+    if level == "undergraduate":
+        if load == "part_time" and residency == "in_state":
+            return "For 2025-2026 undergraduate tuition, the part-time in-state rate is $493.09 tuition + $90.34 mandatory fees = $583.43 total per credit."
+        if load == "part_time" and residency == "out_of_state":
+            return "For 2025-2026 undergraduate tuition, the part-time out-of-state rate is $765.21 tuition + $90.34 mandatory fees = $855.55 total per credit."
+        if load == "full_time" and residency == "in_state":
+            return "For 2025-2026 undergraduate tuition, the full-time in-state rate is $6,344.40 tuition + $1,305.40 mandatory fees = $7,649.80 total per semester."
+        if load == "full_time" and residency == "out_of_state":
+            return "For 2025-2026 undergraduate tuition, the full-time out-of-state rate is $10,703.18 tuition + $1,305.40 mandatory fees = $12,008.58 total per semester."
+        if residency == "in_state":
+            return "For 2025-2026 undergraduate tuition, the main in-state rates are $7,649.80 full-time per semester or $583.43 part-time per credit."
+        if residency == "out_of_state":
+            return "For 2025-2026 undergraduate tuition, the main out-of-state rates are $12,008.58 full-time per semester or $855.55 part-time per credit."
+        if load == "part_time":
+            return "For 2025-2026 undergraduate tuition, part-time rates are $583.43 per credit in-state and $855.55 per credit out-of-state."
+        if load == "full_time":
+            return "For 2025-2026 undergraduate tuition, full-time rates are $7,649.80 per semester in-state and $12,008.58 per semester out-of-state."
+        if load == "online":
+            return (
+                "For 2025-2026 Kean Online undergraduate tuition, the online rate is the same for in-state and out-of-state students:\n"
+                "1. Full-time (12-19 credits): $6,344.40 tuition + $1,305.40 mandatory fees = $7,649.80 per semester.\n"
+                "2. Part-time (less than 12 credits): $493.09 tuition + $90.34 mandatory fees = $583.43 per credit.\n"
+                "3. Full-time overload above 19 credits: $460.83 for each additional credit."
+            )
+        return (
+            "For 2025-2026 undergraduate tuition, the main rates are:\n"
+            "1. Full-time (12-19 credits), In-State: $6,344.40 tuition + $1,305.40 mandatory fees = $7,649.80 per semester.\n"
+            "2. Full-time (12-19 credits), Out-of-State: $10,703.18 tuition + $1,305.40 mandatory fees = $12,008.58 per semester.\n"
+            "3. Part-time, In-State: $493.09 tuition + $90.34 mandatory fees = $583.43 per credit.\n"
+            "4. Part-time, Out-of-State: $765.21 tuition + $90.34 mandatory fees = $855.55 per credit.\n"
+            "5. Students from NJ, NY, PA, DE, VA, MD, and DC are billed at the in-state undergraduate rate."
+        )
+
+    return (
+        "For 2025-2026 tuition, I found these general rates:\n"
+        "1. Undergraduate full-time In-State: $7,649.80 total per semester; Out-of-State: $12,008.58 total per semester.\n"
+        "2. Undergraduate part-time In-State: $583.43 total per credit; Out-of-State: $855.55 total per credit.\n"
+        "3. General graduate In-State: $1,019.54 total per credit; Out-of-State: $1,206.64 total per credit.\n"
+        "4. Some graduate cohort programs have different tuition rates."
     )
 
 def build_shuttle_answer(lang: str) -> str:
@@ -2558,6 +2889,36 @@ def should_use_current_location(text: str) -> bool:
         return False
     return any(keyword_in_text(q, q_tokens, keyword) for keyword in DIRECTION_KEYWORDS)
 
+def should_prefer_location_response(text: str, faq_topic: Optional[str], destination_id: Optional[str]) -> bool:
+    if not destination_id:
+        return False
+
+    q = normalize(text)
+    q_tokens = tokenize(text)
+
+    asks_for_location = any(keyword_in_text(q, q_tokens, keyword) for keyword in LOCATION_KEYWORDS)
+    asks_for_directions = any(keyword_in_text(q, q_tokens, keyword) for keyword in DIRECTION_KEYWORDS)
+    asks_hours = faq_topic == "hours" or any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in ("hours", "open", "close", "opening time", "closing time")
+    )
+    asks_generic_info = any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in ("tell me about", "what is", "what's", "information about", "info about")
+    )
+    asks_event_details = any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in ("tickets", "ticket", "show", "event", "performance", "box office")
+    )
+
+    if asks_hours or asks_event_details:
+        return False
+    if asks_for_directions:
+        return True
+    if asks_for_location and not asks_generic_info:
+        return True
+    return False
+
 def is_closest_parking_question(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
@@ -2750,6 +3111,28 @@ def should_route_destination_without_location_keyword(text: str) -> bool:
 
     return False
 
+def extract_route_endpoint_ids(text: str) -> tuple[Optional[str], Optional[str]]:
+    q = normalize(text)
+    patterns = (
+        r"\bfrom\s+(?P<start>.+?)\s+to\s+(?P<end>.+)",
+        r"\bdesde\s+(?P<start>.+?)\s+hasta\s+(?P<end>.+)",
+        r"\bde\s+(?P<start>.+?)\s+a\s+(?P<end>.+)",
+        r"\b(?P<start>.+?)\s+ile\s+(?P<end>.+?)\s+arasi(?:nda)?\b",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, q)
+        if not match:
+            continue
+        start_text = match.group("start").strip(" .,?!")
+        end_text = match.group("end").strip(" .,?!")
+        if not start_text or not end_text:
+            continue
+        start_id = find_location_destination_id(start_text)
+        end_id = find_location_destination_id(end_text)
+        if start_id and end_id and start_id != end_id:
+            return start_id, end_id
+    return None, None
+
 def find_location_destination_id(text: str, allowed_types: Optional[set[str]] = None) -> Optional[str]:
     if is_program_interest_question(text) or is_degree_availability_question(text) or is_current_datetime_question(text):
         return None
@@ -2829,6 +3212,29 @@ def normalize_location_destination_for_response(destination_id: str, user_text: 
     if parent_id and parent_id in campus_location_by_id:
         return parent_id
     return destination_id
+
+def localize_campus_label_for_location(campus: str, lang: str) -> str:
+    normalized = str(campus or "").strip().lower()
+    if normalized == "main":
+        return {
+            "en": "Main campus",
+            "tr": "Ana kampüs",
+            "es": "campus principal",
+            "zh": "主校区",
+            "ur": "مین کیمپس",
+            "ko": "메인 캠퍼스",
+        }.get(lang, "Main campus")
+    return str(campus or "campus")
+
+def build_route_opening_answer(start_id: str, end_id: str, lang: str) -> str:
+    start_place = campus_location_by_id.get(start_id, {})
+    end_place = campus_location_by_id.get(end_id, {})
+    start_name = start_place.get("name", "the starting location")
+    end_name = end_place.get("name", "the destination")
+    answer = f"Opening directions from {start_name} to {end_name}."
+    if lang == "en":
+        return answer
+    return answer
 
 NON_MAPPED_CAMPUS_ALIASES = {
     "Kean Ocean": {"kean ocean", "ocean campus", "ocean county", "kean ocean campus"},
@@ -3247,6 +3653,170 @@ def is_last_answer_follow_up_request(text: str) -> bool:
             "그 정책은",
         )
     )
+
+def is_contextual_location_follow_up(text: str, last_destination_id: Optional[str]) -> bool:
+    if not last_destination_id:
+        return False
+
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    if not q_tokens or len(q_tokens) > 8:
+        return False
+
+    asks_location = any(
+        keyword_in_text(q, q_tokens, k)
+        for k in (
+            "where is it",
+            "where is that",
+            "where is this",
+            "where do i do that",
+            "where do i do this",
+            "where can i do that",
+            "where can i do this",
+            "where do i go",
+            "where should i go",
+            "where is",
+            "show it on map",
+            "show that on map",
+            "show this on map",
+            "map",
+            "directions",
+            "how do i get there",
+            "how do i get to it",
+            "how do i get to that",
+            "how do i get to this",
+            "get there",
+            "location",
+            "show me",
+            "nerede",
+            "nerde",
+            "bunu nerede yaparim",
+            "bunu nerede yaparım",
+            "oraya nasil giderim",
+            "oraya nasıl giderim",
+            "harita",
+            "haritada goster",
+            "haritada göster",
+            "yol tarifi",
+            "donde esta",
+            "dónde está",
+            "donde hago eso",
+            "dónde hago eso",
+            "adonde voy",
+            "adónde voy",
+            "mapa",
+            "como llegar",
+            "cómo llegar",
+            "在哪里",
+            "我在哪里办理",
+            "地图",
+            "怎么去",
+            "어디",
+            "어디서 해",
+            "어디로 가",
+            "지도",
+            "길 안내",
+            "کہاں",
+            "یہ کہاں کروں",
+            "وہاں کیسے جاؤں",
+            "نقشہ",
+            "راستہ",
+        )
+    )
+    if not asks_location:
+        return False
+
+    has_reference = any(
+        token in q_tokens
+        for token in (
+            "it",
+            "that",
+            "this",
+            "there",
+            "its",
+            "do",
+            "go",
+            "bu",
+            "orasi",
+            "orası",
+            "eso",
+            "esa",
+            "alli",
+            "alli",
+            "那里",
+            "那边",
+            "그거",
+            "거기",
+            "وہ",
+            "وہاں",
+            "یہ",
+        )
+    )
+    return has_reference or len(q_tokens) <= 4
+
+def prefers_service_location_follow_up(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, k)
+        for k in (
+            "where do i do that",
+            "where do i do this",
+            "where can i do that",
+            "where can i do this",
+            "where do i go",
+            "where should i go",
+            "office",
+            "front desk",
+            "service center",
+            "registrar",
+            "financial aid",
+            "admissions",
+            "one stop",
+            "bunu nerede yaparim",
+            "bunu nerede yaparım",
+            "hangi ofis",
+            "ofis",
+            "donde hago eso",
+            "dónde hago eso",
+            "a que oficina voy",
+            "a qué oficina voy",
+            "oficina",
+            "我在哪里办理",
+            "哪个办公室",
+            "어디서 해",
+            "어느 사무실",
+            "office",
+            "یہ کہاں کروں",
+            "کس دفتر",
+        )
+    )
+
+def choose_contextual_destination_id(text: str) -> Optional[str]:
+    current_turn_id = int(conversation_state.get("turn_id") or 0)
+    service_destination_id = conversation_state.get("last_service_destination_id")
+    service_turn_id = conversation_state.get("last_service_destination_turn_id")
+    last_destination_id = conversation_state.get("last_destination_id")
+    destination_turn_id = conversation_state.get("last_destination_turn_id")
+
+    def is_recent(turn_id: Optional[int], max_age: int = 3) -> bool:
+        if turn_id is None:
+            return False
+        return current_turn_id - int(turn_id) <= max_age
+
+    recent_service_destination_id = service_destination_id if is_recent(service_turn_id) else None
+    recent_destination_id = last_destination_id if is_recent(destination_turn_id) else None
+
+    if not recent_service_destination_id and service_destination_id and not is_recent(service_turn_id):
+        conversation_state["last_service_destination_id"] = None
+        conversation_state["last_service_destination_turn_id"] = None
+    if not recent_destination_id and last_destination_id and not is_recent(destination_turn_id):
+        conversation_state["last_destination_id"] = None
+        conversation_state["last_destination_turn_id"] = None
+
+    if prefers_service_location_follow_up(text) and recent_service_destination_id:
+        return recent_service_destination_id
+    return recent_service_destination_id or recent_destination_id
 
 def is_frustration(text: str) -> bool:
     q = normalize(text)
@@ -4041,21 +4611,29 @@ def health():
 @app.post("/chat")
 async def chat(req: ChatRequest):
     user_text = req.message.strip()
+    conversation_state["turn_id"] = int(conversation_state.get("turn_id") or 0) + 1
     lang = detect_language(user_text)
     current_datetime_answer = build_current_datetime_answer(user_text) if is_current_datetime_question(user_text) else None
     faq_topic = detect_faq_intent(user_text)
+    route_start_id, route_end_id = extract_route_endpoint_ids(user_text)
     destination_id = find_location_destination_id(user_text)
     has_location_intent = is_location_question(user_text)
     pending_calendar_category = conversation_state.get("pending_calendar_category")
-    location_context_requested = has_location_intent or (
+    last_faq_topic = conversation_state.get("last_faq_topic")
+    location_context_requested = bool(route_start_id and route_end_id) or has_location_intent or (
         destination_id and should_route_destination_without_location_keyword(user_text)
     )
     normalized_destination_id = (
-        normalize_location_destination_for_response(destination_id, user_text) if destination_id else None
+        normalize_location_destination_for_response(route_end_id, user_text) if route_end_id else (
+            normalize_location_destination_for_response(destination_id, user_text) if destination_id else None
+        )
+    )
+    normalized_start_id = (
+        normalize_location_destination_for_response(route_start_id, user_text) if route_start_id else None
     )
     non_mapped_campus_name = find_non_mapped_campus_name(user_text) if location_context_requested else None
-    use_current_location = should_use_current_location(user_text) if location_context_requested else False
-    location_mode = "directions" if use_current_location else "highlight"
+    use_current_location = False if normalized_start_id else (should_use_current_location(user_text) if location_context_requested else False)
+    location_mode = "directions" if (normalized_start_id and normalized_destination_id) or use_current_location else "highlight"
 
     async def localized(answer: str) -> str:
         return await localize_answer_text(answer, lang)
@@ -4069,26 +4647,48 @@ async def chat(req: ChatRequest):
             conversation_state["last_faq_topic"] = topic
         elif payload.get("intent") == "calendar":
             conversation_state["last_faq_topic"] = "calendar_deadline"
+        start_id = payload.get("start_id")
+        if start_id is not None:
+            conversation_state["last_start_id"] = start_id
+        destination_id = payload.get("destination_id")
+        if destination_id is not None:
+            conversation_state["last_destination_id"] = destination_id
+            conversation_state["last_destination_turn_id"] = conversation_state["turn_id"]
+        response_mode = payload.get("response_mode")
+        if destination_id and (
+            payload.get("faq_topic") in {"registration", "financial_aid", "student_accounts", "admissions", "health_services", "accessibility", "bookstore"}
+            or str(response_mode or "").endswith("_direct")
+            or "location_direct" in str(response_mode or "")
+        ):
+            conversation_state["last_service_destination_id"] = destination_id
+            conversation_state["last_service_destination_turn_id"] = conversation_state["turn_id"]
+        conversation_state["last_intent"] = payload.get("intent")
+        conversation_state["last_response_mode"] = response_mode
         return payload
 
     def with_location(payload: dict) -> dict:
         if not location_context_requested or payload.get("intent") == "location":
             return remember_response(payload)
         enriched = dict(payload)
-        enriched["destination_id"] = normalized_destination_id
-        enriched["use_current_location"] = use_current_location
-        enriched["location_mode"] = location_mode
-        map_target = campus_location_by_id.get(normalized_destination_id, {}) if normalized_destination_id else {}
-        if normalized_destination_id:
+        effective_start_id = enriched.get("start_id", normalized_start_id)
+        effective_destination_id = enriched.get("destination_id", normalized_destination_id)
+        effective_use_current_location = enriched.get("use_current_location", use_current_location)
+        effective_location_mode = enriched.get("location_mode", location_mode)
+        enriched["start_id"] = effective_start_id
+        enriched["destination_id"] = effective_destination_id
+        enriched["use_current_location"] = effective_use_current_location
+        enriched["location_mode"] = effective_location_mode
+        map_target = campus_location_by_id.get(effective_destination_id, {}) if effective_destination_id else {}
+        if effective_destination_id:
             map_note_key = (
                 "map_attached_note_directions_specific"
-                if location_mode == "directions"
+                if effective_location_mode == "directions"
                 else "map_attached_note_highlight_specific"
             )
         else:
             map_note_key = (
                 "map_attached_note_directions_generic"
-                if location_mode == "directions"
+                if effective_location_mode == "directions"
                 else "map_attached_note_highlight_generic"
             )
         map_note = trn(map_note_key, lang, name=map_target.get("name", "that location")).strip()
@@ -4146,6 +4746,25 @@ async def chat(req: ChatRequest):
             "intent": "general",
             "response_mode": "farewell",
         }
+
+    contextual_destination_id = choose_contextual_destination_id(user_text)
+    if is_contextual_location_follow_up(user_text, contextual_destination_id):
+        last_destination_id = contextual_destination_id
+        follow_up_mode = "directions" if should_use_current_location(user_text) else "highlight"
+        destination = campus_location_by_id.get(last_destination_id, {}) if last_destination_id else {}
+        return remember_response({
+            "answer": trn(
+                "location_opening_specific",
+                lang,
+                name=destination.get("name", "That location"),
+                campus=destination.get("campus", "campus"),
+            ),
+            "intent": "location",
+            "destination_id": last_destination_id,
+            "use_current_location": follow_up_mode == "directions",
+            "location_mode": follow_up_mode,
+            "response_mode": "contextual_location_follow_up",
+        })
 
     if is_last_answer_follow_up_request(user_text):
         follow_up_answer = await answer_from_last_response(user_text, lang)
@@ -4234,6 +4853,25 @@ async def chat(req: ChatRequest):
             "response_mode": "financial_aid_direct",
         })
 
+    if is_tuition_follow_up_question(user_text):
+        return with_location({
+            "answer": await localized(build_tuition_answer(user_text, lang)),
+            "intent": "faq",
+            "faq_topic": "student_accounts",
+            "response_mode": "tuition_follow_up",
+        })
+
+    if is_tuition_rate_question(user_text):
+        detected_tuition_level = detect_tuition_level(user_text)
+        conversation_state["last_tuition_level"] = detected_tuition_level if detected_tuition_level != "general" else conversation_state.get("last_tuition_level")
+        conversation_state["last_tuition_turn_id"] = conversation_state["turn_id"]
+        return with_location({
+            "answer": await localized(build_tuition_answer(user_text, lang)),
+            "intent": "faq",
+            "faq_topic": "student_accounts",
+            "response_mode": "tuition_direct",
+        })
+
     if is_student_accounts_question(user_text):
         return with_location({
             "answer": await localized(build_student_accounts_answer(lang)),
@@ -4272,6 +4910,28 @@ async def chat(req: ChatRequest):
             "intent": "faq",
             "faq_topic": "bookstore",
             "response_mode": "bookstore_direct",
+        })
+
+    if is_registration_location_request(user_text, faq_topic, last_faq_topic):
+        return with_location({
+            "answer": await localized(build_registrar_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "registration",
+            "response_mode": "registration_location_direct",
+            "destination_id": "administration",
+            "use_current_location": False,
+            "location_mode": "highlight",
+        })
+
+    if is_registration_process_request(user_text, faq_topic):
+        return with_location({
+            "answer": build_registration_help_answer(lang),
+            "intent": "faq",
+            "faq_topic": "registration",
+            "response_mode": "registration_help_direct",
+            "destination_id": "administration" if asks_location_or_office_details(user_text) else None,
+            "use_current_location": False,
+            "location_mode": "highlight",
         })
 
     if is_registrar_question(user_text):
@@ -4424,17 +5084,31 @@ async def chat(req: ChatRequest):
             "response_mode": "campus_map_in_development",
         }
 
-    if location_context_requested and not faq_topic:
+    if normalized_start_id and normalized_destination_id:
+        return remember_response({
+            "answer": await localized(build_route_opening_answer(normalized_start_id, normalized_destination_id, lang)),
+            "intent": "location",
+            "start_id": normalized_start_id,
+            "destination_id": normalized_destination_id,
+            "use_current_location": False,
+            "location_mode": "directions",
+            "response_mode": "route_between_locations",
+        })
+
+    if location_context_requested and (
+        not faq_topic or should_prefer_location_response(user_text, faq_topic, normalized_destination_id)
+    ):
         if normalized_destination_id:
             destination = campus_location_by_id.get(normalized_destination_id, {})
             return {
                 "answer": trn(
-                    "location_opening_specific",
+                    "location_opening_directions_specific" if location_mode == "directions" else "location_opening_specific",
                     lang,
                     name=destination.get("name", "That location"),
-                    campus=destination.get("campus", "campus"),
+                    campus=localize_campus_label_for_location(destination.get("campus", "campus"), lang),
                 ),
                 "intent": "location",
+                "start_id": normalized_start_id,
                 "destination_id": normalized_destination_id,
                 "use_current_location": use_current_location,
                 "location_mode": location_mode,
@@ -4442,6 +5116,7 @@ async def chat(req: ChatRequest):
         return {
             "answer": trn("location_opening_generic", lang),
             "intent": "location",
+            "start_id": normalized_start_id,
             "destination_id": None,
             "use_current_location": use_current_location,
             "location_mode": location_mode,
@@ -4462,6 +5137,27 @@ async def chat(req: ChatRequest):
                         "answer": f"{localize_calendar_event_text(event, lang)}: {localize_date_text(date, lang)}",
                         "intent": "calendar",
                     })
+                if category == "registration":
+                    related_registration = find_related_registration_event(matched)
+                    if related_registration:
+                        conversation_state["pending_calendar_category"] = None
+                        _, event, date = related_registration
+                        return with_location({
+                            "answer": trn(
+                                "calendar_registration_related_term",
+                                lang,
+                                term=format_calendar_term_label(matched),
+                                event=localize_calendar_event_text(event, lang),
+                                date=localize_date_text(date, lang),
+                            ),
+                            "intent": "calendar",
+                            "response_mode": "calendar_registration_related_term",
+                        })
+                return with_location({
+                    "answer": build_missing_calendar_event_answer(matched, category, lang),
+                    "intent": "calendar",
+                    "response_mode": "calendar_event_unavailable",
+                })
         elif category:
             conversation_state["pending_calendar_category"] = category
             return with_location({

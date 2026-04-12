@@ -13,7 +13,9 @@ from app.main import ChatRequest, chat  # noqa: E402
 
 CASES = [
     ("how do I apply?", "admissions_direct", "faq"),
+    ("where do I register?", "registration_location_direct", "faq"),
     ("horario de la biblioteca", "hours_library", "faq"),
+    ("kayit ofisi", "registration_location_direct", "faq"),
     ("shuttle servisi", "shuttle_direct", "faq"),
     ("申请", "admissions_direct", "faq"),
     ("기숙사", "housing_direct", "faq"),

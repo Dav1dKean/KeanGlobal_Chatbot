@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import L from "leaflet";
 import { CircleMarker, MapContainer, Marker, Polygon, Polyline, Popup, TileLayer, Tooltip, useMap } from "react-leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -12,6 +12,7 @@ import missingPathsData from "../data/kean_paths_missing.json";
 import routingGraphData from "../data/kean_routing_graph.json";
 import parkingLotsGeoJsonRaw from "../data/kean_parking_lots.geojson?raw";
 import pathsGeoJsonRaw from "../data/kean_paths.geojson?raw";
+import supportedWalkingAreaData from "../data/kean_supported_walking_area.json";
 
 const buildingImageModules = import.meta.glob("../assets/buildings/*.{png,jpg,jpeg,webp,gif}", {
   eager: true,
@@ -136,6 +137,10 @@ const parkingLotsGeoJson = JSON.parse(parkingLotsGeoJsonRaw);
 const pathsGeoJson = JSON.parse(pathsGeoJsonRaw);
 const buildingImageRecords = buildBuildingImageRecords(buildingImageModules);
 const HIDDEN_BUILDING_MARKER_IDS = new Set(["george_hennings_research", "kean_east_soccer_field", "msc_game_room"]);
+const SUPPORTED_WALKING_AREA_POLYGON =
+  supportedWalkingAreaData?.features?.find(feature => feature?.geometry?.type === "Polygon")?.geometry?.coordinates?.[0]
+    ?.map(normalizeCoordinatePair)
+    .filter(Boolean) || [];
 
 const campusMarkerIcon = L.icon({
   iconRetinaUrl: markerIcon2x,
@@ -163,6 +168,13 @@ const emergencyPhoneMarkerIcon = L.icon({
   iconAnchor: [14, 14],
   popupAnchor: [0, -14],
   className: "map-image-marker"
+});
+
+const parkingLabelAnchorIcon = L.divIcon({
+  className: "parking-label-anchor",
+  html: "",
+  iconSize: [1, 1],
+  iconAnchor: [0, 0]
 });
 
 const MARKER_LOCATION_TYPES = new Set(["building", "field", "lawn", "landmark", "shuttle_stop", "emergency_phone"]);
@@ -322,7 +334,7 @@ function parseRoutingNodes(graphData, existingLocations) {
 }
 
 function parseParkingGeoJson(data) {
-  return (data?.features || [])
+  const parsedLots = (data?.features || [])
     .map(feature => {
       const ring = feature?.geometry?.coordinates?.[0];
       const polygon = Array.isArray(ring) ? ring.map(normalizeCoordinatePair).filter(Boolean) : [];
@@ -338,6 +350,76 @@ function parseParkingGeoJson(data) {
       };
     })
     .filter(Boolean);
+
+  const getPolygonBounds = polygon => {
+    const latitudes = polygon.map(([lat]) => lat);
+    const longitudes = polygon.map(([, lon]) => lon);
+    return {
+      minLat: Math.min(...latitudes),
+      maxLat: Math.max(...latitudes),
+      minLon: Math.min(...longitudes),
+      maxLon: Math.max(...longitudes)
+    };
+  };
+
+  const getPolygonCenter = polygon => {
+    const total = polygon.reduce(
+      (acc, [lat, lon]) => ({ lat: acc.lat + lat, lon: acc.lon + lon }),
+      { lat: 0, lon: 0 }
+    );
+    return [total.lat / polygon.length, total.lon / polygon.length];
+  };
+
+  const normalizeParkingName = name =>
+    String(name || "")
+      .toLowerCase()
+      .replace(/\bnear hynes\b/g, "")
+      .replace(/\blot\s+\d+\b/g, "lot")
+      .replace(/[^a-z0-9]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const polygonSignature = polygon =>
+    polygon
+      .map(([lat, lon]) => `${lat.toFixed(6)},${lon.toFixed(6)}`)
+      .join("|");
+
+  const dedupedLots = [];
+  parsedLots.forEach(lot => {
+    const center = getPolygonCenter(lot.polygon);
+    const bounds = getPolygonBounds(lot.polygon);
+    const signature = polygonSignature(lot.polygon);
+    const duplicateIndex = dedupedLots.findIndex(existing => {
+      if (existing.signature === signature) return true;
+      if (normalizeParkingName(existing.name) !== normalizeParkingName(lot.name)) return false;
+
+      const [existingLat, existingLon] = existing.center;
+      const [lotLat, lotLon] = center;
+      const centerDistance = Math.hypot(existingLat - lotLat, existingLon - lotLon);
+      const bboxDifference =
+        Math.abs(existing.bounds.minLat - bounds.minLat) +
+        Math.abs(existing.bounds.maxLat - bounds.maxLat) +
+        Math.abs(existing.bounds.minLon - bounds.minLon) +
+        Math.abs(existing.bounds.maxLon - bounds.maxLon);
+
+      return centerDistance < 0.00012 && bboxDifference < 0.0003;
+    });
+
+    if (duplicateIndex >= 0) {
+      const existing = dedupedLots[duplicateIndex];
+      const preferCurrent =
+        (!/near hynes/i.test(lot.name) && /near hynes/i.test(existing.name)) ||
+        lot.name.length < existing.name.length;
+      if (preferCurrent) {
+        dedupedLots[duplicateIndex] = { ...lot, center, bounds, signature };
+      }
+      return;
+    }
+
+    dedupedLots.push({ ...lot, center, bounds, signature });
+  });
+
+  return dedupedLots.map(({ center, bounds, signature, ...lot }) => lot);
 }
 
 function parsePathFeatures(data) {
@@ -402,6 +484,39 @@ function inferParkingTypeFromName(name) {
   if (text.includes("faculty") || text.includes("staff")) return "faculty_staff";
   if (text.includes("visitor")) return "visitor";
   return "student";
+}
+
+function getParkingLabelOverrides(name) {
+  const normalized = normalizeId(name);
+  if (normalized === "hynes_hall_lot") {
+    return {
+      anchor: [40.68303, -74.23184],
+      direction: "center",
+      offset: [0, 0]
+    };
+  }
+  if (normalized === "hynes_hall_lot_overflow_lot") {
+    return {
+      anchor: [40.68312, -74.23034],
+      direction: "center",
+      offset: [0, 0]
+    };
+  }
+  if (normalized === "kean_parking_garage") {
+    return {
+      anchor: [40.682245, -74.23159],
+      direction: "center",
+      offset: [0, 0]
+    };
+  }
+  if (normalized === "admissions_faculty_lot") {
+    return {
+      anchor: [40.68086, -74.23374],
+      direction: "top",
+      offset: [0, -4]
+    };
+  }
+  return { direction: "center", offset: [0, 0] };
 }
 
 function getBuildingImage(building) {
@@ -531,8 +646,22 @@ function haversineDistanceMeters([lat1, lon1], [lat2, lon2]) {
   return 2 * earthRadius * Math.asin(Math.sqrt(a));
 }
 
+function isPointInPolygon([lat, lon], polygon) {
+  if (!Array.isArray(polygon) || polygon.length < 3) return false;
+  let inside = false;
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const [latI, lonI] = polygon[i];
+    const [latJ, lonJ] = polygon[j];
+    const intersects =
+      lonI > lon !== lonJ > lon &&
+      lat < ((latJ - latI) * (lon - lonI)) / ((lonJ - lonI) || Number.EPSILON) + latI;
+    if (intersects) inside = !inside;
+  }
+  return inside;
+}
+
 function isInsideCampus([lat, lon]) {
-  return isWithinBounds([lat, lon], CAMPUS_BOUNDS);
+  return isPointInPolygon([lat, lon], SUPPORTED_WALKING_AREA_POLYGON);
 }
 
 function getLocationById(id, locationsById) {
@@ -797,6 +926,133 @@ function routeIdsToCoordinates(routeIds, edgeKeys, edgeGeometryByKey, locationsB
   return coordinates;
 }
 
+function buildReadableRouteStops(routeIds, locationsById) {
+  const names = [];
+  routeIds.forEach(id => {
+    const location = locationsById.get(id);
+    if (!location) return;
+    let label = "";
+    if (location.type === "entrance" && location.parent && locationsById.get(location.parent)) {
+      label = locationsById.get(location.parent)?.name || location.name;
+    } else if (location.type === "route_node") {
+      return;
+    } else {
+      label = location.name;
+    }
+    if (!label) return;
+    if (names[names.length - 1] !== label) {
+      names.push(label);
+    }
+  });
+  return names;
+}
+
+function routeCrossesVerticalBand(routeCoordinates, longitude, minLat, maxLat) {
+  for (let index = 1; index < routeCoordinates.length; index += 1) {
+    const [prevLat, prevLon] = routeCoordinates[index - 1];
+    const [nextLat, nextLon] = routeCoordinates[index];
+    const segmentMinLat = Math.min(prevLat, nextLat);
+    const segmentMaxLat = Math.max(prevLat, nextLat);
+    if (segmentMaxLat < minLat || segmentMinLat > maxLat) continue;
+    const crosses =
+      (prevLon <= longitude && nextLon >= longitude) ||
+      (prevLon >= longitude && nextLon <= longitude);
+    if (crosses) return true;
+  }
+  return false;
+}
+
+function routeCrossesHorizontalBand(routeCoordinates, latitude, minLon, maxLon) {
+  for (let index = 1; index < routeCoordinates.length; index += 1) {
+    const [prevLat, prevLon] = routeCoordinates[index - 1];
+    const [nextLat, nextLon] = routeCoordinates[index];
+    const segmentMinLon = Math.min(prevLon, nextLon);
+    const segmentMaxLon = Math.max(prevLon, nextLon);
+    if (segmentMaxLon < minLon || segmentMinLon > maxLon) continue;
+    const crosses =
+      (prevLat <= latitude && nextLat >= latitude) ||
+      (prevLat >= latitude && nextLat <= latitude);
+    if (crosses) return true;
+  }
+  return false;
+}
+
+function routeTouchesArea(routeCoordinates, bounds) {
+  return routeCoordinates.some(([lat, lon]) =>
+    lat >= bounds.minLat &&
+    lat <= bounds.maxLat &&
+    lon >= bounds.minLon &&
+    lon <= bounds.maxLon
+  );
+}
+
+function inferRouteCrossingSteps(routeCoordinates) {
+  if (routeCoordinates.length < 2) return [];
+
+  const steps = [];
+  const crossesGreenLane = routeCrossesHorizontalBand(routeCoordinates, 40.68172, -74.2372, -74.2342);
+  const crossesMorrisAve = routeCrossesVerticalBand(routeCoordinates, -74.23318, 40.6792, 40.6836);
+  const crossesVermellaWay = routeCrossesHorizontalBand(routeCoordinates, 40.68296, -74.23395, -74.23135);
+  const touchesTrainStationArea = routeTouchesArea(routeCoordinates, {
+    minLat: 40.68245,
+    maxLat: 40.68395,
+    minLon: -74.2391,
+    maxLon: -74.23635
+  });
+
+  if (crossesGreenLane) {
+    steps.push("Cross Green Lane and continue on the campus-side walkway.");
+  }
+  if (crossesMorrisAve) {
+    steps.push("Cross Morris Avenue at a marked crossing to move between the main campus side and the east-side buildings.");
+  }
+  if (crossesVermellaWay) {
+    steps.push("Cross Vermella Way near the Hynes Hall and shopping-center side of campus.");
+  }
+  if (touchesTrainStationArea) {
+    steps.push("Use the train station crossing area to move safely between the station side and the campus walkways.");
+  }
+
+  return steps;
+}
+
+function buildChatRouteDirections(startLabel, endLabel, routeIds, routeCoordinates, locationsById, routeDistanceMeters) {
+  if (!startLabel || !endLabel || routeIds.length < 2) return "";
+
+  const waypoints = buildReadableRouteStops(routeIds, locationsById).filter(Boolean);
+  const middleStops = waypoints.slice(1, -1);
+  const crossingSteps = inferRouteCrossingSteps(routeCoordinates);
+  const lines = [
+    `Here are step-by-step directions from ${startLabel} to ${endLabel}:`,
+    `1. Start at ${startLabel}.`
+  ];
+
+  crossingSteps.forEach(step => {
+    lines.push(`${lines.length}. ${step}`);
+  });
+
+  if (middleStops.length === 1) {
+    lines.push(`${lines.length}. Walk along the campus pathways toward ${middleStops[0]}.`);
+  } else if (middleStops.length === 2) {
+    lines.push(`${lines.length}. Walk along the campus pathways toward ${middleStops[0]}.`);
+    lines.push(`${lines.length}. Continue past ${middleStops[1]}.`);
+  } else if (middleStops.length >= 3) {
+    lines.push(`${lines.length}. Walk along the campus pathways toward ${middleStops[0]}.`);
+    lines.push(`${lines.length}. Continue past ${middleStops[1]} and ${middleStops[2]}.`);
+  } else {
+    lines.push(`${lines.length}. Follow the main campus walkways toward your destination.`);
+  }
+
+  lines.push(`${lines.length}. Arrive at ${endLabel}.`);
+
+  if (routeDistanceMeters > 0) {
+    const routeDistanceFeet = routeDistanceMeters * 3.28084;
+    lines.push(`${lines.length}. The route is about ${Math.round(routeDistanceFeet)} feet long.`);
+  }
+
+  return lines.join("\n");
+}
+
 function RouteViewport({ routeCoordinates }) {
   const map = useMap();
 
@@ -875,7 +1131,7 @@ function MapResizeObserver() {
   return null;
 }
 
-function MapPanel({ setShowMap, routeRequest, standalone = false }) {
+function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirectionsChange }) {
   const [startId, setStartId] = useState("");
   const [endId, setEndId] = useState("");
   const [userPosition, setUserPosition] = useState(null);
@@ -890,6 +1146,9 @@ function MapPanel({ setShowMap, routeRequest, standalone = false }) {
   const [parkingLots, setParkingLots] = useState([]);
   const [dataError, setDataError] = useState("");
   const [highlightTargetId, setHighlightTargetId] = useState(null);
+  const [routeChatPreface, setRouteChatPreface] = useState("");
+  const [isResolvingCurrentStart, setIsResolvingCurrentStart] = useState(false);
+  const lastAppliedRouteRequestRef = useRef("");
 
   useEffect(() => {
     try {
@@ -1020,6 +1279,38 @@ function MapPanel({ setShowMap, routeRequest, standalone = false }) {
   );
 
   const allParkingLots = useMemo(() => parkingLots, [parkingLots]);
+  const parkingLabelAnchors = useMemo(() => {
+    const anchors = new Map();
+    allParkingLots.forEach(lot => {
+      const override = getParkingLabelOverrides(lot.name);
+      if (override.anchor) {
+        anchors.set(lot.id, override.anchor);
+        return;
+      }
+
+      const normalizedLotName = normalizeId(lot.name).replace(/_near_hynes$/, "");
+      const matchingLocation = campusLocationsData.find(location => {
+        if (String(location?.type || "").trim().toLowerCase() !== "parking") return false;
+        const normalizedLocationName = normalizeId(location.name);
+        return normalizedLocationName === normalizedLotName || normalizedLocationName.replace(/_near_hynes$/, "") === normalizedLotName;
+      });
+
+      if (matchingLocation) {
+        const anchor = getLocationPosition(matchingLocation);
+        if (anchor) {
+          anchors.set(lot.id, anchor);
+          return;
+        }
+      }
+
+      const fallback = lot.polygon.reduce(
+        (acc, [lat, lon]) => [acc[0] + lat, acc[1] + lon],
+        [0, 0]
+      );
+      anchors.set(lot.id, [fallback[0] / lot.polygon.length, fallback[1] / lot.polygon.length]);
+    });
+    return anchors;
+  }, [allParkingLots]);
 
   const directoryPlaces = useMemo(() => {
     return locations
@@ -1115,13 +1406,39 @@ function MapPanel({ setShowMap, routeRequest, standalone = false }) {
     () => (locationMode === "highlight" ? [] : routeCoordinates),
     [locationMode, routeCoordinates]
   );
-  const displayRouteVariants = useMemo(
-    () => (locationMode === "highlight" ? [] : routeVariants),
+  const primaryRouteVariant = useMemo(
+    () => (locationMode === "highlight" ? null : routeVariants[0] || null),
     [locationMode, routeVariants]
   );
   const routeOverlayKey = useMemo(
-    () => `${startId}:${endId}:${displayRouteVariants.map(variant => variant.edgeKeys.join("|")).join("~")}`,
-    [displayRouteVariants, endId, startId]
+    () => `${startId}:${endId}:${primaryRouteVariant?.edgeKeys.join("|") || ""}`,
+    [endId, primaryRouteVariant, startId]
+  );
+  const routeRequestKey = useMemo(
+    () =>
+      routeRequest
+        ? [
+            routeRequest.requestId || "",
+            routeRequest.startId || "",
+            routeRequest.destinationId || "",
+            routeRequest.locationMode || "",
+            routeRequest.useCurrentLocation ? "1" : "0"
+          ].join("|")
+        : "",
+    [routeRequest]
+  );
+  const defaultCampusStartId = useMemo(
+    () =>
+      resolveRoutableId("wilkins_theatre_front") ||
+      resolveRoutableId("wilkins_theatre_main") ||
+      resolveRoutableId("wilkins_theatre") ||
+      resolveRoutableId("morris_ave_student_lot") ||
+      resolveRoutableId("glab_main") ||
+      resolveRoutableId("glab") ||
+      resolveRoutableId("miron_center_main") ||
+      resolveRoutableId("miron_center") ||
+      "",
+    [resolveRoutableId]
   );
 
   const campusOptions = useMemo(() => ["All Campuses", ...new Set(directoryPlaces.map(place => place.campus))], [directoryPlaces]);
@@ -1157,20 +1474,35 @@ function MapPanel({ setShowMap, routeRequest, standalone = false }) {
         setUserPosition(coords);
 
         if (!isInsideCampus(coords)) {
-          setLocationStatus("You are outside Kean campus bounds. Select buildings manually.");
+          const fallbackStart = defaultCampusStartId || startId;
+          if (fallbackStart) {
+            setStartId(fallbackStart);
+          }
+          setLocationStatus("You appear to be outside the supported Kean walking area. Showing directions from a campus start point instead.");
+          const fallbackName =
+            routeOptionById.get(fallbackStart)?.name ||
+            locationsById.get(fallbackStart)?.name ||
+            "a campus starting point";
+          setRouteChatPreface(
+            `You appear to be outside the supported Kean walking area, so I opened directions starting from ${fallbackName}. If you are on or near campus, you can also use your current location there.`
+          );
+          setIsResolvingCurrentStart(false);
           return;
         }
 
         const nearest = getNearestLocation(coords, graphLocations);
         setStartId(nearest.id);
         setLocationStatus(`Using your location. Nearest start point: ${nearest.name}.`);
+        setRouteChatPreface("I used your current location as the starting point.");
+        setIsResolvingCurrentStart(false);
       },
       () => {
         setLocationStatus("Could not read your location. Check browser location permission.");
+        setIsResolvingCurrentStart(false);
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
-  }, [graphLocations, routableLocations.length]);
+  }, [defaultCampusStartId, endId, graphLocations, highlightTargetId, locationsById, onRouteDirectionsChange, routeOptionById, routableLocations.length, startId]);
 
   function swapRoute() {
     setLocationMode("directions");
@@ -1200,13 +1532,24 @@ function MapPanel({ setShowMap, routeRequest, standalone = false }) {
   const startLabel = routeOptionById.get(startId)?.name || startBuilding?.name;
   const endLabel = routeOptionById.get(endId)?.name || endBuilding?.name;
   const highlightTarget = getLocationById(highlightTargetId, locationsById) || endBuilding;
+  const routeDirectionsText = useMemo(
+    () => (
+      locationMode === "highlight"
+        ? ""
+        : buildChatRouteDirections(startLabel, endLabel, routeBuildingIds, routeCoordinates, locationsById, routeDistanceMeters)
+    ),
+    [endLabel, locationMode, locationsById, routeBuildingIds, routeCoordinates, routeDistanceMeters, startLabel]
+  );
 
   useEffect(() => {
     if (!routeRequest) return;
+    if (lastAppliedRouteRequestRef.current === routeRequestKey) return;
+    lastAppliedRouteRequestRef.current = routeRequestKey;
 
     const requestedDestination = routeRequest.destinationId ? getLocationById(routeRequest.destinationId, locationsById) : null;
     const mappedDestination = resolveRoutableId(routeRequest.destinationId);
     const mappedStart = resolveRoutableId(routeRequest.startId);
+    setRouteChatPreface("");
     if (mappedStart) {
       setStartId(mappedStart);
     }
@@ -1218,20 +1561,45 @@ function MapPanel({ setShowMap, routeRequest, standalone = false }) {
     const nextMode = routeRequest.locationMode === "directions" ? "directions" : "highlight";
     setLocationMode(nextMode);
 
-    if (routeRequest.useCurrentLocation || nextMode === "directions") {
+    if (routeRequest.useCurrentLocation) {
       setLocationMode("directions");
+      setIsResolvingCurrentStart(true);
+      setStartId("");
       setMyLocationAsStart();
     } else if (mappedStart && mappedDestination) {
+      setIsResolvingCurrentStart(false);
       setStartId(mappedStart);
       setLocationStatus("Loaded route in standalone map view.");
     } else if (mappedDestination) {
+      setIsResolvingCurrentStart(false);
       const destination = requestedDestination || getLocationById(mappedDestination, locationsById);
       if (destination) {
         setStartId(mappedDestination);
         setLocationStatus(`Showing ${destination.name} on the map.`);
       }
     }
-  }, [locationsById, resolveRoutableId, routeRequest, setMyLocationAsStart]);
+  }, [locationsById, resolveRoutableId, routeRequest, routeRequestKey, setMyLocationAsStart]);
+
+  useEffect(() => {
+    if (typeof onRouteDirectionsChange !== "function") return;
+    if (!routeRequest || locationMode !== "directions") return;
+    if (isResolvingCurrentStart) return;
+    if (startId && endId && routeCoordinates.length < 2) {
+      onRouteDirectionsChange({
+        id: `route-missing:${startId}:${endId}`,
+        text: `I opened the map, but I could not generate a walking route from ${startLabel || "the starting point"} to ${endLabel || "the destination"} yet.`
+      });
+      return;
+    }
+    if (!routeDirectionsText) return;
+    const combinedText = routeChatPreface
+      ? `${routeChatPreface}\n${routeDirectionsText}`
+      : routeDirectionsText;
+    onRouteDirectionsChange({
+      id: `route:${startId}:${endId}:${routeOverlayKey}:${routeChatPreface}`,
+      text: combinedText
+    });
+  }, [endId, endLabel, isResolvingCurrentStart, locationMode, onRouteDirectionsChange, routeChatPreface, routeCoordinates.length, routeDirectionsText, routeOverlayKey, routeRequest, startId, startLabel]);
 
   const standaloneMapUrl = useMemo(() => {
     const params = new URLSearchParams();
@@ -1348,27 +1716,36 @@ function MapPanel({ setShowMap, routeRequest, standalone = false }) {
             maxZoom={MAP_FOCUS_ZOOM}
           />
           {allParkingLots.map(lot => (
-            <Polygon
-              key={lot.id}
-              positions={lot.polygon}
-              pathOptions={{
-                color: PARKING_TYPE_COLORS[lot.parkingType] || "#64748b",
-                fillColor: PARKING_TYPE_COLORS[lot.parkingType] || "#64748b",
-                fillOpacity: 0.34,
-                opacity: 0.95,
-                weight: 3
-              }}
-            >
-              <Tooltip permanent direction="center" className="parking-lot-label" opacity={1}>
-                {lot.name}
-              </Tooltip>
-              <Popup>
-                <strong>{lot.name}</strong>
-                <br />
-                {formatParkingTypeLabel(lot.parkingType)}
-                {lot.approximate ? " (approximate)" : ""}
-              </Popup>
-            </Polygon>
+            <Fragment key={lot.id}>
+              <Polygon
+                positions={lot.polygon}
+                pathOptions={{
+                  color: PARKING_TYPE_COLORS[lot.parkingType] || "#64748b",
+                  fillColor: PARKING_TYPE_COLORS[lot.parkingType] || "#64748b",
+                  fillOpacity: 0.24,
+                  opacity: 0.82,
+                  weight: 2
+                }}
+              >
+                <Popup>
+                  <strong>{lot.name}</strong>
+                  <br />
+                  {formatParkingTypeLabel(lot.parkingType)}
+                  {lot.approximate ? " (approximate)" : ""}
+                </Popup>
+              </Polygon>
+              <Marker position={parkingLabelAnchors.get(lot.id)} icon={parkingLabelAnchorIcon} interactive={false}>
+                <Tooltip
+                  permanent
+                  direction={getParkingLabelOverrides(lot.name).direction}
+                  offset={getParkingLabelOverrides(lot.name).offset}
+                  className="parking-lot-label"
+                  opacity={1}
+                >
+                  {lot.name}
+                </Tooltip>
+              </Marker>
+            </Fragment>
           ))}
           {pointMarkers.map(location => {
             const profile = getLocationProfile(location);
@@ -1439,24 +1816,22 @@ function MapPanel({ setShowMap, routeRequest, standalone = false }) {
           ))}
           <RouteViewport routeCoordinates={displayRouteCoordinates} />
           <HighlightViewport destination={highlightTarget?.position} enabled={locationMode === "highlight"} />
-          {displayRouteVariants.length > 0 && (
+          {primaryRouteVariant && (
             <Fragment key={routeOverlayKey}>
-              {displayRouteVariants.map((variant, index) => (
-                <Polyline
-                  key={`route-${variant.routeIds.join("-")}`}
-                  positions={variant.coordinates}
-                  pathOptions={{
-                    color: ROUTE_LINE_COLORS[index] || ROUTE_LINE_COLORS[ROUTE_LINE_COLORS.length - 1],
-                    weight: index === 0 ? 8 : 6,
-                    opacity: index === 0 ? 0.96 : 0.82
-                  }}
-                />
-              ))}
-              <CircleMarker center={displayRouteVariants[0].coordinates[0]} radius={8} pathOptions={{ color: "#16a34a", fillOpacity: 1 }}>
+              <Polyline
+                key={`route-${primaryRouteVariant.routeIds.join("-")}`}
+                positions={primaryRouteVariant.coordinates}
+                pathOptions={{
+                  color: ROUTE_LINE_COLORS[0],
+                  weight: 8,
+                  opacity: 0.96
+                }}
+              />
+              <CircleMarker center={primaryRouteVariant.coordinates[0]} radius={8} pathOptions={{ color: "#16a34a", fillOpacity: 1 }}>
                 <Popup>Route Start</Popup>
               </CircleMarker>
               <CircleMarker
-                center={displayRouteVariants[0].coordinates[displayRouteVariants[0].coordinates.length - 1]}
+                center={primaryRouteVariant.coordinates[primaryRouteVariant.coordinates.length - 1]}
                 radius={8}
                 pathOptions={{ color: "#dc2626", fillOpacity: 1 }}
               >

@@ -2562,17 +2562,17 @@
   {
     "id": "shuttle_stop_hynes_hall",
     "name": "Shuttle Stop - Hynes Hall",
-    "latlng": "40.68265478470017, -74.23272949680806",
+    "latlng": "40.682666210587406, -74.23273366430955",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "shuttle_stop",
-    "latitude": 40.68265478470017,
-    "longitude": -74.23272949680806,
+    "latitude": 40.682666210587406,
+    "longitude": -74.23273366430955,
     "coordinates": [
-      -74.23272949680806,
-      40.68265478470017
+      -74.23273366430955,
+      40.682666210587406
     ]
   },
   {

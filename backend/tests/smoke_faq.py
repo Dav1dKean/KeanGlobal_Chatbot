@@ -17,11 +17,36 @@ CASES = [
     ("how does the shuttle work?", "shuttle_direct", "faq"),
     ("where is the bookstore?", "bookstore_direct", "faq"),
     ("how do I contact the registrar?", "registrar_direct", "faq"),
+    ("where do I register?", "registration_location_direct", "faq"),
+    ("how can I register for 2026 and where do I do it?", "registration_help_direct", "faq"),
+    ("when does registration start for summer 2026?", "calendar_event_unavailable", "calendar"),
+    ("what is the tuition for graduate?", "tuition_direct", "faq"),
+    ("how much is tuition for bachelor?", "tuition_direct", "faq"),
     ("tell me about housing", "housing_direct", "faq"),
     ("student health services", "health_services_direct", "faq"),
     ("accessibility services", "accessibility_direct", "faq"),
     ("what dining options are on campus?", "dining_direct", "faq"),
     ("what is the smoking policy?", "smoking_policy_direct", "faq"),
+]
+
+SEQUENTIAL_CASES = [
+    (
+        "tuition_follow_up_undergrad",
+        [
+            ("how much is tuition for bachelor?", "tuition_direct", "faq"),
+            ("what about in-state?", "tuition_follow_up", "faq"),
+            ("what about part-time?", "tuition_follow_up", "faq"),
+            ("what about online?", "tuition_follow_up", "faq"),
+        ],
+    ),
+    (
+        "tuition_follow_up_graduate",
+        [
+            ("what is the tuition for graduate?", "tuition_direct", "faq"),
+            ("what about out-of-state?", "tuition_follow_up", "faq"),
+            ("what about online?", "tuition_follow_up", "faq"),
+        ],
+    ),
 ]
 
 
@@ -50,6 +75,32 @@ async def run_cases() -> int:
         print(json.dumps(result, ensure_ascii=False))
         if not ok:
             failures.append(result)
+
+    for label, sequence in SEQUENTIAL_CASES:
+        for prompt, expected_mode, expected_intent in sequence:
+            response = await chat(ChatRequest(message=prompt))
+            actual_mode = response.get("response_mode")
+            actual_intent = response.get("intent")
+            answer = response.get("answer", "")
+            ok = (
+                actual_mode == expected_mode
+                and actual_intent == expected_intent
+                and isinstance(answer, str)
+                and bool(answer.strip())
+            )
+            result = {
+                "sequence": label,
+                "prompt": prompt,
+                "expected_mode": expected_mode,
+                "actual_mode": actual_mode,
+                "expected_intent": expected_intent,
+                "actual_intent": actual_intent,
+                "ok": ok,
+                "answer": answer,
+            }
+            print(json.dumps(result, ensure_ascii=False))
+            if not ok:
+                failures.append(result)
 
     if failures:
         print(json.dumps({"passed": False, "failures": failures}, ensure_ascii=False, indent=2))

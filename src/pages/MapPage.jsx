@@ -24,12 +24,24 @@ export default function MapPage({ standalone = false }) {
   const initialRouteRequest = useMemo(() => buildRouteRequestFromSearch(location.search), [location.search]);
   const [showMap, setShowMap] = useState(standalone || Boolean(initialRouteRequest));
   const [routeRequest, setRouteRequest] = useState(initialRouteRequest);
+  const [routeDirectionsMessage, setRouteDirectionsMessage] = useState(null);
 
   return (
     <div className={standalone ? "main-layout map-only" : showMap ? "main-layout two-col" : "main-layout one-col"}>
-      {!standalone && <ChatPanel setShowMap={setShowMap} setRouteRequest={setRouteRequest} />}
+      {!standalone && (
+        <ChatPanel
+          setShowMap={setShowMap}
+          setRouteRequest={setRouteRequest}
+          externalBotMessage={routeDirectionsMessage}
+        />
+      )}
       {(showMap || standalone) && (
-        <MapPanel setShowMap={setShowMap} routeRequest={routeRequest} standalone={standalone} />
+        <MapPanel
+          setShowMap={setShowMap}
+          routeRequest={routeRequest}
+          standalone={standalone}
+          onRouteDirectionsChange={setRouteDirectionsMessage}
+        />
       )}
     </div>
   );

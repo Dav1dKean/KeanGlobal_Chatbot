@@ -358,15 +358,18 @@ input:focus {
 }
 
 .leaflet-map .parking-lot-label {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(15, 23, 42, 0.14);
-  border-radius: 999px;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14);
-  color: #0f172a;
-  font-size: 11px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: rgba(51, 65, 85, 0.76);
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.01em;
-  padding: 3px 8px;
+  padding: 0;
+  text-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.82),
+    0 0 5px rgba(255, 255, 255, 0.62);
   white-space: nowrap;
 }
 
@@ -819,9 +822,12 @@ body.dark .leaflet-map .leaflet-popup-tip {
 }
 
 body.dark .leaflet-map .parking-lot-label {
-  background: rgba(15, 23, 42, 0.88);
-  border-color: rgba(148, 163, 184, 0.28);
-  color: #f8fafc;
+  background: transparent;
+  border-color: transparent;
+  color: rgba(203, 213, 225, 0.8);
+  text-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.84),
+    0 0 5px rgba(15, 23, 42, 0.68);
 }
 
 body.dark .leaflet-map .leaflet-tile-pane {
