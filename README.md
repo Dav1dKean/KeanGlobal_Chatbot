@@ -108,6 +108,28 @@ export OLLAMA_READ_TIMEOUT_SECONDS=120
 export OLLAMA_MAX_RETRIES=1
 ```
 
+### Run Backend Smoke Tests
+
+Use the backend virtual environment before running tests:
+
+```bash
+cd backend
+source .venv/bin/activate
+python3 tests/smoke_chat.py
+python3 tests/smoke_faq.py
+python3 tests/smoke_multilingual_faq.py
+python3 tests/smoke_department_locations.py
+```
+
+If the virtual environment is missing, create it first:
+
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
 ---
 
 ## 🤖 Install Local AI Model (Ollama)

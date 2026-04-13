@@ -1,0 +1,62 @@
+# Kean University academic departments and schools - RAG-ready
+# Last normalized: 2026-04-13
+# Scope: academic departments and schools listed on Kean University's current Colleges and Schools pages.
+# Format:
+# college|unit_type|unit_name|building_name|building_code|office_or_room|notes
+# Notes:
+# - Science Building = C
+# - Hutchinson Hall = J
+# - Hennings Hall = HH
+# - Maxine and Jack Lane Center for Academic Success = CAS
+# - Liberty Hall Academic Center = LHAC
+# - North Avenue Academic Building = NAAB
+# - Green Lane Academic Building = GLAB
+# - East Campus = EC
+# - D'Angola building code = D
+# - DGHH = Dorothy Grant Hennings Hall (as named in Kean's 2021-2022 Undergraduate Catalog Buildings and Facilities page)
+# - Current Kean public pages use both HH and DGHH room prefixes in College of Education listings; HH is preserved where that is the exact public room prefix shown
+# - Science Building (C) is described in Kean's 2021-2022 catalog as George Hennings Science Hall; both names are retained where helpful for RAG matching
+# - A few units have split/public contact locations; these are noted in the notes field.
+
+college|unit_type|unit_name|building_name|building_code|office_or_room|notes
+College of Business and Public Management|Department|Department of Accounting and Finance|Hynes Hall|H|404H|Chair/contact office publicly listed in Hynes Hall 404H
+College of Business and Public Management|Department|Department of Management|Hynes Hall|H|203G|Chair/contact office publicly listed in Hynes Hall 203G
+College of Business and Public Management|Department|Department of Criminal Justice and Public Affairs|Hynes Hall|H|505L|Chair/contact office publicly listed in Hynes Hall 505L
+College of Business and Public Management|Department|Department of Marketing, Global Business and Economics|Hynes Hall|H|303F|Chair/contact office publicly listed in Hynes Hall 303F
+
+College of Education|Department|Department of Bilingual Education, TESOL, and World Languages|Dorothy Grant Hennings Hall|DGHH|410|Current department page lists chairperson office as DGHH-410
+College of Education|Department|Department of Early Childhood Education|Hennings Hall|HH|419|Current chair/contact office publicly listed as HH-419
+College of Education|Department|Department of Educational Leadership and Secondary Education|Dorothy Grant Hennings Hall|DGHH|328 / 317|Current department page lists main office DGHH-328 and chair office DGHH-317
+College of Education|Department|Department of Elementary and PE/Health Education|D'Angola|D|218|Chair/contact office publicly listed as D-218
+College of Education|Department|Department of Special Education and Literacy|Dorothy Grant Hennings Hall|DGHH|317|Current department page lists chair office as DGHH-317
+
+College of Health Professions and Human Services|Department|Athletic Training|North Avenue Academic Building|NAAB|236|Public faculty/program office listed as NAAB-236
+College of Health Professions and Human Services|Department|Department of Advanced Studies in Psychology|East Campus|EC|142B|Chair office publicly listed as EC 142B
+College of Health Professions and Human Services|Department|Department of Communication Sciences and Disorders|East Campus|EC|104J|Chair office publicly listed as EC 104J
+College of Health Professions and Human Services|Department|Department of Counselor Education|East Campus|EC|311|Chair/contact office publicly listed as EC-311
+College of Health Professions and Human Services|Department|Department of Genetic Counseling|North Avenue Academic Building|NAAB|215|Program director office publicly listed as NAAB-215
+College of Health Professions and Human Services|Department|Department of Graduate Social Work|East Campus|EC|218A / 218C|2025 MSW manual directory lists department suite in East Campus 218 area
+College of Health Professions and Human Services|Department|Department of Health and Human Performance|D'Angola|D|206|Chair office publicly listed as D-206
+College of Health Professions and Human Services|Department|Department of Nursing|North Avenue Academic Building|NAAB|331|Chair/contact office publicly listed as NAAB-331
+College of Health Professions and Human Services|Department|Department of Occupational Therapy|East Campus|EC|224|Chair office publicly listed in EC-224 area
+College of Health Professions and Human Services|Department|Department of Physical Therapy|North Avenue Academic Building|NAAB|421|Department chair/program director office publicly listed as NAAB-421
+College of Health Professions and Human Services|Department|Department of Physician Assistant Studies|North Avenue Academic Building|NAAB|not consistently shown|Current public pages clearly place the department in NAAB, but a stable main office room was not consistently shown on the pages reviewed
+
+College of Liberal Arts|Department|Department of Communication, Media and Journalism|Maxine and Jack Lane Center for Academic Success|CAS|402|Department contact and chair office publicly listed as CAS 402
+College of Liberal Arts|Department|Department of English|Maxine and Jack Lane Center for Academic Success|CAS|301|Chair office publicly listed as CAS 301
+College of Liberal Arts|Department|Department of Fine Arts|Vaughn-Eames Hall|VE|203A|Chair office publicly listed as VE-203A; department also has presence in Performing Arts spaces
+College of Liberal Arts|Department|Department of History|Liberty Hall Academic Center|LHAC|212D|Chair office publicly listed as LHAC 212D
+College of Liberal Arts|Department|Department of Music|Wilkins Theatre / Performing Arts|WT / PA|123 / PA-112|Department public contact shown at Wilkins Theatre 123; public faculty office also listed at PA-112
+College of Liberal Arts|Department|Department of Political, Social and Cultural Sciences|Hutchinson Hall|J|103D|Chair office publicly listed as J-103D in Hutchinson Hall
+College of Liberal Arts|Department|Department of Psychology|East Campus|EC|234B|Chair office publicly listed as EC 234B
+College of Liberal Arts|Department|Department of Theatre|Vaughn-Eames Hall|VE|420|Public theatre faculty office listed as VE 420; department contact page does not clearly show a single main office room
+
+Dorothy and George Hennings College of Science, Mathematics and Technology|Department|Department of Biological Sciences|Science Building / George Hennings Science Hall|C|124 / C225|Department contact publicly listed at C-124; Kean catalog describes C building as George Hennings Science Hall; older faculty manual lists chair office C225
+Dorothy and George Hennings College of Science, Mathematics and Technology|Department|Department of Chemistry and Physics|Science Building / George Hennings Science Hall|C|221A|Public chemistry/physics contact office listed as C221A
+Dorothy and George Hennings College of Science, Mathematics and Technology|Department|Department of Computer Science and Technology|Green Lane Academic Building|GL / GLAB|229|Chair office publicly listed as GL-229; advising pages also route some CS students to NAAB advising rooms
+Dorothy and George Hennings College of Science, Mathematics and Technology|Department|Department of Environmental and Sustainability Sciences|Science Building / George Hennings Science Hall|C|309|Academic advisement page lists department/chair location as C309
+Dorothy and George Hennings College of Science, Mathematics and Technology|Department|Department of Applied Mathematics|Science Building / George Hennings Science Hall|C|232 / 208|Current Colleges and Schools page says Department of Applied Mathematics; current department pages still use Department of Mathematical Sciences and list offices in C232/C208
+Dorothy and George Hennings College of Science, Mathematics and Technology|School|School of Integrative Science and Technology|STEM Building|STEM|5-20D|Current public acting associate dean office listed as STEM 5-20D
+
+Michael Graves College, Architecture and Design|School|Robert Busch School of Design|Green Lane Academic Building|GLAB|518 / 519|Current public pages point to GLAB 518-519 area; chair naming is inconsistent across current pages
+Michael Graves College, Architecture and Design|School|School of Public Architecture|Hutchinson Hall|J|205A|Chair/contact office publicly listed as J-205A in Hutchinson Hall

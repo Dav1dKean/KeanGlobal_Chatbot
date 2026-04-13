@@ -26,6 +26,13 @@ load_dotenv(BACKEND_DIR / ".env")
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://127.0.0.1:11434/api/chat")
 OLLAMA_HEALTH_URL = os.getenv("OLLAMA_HEALTH_URL", "http://127.0.0.1:11434/api/tags")
 MODEL_NAME = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_API_URL = os.getenv(
+    "GEMINI_API_URL",
+    "https://generativelanguage.googleapis.com/v1beta/models",
+)
+PRIMARY_LLM_PROVIDER = os.getenv("PRIMARY_LLM_PROVIDER", "gemini").strip().lower()
 OLLAMA_CONNECT_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_CONNECT_TIMEOUT_SECONDS", "5"))
 OLLAMA_READ_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_READ_TIMEOUT_SECONDS", "30"))
 OLLAMA_TOTAL_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_TOTAL_TIMEOUT_SECONDS", "35"))
@@ -34,6 +41,9 @@ OLLAMA_MAX_RETRIES = int(os.getenv("OLLAMA_MAX_RETRIES", "1"))
 OLLAMA_NUM_PREDICT = int(os.getenv("OLLAMA_NUM_PREDICT", "160"))
 OLLAMA_TEMPERATURE = float(os.getenv("OLLAMA_TEMPERATURE", "0.2"))
 OLLAMA_NUM_CTX = int(os.getenv("OLLAMA_NUM_CTX", "2048"))
+GEMINI_CONNECT_TIMEOUT_SECONDS = float(os.getenv("GEMINI_CONNECT_TIMEOUT_SECONDS", "5"))
+GEMINI_READ_TIMEOUT_SECONDS = float(os.getenv("GEMINI_READ_TIMEOUT_SECONDS", "30"))
+GEMINI_TOTAL_TIMEOUT_SECONDS = float(os.getenv("GEMINI_TOTAL_TIMEOUT_SECONDS", "35"))
 RAG_MAX_RESULTS = int(os.getenv("RAG_MAX_RESULTS", "2"))
 RAG_FALLBACK_MAX_RESULTS = int(os.getenv("RAG_FALLBACK_MAX_RESULTS", "3"))
 RAG_MAX_CHARS_PER_BLOCK = int(os.getenv("RAG_MAX_CHARS_PER_BLOCK", "650"))
@@ -219,6 +229,7 @@ FAQ_INTENT_PATH = DATA_FOLDER / "faq_intent_keywords.json"
 EXCLUDED_RAG_DIR_NAMES = {"venv", ".venv", "chroma_db", "__pycache__"}
 EXCLUDED_RAG_FILE_NAMES = {"requirements.txt", "_RAG_TEMPLATE.txt", "faq_intent_keywords.json", "program_info_rag.txt"}
 PROGRAMS_FILE = DATA_FOLDER / "program_info.json"
+DEPARTMENT_DIRECTORY_FILE = DATA_FOLDER / "kean_departments_rag_ready_v2.txt"
 
 client = chromadb.PersistentClient(path=str(CHROMA_PATH))
 embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
@@ -1584,13 +1595,95 @@ async def call_ollama(messages: list[dict], num_predict: Optional[int] = None) -
             raise last_error
         raise RuntimeError("Unknown Ollama error")
 
+def build_gemini_timeout():
+    return httpx.Timeout(
+        connect=GEMINI_CONNECT_TIMEOUT_SECONDS,
+        read=GEMINI_READ_TIMEOUT_SECONDS,
+        write=GEMINI_CONNECT_TIMEOUT_SECONDS,
+        pool=GEMINI_CONNECT_TIMEOUT_SECONDS,
+    )
+
+def _gemini_contents_from_messages(messages: list[dict]) -> tuple[Optional[str], list[dict]]:
+    system_parts = []
+    contents = []
+
+    for message in messages:
+        role = str(message.get("role", "user")).strip().lower()
+        content = str(message.get("content", "")).strip()
+        if not content:
+            continue
+        if role == "system":
+            system_parts.append(content)
+            continue
+        gemini_role = "model" if role == "assistant" else "user"
+        contents.append({"role": gemini_role, "parts": [{"text": content}]})
+
+    return ("\n\n".join(system_parts).strip() or None, contents)
+
+async def call_gemini(messages: list[dict], num_predict: Optional[int] = None) -> str:
+    if not GEMINI_API_KEY:
+        raise RuntimeError("Gemini API key is not configured.")
+
+    system_instruction, contents = _gemini_contents_from_messages(messages)
+    if not contents:
+        raise RuntimeError("Gemini request requires at least one non-system message.")
+
+    payload = {
+        "contents": contents,
+        "generationConfig": {
+            "temperature": OLLAMA_TEMPERATURE,
+            "maxOutputTokens": num_predict or OLLAMA_NUM_PREDICT,
+        },
+    }
+    if system_instruction:
+        payload["systemInstruction"] = {"parts": [{"text": system_instruction}]}
+
+    url = f"{GEMINI_API_URL.rstrip('/')}/{GEMINI_MODEL}:generateContent"
+    async with httpx.AsyncClient(timeout=build_gemini_timeout()) as client:
+        response = await asyncio.wait_for(
+            client.post(url, params={"key": GEMINI_API_KEY}, json=payload),
+            timeout=GEMINI_TOTAL_TIMEOUT_SECONDS,
+        )
+        response.raise_for_status()
+        data = response.json()
+
+    for candidate in data.get("candidates", []):
+        parts = ((candidate.get("content") or {}).get("parts") or [])
+        text = "".join(part.get("text", "") for part in parts if isinstance(part, dict)).strip()
+        if text:
+            return text
+
+    prompt_feedback = data.get("promptFeedback") or {}
+    block_reason = prompt_feedback.get("blockReason")
+    if block_reason:
+        raise RuntimeError(f"Gemini blocked the response: {block_reason}")
+    raise RuntimeError("Gemini returned no response.")
+
+async def call_primary_llm(messages: list[dict], num_predict: Optional[int] = None) -> str:
+    last_error = None
+    providers = ["gemini", "ollama"] if PRIMARY_LLM_PROVIDER != "ollama" else ["ollama", "gemini"]
+
+    for provider in providers:
+        try:
+            if provider == "gemini":
+                if not GEMINI_API_KEY:
+                    continue
+                return await call_gemini(messages, num_predict=num_predict)
+            return await call_ollama(messages, num_predict=num_predict)
+        except (httpx.HTTPError, asyncio.TimeoutError, RuntimeError) as exc:
+            last_error = exc
+
+    if last_error:
+        raise last_error
+    raise RuntimeError("No language model provider is configured.")
+
 async def localize_answer_text(answer: str, lang: str) -> str:
     if lang == "en" or not answer.strip():
         return answer
 
     lang_name = LANGUAGE_NAMES.get(lang, "English")
     try:
-        translated = await call_ollama(
+        translated = await call_primary_llm(
             [
                 {
                     "role": "system",
@@ -1761,6 +1854,263 @@ def load_program_catalog():
             }
         )
     return catalog
+
+DEPARTMENT_QUERY_KEYWORDS = {
+    "department", "departments", "school", "schools", "college", "colleges", "office", "offices",
+    "faculty", "chair", "building", "room", "location", "where", "find",
+}
+DEPARTMENT_STOP_WORDS = {
+    "kean", "university", "where", "is", "the", "a", "an", "of", "at", "for", "in", "on", "to",
+    "department", "departments", "school", "schools", "college", "colleges", "office", "offices",
+    "building", "room", "location", "located", "find", "me", "can", "i", "you", "please", "what",
+    "which", "tell", "about", "chair", "contact",
+}
+DEPARTMENT_LOCATION_ID_OVERRIDES = {
+    "hynes hall": "Hynes_hall",
+    "dorothy grant hennings hall": "hennings_hall",
+    "hennings hall": "hennings_hall",
+    "george hennings hall": "hennings_hall",
+    "d angola": "d_angola_gym",
+    "east campus": "east_campus_building",
+    "east campus building": "east_campus_building",
+    "north avenue academic building": "naab",
+    "maxine and jack lane center for academic success": "cas",
+    "liberty hall academic center": "lhac",
+    "green lane academic building": "glab",
+    "science building": "science_building",
+    "george hennings science hall": "science_building",
+    "science building george hennings science hall": "science_building",
+    "stem building": "stem",
+    "new jersey center for science technology and mathematics": "stem",
+    "hutchinson hall": "hutchinson_hall Main",
+    "vaughn eames hall": "vaughn_eames",
+    "wilkins theatre": "wilkins_theatre",
+    "wilkins theater": "wilkins_theatre",
+    "performing arts": "wilkins_theatre",
+    "wilkins theatre performing arts": "wilkins_theatre",
+}
+
+def strip_department_prefix(text: str) -> str:
+    return re.sub(r"^(department|school|college)\s+of\s+", "", normalize(text)).strip()
+
+def build_department_aliases(unit_name: str, college: str) -> list[str]:
+    aliases = {
+        normalize(unit_name),
+        strip_department_prefix(unit_name),
+    }
+
+    core_name = strip_department_prefix(unit_name)
+    if core_name:
+        aliases.add(f"{core_name} department")
+        aliases.add(f"{core_name} office")
+        aliases.add(f"{core_name} school")
+
+    college_norm = normalize(college)
+    if "education" in college_norm:
+        aliases.add("education department")
+        aliases.add("education departments")
+        aliases.add("college of education")
+    if "mathematics" in core_name:
+        aliases.add("math department")
+        aliases.add("mathematics department")
+        aliases.add("math")
+    if "computer science" in core_name:
+        aliases.add("computer science department")
+        aliases.add("cs department")
+    if "english" in core_name:
+        aliases.add("english department")
+    if "history" in core_name:
+        aliases.add("history department")
+    if "psychology" in core_name:
+        aliases.add("psychology department")
+    if "nursing" in core_name:
+        aliases.add("nursing department")
+    if "biology" in core_name or "biological sciences" in core_name:
+        aliases.add("biology department")
+    if "chemistry and physics" in core_name:
+        aliases.add("chemistry department")
+        aliases.add("physics department")
+
+    return [alias for alias in aliases if alias]
+
+def resolve_department_location_id(building_name: str, building_code: str) -> Optional[str]:
+    candidates = []
+    building_norm = normalize(building_name)
+    code_norm = normalize(building_code)
+    if building_norm:
+        candidates.append(building_norm)
+        candidates.extend(part.strip() for part in building_norm.split("/") if part.strip())
+    if code_norm:
+        candidates.append(code_norm)
+
+    code_aliases = {
+        "hh": "hennings hall",
+        "dghh": "dorothy grant hennings hall",
+        "ec": "east campus",
+        "naab": "north avenue academic building",
+        "cas": "maxine and jack lane center for academic success",
+        "lhac": "liberty hall academic center",
+        "gl": "green lane academic building",
+        "glab": "green lane academic building",
+        "c": "science building",
+        "stem": "stem building",
+        "j": "hutchinson hall",
+        "ve": "vaughn eames hall",
+        "wt": "wilkins theatre",
+        "pa": "performing arts",
+        "d": "d angola",
+        "h": "hynes hall",
+    }
+    if code_norm in code_aliases:
+        candidates.append(code_aliases[code_norm])
+
+    seen = set()
+    for candidate in candidates:
+        candidate_norm = normalize(candidate)
+        if not candidate_norm or candidate_norm in seen:
+            continue
+        seen.add(candidate_norm)
+        if candidate_norm in DEPARTMENT_LOCATION_ID_OVERRIDES:
+            return DEPARTMENT_LOCATION_ID_OVERRIDES[candidate_norm]
+
+    return None
+
+def load_department_directory() -> list[dict]:
+    rows = []
+    if not DEPARTMENT_DIRECTORY_FILE.exists():
+        return rows
+
+    try:
+        lines = read_text_with_fallback(DEPARTMENT_DIRECTORY_FILE).splitlines()
+    except Exception:
+        return rows
+
+    for raw_line in lines:
+        line = raw_line.strip()
+        if not line or line.startswith("#") or line.lower().startswith("college|unit_type|unit_name|"):
+            continue
+        parts = [part.strip() for part in line.split("|")]
+        if len(parts) != 7:
+            continue
+
+        college, unit_type, unit_name, building_name, building_code, office_or_room, notes = parts
+        aliases = build_department_aliases(unit_name, college)
+        rows.append(
+            {
+                "college": college,
+                "unit_type": unit_type,
+                "unit_name": unit_name,
+                "building_name": building_name,
+                "building_code": building_code,
+                "office_or_room": office_or_room,
+                "notes": notes,
+                "aliases": aliases,
+                "location_id": resolve_department_location_id(building_name, building_code),
+            }
+        )
+    return rows
+
+def is_department_location_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    if is_program_interest_question(text) or is_degree_availability_question(text):
+        return False
+    if asks_location_or_office_details(text):
+        return True
+    return any(keyword_in_text(q, q_tokens, keyword) for keyword in DEPARTMENT_QUERY_KEYWORDS)
+
+def match_department_location(text: str) -> tuple[Optional[dict], list[dict]]:
+    q = normalize(text)
+    if not q or not department_directory:
+        return None, []
+
+    q_tokens = {token for token in q.split() if token and token not in DEPARTMENT_STOP_WORDS}
+    padded_query = f" {q} "
+    scored: list[tuple[int, dict]] = []
+
+    for entry in department_directory:
+        score = 0
+        for alias in entry["aliases"]:
+            alias_norm = normalize(alias)
+            if not alias_norm:
+                continue
+            alias_tokens = {token for token in alias_norm.split() if token and token not in DEPARTMENT_STOP_WORDS}
+            overlap = len(alias_tokens & q_tokens)
+            if q == alias_norm:
+                score = max(score, 240)
+            elif f" {alias_norm} " in padded_query:
+                score = max(score, 190)
+            elif alias_norm in q and len(alias_norm) >= 6:
+                score = max(score, 150)
+            elif overlap:
+                precision = overlap / max(1, len(alias_tokens))
+                score = max(score, 75 + overlap * 18 + int(precision * 30))
+
+        college_norm = normalize(entry["college"])
+        if college_norm and college_norm in q:
+            score = max(score, 165)
+        elif college_norm:
+            college_tokens = {token for token in college_norm.split() if token and token not in DEPARTMENT_STOP_WORDS}
+            overlap = len(college_tokens & q_tokens)
+            if overlap >= 2:
+                score = max(score, 88 + overlap * 10)
+
+        if score >= 90:
+            scored.append((score, entry))
+
+    scored.sort(key=lambda item: item[0], reverse=True)
+    if not scored:
+        return None, []
+
+    best_score = scored[0][0]
+    best_matches = [entry for score, entry in scored if score >= best_score - 14]
+
+    unique_matches = []
+    seen_units = set()
+    for entry in best_matches:
+        unit_key = normalize(entry["unit_name"])
+        if unit_key in seen_units:
+            continue
+        seen_units.add(unit_key)
+        unique_matches.append(entry)
+
+    if len(unique_matches) == 1:
+        return unique_matches[0], []
+    return None, unique_matches[:4]
+
+def format_department_location_label(entry: dict) -> str:
+    building_name = entry.get("building_name", "that building")
+    building_code = str(entry.get("building_code") or "").strip()
+    office_or_room = str(entry.get("office_or_room") or "").strip()
+    room_missing = office_or_room.lower() == "not consistently shown"
+
+    label = building_name
+    if building_code and building_code.lower() not in normalize(building_name):
+        label += f" ({building_code})"
+
+    if office_or_room and not room_missing:
+        label += f", room/office {office_or_room}"
+    return label
+
+def build_department_location_answer(entry: dict) -> str:
+    unit_name = entry.get("unit_name", "That department")
+    building_name = entry.get("building_name", "that building")
+    building_code = str(entry.get("building_code") or "").strip()
+    office_or_room = str(entry.get("office_or_room") or "").strip()
+
+    building_label = building_name
+    if building_code and building_code.lower() not in normalize(building_name):
+        building_label += f" ({building_code})"
+
+    if office_or_room and office_or_room.lower() != "not consistently shown":
+        return f"{unit_name} is in {building_label}, usually listed at room/office {office_or_room}."
+    return f"{unit_name} is in {building_label}. Kean's public pages place it in that building, but a stable room number was not consistently listed."
+
+def build_department_ambiguity_answer(entries: list[dict]) -> str:
+    lines = ["I found multiple department locations that could match. Please tell me which one you want:"]
+    for index, entry in enumerate(entries[:4], start=1):
+        lines.append(f"{index}. {entry['unit_name']} - {format_department_location_label(entry)}")
+    return "\n".join(lines)
 
 def is_course_repeat_question(text: str) -> bool:
     q = normalize(text)
@@ -2109,6 +2459,8 @@ def is_student_accounts_question(text: str) -> bool:
 def detect_tuition_level(text: str) -> str:
     q = normalize(text)
     q_tokens = tokenize(text)
+    if any(keyword_in_text(q, q_tokens, keyword) for keyword in ("doctoral", "doctorate", "doctor", "phd", "ph.d", "edd", "ed.d", "psyd", "psy.d", "dpt", "otd", "slpd")):
+        return "doctoral"
     if any(keyword_in_text(q, q_tokens, keyword) for keyword in ("graduate", "masters", "master", "graduate student", "grad")):
         return "graduate"
     if any(keyword_in_text(q, q_tokens, keyword) for keyword in ("undergraduate", "undergrad", "bachelor", "freshman")):
@@ -2161,9 +2513,158 @@ def is_tuition_follow_up_question(text: str) -> bool:
         for keyword in (
             "in state", "in-state", "out of state", "out-of-state", "resident", "international",
             "part time", "part-time", "full time", "full-time", "per credit", "semester", "online",
+            "class", "classes", "credit", "credits",
             "what about", "and for", "how about",
         )
     )
+
+
+TUITION_NUMBER_WORDS = {
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+    "eleven": 11,
+    "twelve": 12,
+}
+
+
+TUITION_RATE_TABLE = {
+    "undergraduate": {
+        "part_time": {
+            "in_state": 583.43,
+            "out_of_state": 855.55,
+        },
+        "full_time": {
+            "in_state": 7649.80,
+            "out_of_state": 12008.58,
+        },
+    },
+    "graduate": {
+        "per_credit": {
+            "in_state": 1019.54,
+            "out_of_state": 1206.64,
+        },
+    },
+    "doctoral": {
+        "per_credit": {
+            "in_state": 1054.44,
+            "out_of_state": 1219.24,
+        },
+    },
+}
+
+
+def extract_tuition_class_count(text: str) -> Optional[int]:
+    q = normalize(text)
+    digit_match = re.search(r"\b(\d+)\s+(?:graduate|undergraduate|doctoral|doctorate|doctor|grad|undergrad)?\s*classes?\b", q)
+    if digit_match:
+        return int(digit_match.group(1))
+    for word, value in TUITION_NUMBER_WORDS.items():
+        if re.search(rf"\b{word}\s+(?:graduate|undergraduate|doctoral|doctorate|doctor|grad|undergrad)?\s*classes?\b", q):
+            return value
+    return None
+
+
+def extract_tuition_credit_count(text: str) -> Optional[int]:
+    q = normalize(text)
+    digit_match = re.search(r"\b(\d+)\s*credits?\b", q)
+    if digit_match:
+        return int(digit_match.group(1))
+    for word, value in TUITION_NUMBER_WORDS.items():
+        if re.search(rf"\b{word}\s*credits?\b", q):
+            return value
+    return None
+
+
+def format_usd(amount: float) -> str:
+    return f"${amount:,.2f}"
+
+
+def build_tuition_estimate_answer(
+    level: str,
+    residency: str,
+    total_credits: int,
+    class_count: Optional[int],
+    assumed_three_credit_classes: bool,
+) -> Optional[str]:
+    if level not in TUITION_RATE_TABLE:
+        return None
+
+    if residency in {"in_state", "out_of_state"}:
+        residencies = [residency]
+    else:
+        residencies = ["in_state", "out_of_state"]
+
+    assumption_note = ""
+    if class_count is not None and assumed_three_credit_classes:
+        assumption_note = (
+            f" assuming {class_count} classes at about 3 credits each, for roughly {total_credits} credits"
+        )
+
+    if level == "undergraduate":
+        if total_credits >= 12:
+            lines = [
+                f"For 2025-2026 undergraduate tuition{assumption_note}, {total_credits} credits is usually full-time, so the estimated semester total is:"
+            ]
+            for current_residency in residencies:
+                amount = TUITION_RATE_TABLE["undergraduate"]["full_time"][current_residency]
+                label = "In-State" if current_residency == "in_state" else "Out-of-State"
+                lines.append(f"{label}: {format_usd(amount)} per semester.")
+            lines.append(
+                "Source used: Kean Bursar tuition schedule for 2025-2026."
+            )
+            return "\n".join(lines)
+
+        lines = [
+            f"For 2025-2026 undergraduate tuition{assumption_note}, {total_credits} credits is usually part-time, so the estimated total is:"
+        ]
+        for current_residency in residencies:
+            rate = TUITION_RATE_TABLE["undergraduate"]["part_time"][current_residency]
+            amount = rate * total_credits
+            label = "In-State" if current_residency == "in_state" else "Out-of-State"
+            lines.append(f"{label}: {total_credits} x {format_usd(rate)} = {format_usd(amount)}.")
+        lines.append(
+            "At 12 or more undergraduate credits, Kean usually charges the flat full-time semester rate instead."
+        )
+        lines.append("Source used: Kean Bursar tuition schedule for 2025-2026.")
+        return "\n".join(lines)
+
+    if level == "graduate":
+        lines = [
+            f"For 2025-2026 general graduate tuition{assumption_note}, the estimated total is:"
+        ]
+        for current_residency in residencies:
+            rate = TUITION_RATE_TABLE["graduate"]["per_credit"][current_residency]
+            amount = rate * total_credits
+            label = "In-State" if current_residency == "in_state" else "Out-of-State"
+            lines.append(f"{label}: {total_credits} x {format_usd(rate)} = {format_usd(amount)}.")
+        lines.append("Some special cohort graduate programs have different tuition rates.")
+        lines.append("Source used: Kean Bursar tuition schedule for 2025-2026.")
+        return "\n".join(lines)
+
+    if level == "doctoral":
+        lines = [
+            f"For 2025-2026 general doctoral tuition{assumption_note}, the estimated total is:"
+        ]
+        for current_residency in residencies:
+            rate = TUITION_RATE_TABLE["doctoral"]["per_credit"][current_residency]
+            amount = rate * total_credits
+            label = "In-State" if current_residency == "in_state" else "Out-of-State"
+            lines.append(f"{label}: {total_credits} x {format_usd(rate)} = {format_usd(amount)}.")
+        lines.append(
+            "Some doctoral programs such as PsyD, OTD, and DPT have special tuition structures, so those programs can cost differently."
+        )
+        lines.append("Source used: Kean Bursar tuition schedule for 2025-2026.")
+        return "\n".join(lines)
+
+    return None
 
 def is_smoking_policy_question(text: str) -> bool:
     q = normalize(text)
@@ -2379,6 +2880,20 @@ def build_tuition_answer(text: str, lang: str) -> str:
     level = detected_level if detected_level != "general" else (conversation_state.get("last_tuition_level") or "general")
     residency = detect_tuition_residency(text)
     load = detect_tuition_load(text)
+    class_count = extract_tuition_class_count(text)
+    explicit_credits = extract_tuition_credit_count(text)
+
+    if explicit_credits is not None or class_count is not None:
+        total_credits = explicit_credits if explicit_credits is not None else class_count * 3
+        estimated_answer = build_tuition_estimate_answer(
+            level,
+            residency,
+            total_credits,
+            class_count,
+            assumed_three_credit_classes=(explicit_credits is None and class_count is not None),
+        )
+        if estimated_answer:
+            return estimated_answer
 
     if level == "graduate":
         if residency == "in_state":
@@ -2397,6 +2912,19 @@ def build_tuition_answer(text: str, lang: str) -> str:
             "1. In-State: $929.20 tuition + $90.34 mandatory fees = $1,019.54 total per credit.\n"
             "2. Out-of-State: $1,116.30 tuition + $90.34 mandatory fees = $1,206.64 total per credit.\n"
             "3. Some special cohort graduate programs have different rates.\n"
+            "4. Source used: Kean Bursar tuition schedule for 2025-2026."
+        )
+
+    if level == "doctoral":
+        if residency == "in_state":
+            return "For 2025-2026 general doctoral tuition, the in-state rate is $964.10 tuition + $90.34 mandatory fees = $1,054.44 total per credit."
+        if residency == "out_of_state":
+            return "For 2025-2026 general doctoral tuition, the out-of-state rate is $1,128.90 tuition + $90.34 mandatory fees = $1,219.24 total per credit."
+        return (
+            "For 2025-2026 doctoral tuition, the general doctoral per-credit rate is:\n"
+            "1. In-State: $964.10 tuition + $90.34 mandatory fees = $1,054.44 total per credit.\n"
+            "2. Out-of-State: $1,128.90 tuition + $90.34 mandatory fees = $1,219.24 total per credit.\n"
+            "3. Some doctoral programs such as PsyD, OTD, and DPT have different tuition structures.\n"
             "4. Source used: Kean Bursar tuition schedule for 2025-2026."
         )
 
@@ -2438,7 +2966,8 @@ def build_tuition_answer(text: str, lang: str) -> str:
         "1. Undergraduate full-time In-State: $7,649.80 total per semester; Out-of-State: $12,008.58 total per semester.\n"
         "2. Undergraduate part-time In-State: $583.43 total per credit; Out-of-State: $855.55 total per credit.\n"
         "3. General graduate In-State: $1,019.54 total per credit; Out-of-State: $1,206.64 total per credit.\n"
-        "4. Some graduate cohort programs have different tuition rates."
+        "4. General doctoral In-State: $1,054.44 total per credit; Out-of-State: $1,219.24 total per credit.\n"
+        "5. Some graduate and doctoral programs have different tuition structures."
     )
 
 def build_shuttle_answer(lang: str) -> str:
@@ -3010,6 +3539,66 @@ def is_parking_location_question(text: str) -> bool:
     )
     return has_parking and (has_location_style or not asks_ticket_or_cost) and not asks_ticket_or_cost
 
+def is_bike_scooter_parking_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    has_bike_scooter = any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "bike",
+            "bikes",
+            "bicycle",
+            "bicycles",
+            "bike rack",
+            "bike racks",
+            "bike parking",
+            "scooter",
+            "scooters",
+            "scooter parking",
+            "scooter rack",
+            "bicicleta",
+            "bicicletas",
+            "estacionamiento de bicicletas",
+            "patinete",
+            "patinetes",
+            "bisiklet",
+            "bisiklet park",
+            "自行车",
+            "电动滑板车",
+            "자전거",
+            "자전거 거치대",
+            "스쿠터",
+        )
+    )
+    has_location_style = any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in ("where", "donde", "nerede", "near", "map", "where can i", "can i leave", "can i park")
+    )
+    return has_bike_scooter and has_location_style
+
+def is_ev_charging_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    has_ev = any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "ev",
+            "electric vehicle",
+            "electric car",
+            "charging station",
+            "charger",
+            "charge my car",
+            "recharge my car",
+            "ev charging",
+            "car charging",
+        )
+    )
+    has_location_style = any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in ("where", "donde", "nerede", "near", "map", "where can i")
+    )
+    return has_ev and has_location_style
+
 def is_parking_ticket_fee_question(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
@@ -3359,6 +3948,58 @@ def find_closest_parking_lot(reference_location_id: str) -> Optional[dict]:
             best_lot = place
 
     return best_lot
+
+def find_closest_location_by_type(reference_location_id: str, location_type: str) -> Optional[dict]:
+    reference = get_effective_reference_location(reference_location_id)
+    if not reference:
+        return None
+    reference_position = reference.get("position")
+    if not reference_position:
+        return None
+
+    best_place = None
+    best_distance = float("inf")
+    for place in campus_locations:
+        if place.get("type") != location_type:
+            continue
+        place_position = place.get("position")
+        if not place_position:
+            continue
+        distance = haversine_meters(reference_position, place_position)
+        if distance < best_distance:
+            best_distance = distance
+            best_place = place
+
+    return best_place
+
+def find_all_locations_by_type(location_type: str) -> list[dict]:
+    return [place for place in campus_locations if place.get("type") == location_type]
+
+def build_bike_scooter_parking_answer(target: Optional[dict], lang: str) -> str:
+    if target:
+        campus_label = localize_campus_label_for_location(target.get("campus", "campus"), lang)
+        answer = f"The nearest bike and scooter parking is {target.get('name', 'that location')} on {campus_label}. Opening map."
+    else:
+        all_locations = find_all_locations_by_type("bike_scooter_parking")
+        if not all_locations:
+            answer = "I could not find bike or scooter parking in the current campus map data."
+        else:
+            names = ", ".join(place.get("name", "bike parking") for place in all_locations[:4])
+            answer = f"Bike and scooter parking is available at locations like {names}. Opening map."
+    return answer if lang == "en" else answer
+
+def build_ev_charging_answer(targets: list[dict], lang: str) -> str:
+    if not targets:
+        answer = "I could not find EV charging stations in the current campus map data."
+    elif len(targets) == 1:
+        place = targets[0]
+        campus_label = localize_campus_label_for_location(place.get("campus", "campus"), lang)
+        answer = f"An EV charging station is available at {place.get('name', 'that location')} on {campus_label}. Opening map."
+    else:
+        ordered = sorted(targets, key=lambda place: (place.get("campus", ""), place.get("name", "")))
+        names = ", ".join(place.get("name", "EV charging station") for place in ordered)
+        answer = f"EV charging stations are available at {names}. Opening map."
+    return answer if lang == "en" else answer
 
 def detect_faq_intent(text: str) -> Optional[str]:
     q = normalize(text)
@@ -4174,6 +4815,7 @@ def get_time_response(prompt: str):
 campus_locations = load_campus_locations()
 campus_location_by_id = {place["id"]: place for place in campus_locations}
 fallback_rag_docs = load_fallback_rag_docs()
+department_directory = load_department_directory()
 program_catalog = load_program_catalog()
 FAQ_INTENT_KEYWORDS = load_faq_intent_keywords()
 
@@ -4189,7 +4831,7 @@ def build_ollama_timeout():
 
 async def query_ollama(prompt: str, lang: str):
     lang_name = LANGUAGE_NAMES.get(lang, "English")
-    return await call_ollama(
+    return await call_primary_llm(
         [
             {
                 "role": "system",
@@ -4434,7 +5076,7 @@ async def answer_from_last_response(user_text: str, lang: str) -> Optional[str]:
         "Do not invent new facts and keep the answer concise."
     )
     try:
-        return await call_ollama(
+        return await call_primary_llm(
             [
                 {
                     "role": "system",
@@ -4680,6 +5322,10 @@ async def chat(req: ChatRequest):
     non_mapped_campus_name = find_non_mapped_campus_name(user_text) if location_context_requested else None
     use_current_location = False if normalized_start_id else (should_use_current_location(user_text) if location_context_requested else False)
     location_mode = "directions" if (normalized_start_id and normalized_destination_id) or use_current_location else "highlight"
+    department_entry = None
+    ambiguous_department_entries: list[dict] = []
+    if is_department_location_question(user_text):
+        department_entry, ambiguous_department_entries = match_department_location(user_text)
 
     async def localized(answer: str) -> str:
         return await localize_answer_text(answer, lang)
@@ -4996,6 +5642,26 @@ async def chat(req: ChatRequest):
             "response_mode": "one_stop_direct",
         })
 
+    if department_entry:
+        department_destination_id = department_entry.get("location_id")
+        department_use_current_location = should_use_current_location(user_text)
+        department_location_mode = "directions" if department_use_current_location else "highlight"
+        return {
+            "answer": await localized(build_department_location_answer(department_entry)),
+            "intent": "location",
+            "destination_id": department_destination_id,
+            "use_current_location": department_use_current_location,
+            "location_mode": department_location_mode,
+            "response_mode": "department_location_direct",
+        }
+
+    if ambiguous_department_entries:
+        return {
+            "answer": await localized(build_department_ambiguity_answer(ambiguous_department_entries)),
+            "intent": "general",
+            "response_mode": "department_location_clarify",
+        }
+
     if is_dining_question(user_text):
         return with_location({
             "answer": await localized(build_dining_answer(lang)),
@@ -5107,6 +5773,51 @@ async def chat(req: ChatRequest):
             "faq_topic": "parking_transport",
             "response_mode": "policy_fee_summary",
         })
+
+    if is_ev_charging_question(user_text):
+        ev_destination_id = find_location_destination_id(
+            user_text,
+            allowed_types={"ev_charging_station"},
+        )
+        ev_locations = find_all_locations_by_type("ev_charging_station")
+        if not ev_destination_id and len(ev_locations) == 1:
+            ev_destination_id = ev_locations[0]["id"]
+        return {
+            "answer": await localized(
+                build_ev_charging_answer(
+                    [campus_location_by_id[ev_destination_id]] if ev_destination_id and ev_destination_id in campus_location_by_id else ev_locations,
+                    lang,
+                )
+            ),
+            "intent": "location",
+            "destination_id": ev_destination_id,
+            "use_current_location": False,
+            "location_mode": "highlight",
+        }
+
+    if is_bike_scooter_parking_question(user_text):
+        bike_destination_id = find_location_destination_id(
+            user_text,
+            allowed_types={"bike_scooter_parking"},
+        )
+        if not bike_destination_id:
+            reference_id = find_location_destination_id(
+                user_text,
+                allowed_types={"building", "entrance", "landmark", "field"},
+            )
+            if reference_id:
+                nearest_bike = find_closest_location_by_type(reference_id, "bike_scooter_parking")
+                if nearest_bike:
+                    bike_destination_id = nearest_bike["id"]
+
+        bike_target = campus_location_by_id.get(bike_destination_id) if bike_destination_id else None
+        return {
+            "answer": await localized(build_bike_scooter_parking_answer(bike_target, lang)),
+            "intent": "location",
+            "destination_id": bike_destination_id,
+            "use_current_location": False,
+            "location_mode": "highlight",
+        }
 
     if is_parking_location_question(user_text):
         audience = parking_audience(user_text)

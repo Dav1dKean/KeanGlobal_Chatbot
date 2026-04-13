@@ -7,7 +7,7 @@ const API_BASE_URLS = ENV_API_BASE_URL
   ? [ENV_API_BASE_URL]
   : ["http://127.0.0.1:8000", "http://localhost:8000"];
 const CHAT_STORAGE_KEY = "keanglobal_chat_messages";
-const URL_PATTERN = /((?:https?:\/\/|\/)[^\s]+)([.,;:!?)]*)(?=\s|$)/gi;
+const URL_PATTERN = /((?:https?:\/\/)[^\s]+)([.,;:!?)]*)(?=\s|$)/gi;
 const DEFAULT_GREETING = {
   text: "Hello! How can I help you today? I can answer questions about Kean University and help with campus locations and directions.",
   sender: "bot"
@@ -83,8 +83,8 @@ function renderLinkedText(text) {
       <a
         key={`${url}-${offset}`}
         href={url}
-        target={url.startsWith("/") ? undefined : "_blank"}
-        rel={url.startsWith("/") ? undefined : "noreferrer"}
+        target="_blank"
+        rel="noreferrer"
         className="chat-link"
       >
         {url}
