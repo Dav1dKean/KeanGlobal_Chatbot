@@ -3038,5 +3038,165 @@
       -74.22699868793165,
       40.68295616245571
     ]
+  },
+  {
+    "id": "bike_scooter_parking_east_campus_rear_entrance",
+    "name": "Bike / Scooter Parking - East Campus Rear Entrance",
+    "latlng": "40.68013960374249, -74.2239020734109",
+    "campus": "East",
+    "routable": "yes",
+    "parent": "east_campus_building",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.68013960374249,
+    "longitude": -74.2239020734109,
+    "coordinates": [
+      -74.2239020734109,
+      40.68013960374249
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_east_campus_upper_parking_lot",
+    "name": "Bike / Scooter Parking - East Campus Upper Parking Lot",
+    "latlng": "40.68010119914793, -74.2235722025143",
+    "campus": "East",
+    "routable": "yes",
+    "parent": "east_campus_building",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.68010119914793,
+    "longitude": -74.2235722025143,
+    "coordinates": [
+      -74.2235722025143,
+      40.68010119914793
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_stem_atrium",
+    "name": "Bike / Scooter Parking - STEM Building Atrium Entrance",
+    "latlng": "40.679720699031954, -74.230948337167",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "stem",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.679720699031954,
+    "longitude": -74.230948337167,
+    "coordinates": [
+      -74.230948337167,
+      40.679720699031954
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_glab_main_entrance",
+    "name": "Bike / Scooter Parking - GLAB Main Entrance",
+    "latlng": "40.68255637476004, -74.2363213444878",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "glab",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.68255637476004,
+    "longitude": -74.2363213444878,
+    "coordinates": [
+      -74.2363213444878,
+      40.68255637476004
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_naab_main_entrance",
+    "name": "Bike / Scooter Parking - NAAB Main Entrance",
+    "latlng": "40.676755189796495, -74.229086282946",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "naab",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.676755189796495,
+    "longitude": -74.229086282946,
+    "coordinates": [
+      -74.229086282946,
+      40.676755189796495
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_hynes_main_entrance",
+    "name": "Bike / Scooter Parking - Hynes Hall Main Entrance",
+    "latlng": "40.6825943704733, -74.23250759099703",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "hynes_hall",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.6825943704733,
+    "longitude": -74.23250759099703,
+    "coordinates": [
+      -74.23250759099703,
+      40.6825943704733
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_wilkins_cougar_walk",
+    "name": "Bike / Scooter Parking - Wilkins Theatre Along Cougar Walk",
+    "latlng": "40.67838661653724, -74.232733220658",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "wilkins_theatre",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.67838661653724,
+    "longitude": -74.232733220658,
+    "coordinates": [
+      -74.232733220658,
+      40.67838661653724
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_harwood_cougar_walk",
+    "name": "Bike / Scooter Parking - Harwood Arena Along Cougar Walk",
+    "latlng": "40.67982798510823, -74.237310615438",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "harwood_arena",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.67982798510823,
+    "longitude": -74.237310615438,
+    "coordinates": [
+      -74.237310615438,
+      40.67982798510823
+    ]
+  },
+  {
+    "id": "ev_charging_station_main_campus",
+    "name": "EV Charging Station - Main Campus",
+    "latlng": "40.679800095192554, -74.23326375455993",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "ev_charging_station",
+    "latitude": 40.679800095192554,
+    "longitude": -74.23326375455993,
+    "coordinates": [
+      -74.23326375455993,
+      40.679800095192554
+    ]
+  },
+  {
+    "id": "ev_charging_station_east_campus",
+    "name": "EV Charging Station - East Campus",
+    "latlng": "40.68070268534062, -74.22374272714143",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "ev_charging_station",
+    "latitude": 40.68070268534062,
+    "longitude": -74.22374272714143,
+    "coordinates": [
+      -74.22374272714143,
+      40.68070268534062
+    ]
   }
 ]

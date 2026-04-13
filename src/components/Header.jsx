@@ -2,7 +2,7 @@ import ThemeToggle from "./ThemeToggle";
 import keanLogo from "../assets/Kean_Seal-2018-white.gif";
 import { NavLink } from "react-router-dom";
 
-function Header() {
+function Header({ onMapChatClick = () => {} }) {
   return (
     <header className="header">
       <div className="logo">
@@ -13,7 +13,11 @@ function Header() {
           <NavLink to="/" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
             Home
           </NavLink>
-          <NavLink to="/chat" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
+          <NavLink
+            to="/chat"
+            className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
+            onClick={onMapChatClick}
+          >
             Map/Chat
           </NavLink>
           <NavLink to="/programs" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>

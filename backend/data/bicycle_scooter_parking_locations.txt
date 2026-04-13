@@ -1,0 +1,26 @@
+Kean University bicycle and scooter parking locations
+
+Bike and scooter parking is available at these mapped campus locations:
+
+- East Campus Rear Entrance
+- East Campus Upper Parking Lot
+- STEM Building Atrium Entrance
+- GLAB Main Entrance
+- NAAB Main Entrance
+- Hynes Hall Main Entrance
+- Wilkins Theatre Along Cougar Walk
+- Harwood Arena Along Cougar Walk
+
+Map details:
+- East Campus bike and scooter parking locations use the standard bike icon when no dedicated location photo is available.
+- Main Campus bike and scooter parking locations may show location-specific popup photos when matching images are available.
+
+Suggested campus references:
+- Bike / Scooter Parking - East Campus Rear Entrance
+- Bike / Scooter Parking - East Campus Upper Parking Lot
+- Bike / Scooter Parking - STEM Building Atrium Entrance
+- Bike / Scooter Parking - GLAB Main Entrance
+- Bike / Scooter Parking - NAAB Main Entrance
+- Bike / Scooter Parking - Hynes Hall Main Entrance
+- Bike / Scooter Parking - Wilkins Theatre Along Cougar Walk
+- Bike / Scooter Parking - Harwood Arena Along Cougar Walk

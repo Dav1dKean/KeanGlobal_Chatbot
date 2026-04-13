@@ -4,7 +4,9 @@ import { CircleMarker, MapContainer, Marker, Polygon, Polyline, Popup, TileLayer
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import bikeIconImage from "../assets/buildings/bike_icon.png";
 import busIconImage from "../assets/buildings/bus icon.png";
+import evChargingIconImage from "../assets/buildings/electric-vehicle-charging-station-icon.jpg";
 import phoneIconImage from "../assets/buildings/phone icon.png";
 import buildingProfiles from "../data/building_profiles.json";
 import campusLocationsData from "../data/kean_locations.json";
@@ -53,7 +55,9 @@ const LOCATION_TYPE_LABELS = {
   field: "Athletics",
   landmark: "Landmark",
   shuttle_stop: "Shuttle Stop",
-  emergency_phone: "Emergency Phone"
+  emergency_phone: "Emergency Phone",
+  bike_scooter_parking: "Bike / Scooter Parking",
+  ev_charging_station: "EV Charging Station"
 };
 
 const ROUTE_NODE_ALIASES = {
@@ -111,6 +115,12 @@ const BUILDING_IMAGE_ALIASES = {
   kean_east_soccer_field_2: ["kean east soccer field 2", "kean soccer field east campus 2"],
   kean_shuttle_bus: ["kean shuttle bus", "shuttle bus", "campus shuttle"],
   emergency_phone: ["emergency phone"],
+  bike_scooter_parking_stem_atrium: ["main campus bike scooter parking", "stem bike scooter parking", "stem building bike scooter parking"],
+  bike_scooter_parking_glab_main_entrance: ["glab bike scooter parking"],
+  bike_scooter_parking_naab_main_entrance: ["naab bike scooter parking"],
+  bike_scooter_parking_hynes_main_entrance: ["hynes bike scooter parking"],
+  bike_scooter_parking_wilkins_cougar_walk: ["wilkins bike scooter parking", "wilkins theatre bike scooter parking"],
+  bike_scooter_parking_harwood_cougar_walk: ["harwood bike scooter parking", "harwood arena bike scooter parking"],
   library: ["nancy thompson library", "library"],
   learning_plaza: ["learning plaza"],
   little_theater: ["little theater", "little theatre"],
@@ -170,6 +180,24 @@ const emergencyPhoneMarkerIcon = L.icon({
   className: "map-image-marker"
 });
 
+const bikeScooterMarkerIcon = L.icon({
+  iconUrl: bikeIconImage,
+  iconRetinaUrl: bikeIconImage,
+  iconSize: [28, 28],
+  iconAnchor: [14, 14],
+  popupAnchor: [0, -14],
+  className: "map-image-marker"
+});
+
+const evChargingMarkerIcon = L.icon({
+  iconUrl: evChargingIconImage,
+  iconRetinaUrl: evChargingIconImage,
+  iconSize: [40, 34],
+  iconAnchor: [20, 17],
+  popupAnchor: [0, -18],
+  className: "map-image-marker"
+});
+
 const parkingLabelAnchorIcon = L.divIcon({
   className: "parking-label-anchor",
   html: "",
@@ -177,7 +205,16 @@ const parkingLabelAnchorIcon = L.divIcon({
   iconAnchor: [0, 0]
 });
 
-const MARKER_LOCATION_TYPES = new Set(["building", "field", "lawn", "landmark", "shuttle_stop", "emergency_phone"]);
+const MARKER_LOCATION_TYPES = new Set([
+  "building",
+  "field",
+  "lawn",
+  "landmark",
+  "shuttle_stop",
+  "emergency_phone",
+  "bike_scooter_parking",
+  "ev_charging_station"
+]);
 
 function normalizeId(value) {
   return String(value || "")
@@ -551,6 +588,12 @@ function getLocationImage(location) {
   if (location.type === "emergency_phone") {
     return getBuildingImage({ id: "emergency_phone", name: "Emergency Phone" });
   }
+  if (location.type === "bike_scooter_parking") {
+    return getBuildingImage(location) || bikeIconImage;
+  }
+  if (location.type === "ev_charging_station") {
+    return evChargingIconImage;
+  }
   return getBuildingImage(location);
 }
 
@@ -564,6 +607,8 @@ function getLocationImagePlaceholder(location) {
 function getLocationMarkerIcon(location) {
   if (location?.type === "shuttle_stop") return shuttleStopMarkerIcon;
   if (location?.type === "emergency_phone") return emergencyPhoneMarkerIcon;
+  if (location?.type === "bike_scooter_parking") return bikeScooterMarkerIcon;
+  if (location?.type === "ev_charging_station") return evChargingMarkerIcon;
   return campusMarkerIcon;
 }
 
@@ -626,6 +671,20 @@ function getLocationProfile(location) {
       usage: "Emergency phone location for campus safety and urgent assistance.",
       departments: ["Campus Police"],
       notes: "Use this phone to contact emergency services or campus security."
+    };
+  }
+  if (location.type === "bike_scooter_parking") {
+    return {
+      usage: "Bike and scooter parking area for securing bicycles and small personal mobility devices.",
+      departments: ["Campus Directory", "Transportation Support"],
+      notes: "Use the bike racks or scooter parking area shown here. East Campus locations use the bike icon when no location photo is available."
+    };
+  }
+  if (location.type === "ev_charging_station") {
+    return {
+      usage: "Electric vehicle charging station available on campus for EV charging.",
+      departments: ["Parking and Transportation"],
+      notes: "This location is marked as an EV charging station."
     };
   }
   return {
@@ -1614,10 +1673,24 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
     return query ? `/map?${query}` : "/map";
   }, [endId, highlightTarget?.id, locationMode, startId]);
 
+  const routeSummaryText =
+    locationMode === "highlight"
+      ? "Showing destination only"
+      : routeCoordinates.length > 1
+      ? `${Math.round(routeDistanceMeters)} m estimated path`
+      : "No route found in campus graph";
+
   return (
     <div className="panel map-panel">
       <div className="map-header">
-        <h3 className="panel-title">Campus Map</h3>
+        <div className="map-header-copy">
+          <h3 className="panel-title">Campus Map</h3>
+          <div className="route-summary route-summary-inline">
+            <strong>{startLabel}</strong> to <strong>{endLabel}</strong>
+            {" - "}
+            {routeSummaryText}
+          </div>
+        </div>
         <div className="map-header-actions">
           {!standalone && (
             <button
@@ -1687,16 +1760,6 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
         {locationStatus && <span className="route-note">{locationStatus}</span>}
       </div>
 
-      <div className="route-summary">
-        <strong>{startLabel}</strong> to <strong>{endLabel}</strong>
-        {" - "}
-        {locationMode === "highlight"
-          ? "Showing destination only"
-          : routeCoordinates.length > 1
-          ? `${Math.round(routeDistanceMeters)} m estimated path`
-          : "No route found in campus graph"}
-      </div>
-
       <div className="leaflet-wrapper">
         <MapContainer
           center={KEAN_MAIN_CAMPUS}
@@ -1753,6 +1816,11 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
             const imagePlaceholder = getLocationImagePlaceholder(location);
             return (
               <Marker key={location.id} position={location.position} icon={getLocationMarkerIcon(location)}>
+                {location.type === "ev_charging_station" && (
+                  <Tooltip permanent direction="top" offset={[0, -18]} className="special-point-label" opacity={1}>
+                    EV Charging
+                  </Tooltip>
+                )}
                 <Popup>
                   <div className="building-popup">
                     {imageSrc ? (

@@ -836,7 +836,7 @@ DEFAULT_FAQ_INTENT_KEYWORDS = {
     "registration": ("register", "registration", "add/drop", "drop", "schedule"),
     "calendar_deadline": ("deadline", "due date", "when is", "date", "semester starts", "semester ends"),
     "housing": ("housing", "dorm", "residence hall", "roommate", "move in"),
-    "parking_transport": ("parking", "permit", "lot", "shuttle", "bus", "train"),
+    "parking_transport": ("parking", "permit", "lot", "shuttle", "bus", "train", "bike", "bicycle", "scooter", "rack"),
     "library": ("library", "books", "study room", "citation"),
     "it_support": ("wifi", "email", "password", "it", "tech support", "portal"),
     "programs": ("major", "minor", "program", "degree", "curriculum"),
@@ -926,7 +926,7 @@ FAQ_TOPIC_RETRIEVAL_HINTS = {
     "housing": "housing dorm residence life move in roommate residential",
     "health_services": "student health wellness counseling immunization vaccine",
     "accessibility": "accessibility accommodations disability office accessibility services",
-    "parking_transport": "parking permit shuttle transportation train trolley bus",
+    "parking_transport": "parking permit shuttle transportation train trolley bus bike bicycle scooter rack bike parking scooter parking",
     "library": "library books study room citation hours",
     "bookstore": "bookstore barnes noble textbooks apparel",
     "theaters_events": "kean stage theatre theater tickets box office event",
@@ -2938,11 +2938,34 @@ def is_parking_question(text: str) -> bool:
         "ticket",
         "permit",
         "lot",
+        "bike",
+        "bikes",
+        "bicycle",
+        "bicycles",
+        "bike rack",
+        "bike racks",
+        "bike parking",
+        "scooter",
+        "scooters",
+        "scooter parking",
+        "scooter rack",
         "parqueo",
         "estacionamiento",
+        "bicicleta",
+        "bicicletas",
+        "estacionamiento de bicicletas",
+        "patinete",
+        "patinetes",
         "otopark",
+        "bisiklet",
+        "bisiklet park",
         "停车",
+        "自行车",
+        "电动滑板车",
         "주차",
+        "자전거",
+        "자전거 거치대",
+        "스쿠터",
         "پارکنگ",
     )
     return any(keyword_in_text(q, q_tokens, keyword) for keyword in keywords)
@@ -2952,11 +2975,34 @@ def is_parking_location_question(text: str) -> bool:
     q_tokens = tokenize(text)
     has_parking = any(
         keyword_in_text(q, q_tokens, keyword)
-        for keyword in ("parking", "park", "lot", "parqueo", "estacionamiento", "otopark", "停车", "주차", "پارکنگ")
+        for keyword in (
+            "parking",
+            "park",
+            "lot",
+            "bike",
+            "bicycle",
+            "bike rack",
+            "bike parking",
+            "scooter",
+            "scooter parking",
+            "parqueo",
+            "estacionamiento",
+            "bicicleta",
+            "patinete",
+            "otopark",
+            "bisiklet",
+            "停车",
+            "自行车",
+            "电动滑板车",
+            "주차",
+            "자전거",
+            "스쿠터",
+            "پارکنگ",
+        )
     )
     has_location_style = any(
         keyword_in_text(q, q_tokens, keyword)
-        for keyword in ("where", "donde", "nerede", "where can i", "can i park", "map", "near")
+        for keyword in ("where", "donde", "nerede", "where can i", "can i park", "can i leave", "map", "near")
     )
     asks_ticket_or_cost = any(
         keyword_in_text(q, q_tokens, keyword)

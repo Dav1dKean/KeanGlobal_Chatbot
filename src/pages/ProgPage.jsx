@@ -4,7 +4,7 @@ import { Search, BookOpen, ArrowRight, GraduationCap, Globe, Users, Sparkles } f
 import ChatLauncher from "../components/ChatLauncher";
 
 
-const ProgPage = () => {
+const ProgPage = ({ compactModeActive = false }) => {
   const navigate = useNavigate();
   
   // State for fetched data, search, and filters
@@ -227,7 +227,7 @@ const ProgPage = () => {
         )}
       </main>
 
-      <ChatLauncher />
+      {!compactModeActive && <ChatLauncher />}
     </div>
   );
 }

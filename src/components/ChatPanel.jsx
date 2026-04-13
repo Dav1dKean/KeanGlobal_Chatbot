@@ -1,5 +1,6 @@
-import { Mic, Square } from "lucide-react";
+import { Maximize2, MessageCircle, Mic, Minimize2, Square } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import chatbotButtonImage from "../assets/Chatbot Button.png";
 
 const ENV_API_BASE_URL = import.meta.env.VITE_API_URL?.trim();
 const API_BASE_URLS = ENV_API_BASE_URL
@@ -21,12 +22,12 @@ const SPEECH_LANGUAGE_MAP = {
 };
 const VOICE_LANGUAGE_OPTIONS = [
   { value: "auto", label: "Auto" },
-  { value: "en", label: "English" },
-  { value: "es", label: "Spanish" },
-  { value: "zh", label: "Mandarin" },
-  { value: "ko", label: "Korean" },
-  { value: "tr", label: "Turkish" },
-  { value: "ur", label: "Urdu" }
+  { value: "en", label: "EN" },
+  { value: "es", label: "ES" },
+  { value: "zh", label: "ZH" },
+  { value: "ko", label: "KO" },
+  { value: "tr", label: "TR" },
+  { value: "ur", label: "UR" }
 ];
 
 function detectSpeechLanguage(text, fallbackLanguage = "") {
@@ -184,7 +185,14 @@ function renderBotMessage(message, onSelectSuggestion) {
 }
 
 
-function ChatPanel({ setShowMap, setRouteRequest, externalBotMessage = null }) {
+function ChatPanel({
+  setShowMap,
+  setRouteRequest,
+  externalBotMessage = null,
+  viewMode = "full",
+  onViewModeChange = () => {}
+}) {
+  const isCompact = viewMode === "compact";
   const [messages, setMessages] = useState(() => {
     try {
       const saved = localStorage.getItem(CHAT_STORAGE_KEY);
@@ -212,6 +220,9 @@ function ChatPanel({ setShowMap, setRouteRequest, externalBotMessage = null }) {
   const shouldRestartVoiceRef = useRef(false);
   const lastExternalMessageIdRef = useRef(null);
   const routeRequestCounterRef = useRef(0);
+  const chatBoxRef = useRef(null);
+  const [isCompactOpen, setIsCompactOpen] = useState(true);
+  const [showCompactCallout, setShowCompactCallout] = useState(true);
 
   function applyRecognitionLanguage(recognition, sampleText = "") {
     const language = getActiveSpeechLanguage(sampleText);
@@ -342,10 +353,26 @@ function ChatPanel({ setShowMap, setRouteRequest, externalBotMessage = null }) {
     localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
   }, [messages]);
 
+  useEffect(() => {
+    if (!isCompact) {
+      setIsCompactOpen(true);
+      setShowCompactCallout(true);
+    }
+  }, [isCompact]);
+
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [messages, loading, listening, isCompactOpen]);
+
   async function sendMessage(messageOverride) {
     const userMessage = String(messageOverride ?? input).trim();
     if (!userMessage || loadingRef.current) return;
 
+    if (isCompact) {
+      setIsCompactOpen(true);
+    }
     lastUserLanguageRef.current = detectSpeechLanguage(userMessage, lastUserLanguageRef.current).code;
     setMessages(prev => [...prev, { text: userMessage, sender: "user" }]);
     setInput("");
@@ -394,6 +421,7 @@ function ChatPanel({ setShowMap, setRouteRequest, externalBotMessage = null }) {
       const openMap = shouldOpenMapFromResponse(data, answerText);
       setShowMap(openMap);
       if (openMap) {
+        setIsCompactOpen(true);
         routeRequestCounterRef.current += 1;
         setRouteRequest({
           requestId: `${Date.now()}-${routeRequestCounterRef.current}`,
@@ -437,6 +465,9 @@ function ChatPanel({ setShowMap, setRouteRequest, externalBotMessage = null }) {
     if (!externalBotMessage?.id || !externalBotMessage?.text) return;
     if (lastExternalMessageIdRef.current === externalBotMessage.id) return;
     lastExternalMessageIdRef.current = externalBotMessage.id;
+    if (isCompact) {
+      setIsCompactOpen(true);
+    }
     setMessages(prev => [
       ...prev,
       {
@@ -445,6 +476,15 @@ function ChatPanel({ setShowMap, setRouteRequest, externalBotMessage = null }) {
       }
     ]);
   }, [externalBotMessage]);
+
+  function switchView(nextMode) {
+    if (nextMode === viewMode) return;
+    if (nextMode === "compact") {
+      setIsCompactOpen(true);
+      setShowCompactCallout(true);
+    }
+    onViewModeChange(nextMode);
+  }
 
   function cancelSend() {
     if (!loading) return;
@@ -527,6 +567,9 @@ function ChatPanel({ setShowMap, setRouteRequest, externalBotMessage = null }) {
 
   function selectFoodSuggestion(suggestion) {
     if (!suggestion?.id) return;
+    if (isCompact) {
+      setIsCompactOpen(true);
+    }
     setShowMap(true);
     routeRequestCounterRef.current += 1;
     setRouteRequest({
@@ -537,16 +580,94 @@ function ChatPanel({ setShowMap, setRouteRequest, externalBotMessage = null }) {
     });
   }
 
-  return (
-    <div className="panel chat-panel">
-      <div className="map-header">
-        <h3 className="panel-title">Campus Concierge</h3>
-        <button className="btn-secondary" type="button" onClick={clearHistory}>
-          Clear Chat
+  const headerActions = (
+    <>
+      <button
+        className="btn-secondary compact-mode-toggle"
+        type="button"
+        onClick={() => switchView(isCompact ? "full" : "compact")}
+      >
+        {isCompact ? (
+          <>
+            <Maximize2 size={15} aria-hidden="true" />
+            Full Page
+          </>
+        ) : (
+          <>
+            <Minimize2 size={15} aria-hidden="true" />
+            Compact View
+          </>
+        )}
+      </button>
+      <button className="btn-secondary" type="button" onClick={clearHistory}>
+        Clear Chat
+      </button>
+    </>
+  );
+
+  if (isCompact && !isCompactOpen) {
+    return (
+      <div className="compact-chat-launcher">
+        {showCompactCallout && (
+          <div className="compact-chat-callout-wrap">
+            <button
+              type="button"
+              className="compact-chat-close"
+              aria-label="Dismiss compact chat message"
+              onClick={() => setShowCompactCallout(false)}
+            >
+              x
+            </button>
+            <button
+              type="button"
+              className="compact-chat-callout"
+              onClick={() => setIsCompactOpen(true)}
+              aria-label="Open compact chat"
+            >
+              <p className="compact-chat-copy">
+                Ask here anytime. I’ll stay tucked away until you want the full conversation or map.
+              </p>
+            </button>
+          </div>
+        )}
+
+        <button
+          className="compact-chat-launcher-button"
+          type="button"
+          onClick={() => setIsCompactOpen(true)}
+          aria-label="Open compact chat"
+        >
+          <img
+            src={chatbotButtonImage}
+            alt="Open compact chatbot"
+            className="compact-chat-launcher-image"
+            draggable="false"
+          />
         </button>
       </div>
+    );
+  }
 
-      <div className="chat-box">
+  return (
+    <div className={`panel chat-panel${isCompact ? " chat-panel-compact" : ""}`}>
+      <div className="map-header">
+        <h3 className="panel-title">Campus Concierge</h3>
+        <div className="chat-panel-actions">
+          {headerActions}
+          {isCompact && (
+            <button
+              className="btn-secondary compact-collapse-btn"
+              type="button"
+              onClick={() => setIsCompactOpen(false)}
+              aria-label="Collapse compact chat"
+            >
+              <Minimize2 size={15} aria-hidden="true" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div ref={chatBoxRef} className="chat-box">
         {loading && <div className="spinner"></div>}
 
         {messages.map((m, i) => (
@@ -556,48 +677,53 @@ function ChatPanel({ setShowMap, setRouteRequest, externalBotMessage = null }) {
         ))}
       </div>
 
-      <div className="input-row">
+      <div className={`input-row${isCompact ? " input-row-compact" : ""}`}>
         <input
+          className={isCompact ? "compact-input-full" : ""}
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Ask about Kean University..."
         />
 
-        <select
-          className="voice-lang-select"
-          value={voiceLanguage}
-          onChange={event => setVoiceLanguage(event.target.value)}
-          disabled={listening || loading}
-          aria-label="Voice input language"
-        >
-          {VOICE_LANGUAGE_OPTIONS.map(option => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <button
-          className={`btn-secondary voice-btn${listening ? " voice-btn-active" : ""}`}
-          type="button"
-          onClick={toggleVoiceInput}
-          disabled={loading}
-          aria-pressed={listening}
-          title={voiceSupported ? "Use voice input" : "Voice input is unavailable in this browser"}
-        >
-          {listening ? <Square size={16} aria-hidden="true" /> : <Mic size={16} aria-hidden="true" />}
-        </button>
-        <button className="btn-primary" onClick={() => sendMessage()} disabled={loading}>
-          Send
-        </button>
-        {loading && (
-          <button className="btn-secondary" type="button" onClick={cancelSend}>
-            Cancel
+        <div className={`input-controls-row${isCompact ? " input-controls-row-compact" : ""}`}>
+          <select
+            className="voice-lang-select"
+            value={voiceLanguage}
+            onChange={event => setVoiceLanguage(event.target.value)}
+            disabled={listening || loading}
+            aria-label="Voice input language"
+          >
+            {VOICE_LANGUAGE_OPTIONS.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <button
+            className={`btn-secondary voice-btn${listening ? " voice-btn-active" : ""}`}
+            type="button"
+            onClick={toggleVoiceInput}
+            disabled={loading}
+            aria-pressed={listening}
+            title={voiceSupported ? "Use voice input" : "Voice input is unavailable in this browser"}
+          >
+            {listening ? <Square size={16} aria-hidden="true" /> : <Mic size={16} aria-hidden="true" />}
           </button>
-        )}
+          <button className="btn-primary" onClick={() => sendMessage()} disabled={loading}>
+            Send
+          </button>
+          {loading && (
+            <button className="btn-secondary compact-cancel-btn" type="button" onClick={cancelSend}>
+              Cancel
+            </button>
+          )}
+        </div>
       </div>
-      <div className="voice-status" aria-live="polite">
-        {voiceSupported ? voiceStatus : "Voice input is available in supported browsers like Chrome."}
+      <div className={`voice-status${isCompact ? " voice-status-compact" : ""}`} aria-live="polite">
+        <span className={isCompact ? "voice-status-ticker" : ""}>
+          {voiceSupported ? voiceStatus : "Voice input is available in supported browsers like Chrome."}
+        </span>
       </div>
     </div>
   );

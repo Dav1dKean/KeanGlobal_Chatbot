@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import ChatLauncher from "../components/ChatLauncher";
 import keanLogo from "../assets/Kean_Seal-2018-white.gif";
 
-export default function HomePage() {
+export default function HomePage({ compactModeActive = false }) {
   const navigate = useNavigate();
 
   return (
@@ -50,7 +50,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <ChatLauncher defaultOpen />
+      {!compactModeActive && <ChatLauncher defaultOpen />}
     </div>
   );
 }
