@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useMemo, useState, useEffect } from "react";
 import { Search, BookOpen, ArrowRight, GraduationCap, Globe, Users, Sparkles } from "lucide-react";
 import ChatLauncher from "../components/ChatLauncher";
+import { API_BASE_URL } from "../lib/api";
 
 
 const ProgPage = ({ compactModeActive = false }) => {
@@ -17,7 +18,7 @@ const ProgPage = ({ compactModeActive = false }) => {
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/programs');
+        const response = await fetch(`${API_BASE_URL}/api/programs`);
         if (!response.ok) throw new Error("Network response was not ok");
         
         const data = await response.json();

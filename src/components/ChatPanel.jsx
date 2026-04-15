@@ -1,11 +1,8 @@
 import { Maximize2, MessageCircle, Mic, Minimize2, Square } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import chatbotButtonImage from "../assets/Chatbot Button.png";
+import { API_BASE_URLS } from "../lib/api";
 
-const ENV_API_BASE_URL = import.meta.env.VITE_API_URL?.trim();
-const API_BASE_URLS = ENV_API_BASE_URL
-  ? [ENV_API_BASE_URL]
-  : ["http://127.0.0.1:8000", "http://localhost:8000"];
 const CHAT_STORAGE_KEY = "keanglobal_chat_messages";
 const URL_PATTERN = /((?:https?:\/\/)[^\s]+)([.,;:!?)]*)(?=\s|$)/gi;
 const DEFAULT_GREETING = {
