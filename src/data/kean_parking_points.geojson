@@ -4,22 +4,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "administration_lot",
-        "name": "Administration Lot",
-        "campus": "Main",
-        "routable": "yes",
-        "parent": null,
-        "accessibility": "yes",
-        "type": "parking"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-74.236384, 40.680146]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "cougar_hall_lot",
         "name": "Cougar Hall Lot",
         "campus": "Main",
@@ -30,7 +14,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.237648, 40.678616]
+        "coordinates": [
+          -74.237648,
+          40.678616
+        ]
       }
     },
     {
@@ -46,7 +33,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.23875, 40.679394]
+        "coordinates": [
+          -74.23875,
+          40.679394
+        ]
       }
     },
     {
@@ -62,7 +52,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.224403, 40.680689]
+        "coordinates": [
+          -74.224403,
+          40.680689
+        ]
       }
     },
     {
@@ -78,7 +71,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.223294, 40.680227]
+        "coordinates": [
+          -74.223294,
+          40.680227
+        ]
       }
     },
     {
@@ -94,7 +90,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.237025, 40.682491]
+        "coordinates": [
+          -74.237025,
+          40.682491
+        ]
       }
     },
     {
@@ -110,7 +109,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.23704, 40.680893]
+        "coordinates": [
+          -74.23704,
+          40.680893
+        ]
       }
     },
     {
@@ -126,7 +128,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.23179, 40.683246]
+        "coordinates": [
+          -74.23179,
+          40.683246
+        ]
       }
     },
     {
@@ -142,7 +147,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.235855, 40.681925]
+        "coordinates": [
+          -74.235855,
+          40.681925
+        ]
       }
     },
     {
@@ -158,7 +166,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.229507, 40.680404]
+        "coordinates": [
+          -74.22749309322569,
+          40.680196297634204
+        ]
       }
     },
     {
@@ -174,7 +185,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.225091, 40.680593]
+        "coordinates": [
+          -74.2286901231309,
+          40.67965456941204
+        ]
       }
     },
     {
@@ -190,7 +204,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.232546, 40.679702]
+        "coordinates": [
+          -74.232546,
+          40.679702
+        ]
       }
     },
     {
@@ -206,7 +223,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.230129, 40.682698]
+        "coordinates": [
+          -74.23017968816929,
+          40.682819358657696
+        ]
       }
     },
     {
@@ -222,7 +242,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.229338, 40.675734]
+        "coordinates": [
+          -74.229338,
+          40.675734
+        ]
       }
     },
     {
@@ -238,7 +261,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.229507, 40.680404]
+        "coordinates": [
+          -74.2295090460723,
+          40.68048234669881
+        ]
       }
     },
     {
@@ -254,7 +280,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.230852, 40.677057]
+        "coordinates": [
+          -74.230852,
+          40.677057
+        ]
       }
     },
     {
@@ -270,23 +299,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.231402, 40.678871]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "kean_parking_garage_near_hynes",
-        "name": "Kean Parking Garage Near Hynes",
-        "campus": "Main",
-        "routable": "yes",
-        "parent": null,
-        "accessibility": "yes",
-        "type": "parking"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-74.231552, 40.682359]
+        "coordinates": [
+          -74.231402,
+          40.678871
+        ]
       }
     },
     {
@@ -302,7 +318,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.236273, 40.680431]
+        "coordinates": [
+          -74.236273,
+          40.680431
+        ]
       }
     },
     {
@@ -318,7 +337,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.233304, 40.680191]
+        "coordinates": [
+          -74.233304,
+          40.680191
+        ]
       }
     },
     {
@@ -334,7 +356,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.236123, 40.68173]
+        "coordinates": [
+          -74.236123,
+          40.68173
+        ]
       }
     },
     {
@@ -350,7 +375,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.2345, 40.680814]
+        "coordinates": [
+          -74.2345,
+          40.680814
+        ]
       }
     },
     {
@@ -366,7 +394,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.232266, 40.679373]
+        "coordinates": [
+          -74.232266,
+          40.679373
+        ]
       }
     },
     {
@@ -382,7 +413,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.230489, 40.683159]
+        "coordinates": [
+          -74.230489,
+          40.683159
+        ]
       }
     },
     {
@@ -398,7 +432,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.231552, 40.682359]
+        "coordinates": [
+          -74.23188072653751,
+          40.682341812083564
+        ]
       }
     },
     {
@@ -414,7 +451,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.227596, 40.680171]
+        "coordinates": [
+          -74.22745247989178,
+          40.680159331068104
+        ]
       }
     },
     {
@@ -430,7 +470,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.224894, 40.680874]
+        "coordinates": [
+          -74.224894,
+          40.680874
+        ]
       }
     },
     {
@@ -446,7 +489,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.225542, 40.681733]
+        "coordinates": [
+          -74.225542,
+          40.681733
+        ]
       }
     },
     {
@@ -462,7 +508,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.22339, 40.680189]
+        "coordinates": [
+          -74.22339,
+          40.680189
+        ]
       }
     },
     {
@@ -478,7 +527,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.233794, 40.680773]
+        "coordinates": [
+          -74.233794,
+          40.680773
+        ]
       }
     },
     {
@@ -494,7 +546,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.234782, 40.680909]
+        "coordinates": [
+          -74.234782,
+          40.680909
+        ]
       }
     },
     {
@@ -510,7 +565,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.229726, 40.675906]
+        "coordinates": [
+          -74.229726,
+          40.675906
+        ]
       }
     },
     {
@@ -526,7 +584,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.229338, 40.67672]
+        "coordinates": [
+          -74.229338,
+          40.67672
+        ]
       }
     },
     {
@@ -542,7 +603,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.23762, 40.678646]
+        "coordinates": [
+          -74.23762,
+          40.678646
+        ]
       }
     },
     {
@@ -558,7 +622,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-74.238682, 40.679377]
+        "coordinates": [
+          -74.238682,
+          40.679377
+        ]
       }
     }
   ]

@@ -22,6 +22,8 @@ CASES = [
     ("when does registration start for summer 2026?", "calendar_event_unavailable", "calendar"),
     ("what is the tuition for graduate?", "tuition_direct", "faq"),
     ("how much is tuition for bachelor?", "tuition_direct", "faq"),
+    ("how much is parking ticket on campus?", "policy_fee_summary", "faq"),
+    ("is there information about date and location of graduation?", "graduation_ceremony_direct", "faq"),
     ("tell me about housing", "housing_direct", "faq"),
     ("student health services", "health_services_direct", "faq"),
     ("accessibility services", "accessibility_direct", "faq"),
@@ -45,6 +47,25 @@ SEQUENTIAL_CASES = [
             ("what is the tuition for graduate?", "tuition_direct", "faq"),
             ("what about out-of-state?", "tuition_follow_up", "faq"),
             ("what about online?", "tuition_follow_up", "faq"),
+        ],
+    ),
+    (
+        "parking_translation_follow_up_spanish",
+        [
+            ("can I park on the yellow line spaces?", None, "location"),
+            ("dimelo en espanol", "last_answer_follow_up", "general"),
+        ],
+    ),
+    (
+        "parking_translation_follow_up_supported_languages",
+        [
+            ("can I park on the yellow line spaces?", None, "location"),
+            ("say it in spanish", "last_answer_follow_up", "general"),
+            ("say it in turkish", "last_answer_follow_up", "general"),
+            ("say it in chinese", "last_answer_follow_up", "general"),
+            ("say it in korean", "last_answer_follow_up", "general"),
+            ("say it in urdu", "last_answer_follow_up", "general"),
+            ("say it in english", "last_answer_follow_up", "general"),
         ],
     ),
 ]
@@ -82,11 +103,16 @@ async def run_cases() -> int:
             actual_mode = response.get("response_mode")
             actual_intent = response.get("intent")
             answer = response.get("answer", "")
+            extra_ok = True
+            normalized_prompt = prompt.lower()
+            if expected_mode == "last_answer_follow_up" and ("spanish" in normalized_prompt or "espanol" in normalized_prompt):
+                extra_ok = len(answer.split()) >= 8
             ok = (
                 actual_mode == expected_mode
                 and actual_intent == expected_intent
                 and isinstance(answer, str)
                 and bool(answer.strip())
+                and extra_ok
             )
             result = {
                 "sequence": label,
@@ -96,6 +122,7 @@ async def run_cases() -> int:
                 "expected_intent": expected_intent,
                 "actual_intent": actual_intent,
                 "ok": ok,
+                "extra_ok": extra_ok,
                 "answer": answer,
             }
             print(json.dumps(result, ensure_ascii=False))

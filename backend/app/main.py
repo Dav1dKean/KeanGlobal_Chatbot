@@ -6,7 +6,7 @@ import asyncio
 from difflib import SequenceMatcher
 from math import radians, sin, cos, asin, sqrt
 from pathlib import Path
-from datetime import datetime
+from datetime import date, datetime
 from zoneinfo import ZoneInfo
 
 import httpx
@@ -316,14 +316,34 @@ def event_matches_category(event_name: str, category: str) -> bool:
 
 def extract_term_from_text(text: str) -> Optional[str]:
     q = normalize(text)
-    year_match = re.search(r"(20\d{2})", q)
-    if not year_match:
+    season = next(
+        (season_en for season_en, aliases in SEASON_ALIASES.items() if any(alias in q for alias in aliases)),
+        None,
+    )
+    if not season:
         return None
-    year = year_match.group(1)
 
-    for season_en, aliases in SEASON_ALIASES.items():
-        if any(alias in q for alias in aliases):
-            return f"{season_en} {year}"
+    year_match = re.search(r"\b(20\d{2})\b", q)
+    if year_match:
+        return f"{season} {year_match.group(1)}"
+
+    short_year_match = re.search(
+        rf"(?:\b{season}\b|{'|'.join(re.escape(alias) for alias in SEASON_ALIASES.get(season, (season,)))})\s*(?:['’])?(\d{{2}})\b",
+        q,
+    )
+    if short_year_match:
+        return f"{season} 20{short_year_match.group(1)}"
+
+    fallback_term = str(conversation_state.get("last_calendar_term") or "").strip()
+    _, fallback_year = extract_season_year_from_term(fallback_term) if fallback_term else (None, None)
+    if fallback_year is not None:
+        return f"{season} {fallback_year}"
+
+    inferred_term = infer_best_calendar_term_for_season(season)
+    if inferred_term:
+        inferred_season, inferred_year = extract_season_year_from_term(inferred_term)
+        if inferred_season and inferred_year is not None:
+            return f"{inferred_season} {inferred_year}"
     return None
 
 def extract_session_from_text(text: str) -> Optional[str]:
@@ -333,6 +353,34 @@ def extract_session_from_text(text: str) -> Optional[str]:
     if re.search(r"\b(ii|2)\b", q) and any(alias in q for alias in SEASON_ALIASES.get("summer", ())):
         return "2"
     return None
+
+def infer_best_calendar_term_for_season(season: str) -> Optional[str]:
+    season = normalize(season)
+    season_anchors = []
+    anchor_month_by_season = {
+        "winter": 1,
+        "spring": 3,
+        "summer": 6,
+        "fall": 9,
+    }
+
+    for term_key in calendar_data:
+        term_season, term_year = extract_season_year_from_term(term_key)
+        if term_season != season or term_year is None:
+            continue
+        anchor_month = anchor_month_by_season.get(term_season, 1)
+        season_anchors.append((date(term_year, anchor_month, 1), term_key))
+
+    if not season_anchors:
+        return None
+
+    today = datetime.now(NYC_TIMEZONE).date()
+    future_terms = sorted((anchor, key) for anchor, key in season_anchors if anchor >= today)
+    if future_terms:
+        return future_terms[0][1]
+
+    season_anchors.sort()
+    return season_anchors[-1][1]
 
 def format_calendar_term_label(term_key: str) -> str:
     q = normalize(term_key)
@@ -669,6 +717,11 @@ FOOD_INTENT_KEYWORDS = (
     "meal",
     "hungry",
     "snack",
+    "coffee",
+    "cafe",
+    "café",
+    "coffee shop",
+    "starbucks",
     "cafeteria",
     "restaurant",
     "comida",
@@ -682,16 +735,20 @@ FOOD_INTENT_KEYWORDS = (
     "yiyecek",
     "kafeterya",
     "kantin",
+    "kahve",
     "吃",
     "吃饭",
     "食物",
     "餐厅",
     "食堂",
+    "咖啡",
     "음식",
     "식당",
     "밥",
+    "커피",
     "کھانا",
     "خوراک",
+    "کافی",
 )
 
 FOOD_DESTINATION_HINTS = (
@@ -797,7 +854,12 @@ LOCATION_ALIAS_OVERRIDES = {
     ),
     "lhac": (
         "lhac",
+        "liberty hall",
         "liberty hall academic center"
+    ),
+    "liberty_hall_mansion": (
+        "mansion",
+        "liberty hall mansion"
     ),
     "nathan_weiss_building": (
         "nathan weiss",
@@ -865,6 +927,7 @@ conversation_state = {
     "last_tuition_level": None,
     "last_tuition_turn_id": None,
     "pending_calendar_category": None,
+    "last_calendar_term": None,
     "last_answer": None,
     "last_faq_topic": None,
     "last_destination_id": None,
@@ -881,6 +944,7 @@ COMPANION_PROGRAMS_PATH = "/programs"
 COMPANION_PROGRAM_DETAIL_PREFIX = "/program"
 
 SUPPORTED_LANGS = {"en", "tr", "es", "zh", "ur", "ko"}
+LAST_ANSWER_MAX_CHARS = 4000
 LANGUAGE_NAMES = {
     "en": "English",
     "tr": "Turkish",
@@ -888,6 +952,112 @@ LANGUAGE_NAMES = {
     "zh": "Mandarin Chinese",
     "ur": "Urdu",
     "ko": "Korean",
+}
+REQUESTED_RESPONSE_LANGUAGE_HINTS = {
+    "en": (
+        "english",
+        "in english",
+        "to english",
+        "en ingles",
+        "en inglés",
+        "ingles",
+        "inglés",
+        "ingilizce",
+        "英语",
+        "英文",
+        "انگریزی",
+        "영어",
+        "translate to english",
+        "say it in english",
+        "tell me in english",
+    ),
+    "tr": (
+        "turkish",
+        "in turkish",
+        "to turkish",
+        "en turco",
+        "turco",
+        "turkce",
+        "türkçe",
+        "turkce soyle",
+        "türkçe söyle",
+        "土耳其语",
+        "土耳其語",
+        "ترکی",
+        "터키어",
+        "translate to turkish",
+        "say it in turkish",
+    ),
+    "es": (
+        "spanish",
+        "in spanish",
+        "to spanish",
+        "en espanol",
+        "en español",
+        "espanol",
+        "español",
+        "espanol por favor",
+        "español por favor",
+        "西班牙语",
+        "西班牙語",
+        "ہسپانوی",
+        "스페인어",
+        "translate to spanish",
+        "say it in spanish",
+        "tell me in spanish",
+        "dimelo en espanol",
+        "dímelo en español",
+        "dime lo en espanol",
+        "dime lo en español",
+    ),
+    "zh": (
+        "chinese",
+        "in chinese",
+        "to chinese",
+        "mandarin",
+        "in mandarin",
+        "en chino",
+        "chino",
+        "mandarin chinese",
+        "zhongwen",
+        "putonghua",
+        "中文",
+        "汉语",
+        "漢語",
+        "普通话",
+        "普通話",
+        "چینی",
+        "중국어",
+        "translate to chinese",
+        "translate to mandarin",
+        "say it in chinese",
+    ),
+    "ur": (
+        "urdu",
+        "in urdu",
+        "to urdu",
+        "en urdu",
+        "اردو",
+        "乌尔都语",
+        "烏爾都語",
+        "우르두어",
+        "translate to urdu",
+        "say it in urdu",
+    ),
+    "ko": (
+        "korean",
+        "in korean",
+        "to korean",
+        "en coreano",
+        "coreano",
+        "한국어",
+        "韓國語",
+        "韩语",
+        "韓語",
+        "کورین",
+        "translate to korean",
+        "say it in korean",
+    ),
 }
 SHORT_LANGUAGE_HINTS = {
     "en": {
@@ -1045,8 +1215,16 @@ TRANSLATIONS = {
         "ur": "کیمپس میں کھانے کے یہ آپشنز ہیں:",
         "ko": "캠퍼스 내 식사 옵션입니다:",
     },
+    "coffee_suggestions_intro": {
+        "en": "You can get coffee at these locations on campus:",
+        "tr": "Kampüste kahve alabileceğiniz yerler:",
+        "es": "Puedes conseguir café en estos lugares del campus:",
+        "zh": "你可以在校园内这些地点买到咖啡：",
+        "ur": "آپ کیمپس میں ان جگہوں سے کافی لے سکتے ہیں:",
+        "ko": "캠퍼스에서 커피를 마실 수 있는 곳은 다음과 같습니다:",
+    },
     "parking_guidance_student": {
-        "en": "Student parking is shown in blue on the map. Opening map.",
+        "en": "Students may only park in white lined spaces. Student parking is shown in blue on the map. Opening map.",
         "tr": "Öğrenci otoparkı haritada mavi renkte gösterilir. Harita açılıyor.",
         "es": "El estacionamiento para estudiantes aparece en azul en el mapa. Abriendo mapa.",
         "zh": "学生停车区在地图上以蓝色显示。正在打开地图。",
@@ -1054,7 +1232,7 @@ TRANSLATIONS = {
         "ko": "학생 주차 구역은 지도에서 파란색으로 표시됩니다. 지도를 여는 중입니다.",
     },
     "parking_guidance_faculty": {
-        "en": "Faculty/Staff parking is shown in orange on the map. Opening map.",
+        "en": "Faculty/Staff may only park in yellow lined spaces. Faculty/Staff parking is shown in orange on the map. Opening map.",
         "tr": "Akademik/Personel otoparkı haritada turuncu renkte gösterilir. Harita açılıyor.",
         "es": "El estacionamiento para personal/docentes aparece en naranja en el mapa. Abriendo mapa.",
         "zh": "教职工停车区在地图上以橙色显示。正在打开地图。",
@@ -1070,7 +1248,7 @@ TRANSLATIONS = {
         "ko": "야간 주차 구역은 지도에서 초록색으로 표시됩니다. 지도를 여는 중입니다.",
     },
     "parking_guidance_general": {
-        "en": "Opening map. Parking lots are color-coded: Student (blue), Faculty/Staff (orange), Overnight (green).",
+        "en": "Students may only park in white lined spaces, and Faculty/Staff may only park in yellow lined spaces. Opening map. Parking lots are color-coded: Student (blue), Faculty/Staff (orange), Overnight (green).",
         "tr": "Harita açılıyor. Otopark renkleri: Öğrenci (mavi), Akademik/Personel (turuncu), Gece Parkı (yeşil).",
         "es": "Abriendo mapa. Los estacionamientos están codificados por color: Estudiantes (azul), Personal/Docentes (naranja), Nocturno (verde).",
         "zh": "正在打开地图。停车场颜色：学生（蓝色）、教职工（橙色）、夜间（绿色）。",
@@ -1532,6 +1710,10 @@ def detect_language(text: str) -> str:
     t_tokens = set(t_norm.split())
     short_input = re.sub(r"\s+", " ", t.strip())
 
+    requested_lang = detect_requested_response_language(text)
+    if requested_lang:
+        return requested_lang
+
     for lang_code, phrases in SHORT_LANGUAGE_HINTS.items():
         if short_input in phrases or t_norm in phrases:
             return lang_code
@@ -1560,6 +1742,14 @@ def detect_language(text: str) -> str:
         return best_lang
 
     return "en"
+
+def detect_requested_response_language(text: str) -> Optional[str]:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    for lang_code, hints in REQUESTED_RESPONSE_LANGUAGE_HINTS.items():
+        if any(keyword_in_text(q, q_tokens, hint) for hint in hints):
+            return lang_code
+    return None
 
 async def call_ollama(messages: list[dict], num_predict: Optional[int] = None) -> str:
     payload = {
@@ -1730,6 +1920,12 @@ def localize_calendar_event_text(event_text: str, lang: str) -> str:
     for en_word, local_word in word_mapping.items():
         text = re.sub(rf"\b{re.escape(en_word)}\b", local_word, text)
     return text
+
+def build_calendar_event_answer(term_key: str, event_text: str, date_text: str, lang: str) -> str:
+    term_label = format_calendar_term_label(term_key)
+    localized_event = localize_calendar_event_text(event_text, lang)
+    localized_date = localize_date_text(date_text, lang)
+    return f"{term_label} {localized_event}: {localized_date}"
 
 def parse_position(value: str) -> Optional[tuple[float, float]]:
     raw = str(value or "").strip()
@@ -2197,6 +2393,48 @@ def is_graduation_question(text: str) -> bool:
     asks_tuition = is_student_accounts_question(text)
     return asks_graduation and not asks_tuition and not is_degree_availability_question(text)
 
+def is_graduation_ceremony_info_question(text: str) -> bool:
+    if not is_graduation_question(text):
+        return False
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "when",
+            "date",
+            "day",
+            "where",
+            "location",
+            "ceremony",
+            "commencement ceremony",
+            "where is graduation",
+            "graduation location",
+            "graduation date",
+            "fecha",
+            "cuando",
+            "cuándo",
+            "donde",
+            "dónde",
+            "ubicacion",
+            "ubicación",
+            "tarih",
+            "zaman",
+            "nerede",
+            "konum",
+            "日期",
+            "时间",
+            "地点",
+            "날짜",
+            "언제",
+            "어디",
+            "مقام",
+            "کہاں",
+            "کب",
+            "تاریخ",
+        )
+    )
+
 def is_financial_aid_question(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
@@ -2488,6 +2726,8 @@ def detect_tuition_load(text: str) -> str:
     return "general"
 
 def is_tuition_rate_question(text: str) -> bool:
+    if is_parking_ticket_fee_question(text):
+        return False
     q = normalize(text)
     q_tokens = tokenize(text)
     asks_tuition = any(
@@ -2841,7 +3081,16 @@ def build_course_repeat_answer(lang: str) -> str:
 def build_admissions_answer(lang: str) -> str:
     return trn("admissions_summary", lang)
 
-def build_graduation_answer(lang: str) -> str:
+def build_graduation_answer(text: str, lang: str) -> str:
+    if is_graduation_ceremony_info_question(text):
+        answer = (
+            "The current commencement page says the Class of 2026 ceremony is on Wednesday, May 20, 2026 at "
+            "8:30 a.m. at Prudential Center in Newark, New Jersey. The ceremony is for undergraduate and "
+            "graduate students, and January, May, and August candidates are invited to participate. For "
+            "general commencement questions, email commencement@kean.edu. For student ADA accessibility "
+            "questions related to commencement, email adacommencement@kean.edu."
+        )
+        return answer if lang == "en" else answer
     return trn("graduation_summary", lang)
 
 def build_financial_aid_answer(lang: str) -> str:
@@ -3458,6 +3707,24 @@ def is_food_question(text: str) -> bool:
     q_tokens = tokenize(text)
     return any(keyword_in_text(q, q_tokens, keyword) for keyword in FOOD_INTENT_KEYWORDS)
 
+def is_coffee_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "coffee",
+            "cafe",
+            "café",
+            "coffee shop",
+            "starbucks",
+            "kahve",
+            "咖啡",
+            "커피",
+            "کافی",
+        )
+    )
+
 def is_parking_question(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
@@ -3750,8 +4017,11 @@ def extract_route_endpoint_ids(text: str) -> tuple[Optional[str], Optional[str]]
     q = normalize(text)
     patterns = (
         r"\bfrom\s+(?P<start>.+?)\s+to\s+(?P<end>.+)",
+        r"\bto\s+(?P<end>.+?)\s+from\s+(?P<start>.+)",
         r"\bdesde\s+(?P<start>.+?)\s+hasta\s+(?P<end>.+)",
+        r"\bhasta\s+(?P<end>.+?)\s+desde\s+(?P<start>.+)",
         r"\bde\s+(?P<start>.+?)\s+a\s+(?P<end>.+)",
+        r"\ba\s+(?P<end>.+?)\s+de\s+(?P<start>.+)",
         r"\b(?P<start>.+?)\s+ile\s+(?P<end>.+?)\s+arasi(?:nda)?\b",
     )
     for pattern in patterns:
@@ -3767,6 +4037,36 @@ def extract_route_endpoint_ids(text: str) -> tuple[Optional[str], Optional[str]]
         if start_id and end_id and start_id != end_id:
             return start_id, end_id
     return None, None
+
+def extract_location_clause_destination_id(text: str) -> Optional[str]:
+    q = normalize(text)
+    patterns = (
+        r"\bwhere\s+is\s+(?P<place>.+?)(?=\b(?:and|but)\b|\?|$)",
+        r"\bwheres\s+(?P<place>.+?)(?=\b(?:and|but)\b|\?|$)",
+        r"\bshow\s+me\s+(?P<place>.+?)(?=\b(?:and|but)\b|\?|$)",
+        r"\bmap\s+(?P<place>.+?)(?=\b(?:and|but)\b|\?|$)",
+        r"\blocate\s+(?P<place>.+?)(?=\b(?:and|but)\b|\?|$)",
+        r"\bhow\s+do\s+i\s+get\s+to\s+(?P<place>.+?)(?=\b(?:and|but)\b|\?|$)",
+        r"\bhow\s+to\s+get\s+to\s+(?P<place>.+?)(?=\b(?:and|but)\b|\?|$)",
+        r"\bdirections\s+to\s+(?P<place>.+?)(?=\b(?:and|but)\b|\?|$)",
+        r"\broute\s+to\s+(?P<place>.+?)(?=\b(?:and|but)\b|\?|$)",
+        r"\bway\s+to\s+(?P<place>.+?)(?=\b(?:and|but)\b|\?|$)",
+        r"\bdonde\s+esta\s+(?P<place>.+?)(?=\b(?:y|pero)\b|\?|$)",
+        r"\bdonde\s+queda\s+(?P<place>.+?)(?=\b(?:y|pero)\b|\?|$)",
+        r"\bcomo\s+llegar\s+a\s+(?P<place>.+?)(?=\b(?:y|pero)\b|\?|$)",
+        r"\bnerede\s+(?P<place>.+?)(?=\b(?:ve|ama)\b|\?|$)",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, q)
+        if not match:
+            continue
+        place_text = match.group("place").strip(" .,?!")
+        if not place_text:
+            continue
+        destination_id = find_location_destination_id(place_text)
+        if destination_id:
+            return destination_id
+    return None
 
 def find_location_destination_id(text: str, allowed_types: Optional[set[str]] = None) -> Optional[str]:
     if is_program_interest_question(text) or is_degree_availability_question(text) or is_current_datetime_question(text):
@@ -3891,6 +4191,12 @@ def find_non_mapped_campus_name(text: str) -> Optional[str]:
             alias_norm = normalize(alias)
             alias_tokens = alias_norm.split()
             if not alias_tokens:
+                continue
+            informative_alias_tokens = {
+                token for token in alias_tokens
+                if token not in {"campus", "kean", "university", "location"}
+            }
+            if informative_alias_tokens and not (informative_alias_tokens & set(q_tokens)):
                 continue
 
             window_sizes = {len(alias_tokens)}
@@ -4306,6 +4612,8 @@ def is_clarification_request(text: str) -> bool:
 def is_last_answer_follow_up_request(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
+    if detect_requested_response_language(text):
+        return True
     return any(
         keyword_in_text(q, q_tokens, k)
         for k in (
@@ -4340,6 +4648,55 @@ def is_last_answer_follow_up_request(text: str) -> bool:
             "그 정책은",
         )
     )
+
+def is_summary_follow_up_request(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return any(
+        keyword_in_text(q, q_tokens, k)
+        for k in (
+            "summarize that",
+            "summarise that",
+            "summary",
+            "summarize",
+            "summarise",
+            "resume eso",
+            "resumen",
+            "resumelo",
+            "resúmelo",
+            "ozetle",
+            "özetle",
+            "ozet",
+            "özet",
+            "总结",
+            "总结一下",
+            "요약",
+            "요약해",
+            "خلاصہ",
+            "اس کا خلاصہ",
+        )
+    )
+
+def build_concise_summary(text: str, max_sentences: int = 2, max_chars: int = 280) -> str:
+    cleaned = re.sub(r"\s+", " ", str(text or "")).strip()
+    if not cleaned:
+        return ""
+
+    sentences = [part.strip() for part in re.split(r"(?<=[.!?])\s+", cleaned) if part.strip()]
+    if not sentences:
+        return _truncate_snippet(cleaned, max_chars=max_chars)
+
+    selected = []
+    for sentence in sentences:
+        candidate = " ".join(selected + [sentence]).strip()
+        if selected and (len(selected) >= max_sentences or len(candidate) > max_chars):
+            break
+        selected.append(sentence)
+        if len(selected) >= max_sentences:
+            break
+
+    summary = " ".join(selected).strip()
+    return summary or _truncate_snippet(cleaned, max_chars=max_chars)
 
 def is_contextual_location_follow_up(text: str, last_destination_id: Optional[str]) -> bool:
     if not last_destination_id:
@@ -5063,7 +5420,18 @@ async def answer_from_last_response(user_text: str, lang: str) -> Optional[str]:
     if not last_answer:
         return None
 
-    lang_name = LANGUAGE_NAMES.get(lang, "English")
+    response_lang = detect_requested_response_language(user_text) or lang
+    if detect_requested_response_language(user_text):
+        return await localize_answer_text(last_answer, response_lang)
+
+    lang_name = LANGUAGE_NAMES.get(response_lang, "English")
+    if is_summary_follow_up_request(user_text):
+        summary = build_concise_summary(last_answer)
+        if not summary:
+            return None
+        if response_lang != "en":
+            return await localize_answer_text(summary, response_lang)
+        return summary
     prompt = (
         "Previous assistant answer:\n"
         f"{last_answer}\n\n"
@@ -5072,6 +5440,7 @@ async def answer_from_last_response(user_text: str, lang: str) -> Optional[str]:
         "Based only on the previous assistant answer, respond to the follow-up request. "
         "If the user asks for a simpler explanation, simplify it. "
         "If the user asks for a summary, summarize it. "
+        "If the user asks for a translation or asks you to say it in another language, translate the previous assistant answer into that language. "
         "If the user says 'what about that policy', briefly restate the policy topic from the previous answer. "
         "Do not invent new facts and keep the answer concise."
     )
@@ -5305,6 +5674,7 @@ async def chat(req: ChatRequest):
     faq_topic = detect_faq_intent(user_text)
     route_start_id, route_end_id = extract_route_endpoint_ids(user_text)
     destination_id = find_location_destination_id(user_text)
+    location_clause_destination_id = extract_location_clause_destination_id(user_text)
     has_location_intent = is_location_question(user_text)
     pending_calendar_category = conversation_state.get("pending_calendar_category")
     last_faq_topic = conversation_state.get("last_faq_topic")
@@ -5313,7 +5683,9 @@ async def chat(req: ChatRequest):
     )
     normalized_destination_id = (
         normalize_location_destination_for_response(route_end_id, user_text) if route_end_id else (
-            normalize_location_destination_for_response(destination_id, user_text) if destination_id else None
+            normalize_location_destination_for_response(location_clause_destination_id, user_text) if location_clause_destination_id else (
+                normalize_location_destination_for_response(destination_id, user_text) if destination_id else None
+            )
         )
     )
     normalized_start_id = (
@@ -5324,7 +5696,12 @@ async def chat(req: ChatRequest):
     location_mode = "directions" if (normalized_start_id and normalized_destination_id) or use_current_location else "highlight"
     department_entry = None
     ambiguous_department_entries: list[dict] = []
-    if is_department_location_question(user_text):
+    should_check_department_directory = (
+        not normalized_destination_id
+        and not normalized_start_id
+        and not (route_start_id and route_end_id)
+    )
+    if should_check_department_directory and is_department_location_question(user_text):
         department_entry, ambiguous_department_entries = match_department_location(user_text)
 
     async def localized(answer: str) -> str:
@@ -5333,7 +5710,7 @@ async def chat(req: ChatRequest):
     def remember_response(payload: dict) -> dict:
         answer_text = str(payload.get("answer") or "").strip()
         if answer_text:
-            conversation_state["last_answer"] = answer_text[:1200]
+            conversation_state["last_answer"] = answer_text[:LAST_ANSWER_MAX_CHARS]
         topic = payload.get("faq_topic")
         if topic:
             conversation_state["last_faq_topic"] = topic
@@ -5370,6 +5747,8 @@ async def chat(req: ChatRequest):
         enriched["destination_id"] = effective_destination_id
         enriched["use_current_location"] = effective_use_current_location
         enriched["location_mode"] = effective_location_mode
+        if not effective_destination_id:
+            return remember_response(enriched)
         map_target = campus_location_by_id.get(effective_destination_id, {}) if effective_destination_id else {}
         if effective_destination_id:
             map_note_key = (
@@ -5531,10 +5910,10 @@ async def chat(req: ChatRequest):
 
     if is_graduation_question(user_text):
         return with_location({
-            "answer": await localized(build_graduation_answer(lang)),
+            "answer": await localized(build_graduation_answer(user_text, lang)),
             "intent": "faq",
             "faq_topic": "policies",
-            "response_mode": "graduation_direct",
+            "response_mode": "graduation_ceremony_direct" if is_graduation_ceremony_info_question(user_text) else "graduation_direct",
         })
 
     if is_financial_aid_question(user_text):
@@ -5723,7 +6102,8 @@ async def chat(req: ChatRequest):
         food_suggestions = find_food_suggestions(user_text, max_results=3)
         if food_suggestions:
             primary = food_suggestions[0]
-            suggestion_lines = [trn("food_suggestions_intro", lang)]
+            intro_key = "coffee_suggestions_intro" if is_coffee_question(user_text) else "food_suggestions_intro"
+            suggestion_lines = [trn(intro_key, lang)]
             for index, place in enumerate(food_suggestions, start=1):
                 suggestion_lines.append(f"{index}. {place.get('name', 'Food location')} ({place.get('campus', 'Main')})")
             return {
@@ -5852,6 +6232,52 @@ async def chat(req: ChatRequest):
             "response_mode": "route_between_locations",
         })
 
+    if is_calendar_question(user_text) or is_calendar_timing_question(user_text):
+        term = extract_term_from_text(user_text)
+        session = extract_session_from_text(user_text)
+        category = detect_event_category(user_text) or pending_calendar_category
+        if term:
+            matched = next((t for t in calendar_data if term in t), None)
+            if matched and category:
+                best_event = find_best_calendar_event(calendar_data[matched], category, session=session)
+                if best_event:
+                    conversation_state["pending_calendar_category"] = None
+                    conversation_state["last_calendar_term"] = matched
+                    event, date = best_event
+                    return with_location({
+                        "answer": build_calendar_event_answer(matched, event, date, lang),
+                        "intent": "calendar",
+                    })
+                if category == "registration":
+                    related_registration = find_related_registration_event(matched)
+                    if related_registration:
+                        conversation_state["pending_calendar_category"] = None
+                        conversation_state["last_calendar_term"] = matched
+                        _, event, date = related_registration
+                        return with_location({
+                            "answer": trn(
+                                "calendar_registration_related_term",
+                                lang,
+                                term=format_calendar_term_label(matched),
+                                event=localize_calendar_event_text(event, lang),
+                                date=localize_date_text(date, lang),
+                            ),
+                            "intent": "calendar",
+                            "response_mode": "calendar_registration_related_term",
+                        })
+                return with_location({
+                    "answer": build_missing_calendar_event_answer(matched, category, lang),
+                    "intent": "calendar",
+                    "response_mode": "calendar_event_unavailable",
+                })
+        elif category:
+            conversation_state["pending_calendar_category"] = category
+            return with_location({
+                "answer": build_calendar_clarification_prompt(category, lang),
+                "intent": "calendar",
+                "response_mode": "calendar_term_clarify",
+            })
+
     if location_context_requested and (
         not faq_topic or should_prefer_location_response(user_text, faq_topic, normalized_destination_id)
     ):
@@ -5879,50 +6305,6 @@ async def chat(req: ChatRequest):
             "location_mode": location_mode,
         }
 
-    if is_calendar_question(user_text) or is_calendar_timing_question(user_text):
-        term = extract_term_from_text(user_text)
-        session = extract_session_from_text(user_text)
-        category = detect_event_category(user_text) or pending_calendar_category
-        if term:
-            matched = next((t for t in calendar_data if term in t), None)
-            if matched and category:
-                best_event = find_best_calendar_event(calendar_data[matched], category, session=session)
-                if best_event:
-                    conversation_state["pending_calendar_category"] = None
-                    event, date = best_event
-                    return with_location({
-                        "answer": f"{localize_calendar_event_text(event, lang)}: {localize_date_text(date, lang)}",
-                        "intent": "calendar",
-                    })
-                if category == "registration":
-                    related_registration = find_related_registration_event(matched)
-                    if related_registration:
-                        conversation_state["pending_calendar_category"] = None
-                        _, event, date = related_registration
-                        return with_location({
-                            "answer": trn(
-                                "calendar_registration_related_term",
-                                lang,
-                                term=format_calendar_term_label(matched),
-                                event=localize_calendar_event_text(event, lang),
-                                date=localize_date_text(date, lang),
-                            ),
-                            "intent": "calendar",
-                            "response_mode": "calendar_registration_related_term",
-                        })
-                return with_location({
-                    "answer": build_missing_calendar_event_answer(matched, category, lang),
-                    "intent": "calendar",
-                    "response_mode": "calendar_event_unavailable",
-                })
-        elif category:
-            conversation_state["pending_calendar_category"] = category
-            return with_location({
-                "answer": build_calendar_clarification_prompt(category, lang),
-                "intent": "calendar",
-                "response_mode": "calendar_term_clarify",
-            })
-
     if pending_calendar_category:
         term = extract_term_from_text(user_text)
         if term:
@@ -5936,9 +6318,10 @@ async def chat(req: ChatRequest):
                 )
                 if best_event:
                     conversation_state["pending_calendar_category"] = None
+                    conversation_state["last_calendar_term"] = matched
                     event, date = best_event
                     return with_location({
-                        "answer": f"{localize_calendar_event_text(event, lang)}: {localize_date_text(date, lang)}",
+                        "answer": build_calendar_event_answer(matched, event, date, lang),
                         "intent": "calendar",
                         "response_mode": "calendar_term_follow_up",
                     })

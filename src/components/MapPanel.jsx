@@ -46,6 +46,14 @@ const PARKING_TYPE_COLORS = {
   overnight: "#16a34a"
 };
 const ROUTE_LINE_COLORS = ["#2563eb", "#f97316", "#9333ea"];
+const MAX_TRACED_ENDPOINT_MISMATCH_METERS = 35;
+const MAX_ROUTE_SEGMENT_JOIN_GAP_METERS = 45;
+const MAX_ROUTE_SEGMENT_MERGE_GAP_METERS = 8;
+const DISALLOWED_AUTO_PROXIMITY_EDGE_IDS = new Set([
+  // These shortcut edges cut across Morris Avenue / fenced areas instead of using the mapped crossing path.
+  "eB00107",
+  "eB00108"
+]);
 
 const LOCATION_TYPE_LABELS = {
   building: "Building",
@@ -61,14 +69,32 @@ const LOCATION_TYPE_LABELS = {
 };
 
 const ROUTE_NODE_ALIASES = {
+  administration_lot: "visitors_parking_lot",
   "downs_hall_entrance_front": "downs_hall_main",
+  kean_parking_garage_near_hynes: "kean_parking_garage",
+  "kean parking garage near hynes": "kean_parking_garage",
+  "parking garage near hynes": "kean_parking_garage",
   "kean_hall_entrance_front": "kean_hall_main",
   "kean_hall_entrance_side": "kean_hall_main",
   "miron_center_main": "miron_main",
   "naab_entrance_front": "naab_main",
   "north_ave_academic_main": "naab_main",
+  shuttle_stop_stem_liberty_hall: "shuttle_stop_lhac",
+  "shuttle stop stem liberty hall": "shuttle_stop_lhac",
+  visitors_lot: "visitors_parking_lot",
   "vaughn_eames_front": "vaughn_eames_main",
   "wilkins_theatre_front": "wilkins_theatre_main"
+};
+
+const PREFERRED_ROUTE_DESTINATION_IDS = {
+  campus_police: "campus_police_main",
+  cas: "cas_main_front2",
+  downs_hall: "downs_hall_main",
+  harwood_arena: "harwood_arena_main",
+  hennings_hall: "hennings_hall_front",
+  hutchinson_hall: "hutchinson_hall_side",
+  naab: "naab_entrance_front",
+  wilkins_theatre: "wilkins_theatre_side"
 };
 
 const IMAGE_TOKEN_STOP_WORDS = new Set([
@@ -111,6 +137,7 @@ const BUILDING_IMAGE_ALIASES = {
   hutchinson_hall: ["hutchinson hall"],
   kean_hall: ["kean hall"],
   kean_beach_volleyball_court: ["kean beach volleyball court", "beach volleyball court", "miron beach volleyball court"],
+  kean_clock_tower: ["kean clock tower", "clock tower"],
   kean_east_soccer_field_1: ["kean east soccer field 1", "kean soccer field east campus 1"],
   kean_east_soccer_field_2: ["kean east soccer field 2", "kean soccer field east campus 2"],
   kean_shuttle_bus: ["kean shuttle bus", "shuttle bus", "campus shuttle"],
@@ -145,6 +172,11 @@ const BUILDING_IMAGE_ALIASES = {
 
 const parkingLotsGeoJson = JSON.parse(parkingLotsGeoJsonRaw);
 const pathsGeoJson = JSON.parse(pathsGeoJsonRaw);
+const EXISTING_PATH_EDGE_IDS = new Set(
+  (pathsGeoJson?.features || [])
+    .map(feature => String(feature?.properties?.edge_id || "").replace(/\uFEFF/g, "").trim())
+    .filter(Boolean)
+);
 const buildingImageRecords = buildBuildingImageRecords(buildingImageModules);
 const HIDDEN_BUILDING_MARKER_IDS = new Set(["george_hennings_research", "kean_east_soccer_field", "msc_game_room"]);
 const SUPPORTED_WALKING_AREA_POLYGON =
@@ -471,6 +503,8 @@ function parsePathFeatures(data) {
       const fromId = String(properties.from_id || "").trim();
       const toId = String(properties.to_id || "").trim();
       if (!edgeId || !fromId || !toId) return null;
+      const source = String(properties.source || "").trim().toLowerCase();
+      if (source === "auto_proximity" && DISALLOWED_AUTO_PROXIMITY_EDGE_IDS.has(edgeId)) return null;
 
       return {
         edgeId,
@@ -479,7 +513,7 @@ function parsePathFeatures(data) {
         mode: String(properties.mode || "").trim().toLowerCase(),
         pathCoordinates,
         notes: String(properties.notes || "").trim(),
-        source: String(properties.source || "").trim().toLowerCase()
+        source
       };
     })
     .filter(Boolean);
@@ -492,6 +526,8 @@ function parseMissingPathRecords(data) {
       const fromId = String(edge?.from_id || "").trim();
       const toId = String(edge?.to_id || "").trim();
       if (!edgeId || !fromId || !toId) return null;
+      if (EXISTING_PATH_EDGE_IDS.has(edgeId)) return null;
+      if (DISALLOWED_AUTO_PROXIMITY_EDGE_IDS.has(edgeId)) return null;
 
       return {
         edgeId,
@@ -705,6 +741,62 @@ function haversineDistanceMeters([lat1, lon1], [lat2, lon2]) {
   return 2 * earthRadius * Math.asin(Math.sqrt(a));
 }
 
+function alignSegmentToEndpoints(segment, fromPosition, toPosition) {
+  const points = Array.isArray(segment)
+    ? segment
+        .filter(point => Array.isArray(point) && point.length === 2)
+        .map(([lat, lon]) => [lat, lon])
+    : [];
+
+  if (points.length === 0) {
+    return [fromPosition, toPosition].filter(Boolean);
+  }
+
+  if (fromPosition) {
+    if (points.length === 1) {
+      points.unshift(fromPosition);
+    } else {
+      points[0] = fromPosition;
+    }
+  }
+
+  if (toPosition) {
+    if (points.length === 1) {
+      points.push(toPosition);
+    } else {
+      points[points.length - 1] = toPosition;
+    }
+  }
+
+  return points;
+}
+
+function orientSegmentFromStart(segment, fromPosition) {
+  const points = Array.isArray(segment)
+    ? segment
+        .filter(point => Array.isArray(point) && point.length === 2)
+        .map(([lat, lon]) => [lat, lon])
+    : [];
+
+  if (points.length < 2 || !fromPosition) return points;
+
+  const firstDistance = haversineDistanceMeters(points[0], fromPosition);
+  const lastDistance = haversineDistanceMeters(points[points.length - 1], fromPosition);
+  return lastDistance < firstDistance ? [...points].reverse() : points;
+}
+
+function measurePathDistance(segment) {
+  let total = 0;
+  for (let index = 1; index < segment.length; index += 1) {
+    total += haversineDistanceMeters(segment[index - 1], segment[index]);
+  }
+  return total;
+}
+
+function midpointBetweenPoints([latA, lonA], [latB, lonB]) {
+  return [(latA + latB) / 2, (lonA + lonB) / 2];
+}
+
 function isPointInPolygon([lat, lon], polygon) {
   if (!Array.isArray(polygon) || polygon.length < 3) return false;
   let inside = false;
@@ -778,6 +870,36 @@ function getNearestLocation(position, locations) {
   return nearest;
 }
 
+function scoreRoutableCandidate(candidateId, requestedId, locationsById) {
+  const location = locationsById.get(candidateId);
+  if (!location) return Number.NEGATIVE_INFINITY;
+
+  const normalizedRequested = normalizeId(requestedId);
+  const normalizedCandidate = normalizeId(candidateId);
+  const normalizedParent = normalizeId(location.parent);
+  const label = `${candidateId} ${location.name || ""}`.toLowerCase();
+  let score = 0;
+
+  if (candidateId === requestedId) score += 2000;
+  if (normalizedCandidate && normalizedCandidate === normalizedRequested) score += 1200;
+  if (location.parent && location.parent === requestedId) score += 1000;
+  if (normalizedParent && normalizedParent === normalizedRequested) score += 900;
+
+  if (location.type === "entrance") score += 600;
+  else if (location.type === "building") score += 420;
+  else if (location.type === "parking") score += 120;
+  else if (location.type === "bike_scooter_parking") score += 80;
+  else if (location.type === "route_node") score += 60;
+  else score += 180;
+
+  if (/\bmain\b/.test(label)) score += 90;
+  if (/\bfront\b/.test(label)) score += 55;
+  if (/\brear\b/.test(label)) score -= 35;
+  if (/\bside\b/.test(label)) score -= 15;
+
+  return score;
+}
+
 function resolveEdgeNodeId(rawId, locationsById, routableLocationIds, childrenByParent, resolveRoutableId) {
   const requested = String(rawId || "").trim();
   if (!requested) return null;
@@ -836,21 +958,36 @@ function buildGraph(routableLocations, locationsById, edges, resolveRoutableId, 
     const to = getLocationById(toId, locationsById);
     if (!from || !to) return;
 
-    let coordinates = edge.pathCoordinates.length > 1 ? edge.pathCoordinates : [from.position, to.position];
-    const firstDist = haversineDistanceMeters(coordinates[0], from.position);
-    const lastDist = haversineDistanceMeters(coordinates[coordinates.length - 1], from.position);
-    if (lastDist < firstDist) {
-      coordinates = [...coordinates].reverse();
-    }
-
-    let weight = 0;
-    for (let i = 1; i < coordinates.length; i += 1) {
-      weight += haversineDistanceMeters(coordinates[i - 1], coordinates[i]);
-    }
     const hasTracedGeometry = edge.pathCoordinates.length > 1;
-    if (!hasTracedGeometry) {
-      const sourcePenalty = edge.source === "auto_proximity" ? 5.0 : 3.5;
-      weight *= sourcePenalty;
+    const rawCoordinates = hasTracedGeometry
+      ? orientSegmentFromStart(edge.pathCoordinates, from.position)
+      : [from.position, to.position];
+    const startMismatchMeters =
+      hasTracedGeometry && rawCoordinates.length > 0
+        ? haversineDistanceMeters(rawCoordinates[0], from.position)
+        : 0;
+    const endMismatchMeters =
+      hasTracedGeometry && rawCoordinates.length > 1
+        ? haversineDistanceMeters(rawCoordinates[rawCoordinates.length - 1], to.position)
+        : 0;
+    const canTrustTracedGeometry =
+      hasTracedGeometry &&
+      startMismatchMeters <= MAX_TRACED_ENDPOINT_MISMATCH_METERS &&
+      endMismatchMeters <= MAX_TRACED_ENDPOINT_MISMATCH_METERS;
+
+    const coordinates = canTrustTracedGeometry
+      ? rawCoordinates
+      : alignSegmentToEndpoints(rawCoordinates, from.position, to.position);
+
+    let weight = measurePathDistance(coordinates);
+    if (hasTracedGeometry && !canTrustTracedGeometry) {
+      // Mismatched traced edges tend to create bogus shortcuts and stretched route lines.
+      weight *= 2.4;
+    }
+    if (edge.source === "auto_proximity") {
+      weight *= hasTracedGeometry ? 1.35 : 5.0;
+    } else if (!hasTracedGeometry) {
+      weight *= 3.5;
     }
 
     const forwardEdgeKey = `${edge.edgeId}:${fromId}=>${toId}`;
@@ -972,37 +1109,126 @@ function routeIdsToCoordinates(routeIds, edgeKeys, edgeGeometryByKey, locationsB
   for (let i = 1; i < routeIds.length; i += 1) {
     const fromId = routeIds[i - 1];
     const toId = routeIds[i];
-    const segment =
-      edgeGeometryByKey[edgeKeys[i - 1]] ||
-      [locationsById.get(fromId)?.position, locationsById.get(toId)?.position].filter(Boolean);
+    const fromPosition = locationsById.get(fromId)?.position;
+    const toPosition = locationsById.get(toId)?.position;
+    const segment = (edgeGeometryByKey[edgeKeys[i - 1]] || [fromPosition, toPosition].filter(Boolean)).map(
+      ([lat, lon]) => [lat, lon]
+    );
     if (segment.length === 0) continue;
+
+    if (i === 1 && fromPosition) {
+      if (haversineDistanceMeters(segment[0], fromPosition) > 6) {
+        segment.unshift(fromPosition);
+      } else {
+        segment[0] = fromPosition;
+      }
+    }
+
+    if (i === routeIds.length - 1 && toPosition) {
+      if (haversineDistanceMeters(segment[segment.length - 1], toPosition) > 6) {
+        segment.push(toPosition);
+      } else {
+        segment[segment.length - 1] = toPosition;
+      }
+    }
+
     if (coordinates.length === 0) {
       coordinates.push(...segment);
-    } else {
+      continue;
+    }
+
+    const previousPoint = coordinates[coordinates.length - 1];
+    const nextPoint = segment[0];
+    const joinGapMeters = haversineDistanceMeters(previousPoint, nextPoint);
+
+    if (joinGapMeters <= MAX_ROUTE_SEGMENT_MERGE_GAP_METERS) {
       coordinates.push(...segment.slice(1));
+      continue;
+    }
+
+    if (joinGapMeters <= MAX_ROUTE_SEGMENT_JOIN_GAP_METERS) {
+      const joinPoint = midpointBetweenPoints(previousPoint, nextPoint);
+      coordinates[coordinates.length - 1] = joinPoint;
+      segment[0] = joinPoint;
+      coordinates.push(...segment.slice(1));
+      continue;
+    }
+
+    coordinates.push(...segment);
+  }
+
+  const startLocation = locationsById.get(routeIds[0]);
+  const endLocation = locationsById.get(routeIds[routeIds.length - 1]);
+  if (startLocation?.position) {
+    if (coordinates.length === 0) {
+      coordinates.push(startLocation.position);
+    } else if (haversineDistanceMeters(coordinates[0], startLocation.position) > 6) {
+      coordinates.unshift(startLocation.position);
+    } else {
+      coordinates[0] = startLocation.position;
     }
   }
+  if (endLocation?.position) {
+    if (coordinates.length === 0) {
+      coordinates.push(endLocation.position);
+    } else if (haversineDistanceMeters(coordinates[coordinates.length - 1], endLocation.position) > 6) {
+      coordinates.push(endLocation.position);
+    } else {
+      coordinates[coordinates.length - 1] = endLocation.position;
+    }
+  }
+
   return coordinates;
 }
 
-function buildReadableRouteStops(routeIds, locationsById) {
+function isGenericRouteCue(label) {
+  const normalized = String(label || "").toLowerCase();
+  return (
+    !normalized ||
+    /\blot\b/.test(normalized) ||
+    /\bparking\b/.test(normalized) ||
+    /\bentrance\b/.test(normalized) ||
+    /\bcharging\b/.test(normalized) ||
+    /\bphone\b/.test(normalized) ||
+    /\bshuttle stop\b/.test(normalized)
+  );
+}
+
+function getRouteCueLabel(location, locationsById) {
+  if (!location || location.type === "route_node") return "";
+
+  if (location.type === "entrance") {
+    const parent = location.parent ? locationsById.get(location.parent) : null;
+    return parent?.name || "";
+  }
+
+  if (location.type === "parking") return "";
+  if (location.type === "bike_scooter_parking") return "";
+  if (location.type === "shuttle_stop") return "";
+  if (location.type === "emergency_phone") return "";
+  if (location.type === "ev_charging_station") return "";
+
+  return location.name || "";
+}
+
+function buildNotableRouteStops(routeIds, locationsById, startLabel, endLabel) {
+  const normalizedStart = normalizeId(startLabel);
+  const normalizedEnd = normalizeId(endLabel);
   const names = [];
+
   routeIds.forEach(id => {
     const location = locationsById.get(id);
-    if (!location) return;
-    let label = "";
-    if (location.type === "entrance" && location.parent && locationsById.get(location.parent)) {
-      label = locationsById.get(location.parent)?.name || location.name;
-    } else if (location.type === "route_node") {
-      return;
-    } else {
-      label = location.name;
-    }
-    if (!label) return;
-    if (names[names.length - 1] !== label) {
+    const label = getRouteCueLabel(location, locationsById);
+    if (!label || isGenericRouteCue(label)) return;
+
+    const normalizedLabel = normalizeId(label);
+    if (!normalizedLabel || normalizedLabel === normalizedStart || normalizedLabel === normalizedEnd) return;
+
+    if (!names.some(existing => normalizeId(existing) === normalizedLabel)) {
       names.push(label);
     }
   });
+
   return names;
 }
 
@@ -1021,6 +1247,21 @@ function routeCrossesVerticalBand(routeCoordinates, longitude, minLat, maxLat) {
   return false;
 }
 
+function findVerticalBandCrossingIndex(routeCoordinates, longitude, minLat, maxLat) {
+  for (let index = 1; index < routeCoordinates.length; index += 1) {
+    const [prevLat, prevLon] = routeCoordinates[index - 1];
+    const [nextLat, nextLon] = routeCoordinates[index];
+    const segmentMinLat = Math.min(prevLat, nextLat);
+    const segmentMaxLat = Math.max(prevLat, nextLat);
+    if (segmentMaxLat < minLat || segmentMinLat > maxLat) continue;
+    const crosses =
+      (prevLon <= longitude && nextLon >= longitude) ||
+      (prevLon >= longitude && nextLon <= longitude);
+    if (crosses) return index;
+  }
+  return -1;
+}
+
 function routeCrossesHorizontalBand(routeCoordinates, latitude, minLon, maxLon) {
   for (let index = 1; index < routeCoordinates.length; index += 1) {
     const [prevLat, prevLon] = routeCoordinates[index - 1];
@@ -1036,6 +1277,21 @@ function routeCrossesHorizontalBand(routeCoordinates, latitude, minLon, maxLon) 
   return false;
 }
 
+function findHorizontalBandCrossingIndex(routeCoordinates, latitude, minLon, maxLon) {
+  for (let index = 1; index < routeCoordinates.length; index += 1) {
+    const [prevLat, prevLon] = routeCoordinates[index - 1];
+    const [nextLat, nextLon] = routeCoordinates[index];
+    const segmentMinLon = Math.min(prevLon, nextLon);
+    const segmentMaxLon = Math.max(prevLon, nextLon);
+    if (segmentMaxLon < minLon || segmentMinLon > maxLon) continue;
+    const crosses =
+      (prevLat <= latitude && nextLat >= latitude) ||
+      (prevLat >= latitude && nextLat <= latitude);
+    if (crosses) return index;
+  }
+  return -1;
+}
+
 function routeTouchesArea(routeCoordinates, bounds) {
   return routeCoordinates.some(([lat, lon]) =>
     lat >= bounds.minLat &&
@@ -1045,13 +1301,44 @@ function routeTouchesArea(routeCoordinates, bounds) {
   );
 }
 
+function firstRoutePointBeyondDistance(routeCoordinates, targetDistanceMeters = 30) {
+  if (routeCoordinates.length < 2) return null;
+  const origin = routeCoordinates[0];
+  for (let index = 1; index < routeCoordinates.length; index += 1) {
+    if (haversineDistanceMeters(origin, routeCoordinates[index]) >= targetDistanceMeters) {
+      return routeCoordinates[index];
+    }
+  }
+  return routeCoordinates[routeCoordinates.length - 1];
+}
+
+function getBearingDegrees([lat1, lon1], [lat2, lon2]) {
+  const toRadians = value => (value * Math.PI) / 180;
+  const toDegrees = value => (value * 180) / Math.PI;
+  const phi1 = toRadians(lat1);
+  const phi2 = toRadians(lat2);
+  const lambda1 = toRadians(lon1);
+  const lambda2 = toRadians(lon2);
+  const y = Math.sin(lambda2 - lambda1) * Math.cos(phi2);
+  const x =
+    Math.cos(phi1) * Math.sin(phi2) -
+    Math.sin(phi1) * Math.cos(phi2) * Math.cos(lambda2 - lambda1);
+  return (toDegrees(Math.atan2(y, x)) + 360) % 360;
+}
+
+function bearingToCompassDirection(bearing) {
+  const directions = ["north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest"];
+  const index = Math.round(bearing / 45) % directions.length;
+  return directions[index];
+}
+
 function inferRouteCrossingSteps(routeCoordinates) {
   if (routeCoordinates.length < 2) return [];
 
   const steps = [];
-  const crossesGreenLane = routeCrossesHorizontalBand(routeCoordinates, 40.68172, -74.2372, -74.2342);
-  const crossesMorrisAve = routeCrossesVerticalBand(routeCoordinates, -74.23318, 40.6792, 40.6836);
-  const crossesVermellaWay = routeCrossesHorizontalBand(routeCoordinates, 40.68296, -74.23395, -74.23135);
+  const greenLaneCrossingIndex = findHorizontalBandCrossingIndex(routeCoordinates, 40.68172, -74.2372, -74.2342);
+  const morrisAveCrossingIndex = findVerticalBandCrossingIndex(routeCoordinates, -74.23318, 40.6792, 40.6836);
+  const vermellaWayCrossingIndex = findHorizontalBandCrossingIndex(routeCoordinates, 40.68296, -74.23395, -74.23135);
   const touchesTrainStationArea = routeTouchesArea(routeCoordinates, {
     minLat: 40.68245,
     maxLat: 40.68395,
@@ -1059,47 +1346,66 @@ function inferRouteCrossingSteps(routeCoordinates) {
     maxLon: -74.23635
   });
 
-  if (crossesGreenLane) {
-    steps.push("Cross Green Lane and continue on the campus-side walkway.");
+  if (greenLaneCrossingIndex >= 0) {
+    steps.push({
+      order: greenLaneCrossingIndex,
+      text: "Cross Green Lane and continue on the campus-side walkway."
+    });
   }
-  if (crossesMorrisAve) {
-    steps.push("Cross Morris Avenue at a marked crossing to move between the main campus side and the east-side buildings.");
+  if (morrisAveCrossingIndex >= 0) {
+    steps.push({
+      order: morrisAveCrossingIndex,
+      text: "Cross Morris Avenue at a marked crossing to move between the main campus side and the east-side buildings."
+    });
   }
-  if (crossesVermellaWay) {
-    steps.push("Cross Vermella Way near the Hynes Hall and shopping-center side of campus.");
+  if (vermellaWayCrossingIndex >= 0) {
+    steps.push({
+      order: vermellaWayCrossingIndex,
+      text: "Cross Vermella Way near the Hynes Hall and shopping-center side of campus."
+    });
   }
   if (touchesTrainStationArea) {
-    steps.push("Use the train station crossing area to move safely between the station side and the campus walkways.");
+    steps.push({
+      order: routeCoordinates.length,
+      text: "Use the train station crossing area to move safely between the station side and the campus walkways."
+    });
   }
 
-  return steps;
+  return steps.sort((a, b) => a.order - b.order).map(step => step.text);
 }
 
 function buildChatRouteDirections(startLabel, endLabel, routeIds, routeCoordinates, locationsById, routeDistanceMeters) {
   if (!startLabel || !endLabel || routeIds.length < 2) return "";
 
-  const waypoints = buildReadableRouteStops(routeIds, locationsById).filter(Boolean);
-  const middleStops = waypoints.slice(1, -1);
+  const notableStops = buildNotableRouteStops(routeIds, locationsById, startLabel, endLabel);
   const crossingSteps = inferRouteCrossingSteps(routeCoordinates);
+  const firstHeadingPoint = firstRoutePointBeyondDistance(routeCoordinates);
+  const headingDirection = firstHeadingPoint
+    ? bearingToCompassDirection(getBearingDegrees(routeCoordinates[0], firstHeadingPoint))
+    : "";
   const lines = [
     `Here are step-by-step directions from ${startLabel} to ${endLabel}:`,
     `1. Start at ${startLabel}.`
   ];
 
+  if (headingDirection) {
+    lines.push(`${lines.length}. Head ${headingDirection} on the campus walkways toward ${endLabel}.`);
+  }
+
   crossingSteps.forEach(step => {
     lines.push(`${lines.length}. ${step}`);
   });
 
-  if (middleStops.length === 1) {
-    lines.push(`${lines.length}. Walk along the campus pathways toward ${middleStops[0]}.`);
-  } else if (middleStops.length === 2) {
-    lines.push(`${lines.length}. Walk along the campus pathways toward ${middleStops[0]}.`);
-    lines.push(`${lines.length}. Continue past ${middleStops[1]}.`);
-  } else if (middleStops.length >= 3) {
-    lines.push(`${lines.length}. Walk along the campus pathways toward ${middleStops[0]}.`);
-    lines.push(`${lines.length}. Continue past ${middleStops[1]} and ${middleStops[2]}.`);
-  } else {
-    lines.push(`${lines.length}. Follow the main campus walkways toward your destination.`);
+  if (notableStops.length > 0) {
+    const [firstStop, secondStop] = notableStops;
+    lines.push(`${lines.length}. Stay on the main pedestrian route toward ${endLabel}${firstStop ? `, passing ${firstStop}` : ""}.`);
+    if (secondStop) {
+      lines.push(`${lines.length}. Continue past ${secondStop} and follow the walkway signs toward ${endLabel}.`);
+    } else if (notableStops.length > 1) {
+      lines.push(`${lines.length}. Keep following the marked campus walkways toward ${endLabel}.`);
+    }
+  } else if (!headingDirection || crossingSteps.length === 0) {
+    lines.push(`${lines.length}. Stay on the main campus walkways toward ${endLabel}.`);
   }
 
   lines.push(`${lines.length}. Arrive at ${endLabel}.`);
@@ -1287,6 +1593,11 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
       if (!rawId) return null;
       const requested = String(rawId).trim();
       if (!requested) return null;
+      const normalizedRequested = normalizeId(requested);
+      const preferredDestinationId = PREFERRED_ROUTE_DESTINATION_IDS[normalizedRequested];
+      if (preferredDestinationId && routableLocationIds.has(preferredDestinationId)) {
+        return preferredDestinationId;
+      }
 
       const candidates = [];
       const pushCandidate = candidate => {
@@ -1305,12 +1616,17 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
         children.forEach(pushCandidate);
       });
 
-      for (const candidate of candidates) {
-        if (routableLocationIds.has(candidate)) return candidate;
-      }
-      return null;
+      const rankedCandidates = candidates
+        .filter(candidate => routableLocationIds.has(candidate))
+        .map(candidate => ({
+          id: candidate,
+          score: scoreRoutableCandidate(candidate, requested, locationsById)
+        }))
+        .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
+
+      return rankedCandidates[0]?.id || null;
     };
-  }, [aliasCandidatesByNormalizedId, childrenByParent, routableLocationIds]);
+  }, [aliasCandidatesByNormalizedId, childrenByParent, locationsById, routableLocationIds]);
 
   const graphLocations = useMemo(() => locations.filter(location => location.routable), [locations]);
 
@@ -1422,6 +1738,7 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
     });
     return map;
   }, [routeOptions]);
+  const isRoutingDataReady = locations.length > 0 && pathEdges.length > 0 && routableLocationIds.size > 0;
 
   useEffect(() => {
     if (routableLocations.length === 0) return;
@@ -1499,6 +1816,23 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
       "",
     [resolveRoutableId]
   );
+  const activeDirectionsRequest = useMemo(() => {
+    if (!routeRequest || routeRequest.locationMode !== "directions") return null;
+
+    const mappedDestination = resolveRoutableId(routeRequest.destinationId);
+    const mappedStart = resolveRoutableId(routeRequest.startId);
+    const fallbackStart =
+      !routeRequest.useCurrentLocation && !mappedStart && mappedDestination && defaultCampusStartId && defaultCampusStartId !== mappedDestination
+        ? defaultCampusStartId
+        : null;
+
+    return {
+      requestId: routeRequest.requestId || routeRequestKey,
+      destinationId: mappedDestination || null,
+      expectedStartId: routeRequest.useCurrentLocation ? null : mappedStart || fallbackStart || null,
+      useDynamicStart: Boolean(routeRequest.useCurrentLocation)
+    };
+  }, [defaultCampusStartId, resolveRoutableId, routeRequest, routeRequestKey]);
 
   const campusOptions = useMemo(() => ["All Campuses", ...new Set(directoryPlaces.map(place => place.campus))], [directoryPlaces]);
   const filteredDirectoryPlaces = useMemo(() => {
@@ -1565,12 +1899,33 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
 
   function swapRoute() {
     setLocationMode("directions");
+    setHighlightTargetId(null);
+    setRouteChatPreface("");
+    setLocationStatus("");
     setStartId(endId);
     setEndId(startId);
   }
 
   function showDirections() {
     setLocationMode("directions");
+    setHighlightTargetId(null);
+    setRouteChatPreface("");
+  }
+
+  function handleStartChange(event) {
+    setLocationMode("directions");
+    setHighlightTargetId(null);
+    setRouteChatPreface("");
+    setLocationStatus("");
+    setStartId(event.target.value);
+  }
+
+  function handleEndChange(event) {
+    setLocationMode("directions");
+    setHighlightTargetId(null);
+    setRouteChatPreface("");
+    setLocationStatus("");
+    setEndId(event.target.value);
   }
 
   function routeToPlace(place) {
@@ -1602,9 +1957,11 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
 
   useEffect(() => {
     if (!routeRequest) return;
+    if (!isRoutingDataReady) return;
     if (lastAppliedRouteRequestRef.current === routeRequestKey) return;
-    lastAppliedRouteRequestRef.current = routeRequestKey;
 
+    const requestedStartId = String(routeRequest.startId || "").trim();
+    const requestedDestinationId = String(routeRequest.destinationId || "").trim();
     const requestedDestination = routeRequest.destinationId ? getLocationById(routeRequest.destinationId, locationsById) : null;
     const mappedDestination = resolveRoutableId(routeRequest.destinationId);
     const mappedStart = resolveRoutableId(routeRequest.startId);
@@ -1620,6 +1977,18 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
     const nextMode = routeRequest.locationMode === "directions" ? "directions" : "highlight";
     setLocationMode(nextMode);
 
+    if (
+      nextMode === "directions" &&
+      ((requestedStartId && !mappedStart) || (requestedDestinationId && !mappedDestination))
+    ) {
+      setIsResolvingCurrentStart(false);
+      setStartId(mappedStart || "");
+      setEndId(mappedDestination || "");
+      setLocationStatus("I could not match one of the requested route locations to a mapped campus entrance yet.");
+      lastAppliedRouteRequestRef.current = routeRequestKey;
+      return;
+    }
+
     if (routeRequest.useCurrentLocation) {
       setLocationMode("directions");
       setIsResolvingCurrentStart(true);
@@ -1633,19 +2002,34 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
       setIsResolvingCurrentStart(false);
       const destination = requestedDestination || getLocationById(mappedDestination, locationsById);
       if (destination) {
-        setStartId(mappedDestination);
-        setLocationStatus(`Showing ${destination.name} on the map.`);
+        if (nextMode === "directions") {
+          const fallbackStart = defaultCampusStartId && defaultCampusStartId !== mappedDestination ? defaultCampusStartId : "";
+          if (fallbackStart) {
+            setStartId(fallbackStart);
+            setLocationStatus(`Loaded route to ${destination.name} from a campus starting point.`);
+          } else {
+            setLocationStatus(`Showing ${destination.name} on the map.`);
+          }
+        } else {
+          setLocationStatus(`Showing ${destination.name} on the map.`);
+        }
       }
     }
-  }, [locationsById, resolveRoutableId, routeRequest, routeRequestKey, setMyLocationAsStart]);
+    lastAppliedRouteRequestRef.current = routeRequestKey;
+  }, [defaultCampusStartId, isRoutingDataReady, locationsById, resolveRoutableId, routeRequest, routeRequestKey, setMyLocationAsStart]);
 
   useEffect(() => {
     if (typeof onRouteDirectionsChange !== "function") return;
     if (!routeRequest || locationMode !== "directions") return;
     if (isResolvingCurrentStart) return;
+    if (activeDirectionsRequest?.destinationId && endId !== activeDirectionsRequest.destinationId) return;
+    if (activeDirectionsRequest && !activeDirectionsRequest.useDynamicStart && activeDirectionsRequest.expectedStartId && startId !== activeDirectionsRequest.expectedStartId) {
+      return;
+    }
+    if (activeDirectionsRequest?.useDynamicStart && !startId) return;
     if (startId && endId && routeCoordinates.length < 2) {
       onRouteDirectionsChange({
-        id: `route-missing:${startId}:${endId}`,
+        id: `route-missing:${activeDirectionsRequest?.requestId || routeRequestKey}:${startId}:${endId}`,
         text: `I opened the map, but I could not generate a walking route from ${startLabel || "the starting point"} to ${endLabel || "the destination"} yet.`
       });
       return;
@@ -1655,10 +2039,10 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
       ? `${routeChatPreface}\n${routeDirectionsText}`
       : routeDirectionsText;
     onRouteDirectionsChange({
-      id: `route:${startId}:${endId}:${routeOverlayKey}:${routeChatPreface}`,
+      id: `route:${activeDirectionsRequest?.requestId || routeRequestKey}:${startId}:${endId}:${routeOverlayKey}:${routeChatPreface}`,
       text: combinedText
     });
-  }, [endId, endLabel, isResolvingCurrentStart, locationMode, onRouteDirectionsChange, routeChatPreface, routeCoordinates.length, routeDirectionsText, routeOverlayKey, routeRequest, startId, startLabel]);
+  }, [activeDirectionsRequest, endId, endLabel, isResolvingCurrentStart, locationMode, onRouteDirectionsChange, routeChatPreface, routeCoordinates.length, routeDirectionsText, routeOverlayKey, routeRequest, routeRequestKey, startId, startLabel]);
 
   const standaloneMapUrl = useMemo(() => {
     const params = new URLSearchParams();
@@ -1723,7 +2107,7 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
         <div className="route-controls">
           <label className="route-field">
             Start
-            <select value={startId} onChange={event => setStartId(event.target.value)}>
+            <select value={startId} onChange={handleStartChange}>
               {routeOptions.map(option => (
                 <option key={option.destinationId} value={option.destinationId}>
                   {option.name}
@@ -1738,7 +2122,7 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
 
           <label className="route-field">
             Destination
-            <select value={endId} onChange={event => setEndId(event.target.value)}>
+            <select value={endId} onChange={handleEndChange}>
               {routeOptions.map(option => (
                 <option key={option.destinationId} value={option.destinationId}>
                   {option.name}

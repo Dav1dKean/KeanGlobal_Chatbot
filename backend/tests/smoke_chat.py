@@ -69,6 +69,122 @@ SEQUENTIAL_CASES = [
     ),
 ]
 
+CONTENT_CHECKS = [
+    (
+        "graduation_summary_no_fake_map",
+        [
+            {
+                "prompt": "where is graduation?",
+                "expected_mode": "graduation_ceremony_direct",
+                "expected_intent": "faq",
+                "must_contain": ["Prudential Center", "May 20, 2026"],
+                "must_not_contain": ["opened the campus map", "I also opened the campus map"],
+            },
+            {
+                "prompt": "summarize that",
+                "expected_mode": "last_answer_follow_up",
+                "expected_intent": "general",
+                "must_contain": ["May 20, 2026", "Prudential Center"],
+                "must_not_contain": [],
+            },
+        ],
+    ),
+    (
+        "coffee_food_suggestions_not_ocean_fallback",
+        [
+            {
+                "prompt": "where can I get coffee on campus?",
+                "expected_mode": None,
+                "expected_intent": "location",
+                "must_contain": ["You can get coffee at these locations on campus:"],
+                "must_not_contain": ["Kean Ocean", "currently in development", "Uwill", "MAINTENANCE WORK REQUESTS"],
+            },
+        ],
+    ),
+    (
+        "route_to_from_wording",
+        [
+            {
+                "prompt": "how to get to Hynes from glab?",
+                "expected_mode": "route_between_locations",
+                "expected_intent": "location",
+                "expected_start_id": "glab",
+                "expected_destination_id": "Hynes_hall",
+                "must_contain": ["Opening directions from Green Lane Academic Building (GLAB) to Hynes Hall."],
+                "must_not_contain": [],
+            },
+        ],
+    ),
+    (
+        "calendar_short_year_and_summer_sessions",
+        [
+            {
+                "prompt": "when does fall 26 start?",
+                "expected_mode": None,
+                "expected_intent": "calendar",
+                "must_contain": ["Fall 2026", "Term Begins", "September 1, 2026"],
+                "must_not_contain": ["Which semester are you asking about?"],
+            },
+            {
+                "prompt": "when does summer II start?",
+                "expected_mode": "calendar_term_follow_up",
+                "expected_intent": "calendar",
+                "must_contain": ["Summer Session II Begins", "July 7, 2026"],
+                "must_not_contain": ["Which semester are you asking about?"],
+            },
+            {
+                "prompt": "when does summer I start?",
+                "expected_mode": "calendar_term_follow_up",
+                "expected_intent": "calendar",
+                "must_contain": ["Summer Session I Begins", "May 18, 2026"],
+                "must_not_contain": ["Which semester are you asking about?"],
+            },
+        ],
+    ),
+    (
+        "mixed_location_and_faq_targets",
+        [
+            {
+                "prompt": "where is naab and what time does the library opens?",
+                "expected_mode": "hours_library",
+                "expected_intent": "faq",
+                "expected_destination_id": "naab",
+                "must_contain": ["Nancy Thompson Library hours:", "North Avenue Academic Building (NAAB)"],
+                "must_not_contain": ["I also highlighted Nancy Thompson Library on the map."],
+            },
+        ],
+    ),
+    (
+        "mixed_location_and_calendar_targets",
+        [
+            {
+                "prompt": "where is lhac and when does fall 26 start?",
+                "expected_mode": None,
+                "expected_intent": "calendar",
+                "expected_destination_id": "lhac",
+                "must_contain": ["Fall 2026", "Term Begins", "September 1, 2026", "Liberty Hall Academic Center (LHAC)"],
+                "must_not_contain": ["multiple department locations"],
+            },
+            {
+                "prompt": "where is liberty hall and when does fall 26 start?",
+                "expected_mode": None,
+                "expected_intent": "calendar",
+                "expected_destination_id": "lhac",
+                "must_contain": ["Fall 2026", "Term Begins", "September 1, 2026", "Liberty Hall Academic Center (LHAC)"],
+                "must_not_contain": ["multiple department locations", "Liberty Hall Mansion"],
+            },
+            {
+                "prompt": "where is naab and when fall 26 start?",
+                "expected_mode": None,
+                "expected_intent": "calendar",
+                "expected_destination_id": "naab",
+                "must_contain": ["Fall 2026", "Term Begins", "September 1, 2026", "North Avenue Academic Building (NAAB)"],
+                "must_not_contain": ["Opening map."],
+            },
+        ],
+    ),
+]
+
 
 async def run_cases() -> int:
     failures = []
@@ -109,6 +225,44 @@ async def run_cases() -> int:
                 "actual_mode": actual_mode,
                 "expected_intent": expected_intent,
                 "actual_intent": actual_intent,
+                "ok": ok,
+                "answer": answer,
+            }
+            print(json.dumps(result, ensure_ascii=False))
+            if not ok:
+                failures.append(result)
+
+    for label, sequence in CONTENT_CHECKS:
+        for step in sequence:
+            response = await chat(ChatRequest(message=step["prompt"]))
+            actual_mode = response.get("response_mode")
+            actual_intent = response.get("intent")
+            answer = str(response.get("answer", ""))
+            actual_start_id = response.get("start_id")
+            actual_destination_id = response.get("destination_id")
+            contains_required = all(fragment in answer for fragment in step.get("must_contain", []))
+            excludes_forbidden = all(fragment not in answer for fragment in step.get("must_not_contain", []))
+            ok = (
+                actual_mode == step["expected_mode"]
+                and actual_intent == step["expected_intent"]
+                and actual_start_id == step.get("expected_start_id", actual_start_id)
+                and actual_destination_id == step.get("expected_destination_id", actual_destination_id)
+                and contains_required
+                and excludes_forbidden
+            )
+            result = {
+                "sequence": label,
+                "prompt": step["prompt"],
+                "expected_mode": step["expected_mode"],
+                "actual_mode": actual_mode,
+                "expected_intent": step["expected_intent"],
+                "actual_intent": actual_intent,
+                "expected_start_id": step.get("expected_start_id"),
+                "actual_start_id": actual_start_id,
+                "expected_destination_id": step.get("expected_destination_id"),
+                "actual_destination_id": actual_destination_id,
+                "must_contain": step.get("must_contain", []),
+                "must_not_contain": step.get("must_not_contain", []),
                 "ok": ok,
                 "answer": answer,
             }

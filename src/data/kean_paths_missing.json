@@ -1,43 +1,7 @@
 [
   {
-    "edge_id": "eB00001",
-    "from_id": "administration_lot",
-    "to_id": "administration_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00002",
-    "from_id": "administration_lot",
-    "to_id": "d_angola_gym_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00003",
-    "from_id": "administration_lot",
-    "to_id": "harwood_arena_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00004",
-    "from_id": "administration_lot",
-    "to_id": "kean_hall_entrance_front",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
     "edge_id": "eB00005",
-    "from_id": "administration_lot",
+    "from_id": "visitors_parking_lot",
     "to_id": "townsend_hall_main",
     "mode": "walk",
     "accessible": "yes",
@@ -57,15 +21,6 @@
     "edge_id": "eB00011",
     "from_id": "alumni_stadium_main",
     "to_id": "glab_lot",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00012",
-    "from_id": "alumni_stadium_main",
-    "to_id": "harwood_lot",
     "mode": "walk",
     "accessible": "yes",
     "notes": "Auto-suggested proximity edge (trace on sidewalks)",
@@ -234,54 +189,9 @@
     "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
   },
   {
-    "edge_id": "eB00036",
-    "from_id": "cougar_hall_lot",
-    "to_id": "cougar_hall_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00037",
-    "from_id": "cougar_hall_lot",
-    "to_id": "guest_house_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
     "edge_id": "eB00038",
     "from_id": "cougar_hall_main",
     "to_id": "townsend_hall_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00039",
-    "from_id": "d_angola_gym_main",
-    "to_id": "harwood_arena_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00040",
-    "from_id": "d_angola_gym_main",
-    "to_id": "harwood_lot",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00041",
-    "from_id": "d_angola_gym_main",
-    "to_id": "jim_hynes_stadium_main",
     "mode": "walk",
     "accessible": "yes",
     "notes": "Auto-suggested proximity edge (trace on sidewalks)",
@@ -318,15 +228,6 @@
     "edge_id": "eB00045",
     "from_id": "dougall_hall_main",
     "to_id": "whiteman_hall_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00046",
-    "from_id": "downs_hall_main",
-    "to_id": "vaughn_eames_front",
     "mode": "walk",
     "accessible": "yes",
     "notes": "Auto-suggested proximity edge (trace on sidewalks)",
@@ -387,15 +288,6 @@
     "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
   },
   {
-    "edge_id": "eB00055",
-    "from_id": "east_campus_lot",
-    "to_id": "wilkins_lot",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
     "edge_id": "eB00056",
     "from_id": "east_campus_upper_lot",
     "to_id": "enlow_recital_hall_main",
@@ -426,15 +318,6 @@
     "edge_id": "eB00059",
     "from_id": "freshman_residence_hall_main",
     "to_id": "upperclassman_residence_hall_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00060",
-    "from_id": "glab_lot",
-    "to_id": "glab_main",
     "mode": "walk",
     "accessible": "yes",
     "notes": "Auto-suggested proximity edge (trace on sidewalks)",
@@ -477,15 +360,6 @@
     "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
   },
   {
-    "edge_id": "eB00066",
-    "from_id": "green_house_main",
-    "to_id": "science_building_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
     "edge_id": "eB00067",
     "from_id": "green_house_main",
     "to_id": "townley_house_main",
@@ -498,15 +372,6 @@
     "edge_id": "eB00068",
     "from_id": "guest_house_main",
     "to_id": "jim_hynes_stadium_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00069",
-    "from_id": "harwood_arena_main",
-    "to_id": "harwood_lot",
     "mode": "walk",
     "accessible": "yes",
     "notes": "Auto-suggested proximity edge (trace on sidewalks)",
@@ -531,24 +396,6 @@
     "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
   },
   {
-    "edge_id": "eB00073",
-    "from_id": "hennings_hall_front",
-    "to_id": "overflow_parking",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00074",
-    "from_id": "hennings_hall_front",
-    "to_id": "science_building_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
     "edge_id": "eB00076",
     "from_id": "hri_main",
     "to_id": "library_main",
@@ -567,54 +414,9 @@
     "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
   },
   {
-    "edge_id": "eB00080",
-    "from_id": "hutchinson_hall_side",
-    "to_id": "morris avenue lot",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00081",
-    "from_id": "hutchinson_hall_side",
-    "to_id": "technology_center_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00082",
-    "from_id": "hynes_hall_lot",
-    "to_id": "townley_house_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
     "edge_id": "eB00083",
     "from_id": "kean_hall_entrance_front",
     "to_id": "townley_house_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00084",
-    "from_id": "kean_hall_lot",
-    "to_id": "townley_house_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00085",
-    "from_id": "lhac_lot",
-    "to_id": "lhac_main",
     "mode": "walk",
     "accessible": "yes",
     "notes": "Auto-suggested proximity edge (trace on sidewalks)",
@@ -633,96 +435,6 @@
     "edge_id": "eB00087",
     "from_id": "lhac_main",
     "to_id": "liberty_hall_mansion_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00088",
-    "from_id": "lhac_main",
-    "to_id": "liberty_hall_visitor_parking",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00089",
-    "from_id": "liberty_hall_mansion_main",
-    "to_id": "liberty_hall_visitor_parking",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00091",
-    "from_id": "miron_center_main",
-    "to_id": "technology_center_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00094",
-    "from_id": "morris avenue lot",
-    "to_id": "stem_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00095",
-    "from_id": "morris avenue lot",
-    "to_id": "wilkins_theatre_front",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00096",
-    "from_id": "naab_entrance_front",
-    "to_id": "overnight_lot",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00097",
-    "from_id": "naab_entrance_front",
-    "to_id": "vaughn_eames_front",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00098",
-    "from_id": "naab_entrance_front",
-    "to_id": "vaughn_eames_lot",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00101",
-    "from_id": "overflow_parking",
-    "to_id": "stem_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00102",
-    "from_id": "overnight_lot",
-    "to_id": "vaughn_eames_front",
     "mode": "walk",
     "accessible": "yes",
     "notes": "Auto-suggested proximity edge (trace on sidewalks)",
@@ -750,51 +462,6 @@
     "edge_id": "eB00105",
     "from_id": "sozio_hall_main",
     "to_id": "upperclassman_residence_hall_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00106",
-    "from_id": "stem_lot",
-    "to_id": "stem_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00107",
-    "from_id": "stem_lot",
-    "to_id": "wilkins_theatre_front",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00108",
-    "from_id": "stem_main",
-    "to_id": "wilkins_theatre_front",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00110",
-    "from_id": "vaughn_eames_front",
-    "to_id": "vaughn_eames_lot",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00111",
-    "from_id": "vaughn_eames_front",
-    "to_id": "wilkins_theatre_front",
     "mode": "walk",
     "accessible": "yes",
     "notes": "Auto-suggested proximity edge (trace on sidewalks)",

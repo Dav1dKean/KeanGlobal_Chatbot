@@ -1,1 +1,1088 @@
-{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"id": "administration_main", "name": "Administration Building Entrance front", "campus": "Main", "routable": "no", "parent": "administration", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.236143, 40.679803]}}, {"type": "Feature", "properties": {"id": "administration_side", "name": "Administration Building Entrance side", "campus": "Main", "routable": "yes", "parent": null, "accessibility": null, "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.23623757429775, 40.67991700156569]}}, {"type": "Feature", "properties": {"id": "alumni_stadium_main", "name": "Alumni Stadium Main Entrance", "campus": "Main", "routable": "yes", "parent": "alumni_stadium", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.23742, 40.681394]}}, {"type": "Feature", "properties": {"id": "bartlett_hall_main", "name": "Bartlett Hall (AN) Main Entrance", "campus": "Main", "routable": "yes", "parent": "bartlett_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.23431, 40.675979]}}, {"type": "Feature", "properties": {"id": "bruce_hall_main", "name": "Bruce Hall (B) Main Entrance", "campus": "Main", "routable": "yes", "parent": "bruce_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.234618, 40.680019]}}, {"type": "Feature", "properties": {"id": "burch_hall_main", "name": "Burch Hall (AE) Main Entrance", "campus": "Main", "routable": "yes", "parent": "burch_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.233671, 40.675679]}}, {"type": "Feature", "properties": {"id": "campus_police_main", "name": "Kean Police / Public Safety Main Entrance", "campus": "Main", "routable": "yes", "parent": "campus_police", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.232902, 40.676749]}}, {"type": "Feature", "properties": {"id": "cas_main_front1", "name": "Maxine and Jack Lane Center for Academic Success (CAS) Entrance front1", "campus": "Main", "routable": "yes", "parent": "cas", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.233363, 40.678568]}}, {"type": "Feature", "properties": {"id": "cas_main_front2", "name": "Maxine and Jack Lane Center for Academic Success (CAS) Entrance front2", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.234182, 40.678412]}}, {"type": "Feature", "properties": {"id": "cas_main_rear", "name": "Maxine and Jack Lane Center for Academic Success (CAS) Entrance  rear", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.234384, 40.678946]}}, {"type": "Feature", "properties": {"id": "Cougar Pantry", "name": "Cougar Pantry", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.232478, 40.676557]}}, {"type": "Feature", "properties": {"id": "cougar_hall_main", "name": "Cougar Hall Main Entrance", "campus": "Main", "routable": "yes", "parent": "cougar_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.236822, 40.679237]}}, {"type": "Feature", "properties": {"id": "d_angola_gym_main", "name": "D'Angola Gymnasium Main Entrance", "campus": "Main", "routable": "yes", "parent": "d_angola_gym", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.237543, 40.68004]}}, {"type": "Feature", "properties": {"id": "dougall_hall_main", "name": "Dougall Hall (DO) Main Entrance", "campus": "Main", "routable": "yes", "parent": "dougall_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.233576, 40.676446]}}, {"type": "Feature", "properties": {"id": "downs_hall_main", "name": "Downs Hall Entrance front", "campus": "Main", "routable": "yes", "parent": "downs_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.232313, 40.677054]}}, {"type": "Feature", "properties": {"id": "downs_hall_main", "name": "Downs Hall Entrance rear", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.23221, 40.676496]}}, {"type": "Feature", "properties": {"id": "east_campus_building_main", "name": "East Campus Building (EC) Main Entrance", "campus": "East", "routable": "yes", "parent": "east_campus_building", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.223575, 40.680063]}}, {"type": "Feature", "properties": {"id": "enlow_recital_hall_main", "name": "Enlow Recital Hall Main Entrance", "campus": "East", "routable": "yes", "parent": "enlow_recital_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.223811, 40.679668]}}, {"type": "Feature", "properties": {"id": "freshman_residence_hall_main", "name": "Freshman Residence Hall (FRH) Main Entrance", "campus": "Main", "routable": "yes", "parent": "freshman_residence_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.234606, 40.676597]}}, {"type": "Feature", "properties": {"id": "glab_main", "name": "Green Lane Academic Building (GLAB) Main Entrance", "campus": "Main", "routable": "yes", "parent": "glab", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.236298, 40.682573]}}, {"type": "Feature", "properties": {"id": "green_house_main", "name": "Green House / Faculty Lounge Main Entrance", "campus": "Main", "routable": "yes", "parent": "green_house", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.234773, 40.68115]}}, {"type": "Feature", "properties": {"id": "guest_house_main", "name": "Guest House Main Entrance", "campus": "Main", "routable": "yes", "parent": "guest_house", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.238214, 40.678924]}}, {"type": "Feature", "properties": {"id": "harwood_arena_main", "name": "Harwood Arena Main Entrance", "campus": "Main", "routable": "yes", "parent": "harwood_arena", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.237517, 40.680069]}}, {"type": "Feature", "properties": {"id": "hennings_hall_front", "name": "George Hennings Hall Entrance front", "campus": null, "routable": "yes", "parent": "hennings_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.233861, 40.680282]}}, {"type": "Feature", "properties": {"id": "hennings_hall_side", "name": "George Hennings Hall Entrance side", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.234141, 40.680212]}}, {"type": "Feature", "properties": {"id": "hri_main", "name": "Human Rights Institute (HRI) Main Entrance", "campus": "Main", "routable": "yes", "parent": "hri", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.233703, 40.678275]}}, {"type": "Feature", "properties": {"id": "hutchinson_hall_front", "name": "Hutchinson Hall Entrance front", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.233612, 40.679952]}}, {"type": "Feature", "properties": {"id": "hutchinson_hall_rear", "name": "Hutchinson Hall Entrance rear", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.233701, 40.679549]}}, {"type": "Feature", "properties": {"id": "hutchinson_hall_side", "name": "Hutchinson Hall Entrance side", "campus": "Main", "routable": "yes", "parent": "hutchinson_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.233277, 40.679372]}}, {"type": "Feature", "properties": {"id": "Hynes_hall_entrance_front", "name": "Hynes Hall Entrance front", "campus": null, "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.23265092751998, 40.68281154703821]}}, {"type": "Feature", "properties": {"id": "Hynes_hall_entrance_rear", "name": "Hynes Hall Entrance rear", "campus": null, "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.23217646169108, 40.683041935842546]}}, {"type": "Feature", "properties": {"id": "jim_hynes_stadium_main", "name": "Jim Hynes '63 Stadium Main Entrance", "campus": "Main", "routable": "yes", "parent": "jim_hynes_stadium", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.239102, 40.679673]}}, {"type": "Feature", "properties": {"id": "kean_hall_entrance_front", "name": "Kean Hall Entrance front", "campus": "Main", "routable": "yes", "parent": "kean_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.23575959668204, 40.680916038677786]}}, {"type": "Feature", "properties": {"id": "kean_hall_entrance_side", "name": "Kean Hall Entrance side", "campus": null, "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.23534094830305, 40.68122747329496]}}, {"type": "Feature", "properties": {"id": "lhac_main", "name": "Liberty Hall Academic Center (LHAC) Main Entrance", "campus": "Liberty Hall", "routable": "yes", "parent": "lhac", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.227871, 40.679793]}}, {"type": "Feature", "properties": {"id": "liberty_hall_mansion_main", "name": "Liberty Hall Mansion Main Entrance", "campus": "Liberty Hall", "routable": "yes", "parent": "liberty_hall_mansion", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.229017, 40.678666]}}, {"type": "Feature", "properties": {"id": "library_main", "name": "Nancy Thompson Library Main Entrance", "campus": "Main", "routable": "yes", "parent": "library", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.233775, 40.678143]}}, {"type": "Feature", "properties": {"id": "miron_center_main", "name": "Miron Student Center (MSC) Main Entrance", "campus": "Main", "routable": "yes", "parent": "miron_center", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.235024, 40.678165]}}, {"type": "Feature", "properties": {"id": "naab_entrance_front", "name": "North Avenue Academic Building (NAAB) Entrance front", "campus": "Main", "routable": "yes", "parent": "naab", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.229034, 40.676626]}}, {"type": "Feature", "properties": {"id": "naab_entrance_side", "name": "North Avenue Academic Building (NAAB) Entrance side", "campus": null, "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.22852600509529, 40.67626935252855]}}, {"type": "Feature", "properties": {"id": "nathan_weiss_building_main", "name": "Nathan Weiss Building Main Entrance", "campus": "East", "routable": "yes", "parent": "nathan_weiss_building", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.223811, 40.67967]}}, {"type": "Feature", "properties": {"id": "rogers_hall_main", "name": "Rogers Hall (AS) Main Entrance", "campus": "Main", "routable": "yes", "parent": "rogers_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.233957, 40.675279]}}, {"type": "Feature", "properties": {"id": "science_building_main", "name": "Science Building Main Entrance", "campus": "Main", "routable": "yes", "parent": "science_building", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.234215, 40.680316]}}, {"type": "Feature", "properties": {"id": "sozio_hall_main", "name": "Sozio Hall (AW) Main Entrance", "campus": "Main", "routable": "yes", "parent": "sozio_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.234582, 40.675557]}}, {"type": "Feature", "properties": {"id": "stem_main", "name": "New Jersey Center for Science, Technology and Mathematics (STEM) Main Entrance", "campus": "Main", "routable": "yes", "parent": "stem", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.231025, 40.679765]}}, {"type": "Feature", "properties": {"id": "technology_center_main", "name": "Technology (TEC) Main Entrance", "campus": "Main", "routable": "yes", "parent": "technology_center", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.234667, 40.679289]}}, {"type": "Feature", "properties": {"id": "townley_house_main", "name": "Townley House Main Entrance", "campus": "Main", "routable": "yes", "parent": "townley_house", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.23489, 40.681588]}}, {"type": "Feature", "properties": {"id": "townsend_hall_main", "name": "Townsend Hall Main Entrance", "campus": "Main", "routable": "yes", "parent": "townsend_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.236018, 40.679817]}}, {"type": "Feature", "properties": {"id": "townsend_hall_rear", "name": "Townsend Hall Main rear", "campus": null, "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.23569068492266, 40.67931852043914]}}, {"type": "Feature", "properties": {"id": "upperclassman_residence_hall_main", "name": "Upperclassman Residence Hall (URH) Main Entrance", "campus": "Main", "routable": "yes", "parent": "upperclassman_residence_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.23534, 40.676778]}}, {"type": "Feature", "properties": {"id": "vaughn_eames_front", "name": "Vaughn-Eames Hall Entrance front", "campus": "Main", "routable": "yes", "parent": "vaughn_eames", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.230739, 40.677657]}}, {"type": "Feature", "properties": {"id": "vaughn_eames_rear", "name": "Vaughn-Eames Hall Entrance rear", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.231341, 40.677312]}}, {"type": "Feature", "properties": {"id": "vaughn_eames_side", "name": "Vaughn-Eames Hall Entrance side", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.231393, 40.677699]}}, {"type": "Feature", "properties": {"id": "whiteman_hall_main", "name": "Whiteman Hall (WH) Main Entrance", "campus": "Main", "routable": "yes", "parent": "whiteman_hall", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.233095, 40.676387]}}, {"type": "Feature", "properties": {"id": "wilkins_theatre_front", "name": "Wilkins Theatre Entrance front", "campus": "Main", "routable": "yes", "parent": "wilkins_theatre", "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.231607, 40.678608]}}, {"type": "Feature", "properties": {"id": "wilkins_theatre_rear", "name": "Wilkins Theatre Entrance rear", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.232298, 40.678593]}}, {"type": "Feature", "properties": {"id": "wilkins_theatre_side", "name": "Wilkins Theatre Entrance side", "campus": "Main", "routable": "yes", "parent": null, "accessibility": "yes", "type": "entrance"}, "geometry": {"type": "Point", "coordinates": [-74.231683, 40.678446]}}]}
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "administration_main",
+        "name": "Administration Building Entrance front",
+        "campus": "Main",
+        "routable": "no",
+        "parent": "administration",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.236143,
+          40.679803
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "administration_side",
+        "name": "Administration Building Entrance side",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": null,
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23623757429775,
+          40.67991700156569
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "alumni_stadium_main",
+        "name": "Alumni Stadium Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "alumni_stadium",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23742,
+          40.681394
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "bartlett_hall_main",
+        "name": "Bartlett Hall (AN) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "bartlett_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23431,
+          40.675979
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "bruce_hall_main",
+        "name": "Bruce Hall (B) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "bruce_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.234618,
+          40.680019
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "burch_hall_main",
+        "name": "Burch Hall (AE) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "burch_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.233671,
+          40.675679
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "campus_police_main",
+        "name": "Kean Police / Public Safety Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "campus_police",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.232902,
+          40.676749
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "cas_main_front1",
+        "name": "Maxine and Jack Lane Center for Academic Success (CAS) Entrance front1",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "cas",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.233363,
+          40.678568
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "cas_main_front2",
+        "name": "Maxine and Jack Lane Center for Academic Success (CAS) Entrance front2",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.234182,
+          40.678412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "cas_main_rear",
+        "name": "Maxine and Jack Lane Center for Academic Success (CAS) Entrance  rear",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.234384,
+          40.678946
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Cougar Pantry",
+        "name": "Cougar Pantry",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.232478,
+          40.676557
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "cougar_hall_main",
+        "name": "Cougar Hall Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "cougar_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.236822,
+          40.679237
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "d_angola_gym_main",
+        "name": "D'Angola Gymnasium Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "d_angola_gym",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.237543,
+          40.68004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "dougall_hall_main",
+        "name": "Dougall Hall (DO) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "dougall_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.233576,
+          40.676446
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "downs_hall_main",
+        "name": "Downs Hall Entrance front",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "downs_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.232313,
+          40.677054
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "downs_hall_rear",
+        "name": "Downs Hall Entrance rear",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "downs_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23221,
+          40.676496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "east_campus_building_main",
+        "name": "East Campus Building (EC) Main Entrance",
+        "campus": "East",
+        "routable": "yes",
+        "parent": "east_campus_building",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.223575,
+          40.680063
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "enlow_recital_hall_main",
+        "name": "Enlow Recital Hall Main Entrance",
+        "campus": "East",
+        "routable": "yes",
+        "parent": "enlow_recital_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.223811,
+          40.679668
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "freshman_residence_hall_main",
+        "name": "Freshman Residence Hall (FRH) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "freshman_residence_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.234606,
+          40.676597
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "glab_main",
+        "name": "Green Lane Academic Building (GLAB) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "glab",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.236298,
+          40.682573
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "green_house_main",
+        "name": "Green House / Faculty Lounge Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "green_house",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.234773,
+          40.68115
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "guest_house_main",
+        "name": "Guest House Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "guest_house",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.238214,
+          40.678924
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "harwood_arena_main",
+        "name": "Harwood Arena Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "harwood_arena",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.237517,
+          40.680069
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hennings_hall_front",
+        "name": "George Hennings Hall Entrance front",
+        "campus": null,
+        "routable": "yes",
+        "parent": "hennings_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.233861,
+          40.680282
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hennings_hall_side",
+        "name": "George Hennings Hall Entrance side",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.234141,
+          40.680212
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hri_main",
+        "name": "Human Rights Institute (HRI) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "hri",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.233703,
+          40.678275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hutchinson_hall_front",
+        "name": "Hutchinson Hall Entrance front",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23361387507424,
+          40.679948626630306
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hutchinson_hall_rear",
+        "name": "Hutchinson Hall Entrance rear",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23370060425557,
+          40.679547731459564
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hutchinson_hall_side",
+        "name": "Hutchinson Hall Entrance side",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "hutchinson_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.233277,
+          40.679372
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Hynes_hall_entrance_front",
+        "name": "Hynes Hall Entrance front",
+        "campus": null,
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23265092751998,
+          40.68281154703821
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Hynes_hall_entrance_rear",
+        "name": "Hynes Hall Entrance rear",
+        "campus": null,
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.2321368420578,
+          40.68299233191311
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "jim_hynes_stadium_main",
+        "name": "Jim Hynes '63 Stadium Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "jim_hynes_stadium",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.239102,
+          40.679673
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "kean_hall_entrance_front",
+        "name": "Kean Hall Entrance front",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "kean_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23575959668204,
+          40.680916038677786
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "kean_hall_entrance_side",
+        "name": "Kean Hall Entrance side",
+        "campus": null,
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23534094830305,
+          40.68122747329496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "lhac_main",
+        "name": "Liberty Hall Academic Center (LHAC) Main Entrance",
+        "campus": "Liberty Hall",
+        "routable": "yes",
+        "parent": "lhac",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.227871,
+          40.679793
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "liberty_hall_mansion_main",
+        "name": "Liberty Hall Mansion Main Entrance",
+        "campus": "Liberty Hall",
+        "routable": "yes",
+        "parent": "liberty_hall_mansion",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.229017,
+          40.678666
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "library_main",
+        "name": "Nancy Thompson Library Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "library",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.233775,
+          40.678143
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "miron_center_main",
+        "name": "Miron Student Center (MSC) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "miron_center",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.235024,
+          40.678165
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "naab_entrance_front",
+        "name": "North Avenue Academic Building (NAAB) Entrance front",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "naab",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.229034,
+          40.676626
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "naab_entrance_side",
+        "name": "North Avenue Academic Building (NAAB) Entrance side",
+        "campus": null,
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.22849857141968,
+          40.67627112350527
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "nathan_weiss_building_main",
+        "name": "Nathan Weiss Building Main Entrance",
+        "campus": "East",
+        "routable": "yes",
+        "parent": "nathan_weiss_building",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.223811,
+          40.67967
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rogers_hall_main",
+        "name": "Rogers Hall (AS) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "rogers_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.233957,
+          40.675279
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "science_building_main",
+        "name": "Science Building Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "science_building",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.234215,
+          40.680316
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "sozio_hall_main",
+        "name": "Sozio Hall (AW) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "sozio_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.234582,
+          40.675557
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "stem_main",
+        "name": "New Jersey Center for Science, Technology and Mathematics (STEM) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "stem",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.231025,
+          40.679765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "technology_center_main",
+        "name": "Technology (TEC) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "technology_center",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.234667,
+          40.679289
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "townley_house_main",
+        "name": "Townley House Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "townley_house",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23489,
+          40.681588
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "townsend_hall_main",
+        "name": "Townsend Hall Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "townsend_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.236018,
+          40.679817
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "townsend_hall_rear",
+        "name": "Townsend Hall Main rear",
+        "campus": null,
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23569068492266,
+          40.67931852043914
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "upperclassman_residence_hall_main",
+        "name": "Upperclassman Residence Hall (URH) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "upperclassman_residence_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23534,
+          40.676778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "vaughn_eames_front",
+        "name": "Vaughn-Eames Hall Entrance front",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "vaughn_eames",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.230739,
+          40.677657
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "vaughn_eames_rear",
+        "name": "Vaughn-Eames Hall Entrance rear",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.231341,
+          40.677312
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "vaughn_eames_side",
+        "name": "Vaughn-Eames Hall Entrance side",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.231393,
+          40.677699
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "whiteman_hall_main",
+        "name": "Whiteman Hall (WH) Main Entrance",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "whiteman_hall",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.233095,
+          40.676387
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "wilkins_theatre_front",
+        "name": "Wilkins Theatre Entrance front",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": "wilkins_theatre",
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.231607,
+          40.678608
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "wilkins_theatre_rear",
+        "name": "Wilkins Theatre Entrance rear",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23230460557183,
+          40.67859145871961
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "wilkins_theatre_side",
+        "name": "Wilkins Theatre Entrance side",
+        "campus": "Main",
+        "routable": "yes",
+        "parent": null,
+        "accessibility": "yes",
+        "type": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.23167554148452,
+          40.67845583183501
+        ]
+      }
+    }
+  ]
+}
