@@ -1,0 +1,125 @@
+TITLE: Kean University Commencement
+SOURCE_URL: https://www.kean.edu/university-commencement
+SOURCE_SITE: Kean University
+EXTRACTION_DATE: 2026-04-15
+DOCUMENT_TYPE: RAG_READY_TEXT
+TOPIC: Commencement
+INSTITUTION: Kean University
+
+[SECTION] Overview
+Kean University will celebrate the Class of 2026 on Wednesday, May 20, 2026.
+The commencement ceremony is for both undergraduate and graduate students.
+The event begins at 8:30 a.m.
+The location is Prudential Center in Newark, New Jersey.
+
+[SECTION] Cap and Gown
+To participate in the commencement procession, students must wear official Kean University academic regalia.
+Required regalia includes cap, gown, tassel, stole, and hood.
+Students can purchase regalia inside Kean's Barnes & Noble Bookstore using Flex Dollars.
+Students can also purchase regalia online using other forms of credit.
+
+[SECTION] Eligible Graduates and Regalia Costs
+Kean University covers most of the regalia cost for bachelor's and master's students.
+Bachelor's degree candidates are responsible for 30 dollars.
+Master's degree candidates are responsible for 40 dollars.
+Regalia ordering link is provided through Oak Hall.
+
+[SECTION] Bachelor and Master Regalia Deadlines
+Ship to Kean for Grad Fair Pick-Up deadline: Friday, March 27, 2026.
+Ship to Home deadline: Monday, April 13, 2026.
+
+[SECTION] Doctoral Regalia
+Two types of doctoral regalia are available.
+Option 1: Souvenir Regalia. This is designed for one-time use and is suitable for graduates who do not expect to wear doctoral regalia again.
+Option 2: Fine Quality Custom Kean Regalia. This is a premium option recommended for individuals pursuing academic careers who may wear regalia in future commencement ceremonies.
+Detailed ordering information is provided through Oak Hall.
+
+[SECTION] Graduate Fair Overview
+At the Graduate Fair, graduates can pick up regalia and stoles and ask commencement-related questions.
+The following departments will be present to assist students.
+Registrar's Office: verify graduation status.
+Career Services: access job placement assistance and career resources.
+Alumni Engagement: register for future alumni events.
+
+[SECTION] Graduate Fair at Kean Ocean
+Event name: Kean Ocean Graduate Fair.
+Date: Wednesday, April 29, 2026.
+Time: 8 a.m. to 8 p.m.
+Location: Gateway Building Atrium, Kean Ocean Campus.
+
+[SECTION] Graduate Fair at Kean Union
+Event name: Kean Union Graduate Fair.
+Date: Thursday, April 30, 2026.
+Time: 10 a.m. to 6 p.m.
+Location: Barnes and Noble Bookstore, Green Lane Academic Building, Kean Union campus.
+
+[SECTION] Senior Portraits Overview
+Graduates from Fall 2025, Spring 2026, and Summer 2026 in undergraduate, graduate, and doctoral programs can schedule a portrait sitting appointment.
+Portraits may be used for professional networking, job searches, and profile photos.
+There is no sitting fee.
+After reviewing proofs, graduates may choose whether to purchase photos.
+Graduates should arrive in business attire.
+Cap and gown attire will be provided for a second pose.
+
+[SECTION] Senior Portraits at Kean Ocean
+Location: Gateway Building, 5th Floor, Room 500, Kean Ocean campus.
+Appointment dates include Tuesday, March 24, 2026, from 9:30 a.m. to 5 p.m.
+Appointment dates include Wednesday, March 25, 2026, from 12 p.m. to 8 p.m.
+These are listed as the last appointments for the Kean Ocean campus.
+Appointments are scheduled through the Kean Ocean portrait booking link.
+
+[SECTION] Senior Portraits at Kean Union
+Location: Miron Student Center, Room 228, Kean Union campus.
+Appointment dates include Monday, March 30, 2026, from 9:30 a.m. to 8 p.m.
+Appointment dates include Tuesday, March 31, 2026, from 9:30 a.m. to 8 p.m.
+Appointment dates include Wednesday, April 1, 2026, from 9:30 a.m. to 8 p.m.
+Appointment dates include Thursday, April 2, 2026, from 9:30 a.m. to 5 p.m.
+The last appointment date for the Kean Union campus will be at the Graduate Fair on Thursday, April 30, 2026, with limited appointments.
+The page states that these later appointments will not be available until after the March and April portrait sittings, and an email will be sent when they become available.
+Appointments are scheduled through the Kean Union portrait booking link.
+
+[SECTION] Portrait Support Contact
+For questions about photo proofs after portraits have been taken, contact Prestige Photography by LifeTouch.
+Support hours are Monday through Friday from 9 a.m. to 7 p.m.
+Phone number: 1-800-736-4753.
+
+[SECTION] Class Rings
+Graduates can purchase an official Kean class ring.
+The page states that multiple styles are available, including traditional and modern options.
+The class ring shopping link is provided through Balfour.
+
+[SECTION] Contact Information
+For general commencement questions, email commencement@kean.edu.
+For student ADA accessibility questions related to commencement, email adacommencement@kean.edu.
+
+[SECTION] Page Context and Media
+The page also includes a Commencement 2025 Highlights area and a 2025 Commencement Photo Gallery.
+Gallery captions mention Kean University President Lamont Repollet, Ed.D., Olympic medalist Laurie Hernandez as the 2025 commencement speaker, 2025 valedictorian Sophia Sacewicz, Graduate Student with Distinction Jeffrey Brooks, and Cisely Martin.
+These gallery elements are historical highlights and are separate from the Class of 2026 logistics.
+
+[SECTION] Important Dates Summary
+Wednesday, May 20, 2026: Commencement ceremony for the Class of 2026.
+Friday, March 27, 2026: Deadline to ship bachelor's and master's regalia to Kean for Grad Fair pickup.
+Monday, April 13, 2026: Deadline to ship bachelor's and master's regalia to home.
+Wednesday, April 29, 2026: Kean Ocean Graduate Fair.
+Thursday, April 30, 2026: Kean Union Graduate Fair.
+March 24 to March 25, 2026: Kean Ocean portrait dates.
+March 30 to April 2, 2026: Kean Union portrait dates.
+
+[SECTION] Suggested Retrieval Keywords
+Kean commencement
+Kean University commencement 2026
+Class of 2026 commencement
+Prudential Center commencement
+Kean regalia
+Kean cap and gown
+Kean graduate fair
+Kean senior portraits
+Kean ADA commencement
+commencement@kean.edu
+adacommencement@kean.edu
+
+[SECTION] Source Notes
+This file was prepared from the public Kean University commencement webpage.
+It reflects the content visible on the page as accessed on 2026-04-15.
+Users should verify time-sensitive information on the official webpage in case details change after extraction.
