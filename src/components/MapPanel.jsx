@@ -1497,6 +1497,7 @@ function MapResizeObserver() {
 }
 
 function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirectionsChange }) {
+  const MOBILE_MAP_BREAKPOINT = 720;
   const [startId, setStartId] = useState("");
   const [endId, setEndId] = useState("");
   const [userPosition, setUserPosition] = useState(null);
@@ -1513,7 +1514,27 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
   const [highlightTargetId, setHighlightTargetId] = useState(null);
   const [routeChatPreface, setRouteChatPreface] = useState("");
   const [isResolvingCurrentStart, setIsResolvingCurrentStart] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(() => (
+    typeof window !== "undefined" ? window.innerWidth <= MOBILE_MAP_BREAKPOINT : false
+  ));
+  const [showMobileControls, setShowMobileControls] = useState(false);
   const lastAppliedRouteRequestRef = useRef("");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+
+    const handleResize = () => {
+      const nextIsMobile = window.innerWidth <= MOBILE_MAP_BREAKPOINT;
+      setIsMobileViewport(nextIsMobile);
+      if (!nextIsMobile) {
+        setShowMobileControls(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     try {
@@ -2064,6 +2085,10 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
       ? `${Math.round(routeDistanceMeters)} m estimated path`
       : "No route found in campus graph";
 
+  const shouldShowDesktopControls = !isMobileViewport;
+  const shouldShowMobileControls = isMobileViewport && showMobileControls;
+  const shouldRenderExpandedControls = shouldShowDesktopControls || shouldShowMobileControls;
+
   return (
     <div className="panel map-panel">
       <div className="map-header">
@@ -2075,35 +2100,80 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
             {routeSummaryText}
           </div>
         </div>
-        <div className="map-header-actions">
-          {!standalone && (
+        {!isMobileViewport && (
+          <div className="map-header-actions">
+            {!standalone && (
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => window.open(standaloneMapUrl, "_blank", "noopener,noreferrer")}
+              >
+                Open in New Tab
+              </button>
+            )}
             <button
               type="button"
               className="btn-secondary"
-              onClick={() => window.open(standaloneMapUrl, "_blank", "noopener,noreferrer")}
+              onClick={() => setShowBuildingList(prev => !prev)}
             >
-              Open in New Tab
+              {showBuildingList ? "Hide Directions" : "Show Directions"}
             </button>
-          )}
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={() => setShowBuildingList(prev => !prev)}
-          >
-            {showBuildingList ? "Hide Directions" : "Show Directions"}
-          </button>
-          {!standalone && (
-            <button
-              className="btn-secondary"
-              onClick={() => setShowMap(false)}
-            >
-              Close Map
-            </button>
-          )}
-        </div>
+            {!standalone && (
+              <button
+                className="btn-secondary"
+                onClick={() => setShowMap(false)}
+              >
+                Close Map
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
-      {showBuildingList && (
+      {isMobileViewport && (
+        <div className="mobile-map-toolbar">
+          <button
+            type="button"
+            className="btn-secondary mobile-map-toolbar-btn"
+            onClick={() => setShowMobileControls(prev => !prev)}
+          >
+            {showMobileControls ? "Hide Map Controls" : "Show Map Controls"}
+          </button>
+        </div>
+      )}
+
+      {shouldRenderExpandedControls && (
+        <div className="mobile-map-controls-shell">
+          {isMobileViewport && (
+            <div className="map-header-actions mobile-map-header-actions">
+              {!standalone && (
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() => window.open(standaloneMapUrl, "_blank", "noopener,noreferrer")}
+                >
+                  Open in New Tab
+                </button>
+              )}
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => setShowBuildingList(prev => !prev)}
+              >
+                {showBuildingList ? "Hide Directions" : "Show Directions"}
+              </button>
+              {!standalone && (
+                <button
+                  className="btn-secondary"
+                  onClick={() => setShowMap(false)}
+                >
+                  Close Map
+                </button>
+              )}
+            </div>
+          )}
+
+      {showBuildingList && shouldRenderExpandedControls && (
         <div className="route-controls">
           <label className="route-field">
             Start
@@ -2143,6 +2213,8 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
         {dataError && <span className="route-note">{dataError}</span>}
         {locationStatus && <span className="route-note">{locationStatus}</span>}
       </div>
+        </div>
+      )}
 
       <div className="leaflet-wrapper">
         <MapContainer
