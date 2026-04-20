@@ -94,6 +94,8 @@ Frontend sends chat requests to:
 http://localhost:8000/chat
 ```
 
+In production, the frontend now supports same-origin API calls automatically, which is useful for single-domain deployments behind Nginx.
+
 Optional frontend env override:
 
 ```bash
@@ -175,6 +177,12 @@ If model responds → working.
 The backend will call the locally running Mistral model through Ollama and combine it with university documents using Retrieval-Augmented Generation (RAG).
 
 No API keys are required.
+
+## 🌐 DigitalOcean Deployment
+
+For a low-cost hosted setup that keeps the current retrieval quality, see:
+
+`docs/digitalocean-2gb-deploy.md`
 
 ---
 

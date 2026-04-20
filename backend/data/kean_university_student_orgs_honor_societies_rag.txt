@@ -1,0 +1,109 @@
+TITLE: Kean University Student Organizations and Honor Societies - Reference Directory Companion
+LAST_UPDATED: 2026-04-19
+PRIMARY_DOMAIN: https://www.kean.edu/
+SECONDARY_SYSTEMS: CougarLink / Engage
+ENTITY: Kean University Student Life, Center for Leadership and Service, Greek Life, and Honor Societies
+LOCATION: 1000 Morris Avenue, Union, NJ 07083
+
+PURPOSE
+This companion file keeps directory-style details that support retrieval for specific lookups. Broad explanatory content about student involvement, recognition, Greek Life, and honor societies is covered in the Q&A RAG file to avoid duplication.
+
+COLLEGE-SPECIFIC OR PROGRAM-SPECIFIC GROUP EXAMPLES
+Kean has additional college or department pages that highlight specific organizations. Examples from the Center for Cybersecurity page include:
+- CAE in Cybersecurity Community
+- Women in Cybersecurity (WiCyS) Chapter
+- Association for Computing Machinery on Women in Computing (ACM-W)
+- National Cybersecurity Student Association
+- Association for Computing Machinery
+- Upsilon Pi Epsilon (listed on page as Upsilson Pi Epsilon / UPE)
+- Girls Who Code
+- NextGen Cyber
+- Criminal Justice Honor Society - Alpha Phi Sigma
+- Cloud Security Alliance - NJ Chapter
+- Palo Alto Networks Cybersecurity Academy
+- CompTIA Academy Partner
+- National CyberWatch Center
+- National Cybersecurity Training & Education (NCyTE) Center
+- EC-Council Academia Partner
+
+UNIVERSITY-WIDE HONOR SOCIETIES
+- Epsilon Epsilon Omega - Exceptional Opportunities Center Honor Society
+- Lambda Alpha Sigma - National Collegiate Honor Society, all disciplines
+- Phi Kappa Phi - National Collegiate Honor Society, all disciplines
+- Tau Sigma - National Honor Society for Transfer Students
+
+DEPARTMENTAL / FIELD-OF-STUDY HONOR SOCIETIES
+- Alpha Kappa Delta - Sociology
+- Alpha Phi Sigma - Criminal Justice
+- Alpha Psi Omega - Theatre
+- Beta Beta Beta - Biological Sciences
+- Chi Sigma Iota - Counseling
+- Iota Tau Alpha - Athletic Training
+- Kappa Delta Pi - Education
+- Kappa Kappa Psi - Music/Band
+- Lambda Pi Eta - Communication
+- Mu Kappa Tau - Marketing
+- Phi Alpha - Social Work
+- Phi Alpha Theta - History
+- Pi Alpha Alpha - Public Administration
+- Pi Sigma Alpha - Political Science
+- Psi Chi - Psychology
+- Sigma Beta Delta - Business, Management, and Administration
+- Sigma Delta Pi - Spanish
+- Sigma Tau Delta - English
+- Sigma Theta Tau (Lambda Iota Chapter) - Nursing
+- Upsilon Pi Epsilon - Computer Science and Information Technology
+
+HONOR SOCIETY ADVISOR / CONTACT DIRECTORY
+The official honor societies page lists faculty advisors and emails for many societies. Examples include:
+- Epsilon Epsilon Omega - Florangel Cabrera - fcabrera@kean.edu
+- Phi Kappa Phi - Carey Brown - brownca@kean.edu
+- Tau Sigma - Elia Serifovic / Richard Harrell - serifove@kean.edu / harrellr@kean.edu
+- Alpha Kappa Delta - Celene Krauss - ckrauss@kean.edu
+- Alpha Phi Sigma - Lauren Spath / Dennis Bogdan - spathl@kean.edu / dbogdan@kean.edu
+- Beta Beta Beta - Lucas Kirby (Kean Union) / Nancy E. La Fleur (Kean Ocean) - lukirby@kean.edu / nlafleur@kean.edu
+- Kappa Delta Pi - Steven LoCasio - locascst@kean.edu
+- Mu Kappa Tau - Shweta Singh - ssingh@kean.edu
+- Phi Alpha - Roxanne Ruiz-Adams - ruizadar@kean.edu
+- Phi Alpha Theta - Abigail Perkiss - aperkiss@kean.edu
+- Pi Alpha Alpha - Bok Gyo Jeong - bjeong@kean.edu
+- Pi Sigma Alpha - Gilbert Kahn - gkahn@kean.edu
+- Psi Chi - Verneda Hamm-Baugh - vbaugh@kean.edu
+- Sigma Beta Delta - Kihwan Kim - kikim@kean.edu
+- Sigma Delta Pi - Gregory Shephard - gshepher@kean.edu
+- Sigma Tau Delta - Nira Gupta-Casale (Kean Union) / Mia Fiore (Kean Ocean) - ncasale@kean.edu / mfiore@kean.edu
+- Sigma Theta Tau (Lambda Iota Chapter) - Prisca Anuforo - anuforop@kean.edu
+- Upsilon Pi Epsilon - Daehan Kwak - dkwak@kean.edu
+
+HONOR SOCIETY ELIGIBILITY / PROCESS EXAMPLES
+Kean maintains a PDF overview of honor society eligibility and induction information. Examples visible on the official 2026 honors/cords contact document include:
+- Phi Alpha Theta (History): students must hold a 3.3 overall GPA, have taken 45 credits with at least 12 in History at Kean, and have History as a first or second major; invitations are sent in February with induction in April.
+- Mu Kappa Tau (Marketing): students must complete 50 percent of coursework toward the marketing major, have at least a 3.25 GPA, and be in the top 10 percent of their class.
+- Lambda Alpha Sigma: recognition for juniors or seniors with at least 56 completed credits, including at least 32 at Kean, and qualifying GPA standards based on the calendar year's coursework.
+- Phi Kappa Phi: the PDF lists competitive academic ranking criteria for juniors and seniors and notes conduct/integrity requirements.
+- Upsilon Pi Epsilon: the Kean entry says undergraduate candidates in computing and information disciplines must complete at least 60 semester hours and have at least a 3.45 GPA; graduate candidates must complete at least 9 semester hours of graduate credit and have at least a 3.45 GPA.
+
+USEFUL PHYSICAL / ADMINISTRATIVE LOCATIONS
+- Center for Leadership and Service: Miron Student Center, Room 219
+- Main campus mailing location often used across Kean pages: 1000 Morris Avenue, Union, NJ 07083
+- Main university phone on kean.edu pages: 908-737-KEAN (5326)
+- Greek Life email noted on the official page: greeks@kean.edu
+
+RAG NOTES
+- Use the Q&A companion file for broad explanation-style answers.
+- Use this file for directory-style lookups, advisor/contact questions, and specific honor-society or cybersecurity-group lists.
+- Because active organizations, advisors, and eligibility details can change, systems using this file should prefer official Kean pages or CougarLink for the latest live status.
+
+OFFICIAL SOURCE URLS
+- https://www.kean.edu/student-life
+- https://www.kean.edu/offices/center-leadership-and-service/clubs-and-organizations
+- https://www.kean.edu/offices/center-leadership-and-service/clubs-and-organizations/student-group-recognition
+- https://www.kean.edu/offices/center-leadership-and-service/clubs-and-organizations/student-group-recognition/recognition
+- https://www.kean.edu/offices/center-leadership-and-service/forms-and-policies/student-group-recognition-policy
+- https://www.kean.edu/offices/center-leadership-and-service/greek-life
+- https://www.kean.edu/honor-societies
+- https://www.kean.edu/department-honor-societieshonor-cord-information
+- https://www.kean.edu/media/2026-honors-societiescords-contact-information
+- https://www.kean.edu/offices/center-leadership-and-service/community-and-volunteer-services
+- https://www.kean.edu/academics/college-business-and-public-management/center-cybersecurity-0/campus-groups-organizations
+- https://upe.kean.edu/

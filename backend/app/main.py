@@ -33,6 +33,7 @@ GEMINI_API_URL = os.getenv(
     "https://generativelanguage.googleapis.com/v1beta/models",
 )
 PRIMARY_LLM_PROVIDER = os.getenv("PRIMARY_LLM_PROVIDER", "gemini").strip().lower()
+ENABLE_OLLAMA_FALLBACK = os.getenv("ENABLE_OLLAMA_FALLBACK", "1").strip().lower() in {"1", "true", "yes", "on"}
 OLLAMA_CONNECT_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_CONNECT_TIMEOUT_SECONDS", "5"))
 OLLAMA_READ_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_READ_TIMEOUT_SECONDS", "30"))
 OLLAMA_TOTAL_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_TOTAL_TIMEOUT_SECONDS", "35"))
@@ -1117,7 +1118,66 @@ FAQ_TOPIC_RETRIEVAL_HINTS = {
     "smoking_policy": "smoking policy tobacco vape vaping no smoking",
     "dining": "dining food court marketplace starbucks cafe hours",
     "hours": "hours open opening closing schedule",
+    "sports_athletics": "athletics sports team varsity recreation intramural soccer basketball football baseball softball volleyball tennis swimming wrestling lacrosse golf track esports",
+    "student_orgs": "student organizations clubs cougarlink greek life fraternities sororities honor societies center for leadership and service involvement",
 }
+
+SPORT_QUERY_ALIASES = {
+    "baseball": ("baseball",),
+    "basketball": ("basketball",),
+    "cross country": ("cross country",),
+    "football": ("football",),
+    "golf": ("golf",),
+    "lacrosse": ("lacrosse",),
+    "outdoor track & field": ("outdoor track and field", "track and field", "track field"),
+    "soccer": ("soccer",),
+    "volleyball": ("volleyball",),
+    "wrestling": ("wrestling",),
+    "eSports": ("esports", "esport", "e sports", "e sport"),
+    "field hockey": ("field hockey",),
+    "flag football": ("flag football",),
+    "softball": ("softball",),
+    "swimming": ("swimming", "swim"),
+    "tennis": ("tennis",),
+}
+
+def extract_sport_subject(text: str) -> Optional[str]:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    for sport_name, aliases in SPORT_QUERY_ALIASES.items():
+        if any(keyword_in_text(q, q_tokens, alias) for alias in aliases):
+            return sport_name
+    return None
+
+def build_sports_team_availability_answer(question: str, context_blocks: list[str]) -> Optional[str]:
+    sport = extract_sport_subject(question)
+    if not sport or not context_blocks:
+        return None
+
+    normalized_blocks = [
+        re.sub(r"\s+", " ", normalize(block)).strip()
+        for block in context_blocks
+    ]
+    joined = " ".join(normalized_blocks)
+    sport_norm = normalize(sport)
+    if sport_norm not in joined:
+        return None
+
+    has_men = any(f"mens sports {sport_norm}" in block for block in normalized_blocks)
+    has_women = any(f"womens sports {sport_norm}" in block for block in normalized_blocks)
+    has_coed = any(f"co ed sports {sport_norm}" in block for block in normalized_blocks)
+
+    if has_men and has_women:
+        return f"Yes. Kean lists {sport} as both a men's and women's varsity sport."
+    if has_men:
+        return f"Yes. Kean lists {sport} as a men's varsity sport."
+    if has_women:
+        return f"Yes. Kean lists {sport} as a women's varsity sport."
+    if has_coed:
+        return f"Yes. Kean lists {sport} as a co-ed varsity sport."
+    if sport_norm == "soccer" and "soccer programs" in joined:
+        return "Yes. Kean's athletics records say it has both men's and women's soccer programs."
+    return f"Yes. Kean's athletics records mention {sport}."
 TRANSLATIONS = {
     "location_opening_specific": {
         "en": "{name} is on {campus}. Opening map.",
@@ -1294,6 +1354,14 @@ TRANSLATIONS = {
         "zh": "我在当前校园记录中未找到精确匹配。请用具体的项目或政策名称重新提问。",
         "ur": "موجودہ کیمپس ریکارڈ میں عین مطابق جواب نہیں ملا۔ براہِ کرم مخصوص پروگرام یا پالیسی کے نام کے ساتھ دوبارہ سوال کریں۔",
         "ko": "현재 캠퍼스 기록에서 정확한 일치를 찾지 못했습니다. 특정 프로그램 또는 정책 이름으로 다시 질문해 주세요.",
+    },
+    "student_orgs_not_found": {
+        "en": "I’m sorry, I could not find that student organization or honor society information in my current Kean records. Please check the official Kean University website or CougarLink for current or additional information: https://www.kean.edu",
+        "tr": "Üzgünüm, mevcut Kean kayıtlarımda bu öğrenci kulübü veya onur topluluğu bilgilerini bulamadım. Güncel veya ek bilgiler için lütfen resmi Kean Üniversitesi web sitesini ya da CougarLink'i kontrol edin: https://www.kean.edu",
+        "es": "Lo siento, no pude encontrar esa información sobre una organización estudiantil o sociedad de honor en mis registros actuales de Kean. Consulta el sitio web oficial de Kean University o CougarLink para obtener información actual o adicional: https://www.kean.edu",
+        "zh": "抱歉，我在当前的 Kean 记录中没有找到该学生组织或荣誉协会的信息。请查看 Kean University 官方网站或 CougarLink 获取最新或更多信息：https://www.kean.edu",
+        "ur": "معذرت، مجھے اپنے موجودہ Kean ریکارڈ میں اس طلبہ تنظیم یا آنر سوسائٹی کی معلومات نہیں ملیں۔ تازہ یا مزید معلومات کے لیے Kean University کی سرکاری ویب سائٹ یا CougarLink دیکھیں: https://www.kean.edu",
+        "ko": "죄송하지만 현재 Kean 기록에서 해당 학생 단체 또는 명예 학회 정보를 찾지 못했습니다. 최신 정보나 추가 정보는 Kean 공식 웹사이트 또는 CougarLink를 확인해 주세요: https://www.kean.edu",
     },
     "degree_exists_yes": {
         "en": "Yes, {subject} is listed at the {level} level.",
@@ -1851,7 +1919,12 @@ async def call_gemini(messages: list[dict], num_predict: Optional[int] = None) -
 
 async def call_primary_llm(messages: list[dict], num_predict: Optional[int] = None) -> str:
     last_error = None
-    providers = ["gemini", "ollama"] if PRIMARY_LLM_PROVIDER != "ollama" else ["ollama", "gemini"]
+    if PRIMARY_LLM_PROVIDER == "ollama":
+        providers = ["ollama", "gemini"]
+    else:
+        providers = ["gemini"]
+        if ENABLE_OLLAMA_FALLBACK:
+            providers.append("ollama")
 
     for provider in providers:
         try:
@@ -5324,6 +5397,16 @@ def retrieve_fallback_context(
             if "smoking" in source:
                 score *= 2.5
 
+        if faq_topic == "sports_athletics":
+            source = str(doc.get("source", "")).lower()
+            if any(keyword in source for keyword in ("sports", "athletic", "athletics", "recreation", "intramural")):
+                score *= 2.8
+
+        if faq_topic == "student_orgs":
+            source = str(doc.get("source", "")).lower()
+            if any(keyword in source for keyword in ("student_org", "honor_societ", "greek", "cougarlink", "student_life", "clubs", "organizations")):
+                score *= 2.8
+
         scored.append((score, doc))
 
     scored.sort(key=lambda item: item[0], reverse=True)
@@ -5370,10 +5453,9 @@ def should_ask_for_clarification(question: str, context_blocks: list[str], faq_t
     if not query_tokens:
         query_tokens = tokenize(question)
 
-    if not faq_topic and len(query_tokens) <= 2:
-        return True
-
     overlap = best_context_overlap(question, context_blocks)
+    if not faq_topic and len(query_tokens) <= 2:
+        return overlap == 0
     if faq_topic:
         return overlap == 0
     return overlap < 2
@@ -5497,6 +5579,9 @@ def build_fallback_answer(question: str, context_blocks: list[str], lang: str) -
     if not first_content_line:
         first_content_line = context_blocks[0][:280]
     return first_content_line[:280]
+
+def build_student_orgs_not_found_answer(lang: str) -> str:
+    return trn("student_orgs_not_found", lang)
 
 def _clean_fast_path_line(line: str) -> str:
     cleaned = line.strip()
@@ -6383,7 +6468,35 @@ async def chat(req: ChatRequest):
         )
         context_blocks = retrieve_fallback_context(fallback_query, faq_topic=faq_topic)
 
+    if faq_topic == "student_orgs" and not context_blocks:
+        return with_location({
+            "answer": build_student_orgs_not_found_answer(lang),
+            "intent": "faq",
+            "faq_topic": faq_topic,
+            "sources_used": 0,
+            "response_mode": "student_orgs_not_found",
+        })
+
+    if faq_topic == "sports_athletics" and context_blocks:
+        sports_answer = build_sports_team_availability_answer(user_text, context_blocks)
+        if sports_answer:
+            return with_location({
+                "answer": await localized(sports_answer),
+                "intent": "faq",
+                "faq_topic": faq_topic,
+                "sources_used": len(context_blocks),
+                "response_mode": "sports_direct",
+            })
+
     if should_ask_for_clarification(user_text, context_blocks, faq_topic):
+        if faq_topic == "student_orgs":
+            return with_location({
+                "answer": build_student_orgs_not_found_answer(lang),
+                "intent": "faq",
+                "faq_topic": faq_topic,
+                "sources_used": len(context_blocks),
+                "response_mode": "student_orgs_not_found",
+            })
         return with_location({
             "answer": trn("faq_clarify_reply", lang),
             "intent": "faq" if faq_topic else "general",
@@ -6401,6 +6514,14 @@ async def chat(req: ChatRequest):
                 "faq_topic": faq_topic,
                 "sources_used": len(context_blocks),
                 "response_mode": "fast_path",
+            })
+        if faq_topic == "student_orgs":
+            return with_location({
+                "answer": build_student_orgs_not_found_answer(lang),
+                "intent": "faq",
+                "faq_topic": faq_topic,
+                "sources_used": len(context_blocks),
+                "response_mode": "student_orgs_not_found",
             })
         return with_location({
             "answer": await localized(build_program_discovery_reply(user_text, lang) if faq_topic == "programs" else trn("faq_no_exact_match", lang)),
@@ -6424,7 +6545,19 @@ async def chat(req: ChatRequest):
                 "sources_used": len(context_blocks),
                 "response_mode": "fast_path_timeout",
             })
-        fallback_answer = build_program_discovery_reply(user_text, lang) if faq_topic == "programs" else build_fallback_answer(user_text, context_blocks, lang)
+        if faq_topic == "student_orgs":
+            return with_location({
+                "answer": build_student_orgs_not_found_answer(lang),
+                "intent": "faq" if faq_topic else "general",
+                "faq_topic": faq_topic,
+                "sources_used": len(context_blocks),
+                "response_mode": "student_orgs_not_found",
+            })
+        fallback_answer = (
+            build_program_discovery_reply(user_text, lang)
+            if faq_topic == "programs"
+            else build_fallback_answer(user_text, context_blocks, lang)
+        )
         return with_location({"answer": await localized(fallback_answer), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)})
     except Exception:
         fast_answer = build_fast_path_answer(user_text, context_blocks, lang, max_lines=2, faq_topic=faq_topic)
@@ -6436,7 +6569,19 @@ async def chat(req: ChatRequest):
                 "sources_used": len(context_blocks),
                 "response_mode": "fast_path_timeout",
             })
-        fallback_answer = build_program_discovery_reply(user_text, lang) if faq_topic == "programs" else build_fallback_answer(user_text, context_blocks, lang)
+        if faq_topic == "student_orgs":
+            return with_location({
+                "answer": build_student_orgs_not_found_answer(lang),
+                "intent": "faq" if faq_topic else "general",
+                "faq_topic": faq_topic,
+                "sources_used": len(context_blocks),
+                "response_mode": "student_orgs_not_found",
+            })
+        fallback_answer = (
+            build_program_discovery_reply(user_text, lang)
+            if faq_topic == "programs"
+            else build_fallback_answer(user_text, context_blocks, lang)
+        )
         return with_location({"answer": await localized(fallback_answer), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)})
 
     return with_location({"answer": await localized(reply), "intent": "faq" if faq_topic else "general", "faq_topic": faq_topic, "sources_used": len(context_blocks)})

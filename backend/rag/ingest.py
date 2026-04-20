@@ -119,7 +119,7 @@ def ingest():
     except:
         pass
 
-    collection = client.create_collection(
+    collection = client.get_or_create_collection(
         name=COLLECTION_NAME,
         embedding_function=embedding_function
     )
@@ -168,11 +168,21 @@ def ingest():
     # UPSERT EVERYTHING
     # ==============================
 
-    collection.upsert(
-        documents=documents,
-        ids=ids,
-        metadatas=metadatas
+    # Reacquire the collection after creation. Newer Chroma versions can behave
+    # inconsistently if we keep using a handle from just before/after deletion.
+    collection = client.get_or_create_collection(
+        name=COLLECTION_NAME,
+        embedding_function=embedding_function
     )
+
+    batch_size = 100
+    for i in range(0, len(documents), batch_size):
+        collection.upsert(
+            documents=documents[i : i + batch_size],
+            ids=ids[i : i + batch_size],
+            metadatas=metadatas[i : i + batch_size]
+        )
+        print(f"✅ Inserted chunks {i + 1} to {min(i + batch_size, len(documents))}")
 
     print("All text/JSON knowledge sources ingested successfully!")
 

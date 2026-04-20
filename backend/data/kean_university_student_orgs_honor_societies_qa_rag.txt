@@ -1,0 +1,164 @@
+TITLE: Kean University Student Organizations, Greek Life, Honor Societies, and Campus Involvement - Q&A RAG File
+LAST_UPDATED: 2026-04-19
+PRIMARY_DOMAIN: https://www.kean.edu/
+SYSTEMS: CougarLink / Engage
+ENTITY: Kean University Student Life, Center for Leadership and Service, Greek Life, Honor Societies, and Related Campus Groups
+LOCATION: 1000 Morris Avenue, Union, NJ 07083
+FORMAT_NOTE: This file is organized as short question-and-answer chunks for retrieval-augmented generation. It preserves official wording where possible and keeps alternate official counts when different Kean pages use different numbers.
+
+==================================================
+CHUNK 1
+QUESTION: What are the main ways students get involved at Kean University?
+ANSWER: Kean University supports student involvement through Student Life, the Center for Leadership and Service, recognized student organizations, student governments, Greek Life, honor societies, and CougarLink. Student Life presents these areas as major pathways for involvement and campus engagement.
+
+==================================================
+CHUNK 2
+QUESTION: How many student organizations does Kean University have?
+ANSWER: Official Kean pages use more than one count. The Student Life page says students can get involved through more than 160 student organizations. The student group recognition page says there are more than 120 student groups at Kean University. Because both numbers appear on official Kean pages, both should be preserved in a RAG system instead of forcing a single value.
+
+==================================================
+CHUNK 3
+QUESTION: What is CougarLink at Kean University?
+ANSWER: CougarLink is Kean University's online student group management and co-curricular involvement tracking system. Students are directed to CougarLink to search for active groups, explore involvement opportunities, and track extracurricular engagement. Older Kean event-planning guidance also describes CougarLink as the place where student groups submit event requests and activity information.
+
+==================================================
+CHUNK 4
+QUESTION: Which office handles student group recognition at Kean University?
+ANSWER: The Center for Leadership and Service handles student group recognition. Kean states that the Center for Leadership and Service, through the auspices of the Vice President for Student Affairs, is responsible for student group recognition and related development support.
+
+==================================================
+CHUNK 5
+QUESTION: What types of student groups are officially recognized by Kean University?
+ANSWER: Kean's recognition materials identify four broad categories of recognized student groups: Greek organizations, honor societies, student governments, and student clubs and organizations.
+
+==================================================
+CHUNK 6
+QUESTION: Does the Center for Leadership and Service approve athletic clubs?
+ANSWER: No. Kean states that athletic clubs or other high-risk clubs are not administered by the Center for Leadership and Service, and applications for recognition through that office will be denied.
+
+==================================================
+CHUNK 7
+QUESTION: What is one important requirement for a recognized student organization at Kean?
+ANSWER: Kean's Student Group Recognition Policy states that a group must have a full-time Kean University faculty or staff advisor who is appointed for a one-year term and approved by the Center for Leadership and Service.
+
+==================================================
+CHUNK 8
+QUESTION: What support does Kean provide to recognized student groups?
+ANSWER: The Center for Leadership and Service lists multiple support resources for recognized groups, including student group locker space, help with room reservations, assistance with student group forms, assistance with student government paperwork, CougarLink support, student group consulting, a student group and leadership resource library, student group development, and workshops and training.
+
+==================================================
+CHUNK 9
+QUESTION: What is Greek Life at Kean University?
+ANSWER: Kean states that Greek Life empowers members of Greek-letter organizations to promote and preserve the ideals of scholarship, service, leadership, campus involvement, and brotherhood or sisterhood. Kean also says Greek chapters enhance the quality of life for students on and off campus by providing opportunities for meaningful involvement and growth.
+
+==================================================
+CHUNK 10
+QUESTION: What is the role of the Greek Senate at Kean University?
+ANSWER: Kean states that the Greek Senate is advised and supported by the Center for Leadership and Service. It promotes cooperation among Greek organizations through activities and programs and serves as a governing body that develops standards, policies, and procedures relating to Greek affairs.
+
+==================================================
+CHUNK 11
+QUESTION: Where can students contact Greek Life at Kean University?
+ANSWER: Kean's Greek Life page says the Greek Senate can be reached through the Center for Leadership and Service, located in Miron Student Center, Room 219, or by email at greeks@kean.edu.
+
+==================================================
+CHUNK 12
+QUESTION: Does Kean University hold an event for students interested in Greek organizations?
+ANSWER: Yes. Kean says a Meet the Greeks event is held at the beginning of each fall and spring semester so interested students can learn about Greek-letter organizations and involvement opportunities.
+
+==================================================
+CHUNK 13
+QUESTION: What national sororities are specifically mentioned on Kean's Greek Life page?
+ANSWER: The Greek Life page states that the Panhellenic Association at Kean promotes unity among national sororities and currently lists Delta Phi Epsilon and Theta Phi Alpha.
+
+==================================================
+CHUNK 14
+QUESTION: What are the main purposes of fraternities and sororities at Kean University?
+ANSWER: Kean lists several purposes for fraternities and sororities: Greek identity and tradition, leadership development, scholastic support, diversified social programming, and community involvement and service.
+
+==================================================
+CHUNK 15
+QUESTION: What are honor societies at Kean University?
+ANSWER: Kean states that academic achievement is recognized by election during the junior or senior year to one of the honor societies established at the university. Qualified candidates receive notification of eligibility and an invitation to membership directly from the local chapter of the sponsoring honor society.
+
+==================================================
+CHUNK 16
+QUESTION: What university-wide honor societies are listed by Kean University?
+ANSWER: Kean's honor societies page lists the following university-wide honor societies: Epsilon Epsilon Omega, Lambda Alpha Sigma, Phi Kappa Phi, and Tau Sigma.
+
+==================================================
+CHUNK 17
+QUESTION: What departmental or field-specific honor societies are listed by Kean University?
+ANSWER: Kean's honor society information pages list many field-specific societies, including Alpha Kappa Delta for Sociology, Alpha Phi Sigma for Criminal Justice, Alpha Psi Omega for Theatre, Beta Beta Beta for Biological Sciences, Chi Sigma Iota for Counseling, Iota Tau Alpha for Athletic Training, Kappa Delta Pi for Education, Kappa Kappa Psi for Music/Band, Lambda Pi Eta for Communication, Mu Kappa Tau for Marketing, Phi Alpha for Social Work, Phi Alpha Theta for History, Pi Alpha Alpha for Public Administration, Pi Sigma Alpha for Political Science, Psi Chi for Psychology, Sigma Beta Delta for Business, Management, and Administration, Sigma Delta Pi for Spanish, Sigma Tau Delta for English, Sigma Theta Tau for Nursing, and Upsilon Pi Epsilon for Computer Science and Information Technology.
+
+==================================================
+CHUNK 18
+QUESTION: Does Computer Science have an honor society at Kean University?
+ANSWER: Yes. Kean's Department Honor Societies and Honor Cord Information page lists Upsilon Pi Epsilon as the honor society for Computer Science and Information Technology. The page lists faculty advisor Daehan Kwak and the contact email dkwak@kean.edu.
+
+==================================================
+CHUNK 19
+QUESTION: Can a RAG system use Kean honor society faculty contacts?
+ANSWER: Yes. Kean's honor societies page includes faculty advisor names and email addresses for many honor societies. These can be useful for a RAG system that answers questions about who advises a chapter or where students can ask for more information.
+
+==================================================
+CHUNK 20
+QUESTION: What are some examples of faculty advisor listings for Kean honor societies?
+ANSWER: Examples shown on Kean's official honor society information pages include Florangel Cabrera for Epsilon Epsilon Omega, Carey Brown for Phi Kappa Phi, Celene Krauss for Alpha Kappa Delta, Daehan Kwak for Upsilon Pi Epsilon, Steven LoCasio for Kappa Delta Pi, Roxanne Ruiz-Adams for Phi Alpha, Abigail Perkiss for Phi Alpha Theta, Gilbert Kahn for Pi Sigma Alpha, Verneda Hamm-Baugh for Psi Chi, Kihwan Kim for Sigma Beta Delta, Gregory Shephard for Sigma Delta Pi, and Prisca Anuforo for Sigma Theta Tau.
+
+==================================================
+CHUNK 21
+QUESTION: What are sample eligibility examples for Kean honor societies?
+ANSWER: Kean maintains honor society information pages with sample eligibility notes. Examples visible there include Phi Alpha Theta requiring a 3.3 overall GPA, 45 credits completed, at least 12 credits in History at Kean, and History as a first or second major. The same information set describes Mu Kappa Tau as requiring at least 50 percent of coursework toward the marketing major, at least a 3.25 GPA, and top 10 percent class standing. The Kean Upsilon Pi Epsilon entry says undergraduate candidates in computing and information disciplines must complete at least 60 semester hours and have at least a 3.45 GPA, while graduate candidates must complete at least 9 semester hours of graduate credit and have at least a 3.45 GPA. These examples should be checked against the current official page or chapter contact because chapter requirements can change.
+
+==================================================
+CHUNK 22
+QUESTION: Are there program-specific student organizations beyond the main Student Life pages?
+ANSWER: Yes. Some Kean academic units highlight additional groups or partner organizations on their own pages. These can supplement the central student involvement pages and are useful to include in a broad RAG system.
+
+==================================================
+CHUNK 23
+QUESTION: What campus groups and organizations are listed on Kean's Center for Cybersecurity pages?
+ANSWER: Kean's Center for Cybersecurity pages list or reference multiple groups and related organizations, including CAE in Cybersecurity Community, Women in Cybersecurity (WiCyS) Chapter, Association for Computing Machinery on Women in Computing (ACM-W), National Cybersecurity Student Association, Association for Computing Machinery, Upsilon Pi Epsilon, Girls Who Code, NextGen Cyber, and Alpha Phi Sigma as the Criminal Justice Honor Society. Related partner or affiliate organizations also include Cloud Security Alliance, Palo Alto Networks Cybersecurity Academy, CompTIA Academy Partner, National CyberWatch Center, and the NCyTE Center.
+
+==================================================
+CHUNK 24
+QUESTION: Are all items on program pages traditional student clubs?
+ANSWER: No. Some program pages mix student clubs, honor societies, chapters, professional associations, academy partnerships, and external affiliations. A RAG system should avoid assuming every listed item is a standard student-run club.
+
+==================================================
+CHUNK 25
+QUESTION: What does Kean say about community and volunteer service involvement?
+ANSWER: The Center for Leadership and Service states that it serves the university community as a student-focused connection point for student involvement and campus engagement. It encourages active citizenship and celebrates individual and community involvement, which makes service opportunities another important part of Kean's involvement ecosystem.
+
+==================================================
+CHUNK 26
+QUESTION: How should a chatbot answer questions about Kean student organizations when the exact club list is not embedded in the RAG file?
+ANSWER: The chatbot should explain that Kean directs students to CougarLink to search active student groups and current opportunities. It can then provide the main involvement offices, recognition categories, and any known category-based examples such as Greek organizations, honor societies, student governments, and program-specific groups.
+
+==================================================
+CHUNK 27
+QUESTION: How should a chatbot handle conflicting counts such as 120 plus groups versus 160 plus organizations?
+ANSWER: The chatbot should say that Kean's official pages use different counts on different pages. It should preserve both numbers, explain that they likely reflect different snapshots or categorization approaches, and avoid claiming that one number is definitively correct unless Kean publishes a single updated total.
+
+==================================================
+CHUNK 28
+QUESTION: What is a good retrieval strategy for Kean organization questions?
+ANSWER: For best retrieval, use separate chunks for student organization basics, recognition policy, CougarLink, Greek Life, honor societies, and college-specific organizations. Questions about joining, eligibility, or contacts should route to the most specific chunk possible, while questions asking for the current full club list should be answered with a referral to CougarLink.
+
+==================================================
+CHUNK 29
+QUESTION: What should a chatbot say if someone asks how to start a new student group at Kean?
+ANSWER: The chatbot should direct the user to the Center for Leadership and Service and the Student Group Recognition Policy. It should mention that recognition requests are reviewed each semester and that one stated requirement is a full-time Kean faculty or staff advisor approved by the Center for Leadership and Service.
+
+==================================================
+CHUNK 30
+QUESTION: What should a chatbot say if someone asks about Greek new member education rules?
+ANSWER: The chatbot should note that Kean publishes Greek new member education guidelines and that groups are required to submit required materials in advance through the Center for Leadership and Service Greek Affairs process. For precise compliance details, the chatbot should direct the user to the current official Greek Life guidelines.
+
+==================================================
+CHUNK 31
+QUESTION: What should a chatbot say if someone asks where to begin for student involvement at Kean University?
+ANSWER: A practical answer is: Start with Student Life and CougarLink to explore active organizations and opportunities. For creating or recognizing a group, contact the Center for Leadership and Service. For fraternities and sororities, use the Greek Life page or contact the Center for Leadership and Service in Miron Student Center Room 219. For academic recognition, review the official honor societies page.
+
+END OF FILE
