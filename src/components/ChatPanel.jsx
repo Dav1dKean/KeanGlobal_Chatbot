@@ -4,6 +4,7 @@ import chatbotButtonImage from "../assets/Chatbot Button.png";
 import { API_BASE_URLS } from "../lib/api";
 
 const CHAT_STORAGE_KEY = "keanglobal_chat_messages";
+const CHAT_SESSION_KEY = "keanglobal_chat_session_id";
 const URL_PATTERN = /((?:https?:\/\/)[^\s]+)([.,;:!?)]*)(?=\s|$)/gi;
 const DEFAULT_GREETING = {
   text: "Hello! How can I help you today? I can answer questions about Kean University and help with campus locations and directions.",
@@ -26,6 +27,13 @@ const VOICE_LANGUAGE_OPTIONS = [
   { value: "tr", label: "TR" },
   { value: "ur", label: "UR" }
 ];
+
+function createChatSessionId() {
+  if (window.crypto?.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+  return `chat-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
 
 function detectSpeechLanguage(text, fallbackLanguage = "") {
   const sample = String(text || "").trim();
@@ -218,8 +226,23 @@ function ChatPanel({
   const lastExternalMessageIdRef = useRef(null);
   const routeRequestCounterRef = useRef(0);
   const chatBoxRef = useRef(null);
+  const sessionIdRef = useRef("");
   const [isCompactOpen, setIsCompactOpen] = useState(true);
   const [showCompactCallout, setShowCompactCallout] = useState(true);
+
+  if (!sessionIdRef.current) {
+    try {
+      const storedSessionId = localStorage.getItem(CHAT_SESSION_KEY);
+      if (storedSessionId) {
+        sessionIdRef.current = storedSessionId;
+      } else {
+        sessionIdRef.current = createChatSessionId();
+        localStorage.setItem(CHAT_SESSION_KEY, sessionIdRef.current);
+      }
+    } catch {
+      sessionIdRef.current = createChatSessionId();
+    }
+  }
 
   function applyRecognitionLanguage(recognition, sampleText = "") {
     const language = getActiveSpeechLanguage(sampleText);
@@ -387,7 +410,7 @@ function ChatPanel({
           response = await fetch(`${baseUrl}/chat`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: userMessage }),
+            body: JSON.stringify({ message: userMessage, session_id: sessionIdRef.current }),
             signal: abortControllerRef.current.signal
           });
           data = await response.json().catch(() => ({}));
@@ -522,6 +545,12 @@ function ChatPanel({
     setShowMap(false);
     setRouteRequest(null);
     localStorage.removeItem(CHAT_STORAGE_KEY);
+    sessionIdRef.current = createChatSessionId();
+    try {
+      localStorage.setItem(CHAT_SESSION_KEY, sessionIdRef.current);
+    } catch {
+      // Ignore storage issues; the in-memory session id still resets the chat context.
+    }
     abortControllerRef.current = null;
     pendingUserMessageRef.current = "";
   }

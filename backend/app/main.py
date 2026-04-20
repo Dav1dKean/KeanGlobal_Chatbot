@@ -261,6 +261,7 @@ policy_collection = client.get_or_create_collection(
 
 class ChatRequest(BaseModel):
     message: str
+    session_id: Optional[str] = None
 
 # CALENDAR LOGIC
 
@@ -330,7 +331,7 @@ def event_matches_category(event_name: str, category: str) -> bool:
         return any(token in event_text for token in ("exam", "final"))
     return False
 
-def extract_term_from_text(text: str) -> Optional[str]:
+def extract_term_from_text(text: str, conversation_state: Optional[dict] = None) -> Optional[str]:
     q = normalize(text)
     season = next(
         (season_en for season_en, aliases in SEASON_ALIASES.items() if any(alias in q for alias in aliases)),
@@ -350,7 +351,7 @@ def extract_term_from_text(text: str) -> Optional[str]:
     if short_year_match:
         return f"{season} 20{short_year_match.group(1)}"
 
-    fallback_term = str(conversation_state.get("last_calendar_term") or "").strip()
+    fallback_term = str((conversation_state or {}).get("last_calendar_term") or "").strip()
     _, fallback_year = extract_season_year_from_term(fallback_term) if fallback_term else (None, None)
     if fallback_year is not None:
         return f"{season} {fallback_year}"
@@ -397,6 +398,16 @@ def infer_best_calendar_term_for_season(season: str) -> Optional[str]:
 
     season_anchors.sort()
     return season_anchors[-1][1]
+
+
+def get_conversation_state(session_id: Optional[str]) -> dict:
+    raw_session_id = str(session_id or "").strip()
+    safe_session_id = re.sub(r"[^a-zA-Z0-9._:-]", "", raw_session_id)[:120] or "default"
+    state = conversation_states.get(safe_session_id)
+    if state is None:
+        state = fresh_conversation_state()
+        conversation_states[safe_session_id] = state
+    return state
 
 def format_calendar_term_label(term_key: str) -> str:
     q = normalize(term_key)
@@ -936,23 +947,30 @@ FAQ_INTENT_KEYWORDS = {}
 campus_locations = []
 campus_location_by_id = {}
 fallback_rag_docs = []
-conversation_state = {
-    "turn_id": 0,
-    "last_degree_subject": None,
-    "last_degree_level": None,
-    "last_tuition_level": None,
-    "last_tuition_turn_id": None,
-    "pending_calendar_category": None,
-    "last_calendar_term": None,
-    "last_answer": None,
-    "last_faq_topic": None,
-    "last_destination_id": None,
-    "last_destination_turn_id": None,
-    "last_service_destination_id": None,
-    "last_service_destination_turn_id": None,
-    "last_intent": None,
-    "last_response_mode": None,
-}
+
+
+def fresh_conversation_state() -> dict:
+    return {
+        "turn_id": 0,
+        "last_degree_subject": None,
+        "last_degree_level": None,
+        "last_tuition_level": None,
+        "last_tuition_turn_id": None,
+        "pending_calendar_category": None,
+        "last_calendar_term": None,
+        "last_answer": None,
+        "last_faq_topic": None,
+        "last_destination_id": None,
+        "last_destination_turn_id": None,
+        "last_service_destination_id": None,
+        "last_service_destination_turn_id": None,
+        "last_intent": None,
+        "last_response_mode": None,
+        "last_start_id": None,
+    }
+
+
+conversation_states: dict[str, dict] = {}
 KEAN_MAIN_URL = "https://www.kean.edu"
 KEAN_PROGRAMS_URL = "https://www.kean.edu/academics"
 KEAN_CATALOG_URL = "https://kean.smartcatalogiq.com/"
@@ -2828,13 +2846,14 @@ def is_tuition_rate_question(text: str) -> bool:
         for keyword in ("payment plan", "payment plans", "monthly payment", "installment plan", "refund", "late fee")
     )
 
-def is_tuition_follow_up_question(text: str) -> bool:
+def is_tuition_follow_up_question(text: str, conversation_state: Optional[dict] = None) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
-    if conversation_state.get("last_faq_topic") != "student_accounts":
+    state = conversation_state or {}
+    if state.get("last_faq_topic") != "student_accounts":
         return False
-    last_tuition_turn_id = conversation_state.get("last_tuition_turn_id")
-    current_turn_id = int(conversation_state.get("turn_id") or 0)
+    last_tuition_turn_id = state.get("last_tuition_turn_id")
+    current_turn_id = int(state.get("turn_id") or 0)
     if last_tuition_turn_id is None or current_turn_id - int(last_tuition_turn_id) > 3:
         return False
     return any(
@@ -3213,9 +3232,10 @@ def build_student_accounts_answer(lang: str) -> str:
         "5. More information: https://www.kean.edu/offices/student-accounting"
     )
 
-def build_tuition_answer(text: str, lang: str) -> str:
+def build_tuition_answer(text: str, lang: str, conversation_state: Optional[dict] = None) -> str:
     detected_level = detect_tuition_level(text)
-    level = detected_level if detected_level != "general" else (conversation_state.get("last_tuition_level") or "general")
+    state = conversation_state or {}
+    level = detected_level if detected_level != "general" else (state.get("last_tuition_level") or "general")
     residency = detect_tuition_residency(text)
     load = detect_tuition_load(text)
     class_count = extract_tuition_class_count(text)
@@ -4925,12 +4945,13 @@ def prefers_service_location_follow_up(text: str) -> bool:
         )
     )
 
-def choose_contextual_destination_id(text: str) -> Optional[str]:
-    current_turn_id = int(conversation_state.get("turn_id") or 0)
-    service_destination_id = conversation_state.get("last_service_destination_id")
-    service_turn_id = conversation_state.get("last_service_destination_turn_id")
-    last_destination_id = conversation_state.get("last_destination_id")
-    destination_turn_id = conversation_state.get("last_destination_turn_id")
+def choose_contextual_destination_id(text: str, conversation_state: Optional[dict] = None) -> Optional[str]:
+    state = conversation_state or {}
+    current_turn_id = int(state.get("turn_id") or 0)
+    service_destination_id = state.get("last_service_destination_id")
+    service_turn_id = state.get("last_service_destination_turn_id")
+    last_destination_id = state.get("last_destination_id")
+    destination_turn_id = state.get("last_destination_turn_id")
 
     def is_recent(turn_id: Optional[int], max_age: int = 3) -> bool:
         if turn_id is None:
@@ -4941,11 +4962,11 @@ def choose_contextual_destination_id(text: str) -> Optional[str]:
     recent_destination_id = last_destination_id if is_recent(destination_turn_id) else None
 
     if not recent_service_destination_id and service_destination_id and not is_recent(service_turn_id):
-        conversation_state["last_service_destination_id"] = None
-        conversation_state["last_service_destination_turn_id"] = None
+        state["last_service_destination_id"] = None
+        state["last_service_destination_turn_id"] = None
     if not recent_destination_id and last_destination_id and not is_recent(destination_turn_id):
-        conversation_state["last_destination_id"] = None
-        conversation_state["last_destination_turn_id"] = None
+        state["last_destination_id"] = None
+        state["last_destination_turn_id"] = None
 
     if prefers_service_location_follow_up(text) and recent_service_destination_id:
         return recent_service_destination_id
@@ -5513,8 +5534,9 @@ def build_rag_prompt(user_text: str, context_blocks: list[str], faq_topic: Optio
         f"User question: {user_text}"
     )
 
-async def answer_from_last_response(user_text: str, lang: str) -> Optional[str]:
-    last_answer = str(conversation_state.get("last_answer") or "").strip()
+async def answer_from_last_response(user_text: str, lang: str, conversation_state: Optional[dict] = None) -> Optional[str]:
+    state = conversation_state or {}
+    last_answer = str(state.get("last_answer") or "").strip()
     if not last_answer:
         return None
 
@@ -5769,6 +5791,7 @@ def health():
 @app.post("/chat")
 async def chat(req: ChatRequest):
     user_text = req.message.strip()
+    conversation_state = get_conversation_state(req.session_id)
     conversation_state["turn_id"] = int(conversation_state.get("turn_id") or 0) + 1
     lang = detect_language(user_text)
     current_datetime_answer = build_current_datetime_answer(user_text) if is_current_datetime_question(user_text) else None
@@ -5919,8 +5942,18 @@ async def chat(req: ChatRequest):
             "response_mode": "farewell",
         }
 
-    contextual_destination_id = choose_contextual_destination_id(user_text)
-    if is_contextual_location_follow_up(user_text, contextual_destination_id):
+    explicit_location_request = bool(
+        route_start_id
+        or route_end_id
+        or destination_id
+        or location_clause_destination_id
+        or normalized_destination_id
+        or normalized_start_id
+        or department_entry
+        or ambiguous_department_entries
+    )
+    contextual_destination_id = choose_contextual_destination_id(user_text, conversation_state)
+    if not explicit_location_request and is_contextual_location_follow_up(user_text, contextual_destination_id):
         last_destination_id = contextual_destination_id
         follow_up_mode = "directions" if should_use_current_location(user_text) else "highlight"
         destination = campus_location_by_id.get(last_destination_id, {}) if last_destination_id else {}
@@ -5939,7 +5972,7 @@ async def chat(req: ChatRequest):
         })
 
     if is_last_answer_follow_up_request(user_text):
-        follow_up_answer = await answer_from_last_response(user_text, lang)
+        follow_up_answer = await answer_from_last_response(user_text, lang, conversation_state)
         if follow_up_answer:
             return remember_response({
                 "answer": follow_up_answer.strip(),
@@ -6025,9 +6058,9 @@ async def chat(req: ChatRequest):
             "response_mode": "financial_aid_direct",
         })
 
-    if is_tuition_follow_up_question(user_text):
+    if is_tuition_follow_up_question(user_text, conversation_state):
         return with_location({
-            "answer": await localized(build_tuition_answer(user_text, lang)),
+            "answer": await localized(build_tuition_answer(user_text, lang, conversation_state)),
             "intent": "faq",
             "faq_topic": "student_accounts",
             "response_mode": "tuition_follow_up",
@@ -6038,7 +6071,7 @@ async def chat(req: ChatRequest):
         conversation_state["last_tuition_level"] = detected_tuition_level if detected_tuition_level != "general" else conversation_state.get("last_tuition_level")
         conversation_state["last_tuition_turn_id"] = conversation_state["turn_id"]
         return with_location({
-            "answer": await localized(build_tuition_answer(user_text, lang)),
+            "answer": await localized(build_tuition_answer(user_text, lang, conversation_state)),
             "intent": "faq",
             "faq_topic": "student_accounts",
             "response_mode": "tuition_direct",
@@ -6334,7 +6367,7 @@ async def chat(req: ChatRequest):
         })
 
     if is_calendar_question(user_text) or is_calendar_timing_question(user_text):
-        term = extract_term_from_text(user_text)
+        term = extract_term_from_text(user_text, conversation_state)
         session = extract_session_from_text(user_text)
         category = detect_event_category(user_text) or pending_calendar_category
         if term:
@@ -6407,7 +6440,7 @@ async def chat(req: ChatRequest):
         }
 
     if pending_calendar_category:
-        term = extract_term_from_text(user_text)
+        term = extract_term_from_text(user_text, conversation_state)
         if term:
             matched = next((t for t in calendar_data if term in t), None)
             session = extract_session_from_text(user_text)
