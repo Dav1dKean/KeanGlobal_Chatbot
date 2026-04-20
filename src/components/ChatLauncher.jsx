@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import chatbotButtonImage from "../assets/Chatbot button.png";
+import chatbotButtonImage from "../assets/Chatbot Button.png";
 
 export default function ChatLauncher({ defaultOpen = false, className = "" }) {
   const navigate = useNavigate();
