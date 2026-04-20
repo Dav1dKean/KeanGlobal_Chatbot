@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ChatPanel from "../components/ChatPanel";
 import MapPanel from "../components/MapPanel";
+
+const MOBILE_LAYOUT_BREAKPOINT = 980;
 
 function buildRouteRequestFromSearch(search) {
   const params = new URLSearchParams(search);
@@ -32,6 +34,13 @@ export default function MapPage({
   const [showMap, setShowMap] = useState(standalone || forceShowMap || Boolean(externalRouteRequest) || Boolean(initialRouteRequest));
   const [routeRequest, setRouteRequest] = useState(externalRouteRequest || initialRouteRequest);
   const [routeDirectionsMessage, setRouteDirectionsMessage] = useState(null);
+  const [isMobileLayout, setIsMobileLayout] = useState(() => (
+    typeof window !== "undefined" ? window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT : false
+  ));
+  const [mobileActivePanel, setMobileActivePanel] = useState(() => (
+    standalone || forceShowMap || Boolean(externalRouteRequest) || Boolean(initialRouteRequest) ? "map" : "chat"
+  ));
+  const previousShowMapRef = useRef(showMap);
 
   useEffect(() => {
     if (externalRouteRequest) {
@@ -46,11 +55,66 @@ export default function MapPage({
     }
   }, [forceShowMap]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+
+    const handleResize = () => {
+      setIsMobileLayout(window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (standalone) {
+      setMobileActivePanel("map");
+      return;
+    }
+
+    if (!showMap) {
+      setMobileActivePanel("chat");
+    } else if (!previousShowMapRef.current) {
+      setMobileActivePanel("map");
+    }
+
+    previousShowMapRef.current = showMap;
+  }, [showMap, standalone]);
+
+  useEffect(() => {
+    if (routeRequest && !standalone) {
+      setMobileActivePanel("map");
+    }
+  }, [routeRequest, standalone]);
+
   const layoutClassName = standalone ? "main-layout map-only" : showMap ? "main-layout two-col" : "main-layout one-col";
+  const rootClassName = `${layoutClassName}${isMobileLayout && !standalone ? " mobile-stacked" : ""}`;
+  const showMobileTabs = !standalone && isMobileLayout && showMap;
 
   return (
-    <div className={layoutClassName}>
-      {!standalone && (
+    <div className={rootClassName}>
+      {showMobileTabs && (
+        <div className="mobile-panel-tabs" role="tablist" aria-label="Chat and map panels">
+          <button
+            type="button"
+            className={`mobile-panel-tab${mobileActivePanel === "chat" ? " active" : ""}`}
+            onClick={() => setMobileActivePanel("chat")}
+            aria-pressed={mobileActivePanel === "chat"}
+          >
+            Chat
+          </button>
+          <button
+            type="button"
+            className={`mobile-panel-tab${mobileActivePanel === "map" ? " active" : ""}`}
+            onClick={() => setMobileActivePanel("map")}
+            aria-pressed={mobileActivePanel === "map"}
+          >
+            Map
+          </button>
+        </div>
+      )}
+      {!standalone && (!showMobileTabs || mobileActivePanel === "chat") && (
         <ChatPanel
           setShowMap={setShowMap}
           setRouteRequest={setRouteRequest}
@@ -64,7 +128,7 @@ export default function MapPage({
           }}
         />
       )}
-      {(showMap || standalone) && (
+      {(showMap || standalone) && (!showMobileTabs || mobileActivePanel === "map") && (
         <MapPanel
           setShowMap={setShowMap}
           routeRequest={routeRequest}
