@@ -223,7 +223,12 @@ load_calendars()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 CHROMA_PATH = BASE_DIR / "app" / "chroma_db"
-LOCATION_JSON_PATH = BASE_DIR.parent / "src" / "data" / "kean_locations.json"
+LOCATION_JSON_ENV_PATH = os.getenv("KEAN_LOCATIONS_PATH", "").strip()
+LOCATION_JSON_CANDIDATE_PATHS = [
+    Path(LOCATION_JSON_ENV_PATH).expanduser() if LOCATION_JSON_ENV_PATH else None,
+    BASE_DIR / "data" / "kean_locations.json",
+    BASE_DIR.parent / "src" / "data" / "kean_locations.json",
+]
 POLICY_FOLDER = BASE_DIR / "Policies"
 DATA_FOLDER = BASE_DIR / "data"
 FAQ_INTENT_PATH = DATA_FOLDER / "faq_intent_keywords.json"
@@ -231,6 +236,16 @@ EXCLUDED_RAG_DIR_NAMES = {"venv", ".venv", "chroma_db", "__pycache__"}
 EXCLUDED_RAG_FILE_NAMES = {"requirements.txt", "_RAG_TEMPLATE.txt", "faq_intent_keywords.json", "program_info_rag.txt"}
 PROGRAMS_FILE = DATA_FOLDER / "program_info.json"
 DEPARTMENT_DIRECTORY_FILE = DATA_FOLDER / "kean_departments_rag_ready_v2.txt"
+
+
+def resolve_location_json_path() -> Optional[Path]:
+    for candidate in LOCATION_JSON_CANDIDATE_PATHS:
+        if candidate and candidate.exists():
+            return candidate
+    return None
+
+
+LOCATION_JSON_PATH = resolve_location_json_path()
 
 client = chromadb.PersistentClient(path=str(CHROMA_PATH))
 embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
@@ -2024,10 +2039,11 @@ def haversine_meters(point_a: tuple[float, float], point_b: tuple[float, float])
 
 def load_campus_locations():
     rows = []
-    if not LOCATION_JSON_PATH.exists():
+    location_json_path = LOCATION_JSON_PATH or resolve_location_json_path()
+    if not location_json_path or not location_json_path.exists():
         return rows
 
-    with open(LOCATION_JSON_PATH, "r", encoding="utf-8") as f:
+    with open(location_json_path, "r", encoding="utf-8") as f:
         try:
             entries = json.load(f)
         except json.JSONDecodeError:

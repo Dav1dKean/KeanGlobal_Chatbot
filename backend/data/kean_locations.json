@@ -1,0 +1,3202 @@
+[
+  {
+    "id": "administration",
+    "name": "Administration Building",
+    "latlng": "40.679752, -74.236319",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.679752,
+    "longitude": -74.236319,
+    "coordinates": [
+      -74.236319,
+      40.679752
+    ]
+  },
+  {
+    "id": "administration_main",
+    "name": "Administration Building Entrance front",
+    "latlng": "40.679803, -74.236143",
+    "campus": "Main",
+    "routable": "no",
+    "parent": "administration",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.679803,
+    "longitude": -74.236143,
+    "coordinates": [
+      -74.236143,
+      40.679803
+    ]
+  },
+  {
+    "id": "administration_side",
+    "name": "Administration Building Entrance side",
+    "latlng": "40.67991700156569, -74.23623757429775",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": null,
+    "type": "entrance",
+    "latitude": 40.67991700156569,
+    "longitude": -74.23623757429775,
+    "coordinates": [
+      -74.23623757429775,
+      40.67991700156569
+    ]
+  },
+  {
+    "id": "admissions_faculty_lot",
+    "name": "Admissions Faculty Lot",
+    "latlng": "40.680773, -74.233794",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.680773,
+    "longitude": -74.233794,
+    "coordinates": [
+      -74.233794,
+      40.680773
+    ]
+  },
+  {
+    "id": "admissions_student_lot",
+    "name": "Admissions Student Lot",
+    "latlng": "40.680909, -74.234782",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.680909,
+    "longitude": -74.234782,
+    "coordinates": [
+      -74.234782,
+      40.680909
+    ]
+  },
+  {
+    "id": "alumni_stadium",
+    "name": "Alumni Stadium",
+    "latlng": "40.681074, -74.238488",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.681074,
+    "longitude": -74.238488,
+    "coordinates": [
+      -74.238488,
+      40.681074
+    ]
+  },
+  {
+    "id": "alumni_stadium_main",
+    "name": "Alumni Stadium Main Entrance",
+    "latlng": "40.681394, -74.23742",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "alumni_stadium",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.681394,
+    "longitude": -74.23742,
+    "coordinates": [
+      -74.23742,
+      40.681394
+    ]
+  },
+  {
+    "id": "barnes_nobles_glab",
+    "name": "Barnes & Noble at GLAB",
+    "latlng": "40.68279938793707, -74.23643410660495",
+    "campus": "Main",
+    "routable": "Yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.68279938793707,
+    "longitude": -74.23643410660495,
+    "coordinates": [
+      -74.23643410660495,
+      40.68279938793707
+    ]
+  },
+  {
+    "id": "bartlett_hall",
+    "name": "Bartlett Hall (AN)",
+    "latlng": "40.675968, -74.234307",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.675968,
+    "longitude": -74.234307,
+    "coordinates": [
+      -74.234307,
+      40.675968
+    ]
+  },
+  {
+    "id": "bartlett_hall_main",
+    "name": "Bartlett Hall (AN) Main Entrance",
+    "latlng": "40.675979, -74.23431",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "bartlett_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.675979,
+    "longitude": -74.23431,
+    "coordinates": [
+      -74.23431,
+      40.675979
+    ]
+  },
+  {
+    "id": "basketball_courts",
+    "name": "Basketball Courts",
+    "latlng": "40.677401, -74.233978",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.677401,
+    "longitude": -74.233978,
+    "coordinates": [
+      -74.233978,
+      40.677401
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_east_campus_rear_entrance",
+    "name": "Bike / Scooter Parking - East Campus Rear Entrance",
+    "latlng": "40.68013960374249, -74.2239020734109",
+    "campus": "East",
+    "routable": "yes",
+    "parent": "east_campus_building",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.68013960374249,
+    "longitude": -74.2239020734109,
+    "coordinates": [
+      -74.2239020734109,
+      40.68013960374249
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_east_campus_upper_parking_lot",
+    "name": "Bike / Scooter Parking - East Campus Upper Parking Lot",
+    "latlng": "40.68010119914793, -74.2235722025143",
+    "campus": "East",
+    "routable": "yes",
+    "parent": "east_campus_building",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.68010119914793,
+    "longitude": -74.2235722025143,
+    "coordinates": [
+      -74.2235722025143,
+      40.68010119914793
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_glab_main_entrance",
+    "name": "Bike / Scooter Parking - GLAB Main Entrance",
+    "latlng": "40.68255637476004, -74.2363213444878",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "glab",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.68255637476004,
+    "longitude": -74.2363213444878,
+    "coordinates": [
+      -74.2363213444878,
+      40.68255637476004
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_harwood_cougar_walk",
+    "name": "Bike / Scooter Parking - Harwood Arena Along Cougar Walk",
+    "latlng": "40.67982798510823, -74.237310615438",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "harwood_arena",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.67982798510823,
+    "longitude": -74.237310615438,
+    "coordinates": [
+      -74.237310615438,
+      40.67982798510823
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_hynes_main_entrance",
+    "name": "Bike / Scooter Parking - Hynes Hall Main Entrance",
+    "latlng": "40.6825943704733, -74.23250759099703",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "hynes_hall",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.6825943704733,
+    "longitude": -74.23250759099703,
+    "coordinates": [
+      -74.23250759099703,
+      40.6825943704733
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_naab_main_entrance",
+    "name": "Bike / Scooter Parking - NAAB Main Entrance",
+    "latlng": "40.676755189796495, -74.229086282946",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "naab",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.676755189796495,
+    "longitude": -74.229086282946,
+    "coordinates": [
+      -74.229086282946,
+      40.676755189796495
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_stem_atrium",
+    "name": "Bike / Scooter Parking - STEM Building Atrium Entrance",
+    "latlng": "40.679720699031954, -74.230948337167",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "stem",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.679720699031954,
+    "longitude": -74.230948337167,
+    "coordinates": [
+      -74.230948337167,
+      40.679720699031954
+    ]
+  },
+  {
+    "id": "bike_scooter_parking_wilkins_cougar_walk",
+    "name": "Bike / Scooter Parking - Wilkins Theatre Along Cougar Walk",
+    "latlng": "40.67838661653724, -74.232733220658",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "wilkins_theatre",
+    "accessibility": "yes",
+    "type": "bike_scooter_parking",
+    "latitude": 40.67838661653724,
+    "longitude": -74.232733220658,
+    "coordinates": [
+      -74.232733220658,
+      40.67838661653724
+    ]
+  },
+  {
+    "id": "bouer_boucher_theater",
+    "name": "Bauer Boucher Theatre Center",
+    "latlng": "40.677583746069274, -74.23078403401954",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.677583746069274,
+    "longitude": -74.23078403401954,
+    "coordinates": [
+      -74.23078403401954,
+      40.677583746069274
+    ]
+  },
+  {
+    "id": "bruce_hall",
+    "name": "Bruce Hall (B)",
+    "latlng": "40.680128, -74.234865",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.680128,
+    "longitude": -74.234865,
+    "coordinates": [
+      -74.234865,
+      40.680128
+    ]
+  },
+  {
+    "id": "bruce_hall_main",
+    "name": "Bruce Hall (B) Main Entrance",
+    "latlng": "40.680019, -74.234618",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "bruce_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.680019,
+    "longitude": -74.234618,
+    "coordinates": [
+      -74.234618,
+      40.680019
+    ]
+  },
+  {
+    "id": "burch_hall",
+    "name": "Burch Hall (AE)",
+    "latlng": "40.675893, -74.233733",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.675893,
+    "longitude": -74.233733,
+    "coordinates": [
+      -74.233733,
+      40.675893
+    ]
+  },
+  {
+    "id": "burch_hall_main",
+    "name": "Burch Hall (AE) Main Entrance",
+    "latlng": "40.675679, -74.233671",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "burch_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.675679,
+    "longitude": -74.233671,
+    "coordinates": [
+      -74.233671,
+      40.675679
+    ]
+  },
+  {
+    "id": "burger_art_gallery",
+    "name": "Burger Art Gallery",
+    "latlng": "40.67852161773807, -74.23433924892579",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67852161773807,
+    "longitude": -74.23433924892579,
+    "coordinates": [
+      -74.23433924892579,
+      40.67852161773807
+    ]
+  },
+  {
+    "id": "campus_police",
+    "name": "Kean Police / Public Safety",
+    "latlng": "40.676771, -74.232851",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.676771,
+    "longitude": -74.232851,
+    "coordinates": [
+      -74.232851,
+      40.676771
+    ]
+  },
+  {
+    "id": "campus_police_main",
+    "name": "Kean Police / Public Safety Main Entrance",
+    "latlng": "40.676749, -74.232902",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "campus_police",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.676749,
+    "longitude": -74.232902,
+    "coordinates": [
+      -74.232902,
+      40.676749
+    ]
+  },
+  {
+    "id": "cas",
+    "name": "Maxine and Jack Lane Center for Academic Success (CAS)",
+    "latlng": "40.67852, -74.233667",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67852,
+    "longitude": -74.233667,
+    "coordinates": [
+      -74.233667,
+      40.67852
+    ]
+  },
+  {
+    "id": "cas_main_front1",
+    "name": "Maxine and Jack Lane Center for Academic Success (CAS) Entrance front1",
+    "latlng": "40.678568, -74.233363",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "cas",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.678568,
+    "longitude": -74.233363,
+    "coordinates": [
+      -74.233363,
+      40.678568
+    ]
+  },
+  {
+    "id": "cas_main_front2",
+    "name": "Maxine and Jack Lane Center for Academic Success (CAS) Entrance front2",
+    "latlng": "40.678412, -74.234182",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.678412,
+    "longitude": -74.234182,
+    "coordinates": [
+      -74.234182,
+      40.678412
+    ]
+  },
+  {
+    "id": "cas_main_rear",
+    "name": "Maxine and Jack Lane Center for Academic Success (CAS) Entrance  rear",
+    "latlng": "40.678946, -74.234384",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.678946,
+    "longitude": -74.234384,
+    "coordinates": [
+      -74.234384,
+      40.678946
+    ]
+  },
+  {
+    "id": "Cougar Pantry",
+    "name": "Cougar Pantry",
+    "latlng": "40.676557, -74.232478",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.676557,
+    "longitude": -74.232478,
+    "coordinates": [
+      -74.232478,
+      40.676557
+    ]
+  },
+  {
+    "id": "cougar_hall",
+    "name": "Cougar Hall",
+    "latlng": "40.67901, -74.236734",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67901,
+    "longitude": -74.236734,
+    "coordinates": [
+      -74.236734,
+      40.67901
+    ]
+  },
+  {
+    "id": "cougar_hall_faculty_staff_lot",
+    "name": "Cougar Hall Faculty/Staff Lot",
+    "latlng": "40.678646, -74.237620",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.678646,
+    "longitude": -74.23762,
+    "coordinates": [
+      -74.23762,
+      40.678646
+    ]
+  },
+  {
+    "id": "cougar_hall_lot",
+    "name": "Cougar Hall Lot",
+    "latlng": "40.678616, -74.237648",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.678616,
+    "longitude": -74.237648,
+    "coordinates": [
+      -74.237648,
+      40.678616
+    ]
+  },
+  {
+    "id": "cougar_hall_main",
+    "name": "Cougar Hall Main Entrance",
+    "latlng": "40.679237, -74.236822",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "cougar_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.679237,
+    "longitude": -74.236822,
+    "coordinates": [
+      -74.236822,
+      40.679237
+    ]
+  },
+  {
+    "id": "cougar_softball_field",
+    "name": "Cougar Softball Field",
+    "latlng": "40.67996407162828, -74.23930400643496",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67996407162828,
+    "longitude": -74.23930400643496,
+    "coordinates": [
+      -74.23930400643496,
+      40.67996407162828
+    ]
+  },
+  {
+    "id": "cougars_den",
+    "name": "Cougars Den",
+    "latlng": "40.677733, -74.234573",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.677733,
+    "longitude": -74.234573,
+    "coordinates": [
+      -74.234573,
+      40.677733
+    ]
+  },
+  {
+    "id": "d_angola_gym",
+    "name": "D'Angola Gymnasium",
+    "latlng": "40.680088, -74.237896",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.680088,
+    "longitude": -74.237896,
+    "coordinates": [
+      -74.237896,
+      40.680088
+    ]
+  },
+  {
+    "id": "d_angola_gym_lot_2",
+    "name": "D'Angola Gym Lot 2",
+    "latlng": "40.679377, -74.238682",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.679377,
+    "longitude": -74.238682,
+    "coordinates": [
+      -74.238682,
+      40.679377
+    ]
+  },
+  {
+    "id": "d_angola_gym_main",
+    "name": "D'Angola Gymnasium Main Entrance",
+    "latlng": "40.68004, -74.237543",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "d_angola_gym",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.68004,
+    "longitude": -74.237543,
+    "coordinates": [
+      -74.237543,
+      40.68004
+    ]
+  },
+  {
+    "id": "d_angola_lot",
+    "name": "D'Angola Lot",
+    "latlng": "40.679394, -74.23875",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.679394,
+    "longitude": -74.23875,
+    "coordinates": [
+      -74.23875,
+      40.679394
+    ]
+  },
+  {
+    "id": "d_angola_pool",
+    "name": "D'Angola Pool",
+    "latlng": "40.67979671480611, -74.23864032922894",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67979671480611,
+    "longitude": -74.23864032922894,
+    "coordinates": [
+      -74.23864032922894,
+      40.67979671480611
+    ]
+  },
+  {
+    "id": "dougall_hall",
+    "name": "Dougall Hall (DO)",
+    "latlng": "40.676428, -74.233711",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.676428,
+    "longitude": -74.233711,
+    "coordinates": [
+      -74.233711,
+      40.676428
+    ]
+  },
+  {
+    "id": "dougall_hall_main",
+    "name": "Dougall Hall (DO) Main Entrance",
+    "latlng": "40.676446, -74.233576",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "dougall_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.676446,
+    "longitude": -74.233576,
+    "coordinates": [
+      -74.233576,
+      40.676446
+    ]
+  },
+  {
+    "id": "downs_hall",
+    "name": "Downs Hall",
+    "latlng": "40.67675, -74.232487",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67675,
+    "longitude": -74.232487,
+    "coordinates": [
+      -74.232487,
+      40.67675
+    ]
+  },
+  {
+    "id": "downs_hall_main",
+    "name": "Downs Hall Entrance front",
+    "latlng": "40.677054, -74.232313",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "downs_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.677054,
+    "longitude": -74.232313,
+    "coordinates": [
+      -74.232313,
+      40.677054
+    ]
+  },
+  {
+    "id": "downs_hall_rear",
+    "name": "Downs Hall Entrance rear",
+    "latlng": "40.676496, -74.23221",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "downs_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.676496,
+    "longitude": -74.23221,
+    "coordinates": [
+      -74.23221,
+      40.676496
+    ]
+  },
+  {
+    "id": "east_campus_building",
+    "name": "East Campus Building (EC)",
+    "latlng": "40.680021, -74.223654",
+    "campus": "East",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.680021,
+    "longitude": -74.223654,
+    "coordinates": [
+      -74.223654,
+      40.680021
+    ]
+  },
+  {
+    "id": "east_campus_building_main",
+    "name": "East Campus Building (EC) Main Entrance",
+    "latlng": "40.680063, -74.223575",
+    "campus": "East",
+    "routable": "yes",
+    "parent": "east_campus_building",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.680063,
+    "longitude": -74.223575,
+    "coordinates": [
+      -74.223575,
+      40.680063
+    ]
+  },
+  {
+    "id": "east_campus_faculty_lot",
+    "name": "East Campus Faculty Lot",
+    "latlng": "40.680189, -74.223390",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.680189,
+    "longitude": -74.22339,
+    "coordinates": [
+      -74.22339,
+      40.680189
+    ]
+  },
+  {
+    "id": "east_campus_gym",
+    "name": "East Campus Gym (EC)",
+    "latlng": "40.680213, -74.224516",
+    "campus": "East",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.680213,
+    "longitude": -74.224516,
+    "coordinates": [
+      -74.224516,
+      40.680213
+    ]
+  },
+  {
+    "id": "east_campus_lot",
+    "name": "East Campus Lot",
+    "latlng": "40.680689, -74.224403",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.680689,
+    "longitude": -74.224403,
+    "coordinates": [
+      -74.224403,
+      40.680689
+    ]
+  },
+  {
+    "id": "east_campus_lower_lot",
+    "name": "East Campus Lower Lot",
+    "latlng": "40.680874, -74.224894",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.680874,
+    "longitude": -74.224894,
+    "coordinates": [
+      -74.224894,
+      40.680874
+    ]
+  },
+  {
+    "id": "east_campus_overflow_lot",
+    "name": "East Campus Overflow Lot",
+    "latlng": "40.681733, -74.225542",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.681733,
+    "longitude": -74.225542,
+    "coordinates": [
+      -74.225542,
+      40.681733
+    ]
+  },
+  {
+    "id": "east_campus_upper_lot",
+    "name": "East Campus Upper Lot",
+    "latlng": "40.680227, -74.223294",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.680227,
+    "longitude": -74.223294,
+    "coordinates": [
+      -74.223294,
+      40.680227
+    ]
+  },
+  {
+    "id": "emergency_phone_administration_building",
+    "name": "Emergency Phone - Administration Building",
+    "latlng": "40.68005581524508, -74.23647257045144",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.68005581524508,
+    "longitude": -74.23647257045144,
+    "coordinates": [
+      -74.23647257045144,
+      40.68005581524508
+    ]
+  },
+  {
+    "id": "emergency_phone_burch_hall",
+    "name": "Emergency Phone - Burch Hall",
+    "latlng": "40.676012794028935, -74.23341644514363",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.676012794028935,
+    "longitude": -74.23341644514363,
+    "coordinates": [
+      -74.23341644514363,
+      40.676012794028935
+    ]
+  },
+  {
+    "id": "emergency_phone_d_angola_gym",
+    "name": "Emergency Phone - D'Angola Gym",
+    "latlng": "40.68002604379305, -74.23840904408362",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.68002604379305,
+    "longitude": -74.23840904408362,
+    "coordinates": [
+      -74.23840904408362,
+      40.68002604379305
+    ]
+  },
+  {
+    "id": "emergency_phone_downs_hall",
+    "name": "Emergency Phone - Downs Hall",
+    "latlng": "40.676520610980674, -74.23214025585794",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.676520610980674,
+    "longitude": -74.23214025585794,
+    "coordinates": [
+      -74.23214025585794,
+      40.676520610980674
+    ]
+  },
+  {
+    "id": "emergency_phone_east_campus_building",
+    "name": "Emergency Phone - East Campus Building",
+    "latlng": "40.68011171763527, -74.22356418804576",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.68011171763527,
+    "longitude": -74.22356418804576,
+    "coordinates": [
+      -74.22356418804576,
+      40.68011171763527
+    ]
+  },
+  {
+    "id": "emergency_phone_east_campus_gym",
+    "name": "Emergency Phone - East Campus Gym",
+    "latlng": "40.680384164047354, -74.22437550178365",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.680384164047354,
+    "longitude": -74.22437550178365,
+    "coordinates": [
+      -74.22437550178365,
+      40.680384164047354
+    ]
+  },
+  {
+    "id": "emergency_phone_glab",
+    "name": "Emergency Phone - GLAB",
+    "latlng": "40.682459970061956, -74.23696673185415",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.682459970061956,
+    "longitude": -74.23696673185415,
+    "coordinates": [
+      -74.23696673185415,
+      40.682459970061956
+    ]
+  },
+  {
+    "id": "emergency_phone_hardwood_arena",
+    "name": "Emergency Phone - Hardwood Arena",
+    "latlng": "40.68079076061588, -74.23663353145112",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.68079076061588,
+    "longitude": -74.23663353145112,
+    "coordinates": [
+      -74.23663353145112,
+      40.68079076061588
+    ]
+  },
+  {
+    "id": "emergency_phone_hutchinson_hall",
+    "name": "Emergency Phone - Hutchinson Hall",
+    "latlng": "40.68006520407931, -74.23360129355417",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.68006520407931,
+    "longitude": -74.23360129355417,
+    "coordinates": [
+      -74.23360129355417,
+      40.68006520407931
+    ]
+  },
+  {
+    "id": "emergency_phone_kean_east_soccer_field_1",
+    "name": "Emergency Phone - Kean East Soccer Field 1",
+    "latlng": "40.68295616245571, -74.22699868793165",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.68295616245571,
+    "longitude": -74.22699868793165,
+    "coordinates": [
+      -74.22699868793165,
+      40.68295616245571
+    ]
+  },
+  {
+    "id": "emergency_phone_kean_hall_parking",
+    "name": "Emergency Phone - Kean Hall Parking",
+    "latlng": "40.68160341755545, -74.23614385691243",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.68160341755545,
+    "longitude": -74.23614385691243,
+    "coordinates": [
+      -74.23614385691243,
+      40.68160341755545
+    ]
+  },
+  {
+    "id": "emergency_phone_liberty_hall_academic_building",
+    "name": "Emergency Phone - Liberty Hall Academic Building",
+    "latlng": "40.67997913249283, -74.22749741448807",
+    "campus": "Liberty Hall",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.67997913249283,
+    "longitude": -74.22749741448807,
+    "coordinates": [
+      -74.22749741448807,
+      40.67997913249283
+    ]
+  },
+  {
+    "id": "emergency_phone_nancy_thompson_library",
+    "name": "Emergency Phone - Nancy Thompson Library",
+    "latlng": "40.67835767029922, -74.23313808310853",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.67835767029922,
+    "longitude": -74.23313808310853,
+    "coordinates": [
+      -74.23313808310853,
+      40.67835767029922
+    ]
+  },
+  {
+    "id": "emergency_phone_north_ave_exit",
+    "name": "Emergency Phone - North Ave Exit",
+    "latlng": "40.67558305136038, -74.22893257444088",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.67558305136038,
+    "longitude": -74.22893257444088,
+    "coordinates": [
+      -74.22893257444088,
+      40.67558305136038
+    ]
+  },
+  {
+    "id": "emergency_phone_overnight_parking",
+    "name": "Emergency Phone - Overnight Parking",
+    "latlng": "40.675409540008104, -74.23046830543981",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.675409540008104,
+    "longitude": -74.23046830543981,
+    "coordinates": [
+      -74.23046830543981,
+      40.675409540008104
+    ]
+  },
+  {
+    "id": "emergency_phone_residential_halls",
+    "name": "Emergency Phone - Residential Halls",
+    "latlng": "40.676120257317365, -74.23449111096154",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.676120257317365,
+    "longitude": -74.23449111096154,
+    "coordinates": [
+      -74.23449111096154,
+      40.676120257317365
+    ]
+  },
+  {
+    "id": "emergency_phone_vaughn_eames_hall",
+    "name": "Emergency Phone - Vaughn-Eames Hall",
+    "latlng": "40.67688918121405, -74.2313076232538",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.67688918121405,
+    "longitude": -74.2313076232538,
+    "coordinates": [
+      -74.2313076232538,
+      40.67688918121405
+    ]
+  },
+  {
+    "id": "emergency_phone_wilkins_theater",
+    "name": "Emergency Phone - Wilkins Theater",
+    "latlng": "40.678318928583764, -74.23184238226719",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "emergency_phone",
+    "latitude": 40.678318928583764,
+    "longitude": -74.23184238226719,
+    "coordinates": [
+      -74.23184238226719,
+      40.678318928583764
+    ]
+  },
+  {
+    "id": "enlow_hall_lawn",
+    "name": "The Lawn at Enlow Hall",
+    "latlng": "40.681790758695435, -74.22514721600169",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.681790758695435,
+    "longitude": -74.22514721600169,
+    "coordinates": [
+      -74.22514721600169,
+      40.681790758695435
+    ]
+  },
+  {
+    "id": "enlow_recital_hall",
+    "name": "Enlow Recital Hall",
+    "latlng": "40.679829, -74.22393",
+    "campus": "East",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.679829,
+    "longitude": -74.22393,
+    "coordinates": [
+      -74.22393,
+      40.679829
+    ]
+  },
+  {
+    "id": "enlow_recital_hall_main",
+    "name": "Enlow Recital Hall Main Entrance",
+    "latlng": "40.679668, -74.223811",
+    "campus": "East",
+    "routable": "yes",
+    "parent": "enlow_recital_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.679668,
+    "longitude": -74.223811,
+    "coordinates": [
+      -74.223811,
+      40.679668
+    ]
+  },
+  {
+    "id": "ev_charging_station_east_campus",
+    "name": "EV Charging Station - East Campus",
+    "latlng": "40.68070268534062, -74.22374272714143",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "ev_charging_station",
+    "latitude": 40.68070268534062,
+    "longitude": -74.22374272714143,
+    "coordinates": [
+      -74.22374272714143,
+      40.68070268534062
+    ]
+  },
+  {
+    "id": "ev_charging_station_main_campus",
+    "name": "EV Charging Station - Main Campus",
+    "latlng": "40.679800095192554, -74.23326375455993",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "ev_charging_station",
+    "latitude": 40.679800095192554,
+    "longitude": -74.23326375455993,
+    "coordinates": [
+      -74.23326375455993,
+      40.679800095192554
+    ]
+  },
+  {
+    "id": "facilities",
+    "name": "Facilities (M)",
+    "latlng": "40.677933, -74.236523",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.677933,
+    "longitude": -74.236523,
+    "coordinates": [
+      -74.236523,
+      40.677933
+    ]
+  },
+  {
+    "id": "freshman_residence_hall",
+    "name": "Freshman Residence Hall (FRH)",
+    "latlng": "40.676528, -74.234594",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.676528,
+    "longitude": -74.234594,
+    "coordinates": [
+      -74.234594,
+      40.676528
+    ]
+  },
+  {
+    "id": "freshman_residence_hall_main",
+    "name": "Freshman Residence Hall (FRH) Main Entrance",
+    "latlng": "40.676597, -74.234606",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "freshman_residence_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.676597,
+    "longitude": -74.234606,
+    "coordinates": [
+      -74.234606,
+      40.676597
+    ]
+  },
+  {
+    "id": "george_hennings_research",
+    "name": "George Hennings Research",
+    "latlng": "40.680601, -74.234041",
+    "campus": "Main",
+    "routable": null,
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.680601,
+    "longitude": -74.234041,
+    "coordinates": [
+      -74.234041,
+      40.680601
+    ]
+  },
+  {
+    "id": "glab",
+    "name": "Green Lane Academic Building (GLAB)",
+    "latlng": "40.68264, -74.23614",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.68264,
+    "longitude": -74.23614,
+    "coordinates": [
+      -74.23614,
+      40.68264
+    ]
+  },
+  {
+    "id": "glab_lot",
+    "name": "GLAB Lot",
+    "latlng": "40.682491, -74.237025",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.682491,
+    "longitude": -74.237025,
+    "coordinates": [
+      -74.237025,
+      40.682491
+    ]
+  },
+  {
+    "id": "glab_main",
+    "name": "Green Lane Academic Building (GLAB) Main Entrance",
+    "latlng": "40.682573, -74.236298",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "glab",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.682573,
+    "longitude": -74.236298,
+    "coordinates": [
+      -74.236298,
+      40.682573
+    ]
+  },
+  {
+    "id": "green_house",
+    "name": "Green House / Faculty Lounge",
+    "latlng": "40.681202, -74.2347",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.681202,
+    "longitude": -74.2347,
+    "coordinates": [
+      -74.2347,
+      40.681202
+    ]
+  },
+  {
+    "id": "green_house_main",
+    "name": "Green House / Faculty Lounge Main Entrance",
+    "latlng": "40.68115, -74.234773",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "green_house",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.68115,
+    "longitude": -74.234773,
+    "coordinates": [
+      -74.234773,
+      40.68115
+    ]
+  },
+  {
+    "id": "guest_house",
+    "name": "Guest House",
+    "latlng": "40.678884, -74.238206",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.678884,
+    "longitude": -74.238206,
+    "coordinates": [
+      -74.238206,
+      40.678884
+    ]
+  },
+  {
+    "id": "guest_house_main",
+    "name": "Guest House Main Entrance",
+    "latlng": "40.678924, -74.238214",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "guest_house",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.678924,
+    "longitude": -74.238214,
+    "coordinates": [
+      -74.238214,
+      40.678924
+    ]
+  },
+  {
+    "id": "harwood_arena",
+    "name": "Harwood Arena",
+    "latlng": "40.680463, -74.237419",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.680463,
+    "longitude": -74.237419,
+    "coordinates": [
+      -74.237419,
+      40.680463
+    ]
+  },
+  {
+    "id": "harwood_arena_main",
+    "name": "Harwood Arena Main Entrance",
+    "latlng": "40.680069, -74.237517",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "harwood_arena",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.680069,
+    "longitude": -74.237517,
+    "coordinates": [
+      -74.237517,
+      40.680069
+    ]
+  },
+  {
+    "id": "harwood_lot",
+    "name": "Harwood Lot",
+    "latlng": "40.680893, -74.23704",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.680893,
+    "longitude": -74.23704,
+    "coordinates": [
+      -74.23704,
+      40.680893
+    ]
+  },
+  {
+    "id": "hennings_hall",
+    "name": "George Hennings Hall",
+    "latlng": "40.680143, -74.23395",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.680143,
+    "longitude": -74.23395,
+    "coordinates": [
+      -74.23395,
+      40.680143
+    ]
+  },
+  {
+    "id": "hennings_hall_front",
+    "name": "George Hennings Hall Entrance front",
+    "latlng": "40.680282, -74.233861",
+    "campus": null,
+    "routable": "yes",
+    "parent": "hennings_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.680282,
+    "longitude": -74.233861,
+    "coordinates": [
+      -74.233861,
+      40.680282
+    ]
+  },
+  {
+    "id": "hennings_hall_side",
+    "name": "George Hennings Hall Entrance side",
+    "latlng": "40.680212, -74.234141",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.680212,
+    "longitude": -74.234141,
+    "coordinates": [
+      -74.234141,
+      40.680212
+    ]
+  },
+  {
+    "id": "hennings_research",
+    "name": "Hennings Research Building",
+    "latlng": "40.680618006062204, -74.23398878808257",
+    "campus": null,
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.680618006062204,
+    "longitude": -74.23398878808257,
+    "coordinates": [
+      -74.23398878808257,
+      40.680618006062204
+    ]
+  },
+  {
+    "id": "hri",
+    "name": "Human Rights Institute (HRI)",
+    "latlng": "40.678259, -74.233358",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.678259,
+    "longitude": -74.233358,
+    "coordinates": [
+      -74.233358,
+      40.678259
+    ]
+  },
+  {
+    "id": "hri_main",
+    "name": "Human Rights Institute (HRI) Main Entrance",
+    "latlng": "40.678275, -74.233703",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "hri",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.678275,
+    "longitude": -74.233703,
+    "coordinates": [
+      -74.233703,
+      40.678275
+    ]
+  },
+  {
+    "id": "hutchinson_hall Main",
+    "name": "Hutchinson Hall",
+    "latlng": "40.679625, -74.233574",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.679625,
+    "longitude": -74.233574,
+    "coordinates": [
+      -74.233574,
+      40.679625
+    ]
+  },
+  {
+    "id": "hutchinson_hall_front",
+    "name": "Hutchinson Hall Entrance front",
+    "latlng": "40.679948626630306, -74.23361387507424",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.679948626630306,
+    "longitude": -74.23361387507424,
+    "coordinates": [
+      -74.23361387507424,
+      40.679948626630306
+    ]
+  },
+  {
+    "id": "hutchinson_hall_rear",
+    "name": "Hutchinson Hall Entrance rear",
+    "latlng": "40.679547731459564, -74.23370060425557",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.679547731459564,
+    "longitude": -74.23370060425557,
+    "coordinates": [
+      -74.23370060425557,
+      40.679547731459564
+    ]
+  },
+  {
+    "id": "hutchinson_hall_side",
+    "name": "Hutchinson Hall Entrance side",
+    "latlng": "40.679372, -74.233277",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "hutchinson_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.679372,
+    "longitude": -74.233277,
+    "coordinates": [
+      -74.233277,
+      40.679372
+    ]
+  },
+  {
+    "id": "Hynes_hall",
+    "name": "Hynes Hall",
+    "latlng": "40.68291429778565, -74.232361190369",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.68291429778565,
+    "longitude": -74.232361190369,
+    "coordinates": [
+      -74.232361190369,
+      40.68291429778565
+    ]
+  },
+  {
+    "id": "Hynes_hall_entrance_front",
+    "name": "Hynes Hall Entrance front",
+    "latlng": "40.68281154703821, -74.23265092751998",
+    "campus": null,
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.68281154703821,
+    "longitude": -74.23265092751998,
+    "coordinates": [
+      -74.23265092751998,
+      40.68281154703821
+    ]
+  },
+  {
+    "id": "Hynes_hall_entrance_rear",
+    "name": "Hynes Hall Entrance rear",
+    "latlng": "40.68299233191311, -74.2321368420578",
+    "campus": null,
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.68299233191311,
+    "longitude": -74.2321368420578,
+    "coordinates": [
+      -74.2321368420578,
+      40.68299233191311
+    ]
+  },
+  {
+    "id": "hynes_hall_lot",
+    "name": "Hynes Hall Lot",
+    "latlng": "40.683246, -74.23179",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.683246,
+    "longitude": -74.23179,
+    "coordinates": [
+      -74.23179,
+      40.683246
+    ]
+  },
+  {
+    "id": "hynes_hall_lot_overflow_lot",
+    "name": "Hynes Hall Lot Overflow Lot",
+    "latlng": "40.683159, -74.230489",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.683159,
+    "longitude": -74.230489,
+    "coordinates": [
+      -74.230489,
+      40.683159
+    ]
+  },
+  {
+    "id": "jim_hynes_basefll_stadium",
+    "name": "Jim Hynes '63 Baseball Stadium",
+    "latlng": "40.679945, -74.239338",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.679945,
+    "longitude": -74.239338,
+    "coordinates": [
+      -74.239338,
+      40.679945
+    ]
+  },
+  {
+    "id": "jim_hynes_stadium_main",
+    "name": "Jim Hynes '63 Stadium Main Entrance",
+    "latlng": "40.679673, -74.239102",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "jim_hynes_stadium",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.679673,
+    "longitude": -74.239102,
+    "coordinates": [
+      -74.239102,
+      40.679673
+    ]
+  },
+  {
+    "id": "kean_beach_volleyball_court",
+    "name": "Kean Beach Volleyball Court",
+    "latlng": "40.67734412866824, -74.23437037201894",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "field",
+    "latitude": 40.67734412866824,
+    "longitude": -74.23437037201894,
+    "coordinates": [
+      -74.23437037201894,
+      40.67734412866824
+    ]
+  },
+  {
+    "id": "kean_clock_tower",
+    "name": "Kean Clock Tower",
+    "latlng": "40.67811497857712, -74.23446170541764",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "landmark",
+    "latitude": 40.67811497857712,
+    "longitude": -74.23446170541764,
+    "coordinates": [
+      -74.23446170541764,
+      40.67811497857712
+    ]
+  },
+  {
+    "id": "kean_day_care_center",
+    "name": "Kean Day Care Center",
+    "latlng": "40.679413, -74.235357",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.679413,
+    "longitude": -74.235357,
+    "coordinates": [
+      -74.235357,
+      40.679413
+    ]
+  },
+  {
+    "id": "kean_east_soccer_field",
+    "name": "Kean East Soccer Field",
+    "latlng": "40.68337752740948, -74.22767345991934",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.68337752740948,
+    "longitude": -74.22767345991934,
+    "coordinates": [
+      -74.22767345991934,
+      40.68337752740948
+    ]
+  },
+  {
+    "id": "kean_east_soccer_field_1",
+    "name": "Kean East Soccer Field 1",
+    "latlng": "40.68327775534743, -74.22764990471772",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "field",
+    "latitude": 40.68327775534743,
+    "longitude": -74.22764990471772,
+    "coordinates": [
+      -74.22764990471772,
+      40.68327775534743
+    ]
+  },
+  {
+    "id": "kean_east_soccer_field_2",
+    "name": "Kean East Soccer Field 2",
+    "latlng": "40.68171469964415, -74.22664204721536",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "field",
+    "latitude": 40.68171469964415,
+    "longitude": -74.22664204721536,
+    "coordinates": [
+      -74.22664204721536,
+      40.68171469964415
+    ]
+  },
+  {
+    "id": "kean_hall",
+    "name": "Kean Hall",
+    "latlng": "40.680906, -74.235654",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.680906,
+    "longitude": -74.235654,
+    "coordinates": [
+      -74.235654,
+      40.680906
+    ]
+  },
+  {
+    "id": "kean_hall_entrance_front",
+    "name": "Kean Hall Entrance front",
+    "latlng": "40.680916038677786, -74.23575959668204",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "kean_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.680916038677786,
+    "longitude": -74.23575959668204,
+    "coordinates": [
+      -74.23575959668204,
+      40.680916038677786
+    ]
+  },
+  {
+    "id": "kean_hall_entrance_side",
+    "name": "Kean Hall Entrance side",
+    "latlng": "40.68122747329496, -74.23534094830305",
+    "campus": null,
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.68122747329496,
+    "longitude": -74.23534094830305,
+    "coordinates": [
+      -74.23534094830305,
+      40.68122747329496
+    ]
+  },
+  {
+    "id": "kean_hall_faculty_staff_lot",
+    "name": "Kean Hall Faculty/Staff Lot",
+    "latlng": "40.680814, -74.234500",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.680814,
+    "longitude": -74.2345,
+    "coordinates": [
+      -74.2345,
+      40.680814
+    ]
+  },
+  {
+    "id": "kean_hall_lot",
+    "name": "Kean Hall Lot",
+    "latlng": "40.681925, -74.235855",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.681925,
+    "longitude": -74.235855,
+    "coordinates": [
+      -74.235855,
+      40.681925
+    ]
+  },
+  {
+    "id": "kean_hall_student_lot",
+    "name": "Kean Hall Student Lot",
+    "latlng": "40.681730, -74.236123",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.68173,
+    "longitude": -74.236123,
+    "coordinates": [
+      -74.236123,
+      40.68173
+    ]
+  },
+  {
+    "id": "kean_parking_garage",
+    "name": "Kean Parking Garage",
+    "latlng": "40.682341812083564, -74.23188072653751",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.682341812083564,
+    "longitude": -74.23188072653751,
+    "coordinates": [
+      -74.23188072653751,
+      40.682341812083564
+    ]
+  },
+  {
+    "id": "kean_tennis_courts",
+    "name": "Kean Tennis Courts",
+    "latlng": "40.6816584439175, -74.23927450210465",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.6816584439175,
+    "longitude": -74.23927450210465,
+    "coordinates": [
+      -74.23927450210465,
+      40.6816584439175
+    ]
+  },
+  {
+    "id": "learning_plaza",
+    "name": "Learning Plaza",
+    "latlng": "40.67907314269603, -74.23299148103659",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "landmark",
+    "latitude": 40.67907314269603,
+    "longitude": -74.23299148103659,
+    "coordinates": [
+      -74.23299148103659,
+      40.67907314269603
+    ]
+  },
+  {
+    "id": "lhac",
+    "name": "Liberty Hall Academic Center (LHAC)",
+    "latlng": "40.679795, -74.227666",
+    "campus": "Liberty Hall",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.679795,
+    "longitude": -74.227666,
+    "coordinates": [
+      -74.227666,
+      40.679795
+    ]
+  },
+  {
+    "id": "lhac_lot",
+    "name": "LHAC Lot",
+    "latlng": "40.680196297634204, -74.22749309322569",
+    "campus": "Liberty Hall",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.680196297634204,
+    "longitude": -74.22749309322569,
+    "coordinates": [
+      -74.22749309322569,
+      40.680196297634204
+    ]
+  },
+  {
+    "id": "lhac_main",
+    "name": "Liberty Hall Academic Center (LHAC) Main Entrance",
+    "latlng": "40.679793, -74.227871",
+    "campus": "Liberty Hall",
+    "routable": "yes",
+    "parent": "lhac",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.679793,
+    "longitude": -74.227871,
+    "coordinates": [
+      -74.227871,
+      40.679793
+    ]
+  },
+  {
+    "id": "liberty_hall_lot",
+    "name": "Liberty Hall Lot",
+    "latlng": "40.680159331068104, -74.22745247989178",
+    "campus": "Liberty Hall",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.680159331068104,
+    "longitude": -74.22745247989178,
+    "coordinates": [
+      -74.22745247989178,
+      40.680159331068104
+    ]
+  },
+  {
+    "id": "liberty_hall_mansion",
+    "name": "Liberty Hall Mansion",
+    "latlng": "40.678546, -74.228828",
+    "campus": "Liberty Hall",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.678546,
+    "longitude": -74.228828,
+    "coordinates": [
+      -74.228828,
+      40.678546
+    ]
+  },
+  {
+    "id": "liberty_hall_mansion_main",
+    "name": "Liberty Hall Mansion Main Entrance",
+    "latlng": "40.678666, -74.229017",
+    "campus": "Liberty Hall",
+    "routable": "yes",
+    "parent": "liberty_hall_mansion",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.678666,
+    "longitude": -74.229017,
+    "coordinates": [
+      -74.229017,
+      40.678666
+    ]
+  },
+  {
+    "id": "liberty_hall_visitor_parking",
+    "name": "Liberty Hall Visitor Parking Only",
+    "latlng": "40.67965456941204, -74.2286901231309",
+    "campus": "Liberty Hall",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.67965456941204,
+    "longitude": -74.2286901231309,
+    "coordinates": [
+      -74.2286901231309,
+      40.67965456941204
+    ]
+  },
+  {
+    "id": "library",
+    "name": "Nancy Thompson Library",
+    "latlng": "40.678044, -74.23362",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.678044,
+    "longitude": -74.23362,
+    "coordinates": [
+      -74.23362,
+      40.678044
+    ]
+  },
+  {
+    "id": "library_main",
+    "name": "Nancy Thompson Library Main Entrance",
+    "latlng": "40.678143, -74.233775",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "library",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.678143,
+    "longitude": -74.233775,
+    "coordinates": [
+      -74.233775,
+      40.678143
+    ]
+  },
+  {
+    "id": "little_theater",
+    "name": "Little Theater",
+    "latlng": "40.67763782548457, -74.2347529104569",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67763782548457,
+    "longitude": -74.2347529104569,
+    "coordinates": [
+      -74.2347529104569,
+      40.67763782548457
+    ]
+  },
+  {
+    "id": "miron_center",
+    "name": "Miron Student Center (MSC)",
+    "latlng": "40.67816, -74.234987",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67816,
+    "longitude": -74.234987,
+    "coordinates": [
+      -74.234987,
+      40.67816
+    ]
+  },
+  {
+    "id": "miron_center_main",
+    "name": "Miron Student Center (MSC) Main Entrance",
+    "latlng": "40.678165, -74.235024",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "miron_center",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.678165,
+    "longitude": -74.235024,
+    "coordinates": [
+      -74.235024,
+      40.678165
+    ]
+  },
+  {
+    "id": "morris avenue lot",
+    "name": "Morris Avenue Lot",
+    "latlng": "40.679702, -74.232546",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.679702,
+    "longitude": -74.232546,
+    "coordinates": [
+      -74.232546,
+      40.679702
+    ]
+  },
+  {
+    "id": "morris_ave_faculty_staff_lot",
+    "name": "Morris Ave Faculty/Staff Lot",
+    "latlng": "40.679373, -74.232266",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.679373,
+    "longitude": -74.232266,
+    "coordinates": [
+      -74.232266,
+      40.679373
+    ]
+  },
+  {
+    "id": "morris_ave_student_lot",
+    "name": "Morris Ave Student Lot",
+    "latlng": "40.680191, -74.233304",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.680191,
+    "longitude": -74.233304,
+    "coordinates": [
+      -74.233304,
+      40.680191
+    ]
+  },
+  {
+    "id": "msc_game_room",
+    "name": "Miron Student Center Game Room",
+    "latlng": "40.67759683780515, -74.23490151965017",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67759683780515,
+    "longitude": -74.23490151965017,
+    "coordinates": [
+      -74.23490151965017,
+      40.67759683780515
+    ]
+  },
+  {
+    "id": "msc_turf_field",
+    "name": "Miron Student Center Turf Field",
+    "latlng": "40.6770973334715, -74.23367869423812",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.6770973334715,
+    "longitude": -74.23367869423812,
+    "coordinates": [
+      -74.23367869423812,
+      40.6770973334715
+    ]
+  },
+  {
+    "id": "naab",
+    "name": "North Avenue Academic Building (NAAB)",
+    "latlng": "40.67662, -74.229023",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67662,
+    "longitude": -74.229023,
+    "coordinates": [
+      -74.229023,
+      40.67662
+    ]
+  },
+  {
+    "id": "naab_entrance_front",
+    "name": "North Avenue Academic Building (NAAB) Entrance front",
+    "latlng": "40.676626, -74.229034",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "naab",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.676626,
+    "longitude": -74.229034,
+    "coordinates": [
+      -74.229034,
+      40.676626
+    ]
+  },
+  {
+    "id": "naab_entrance_side",
+    "name": "North Avenue Academic Building (NAAB) Entrance side",
+    "latlng": "40.67627112350527, -74.22849857141968",
+    "campus": null,
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.67627112350527,
+    "longitude": -74.22849857141968,
+    "coordinates": [
+      -74.22849857141968,
+      40.67627112350527
+    ]
+  },
+  {
+    "id": "naab_faculty_staff_lot",
+    "name": "NAAB Faculty/Staff Lot",
+    "latlng": "40.676720, -74.229338",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.67672,
+    "longitude": -74.229338,
+    "coordinates": [
+      -74.229338,
+      40.67672
+    ]
+  },
+  {
+    "id": "nathan_weiss_building",
+    "name": "Nathan Weiss Building",
+    "latlng": "40.679874, -74.224134",
+    "campus": "East",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.679874,
+    "longitude": -74.224134,
+    "coordinates": [
+      -74.224134,
+      40.679874
+    ]
+  },
+  {
+    "id": "nathan_weiss_building_main",
+    "name": "Nathan Weiss Building Main Entrance",
+    "latlng": "40.67967, -74.223811",
+    "campus": "East",
+    "routable": "yes",
+    "parent": "nathan_weiss_building",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.67967,
+    "longitude": -74.223811,
+    "coordinates": [
+      -74.223811,
+      40.67967
+    ]
+  },
+  {
+    "id": "one_mans_search",
+    "name": "One Mans Search",
+    "latlng": "40.67846411846568, -74.23484864112324",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "landmark",
+    "latitude": 40.67846411846568,
+    "longitude": -74.23484864112324,
+    "coordinates": [
+      -74.23484864112324,
+      40.67846411846568
+    ]
+  },
+  {
+    "id": "overflow_parking",
+    "name": "Overflow Parking",
+    "latlng": "40.682819358657696, -74.23017968816929",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.682819358657696,
+    "longitude": -74.23017968816929,
+    "coordinates": [
+      -74.23017968816929,
+      40.682819358657696
+    ]
+  },
+  {
+    "id": "overnight_lot",
+    "name": "Overnight Lot",
+    "latlng": "40.675734, -74.229338",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.675734,
+    "longitude": -74.229338,
+    "coordinates": [
+      -74.229338,
+      40.675734
+    ]
+  },
+  {
+    "id": "overnight_parking_lot",
+    "name": "Overnight Parking Lot",
+    "latlng": "40.675906, -74.229726",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.675906,
+    "longitude": -74.229726,
+    "coordinates": [
+      -74.229726,
+      40.675906
+    ]
+  },
+  {
+    "id": "receiving_deliveries",
+    "name": "Receiving / Deliveries",
+    "latlng": "40.67788, -74.236451",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67788,
+    "longitude": -74.236451,
+    "coordinates": [
+      -74.236451,
+      40.67788
+    ]
+  },
+  {
+    "id": "rogers_hall",
+    "name": "Rogers Hall (AS)",
+    "latlng": "40.67527, -74.233953",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67527,
+    "longitude": -74.233953,
+    "coordinates": [
+      -74.233953,
+      40.67527
+    ]
+  },
+  {
+    "id": "rogers_hall_main",
+    "name": "Rogers Hall (AS) Main Entrance",
+    "latlng": "40.675279, -74.233957",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "rogers_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.675279,
+    "longitude": -74.233957,
+    "coordinates": [
+      -74.233957,
+      40.675279
+    ]
+  },
+  {
+    "id": "science_building",
+    "name": "Science Building",
+    "latlng": "40.680433, -74.234453",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.680433,
+    "longitude": -74.234453,
+    "coordinates": [
+      -74.234453,
+      40.680433
+    ]
+  },
+  {
+    "id": "science_building_main",
+    "name": "Science Building Main Entrance",
+    "latlng": "40.680316, -74.234215",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "science_building",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.680316,
+    "longitude": -74.234215,
+    "coordinates": [
+      -74.234215,
+      40.680316
+    ]
+  },
+  {
+    "id": "shuttle_stop_east_campus_building",
+    "name": "Shuttle Stop - East Campus Building",
+    "latlng": "40.68012627006297, -74.22352537921007",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "shuttle_stop",
+    "latitude": 40.68012627006297,
+    "longitude": -74.22352537921007,
+    "coordinates": [
+      -74.22352537921007,
+      40.68012627006297
+    ]
+  },
+  {
+    "id": "shuttle_stop_east_campus_lot_b",
+    "name": "Shuttle Stop - East Campus Lot B",
+    "latlng": "40.68128833195121, -74.22531167665606",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "shuttle_stop",
+    "latitude": 40.68128833195121,
+    "longitude": -74.22531167665606,
+    "coordinates": [
+      -74.22531167665606,
+      40.68128833195121
+    ]
+  },
+  {
+    "id": "shuttle_stop_faculty_housing",
+    "name": "Shuttle Stop - Faculty Housing",
+    "latlng": "40.6818024696625, -74.2296364438058",
+    "campus": "Liberty Hall",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "shuttle_stop",
+    "latitude": 40.6818024696625,
+    "longitude": -74.2296364438058,
+    "coordinates": [
+      -74.2296364438058,
+      40.6818024696625
+    ]
+  },
+  {
+    "id": "shuttle_stop_hennings_hall_dorothy",
+    "name": "Shuttle Stop - Hennings Hall (Dorothy)",
+    "latlng": "40.68037692468772, -74.23377017535557",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "shuttle_stop",
+    "latitude": 40.68037692468772,
+    "longitude": -74.23377017535557,
+    "coordinates": [
+      -74.23377017535557,
+      40.68037692468772
+    ]
+  },
+  {
+    "id": "shuttle_stop_hynes_hall",
+    "name": "Shuttle Stop - Hynes Hall",
+    "latlng": "40.68264862569919, -74.23266868416046",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "shuttle_stop",
+    "latitude": 40.68264862569919,
+    "longitude": -74.23266868416046,
+    "coordinates": [
+      -74.23266868416046,
+      40.68264862569919
+    ]
+  },
+  {
+    "id": "shuttle_stop_morris_ave_1",
+    "name": "Shuttle Stop - Morris Ave",
+    "latlng": "40.68070981060924, -74.23334371427862",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "shuttle_stop",
+    "latitude": 40.68070981060924,
+    "longitude": -74.23334371427862,
+    "coordinates": [
+      -74.23334371427862,
+      40.68070981060924
+    ]
+  },
+  {
+    "id": "shuttle_stop_morris_ave_2",
+    "name": "Shuttle Stop - Morris Ave South",
+    "latlng": "40.68073919683971, -74.23331917396459",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "shuttle_stop",
+    "latitude": 40.68073919683971,
+    "longitude": -74.23331917396459,
+    "coordinates": [
+      -74.23331917396459,
+      40.68073919683971
+    ]
+  },
+  {
+    "id": "shuttle_stop_naab_building",
+    "name": "Shuttle Stop - NAAB Building",
+    "latlng": "40.6764940964261, -74.22900182212791",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "shuttle_stop",
+    "latitude": 40.6764940964261,
+    "longitude": -74.22900182212791,
+    "coordinates": [
+      -74.22900182212791,
+      40.6764940964261
+    ]
+  },
+  {
+    "id": "shuttle_stop_lhac",
+    "name": "Shuttle Stop - LHAC",
+    "latlng": "40.67983950966325, -74.2293068183364",
+    "campus": "Liberty Hall",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "shuttle_stop",
+    "latitude": 40.67983950966325,
+    "longitude": -74.2293068183364,
+    "coordinates": [
+      -74.2293068183364,
+      40.67983950966325
+    ]
+  },
+  {
+    "id": "shuttle_stop_stem",
+    "name": "Shuttle Stop - STEM",
+    "latlng": "40.67934791473394, -74.22997132674581",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "shuttle_stop",
+    "latitude": 40.67934791473394,
+    "longitude": -74.22997132674581,
+    "coordinates": [
+      -74.22997132674581,
+      40.67934791473394
+    ]
+  },
+  {
+    "id": "shuttle_stop_wilkins_theater",
+    "name": "Shuttle Stop - Wilkins Theater",
+    "latlng": "40.67891350108869, -74.23193098930234",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "shuttle_stop",
+    "latitude": 40.67891350108869,
+    "longitude": -74.23193098930234,
+    "coordinates": [
+      -74.23193098930234,
+      40.67891350108869
+    ]
+  },
+  {
+    "id": "smash_burgar_at_miron",
+    "name": "Smash Burget at Miron Center",
+    "latlng": "40.678179, -74.235151",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.678179,
+    "longitude": -74.235151,
+    "coordinates": [
+      -74.235151,
+      40.678179
+    ]
+  },
+  {
+    "id": "sozio_hall",
+    "name": "Sozio Hall (AW)",
+    "latlng": "40.675569, -74.234586",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.675569,
+    "longitude": -74.234586,
+    "coordinates": [
+      -74.234586,
+      40.675569
+    ]
+  },
+  {
+    "id": "sozio_hall_main",
+    "name": "Sozio Hall (AW) Main Entrance",
+    "latlng": "40.675557, -74.234582",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "sozio_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.675557,
+    "longitude": -74.234582,
+    "coordinates": [
+      -74.234582,
+      40.675557
+    ]
+  },
+  {
+    "id": "starbucks_at_library",
+    "name": "Starbucks in Nancy Thompson Library",
+    "latlng": "40.677914, -74.233875",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.677914,
+    "longitude": -74.233875,
+    "coordinates": [
+      -74.233875,
+      40.677914
+    ]
+  },
+  {
+    "id": "stem",
+    "name": "New Jersey Center for Science, Technology and Mathematics (STEM)",
+    "latlng": "40.679721, -74.230965",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.679721,
+    "longitude": -74.230965,
+    "coordinates": [
+      -74.230965,
+      40.679721
+    ]
+  },
+  {
+    "id": "stem_lot",
+    "name": "STEM Lot",
+    "latlng": "40.68048234669881, -74.2295090460723",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.68048234669881,
+    "longitude": -74.2295090460723,
+    "coordinates": [
+      -74.2295090460723,
+      40.68048234669881
+    ]
+  },
+  {
+    "id": "stem_main",
+    "name": "New Jersey Center for Science, Technology and Mathematics (STEM) Main Entrance",
+    "latlng": "40.679765, -74.231025",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "stem",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.679765,
+    "longitude": -74.231025,
+    "coordinates": [
+      -74.231025,
+      40.679765
+    ]
+  },
+  {
+    "id": "student_support_center",
+    "name": "Student Support Center",
+    "latlng": "40.679814, -74.236167",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.679814,
+    "longitude": -74.236167,
+    "coordinates": [
+      -74.236167,
+      40.679814
+    ]
+  },
+  {
+    "id": "technology_center",
+    "name": "Technology (TEC)",
+    "latlng": "40.679405, -74.234706",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.679405,
+    "longitude": -74.234706,
+    "coordinates": [
+      -74.234706,
+      40.679405
+    ]
+  },
+  {
+    "id": "technology_center_main",
+    "name": "Technology (TEC) Main Entrance",
+    "latlng": "40.679289, -74.234667",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "technology_center",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.679289,
+    "longitude": -74.234667,
+    "coordinates": [
+      -74.234667,
+      40.679289
+    ]
+  },
+  {
+    "id": "the_thinker_statue",
+    "name": "The Thinker",
+    "latlng": "40.67906398918469, -74.23316448352021",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.67906398918469,
+    "longitude": -74.23316448352021,
+    "coordinates": [
+      -74.23316448352021,
+      40.67906398918469
+    ]
+  },
+  {
+    "id": "townley_house",
+    "name": "Townley House",
+    "latlng": "40.681593, -74.234827",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.681593,
+    "longitude": -74.234827,
+    "coordinates": [
+      -74.234827,
+      40.681593
+    ]
+  },
+  {
+    "id": "townley_house_main",
+    "name": "Townley House Main Entrance",
+    "latlng": "40.681588, -74.23489",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "townley_house",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.681588,
+    "longitude": -74.23489,
+    "coordinates": [
+      -74.23489,
+      40.681588
+    ]
+  },
+  {
+    "id": "townsend_hall",
+    "name": "Townsend Hall",
+    "latlng": "40.679899, -74.235533",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.679899,
+    "longitude": -74.235533,
+    "coordinates": [
+      -74.235533,
+      40.679899
+    ]
+  },
+  {
+    "id": "townsend_hall_main",
+    "name": "Townsend Hall Main Entrance",
+    "latlng": "40.679817, -74.236018",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "townsend_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.679817,
+    "longitude": -74.236018,
+    "coordinates": [
+      -74.236018,
+      40.679817
+    ]
+  },
+  {
+    "id": "townsend_hall_rear",
+    "name": "Townsend Hall Main rear",
+    "latlng": "40.67931852043914, -74.23569068492266",
+    "campus": null,
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.67931852043914,
+    "longitude": -74.23569068492266,
+    "coordinates": [
+      -74.23569068492266,
+      40.67931852043914
+    ]
+  },
+  {
+    "id": "union_train_station",
+    "name": "Union Township Train Station",
+    "latlng": "40.6833, -74.238509",
+    "campus": "Main",
+    "routable": "Yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.6833,
+    "longitude": -74.238509,
+    "coordinates": [
+      -74.238509,
+      40.6833
+    ]
+  },
+  {
+    "id": "upperclassman_residence_hall",
+    "name": "Upperclassman Residence Hall (URH)",
+    "latlng": "40.676731, -74.235445",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.676731,
+    "longitude": -74.235445,
+    "coordinates": [
+      -74.235445,
+      40.676731
+    ]
+  },
+  {
+    "id": "upperclassman_residence_hall_main",
+    "name": "Upperclassman Residence Hall (URH) Main Entrance",
+    "latlng": "40.676778, -74.23534",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "upperclassman_residence_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.676778,
+    "longitude": -74.23534,
+    "coordinates": [
+      -74.23534,
+      40.676778
+    ]
+  },
+  {
+    "id": "vaughn_eames",
+    "name": "Vaughn-Eames Hall",
+    "latlng": "40.677631, -74.231129",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.677631,
+    "longitude": -74.231129,
+    "coordinates": [
+      -74.231129,
+      40.677631
+    ]
+  },
+  {
+    "id": "vaughn_eames_front",
+    "name": "Vaughn-Eames Hall Entrance front",
+    "latlng": "40.677657, -74.230739",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "vaughn_eames",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.677657,
+    "longitude": -74.230739,
+    "coordinates": [
+      -74.230739,
+      40.677657
+    ]
+  },
+  {
+    "id": "vaughn_eames_lot",
+    "name": "Vaughn-Eames Lot",
+    "latlng": "40.677057, -74.230852",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.677057,
+    "longitude": -74.230852,
+    "coordinates": [
+      -74.230852,
+      40.677057
+    ]
+  },
+  {
+    "id": "vaughn_eames_rear",
+    "name": "Vaughn-Eames Hall Entrance rear",
+    "latlng": "40.677312, -74.231341",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.677312,
+    "longitude": -74.231341,
+    "coordinates": [
+      -74.231341,
+      40.677312
+    ]
+  },
+  {
+    "id": "vaughn_eames_side",
+    "name": "Vaughn-Eames Hall Entrance side",
+    "latlng": "40.677699, -74.231393",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.677699,
+    "longitude": -74.231393,
+    "coordinates": [
+      -74.231393,
+      40.677699
+    ]
+  },
+  {
+    "id": "visitors_parking_lot",
+    "name": "Visitors Parking Lot",
+    "latlng": "40.680431, -74.236273",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.680431,
+    "longitude": -74.236273,
+    "coordinates": [
+      -74.236273,
+      40.680431
+    ]
+  },
+  {
+    "id": "whiteman_hall",
+    "name": "Whiteman Hall (WH)",
+    "latlng": "40.676384, -74.23308",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.676384,
+    "longitude": -74.23308,
+    "coordinates": [
+      -74.23308,
+      40.676384
+    ]
+  },
+  {
+    "id": "whiteman_hall_main",
+    "name": "Whiteman Hall (WH) Main Entrance",
+    "latlng": "40.676387, -74.233095",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "whiteman_hall",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.676387,
+    "longitude": -74.233095,
+    "coordinates": [
+      -74.233095,
+      40.676387
+    ]
+  },
+  {
+    "id": "wilkins_lot",
+    "name": "Wilkins Theater Lot",
+    "latlng": "40.678871, -74.231402",
+    "campus": "East",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "parking",
+    "latitude": 40.678871,
+    "longitude": -74.231402,
+    "coordinates": [
+      -74.231402,
+      40.678871
+    ]
+  },
+  {
+    "id": "wilkins_theatre",
+    "name": "Wilkins Theatre",
+    "latlng": "40.678552, -74.231742",
+    "campus": "Main",
+    "routable": "no",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "building",
+    "latitude": 40.678552,
+    "longitude": -74.231742,
+    "coordinates": [
+      -74.231742,
+      40.678552
+    ]
+  },
+  {
+    "id": "wilkins_theatre_front",
+    "name": "Wilkins Theatre Entrance front",
+    "latlng": "40.678608, -74.231607",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": "wilkins_theatre",
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.678608,
+    "longitude": -74.231607,
+    "coordinates": [
+      -74.231607,
+      40.678608
+    ]
+  },
+  {
+    "id": "wilkins_theatre_rear",
+    "name": "Wilkins Theatre Entrance rear",
+    "latlng": "40.67859145871961, -74.23230460557183",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.67859145871961,
+    "longitude": -74.23230460557183,
+    "coordinates": [
+      -74.23230460557183,
+      40.67859145871961
+    ]
+  },
+  {
+    "id": "wilkins_theatre_side",
+    "name": "Wilkins Theatre Entrance side",
+    "latlng": "40.67845583183501, -74.23167554148452",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "entrance",
+    "latitude": 40.67845583183501,
+    "longitude": -74.23167554148452,
+    "coordinates": [
+      -74.23167554148452,
+      40.67845583183501
+    ]
+  }
+]
