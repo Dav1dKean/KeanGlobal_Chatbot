@@ -1144,13 +1144,14 @@ input:focus {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
+  margin-bottom: 2px;
 }
 
 .mobile-panel-tab {
   border: 1px solid color-mix(in srgb, var(--border-light) 72%, var(--kean-blue) 28%);
   background: rgba(255, 255, 255, 0.82);
   color: var(--kean-blue);
-  padding: 11px 14px;
+  padding: 10px 14px;
   border-radius: 14px;
   font-size: 14px;
   font-weight: 700;
@@ -1481,8 +1482,8 @@ body.dark .compact-chat-close {
 @media (max-width: 980px) {
   .main-layout.mobile-stacked {
     grid-template-columns: 1fr !important;
-    gap: 10px;
-    padding: 10px 10px 14px;
+    gap: 6px;
+    padding: 6px 8px 12px;
   }
 
   .main-layout.mobile-stacked .chat-panel,
@@ -1490,7 +1491,7 @@ body.dark .compact-chat-close {
     height: auto;
     max-height: none;
     min-height: 0;
-    padding: 14px;
+    padding: 10px 10px 12px;
     overflow: visible;
   }
 
@@ -1578,14 +1579,14 @@ body.dark .compact-chat-close {
   .main-layout.map-only .map-header {
     align-items: stretch;
     flex-direction: column;
-    gap: 12px;
+    gap: 4px;
   }
 
   .main-layout.mobile-stacked .map-header-copy,
   .main-layout.map-only .map-header-copy {
     flex-direction: column;
     align-items: flex-start;
-    gap: 6px;
+    gap: 2px;
   }
 
   .main-layout.mobile-stacked .map-header-actions,
@@ -1790,7 +1791,7 @@ body.dark .compact-chat-close {
 
 @media (max-width: 560px) {
   .main-layout.mobile-stacked {
-    padding: 8px 8px 12px;
+    padding: 4px 6px 10px;
   }
 
   .main-layout.mobile-stacked .input-controls-row {
@@ -1922,7 +1923,7 @@ body.dark .compact-chat-close {
 @media (max-width: 720px) {
   .mobile-map-toolbar {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
 
   .mobile-map-toolbar-btn {
@@ -1934,8 +1935,8 @@ body.dark .compact-chat-close {
   }
 
   .mobile-map-controls-shell {
-    margin-bottom: 12px;
-    padding: 12px;
+    margin-bottom: 8px;
+    padding: 10px;
     border: 1px solid color-mix(in srgb, var(--border-light) 74%, var(--kean-blue) 26%);
     border-radius: 14px;
     background: color-mix(in srgb, var(--bg-panel) 92%, var(--kean-blue) 8%);
@@ -1945,15 +1946,33 @@ body.dark .compact-chat-close {
     margin-bottom: 2px;
   }
 
+  .main-layout.mobile-stacked .map-panel,
+  .main-layout.map-only .map-panel {
+    gap: 8px;
+  }
+
+  .main-layout.mobile-stacked .map-panel .panel-title,
+  .main-layout.map-only .map-panel .panel-title {
+    margin-bottom: 2px;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
   .main-layout.mobile-stacked .route-summary-inline,
   .main-layout.map-only .route-summary-inline {
     font-size: 12px;
-    line-height: 1.45;
+    line-height: 1.35;
+    padding-bottom: 0;
   }
 
   .main-layout.mobile-stacked .map-header-copy strong,
   .main-layout.map-only .map-header-copy strong {
     word-break: break-word;
+  }
+
+  .main-layout.mobile-stacked .leaflet-wrapper,
+  .main-layout.map-only .leaflet-wrapper {
+    margin-top: 0;
   }
 
   .hero-video {
