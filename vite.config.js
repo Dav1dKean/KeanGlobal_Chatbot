@@ -14,5 +14,8 @@ export default defineConfig({
         pollInterval: 50
       }
     }
+  },
+  preview: {
+    allowedHosts: true
   }
 })
