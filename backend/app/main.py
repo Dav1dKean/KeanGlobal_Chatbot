@@ -2220,6 +2220,7 @@ def build_department_aliases(unit_name: str, college: str) -> list[str]:
     if "computer science" in core_name:
         aliases.add("computer science department")
         aliases.add("cs department")
+        aliases.add("computer science")
     if "english" in core_name:
         aliases.add("english department")
     if "history" in core_name:
@@ -2233,6 +2234,11 @@ def build_department_aliases(unit_name: str, college: str) -> list[str]:
     if "chemistry and physics" in core_name:
         aliases.add("chemistry department")
         aliases.add("physics department")
+    if "criminal justice and public affairs" in core_name:
+        aliases.add("public administration department")
+        aliases.add("public administration")
+        aliases.add("public affairs department")
+        aliases.add("criminal justice department")
 
     return [alias for alias in aliases if alias]
 
@@ -2406,8 +2412,15 @@ def build_department_location_answer(entry: dict) -> str:
         building_label += f" ({building_code})"
 
     if office_or_room and office_or_room.lower() != "not consistently shown":
-        return f"{unit_name} is in {building_label}, usually listed at room/office {office_or_room}."
-    return f"{unit_name} is in {building_label}. Kean's public pages place it in that building, but a stable room number was not consistently listed."
+        return (
+            f"The {unit_name} is located in {building_label}, "
+            f"usually listed at office/room {office_or_room}. Opening map to the building."
+        )
+    return (
+        f"The {unit_name} is located in {building_label}. "
+        "Kean's public pages place it in that building, but a stable office or room number was not consistently listed. "
+        "Opening map to the building."
+    )
 
 def build_department_ambiguity_answer(entries: list[dict]) -> str:
     lines = ["I found multiple department locations that could match. Please tell me which one you want:"]
@@ -5820,11 +5833,7 @@ async def chat(req: ChatRequest):
     location_mode = "directions" if (normalized_start_id and normalized_destination_id) or use_current_location else "highlight"
     department_entry = None
     ambiguous_department_entries: list[dict] = []
-    should_check_department_directory = (
-        not normalized_destination_id
-        and not normalized_start_id
-        and not (route_start_id and route_end_id)
-    )
+    should_check_department_directory = not (route_start_id and route_end_id)
     if should_check_department_directory and is_department_location_question(user_text):
         department_entry, ambiguous_department_entries = match_department_location(user_text)
 
