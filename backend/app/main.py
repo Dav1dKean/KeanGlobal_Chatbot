@@ -6043,7 +6043,7 @@ async def chat(req: ChatRequest):
             "response_mode": "course_repeat_policy",
         })
 
-    if is_admissions_question(user_text):
+    if is_admissions_question(user_text) and not location_context_requested:
         return with_location({
             "answer": await localized(build_admissions_answer(lang)),
             "intent": "faq",

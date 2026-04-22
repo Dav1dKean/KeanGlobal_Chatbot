@@ -86,15 +86,19 @@ const ROUTE_NODE_ALIASES = {
   "wilkins_theatre_front": "wilkins_theatre_main"
 };
 
+const MERGED_ROUTE_NODE_IDS = {
+  downs_main: "downs_hall_main"
+};
+
 const PREFERRED_ROUTE_DESTINATION_IDS = {
   campus_police: "campus_police_main",
-  cas: "cas_main_front2",
+  cas: "cas_main",
   downs_hall: "downs_hall_main",
   harwood_arena: "harwood_arena_main",
   hennings_hall: "hennings_hall_front",
   hutchinson_hall: "hutchinson_hall_side",
   naab: "naab_entrance_front",
-  wilkins_theatre: "wilkins_theatre_side"
+  wilkins_theatre: "wilkins_main"
 };
 
 const IMAGE_TOKEN_STOP_WORDS = new Set([
@@ -387,7 +391,9 @@ function parseRoutingNodes(graphData, existingLocations) {
     .map(node => {
       const id = String(node?.id || "").trim();
       const position = normalizeCoordinatePair(node?.coordinates);
+      const mergedTargetId = MERGED_ROUTE_NODE_IDS[id];
       if (!id || !position || existingIds.has(id)) return null;
+      if (mergedTargetId && existingIds.has(mergedTargetId)) return null;
       return {
         id,
         name: prettifyRouteNodeName(id),
@@ -903,6 +909,9 @@ function scoreRoutableCandidate(candidateId, requestedId, locationsById) {
 function resolveEdgeNodeId(rawId, locationsById, routableLocationIds, childrenByParent, resolveRoutableId) {
   const requested = String(rawId || "").trim();
   if (!requested) return null;
+
+  const mergedRequested = MERGED_ROUTE_NODE_IDS[requested];
+  if (mergedRequested && routableLocationIds.has(mergedRequested)) return mergedRequested;
 
   if (routableLocationIds.has(requested)) return requested;
 
@@ -1610,12 +1619,13 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
   }, [locations]);
 
   const resolveRoutableId = useMemo(() => {
-    return rawId => {
+    return (rawId, options = {}) => {
       if (!rawId) return null;
       const requested = String(rawId).trim();
       if (!requested) return null;
       const normalizedRequested = normalizeId(requested);
-      const preferredDestinationId = PREFERRED_ROUTE_DESTINATION_IDS[normalizedRequested];
+      const preferDestination = options.preferDestination === true;
+      const preferredDestinationId = preferDestination ? PREFERRED_ROUTE_DESTINATION_IDS[normalizedRequested] : null;
       if (preferredDestinationId && routableLocationIds.has(preferredDestinationId)) {
         return preferredDestinationId;
       }
@@ -1626,6 +1636,7 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
         if (!candidates.includes(candidate)) candidates.push(candidate);
       };
 
+      pushCandidate(MERGED_ROUTE_NODE_IDS[requested]);
       pushCandidate(requested);
       pushCandidate(ROUTE_NODE_ALIASES[requested]);
 
@@ -1840,7 +1851,7 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
   const activeDirectionsRequest = useMemo(() => {
     if (!routeRequest || routeRequest.locationMode !== "directions") return null;
 
-    const mappedDestination = resolveRoutableId(routeRequest.destinationId);
+    const mappedDestination = resolveRoutableId(routeRequest.destinationId, { preferDestination: true });
     const mappedStart = resolveRoutableId(routeRequest.startId);
     const fallbackStart =
       !routeRequest.useCurrentLocation && !mappedStart && mappedDestination && defaultCampusStartId && defaultCampusStartId !== mappedDestination
@@ -1950,7 +1961,7 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
   }
 
   function routeToPlace(place) {
-    const resolvedDestinationId = resolveRoutableId(place.destinationId);
+    const resolvedDestinationId = resolveRoutableId(place.destinationId, { preferDestination: true });
     if (!resolvedDestinationId) {
       setLocationStatus("Route data not set for this location yet. Select a mapped destination above.");
       return;
@@ -1984,7 +1995,7 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
     const requestedStartId = String(routeRequest.startId || "").trim();
     const requestedDestinationId = String(routeRequest.destinationId || "").trim();
     const requestedDestination = routeRequest.destinationId ? getLocationById(routeRequest.destinationId, locationsById) : null;
-    const mappedDestination = resolveRoutableId(routeRequest.destinationId);
+    const mappedDestination = resolveRoutableId(routeRequest.destinationId, { preferDestination: true });
     const mappedStart = resolveRoutableId(routeRequest.startId);
     setRouteChatPreface("");
     if (mappedStart) {
