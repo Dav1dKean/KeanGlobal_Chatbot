@@ -2428,6 +2428,94 @@ def build_department_ambiguity_answer(entries: list[dict]) -> str:
         lines.append(f"{index}. {entry['unit_name']} - {format_department_location_label(entry)}")
     return "\n".join(lines)
 
+def build_secondary_resource_answer(text: str) -> Optional[str]:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+
+    if keyword_in_text(q, q_tokens, "academic coaching"):
+        return (
+            "Academic Coaching at Kean is a student-centered support service that helps students build "
+            "skills, habits, and strategies for academic and personal success. It focuses on how students "
+            "learn, not on tutoring for one specific class. Coaches can help with time management, "
+            "organization, goal setting, study strategies, test preparation, motivation, self-regulation, "
+            "stress management, and academic mindset."
+        )
+
+    if (
+        keyword_in_text(q, q_tokens, "student accountability")
+        or keyword_in_text(q, q_tokens, "standards and education")
+        or keyword_in_text(q, q_tokens, "sase")
+        or keyword_in_text(q, q_tokens, "student conduct")
+        or keyword_in_text(q, q_tokens, "community standards")
+    ):
+        return (
+            "The Office of Student Accountability, Standards and Education, formerly Community Standards "
+            "and Student Conduct, supports Kean's campus standards and student conduct process. It educates "
+            "students about community values in the Student Code of Conduct, investigates complaints, "
+            "resolves or refers cases to the proper conduct process, and helps make sure procedures are fair."
+        )
+
+    if keyword_in_text(q, q_tokens, "kean cares"):
+        return (
+            "Kean Cares is an awareness campaign that highlights services and departments available to support "
+            "Kean students. It points students toward wellness, support, safety, retention, veteran, first-gen, "
+            "behavioral intervention, and related campus resources."
+        )
+
+    if keyword_in_text(q, q_tokens, "kubit") or keyword_in_text(q, q_tokens, "behavioral intervention team"):
+        return (
+            "KUBIT Cares is Kean's Behavioral Intervention Team resource. KUBIT is a multidisciplinary team "
+            "that reviews referrals, assesses risk, and coordinates caring support for students or community "
+            "members showing disruptive, distressed, changed, at-risk, or concerning behavior. For emergencies "
+            "or immediate danger, call 911 or Kean Public Safety at (908) 737-4800."
+        )
+
+    if (
+        keyword_in_text(q, q_tokens, "commuter locker")
+        or keyword_in_text(q, q_tokens, "commuter lockers")
+        or ("commuter" in q_tokens and "locker" in q_tokens)
+        or ("commuters" in q_tokens and "lockers" in q_tokens)
+    ):
+        return (
+            "Yes. Kean commuter lockers are available to commuter students in the Townsend and Technology "
+            "buildings. The crawler record says commuter students may apply free of charge through the "
+            "Commuter Resource Center in Hutchinson Hall, Room 130. Students must remove locker contents by "
+            "the last day of the Spring semester, and lockers may be renewed as early as Summer Session I."
+        )
+
+    if (
+        keyword_in_text(q, q_tokens, "cougar card")
+        or keyword_in_text(q, q_tokens, "cougar cards")
+        or ("cougar" in q_tokens and "card" in q_tokens)
+        or ("cougar" in q_tokens and "cards" in q_tokens)
+    ):
+        return (
+            "The Kean Cougar Card is the official Kean University identification card for active, "
+            "registered students, faculty, and staff. It provides access to campus buildings and classrooms, "
+            "computer labs, the gymnasium, and residence halls. It also serves as ID for on-campus activities "
+            "and University events, and students may use it for meal plans, Cougar Dollars, and flex plans when applicable. "
+            "The Cougar Card Office is in Miron Student Center, Office 6."
+        )
+
+    if (
+        keyword_in_text(q, q_tokens, "bicycle parking")
+        or keyword_in_text(q, q_tokens, "bike parking")
+        or keyword_in_text(q, q_tokens, "bike rack")
+        or keyword_in_text(q, q_tokens, "bike racks")
+        or ("bicycle" in q_tokens and "parking" in q_tokens)
+        or ("bike" in q_tokens and "parking" in q_tokens)
+    ):
+        if any(keyword_in_text(q, q_tokens, keyword) for keyword in ("where", "near", "closest", "map", "directions", "route")):
+            return None
+        return (
+            "Yes. Kean has bicycle parking. Bicycle racks are listed at East Campus Rear Entrance, "
+            "East Campus Upper Parking Lot, STEM Building outside the Atrium Entrance, GLAB under the stairs "
+            "at the main entrance, NAAB Main Entrance, Hynes Hall Main Entrance, Wilkins Theatre rear side along "
+            "Cougar Walk, and Harwood Arena across from the main entrance along Cougar Walk."
+        )
+
+    return None
+
 def is_course_repeat_question(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
@@ -5901,6 +5989,15 @@ async def chat(req: ChatRequest):
             separator = "\n\n" if "\n" in answer_text else " "
             enriched["answer"] = f"{answer_text}{separator}{map_note}"
         return remember_response(enriched)
+
+    secondary_resource_answer = build_secondary_resource_answer(user_text)
+    if secondary_resource_answer:
+        return remember_response({
+            "answer": await localized(secondary_resource_answer),
+            "intent": "faq",
+            "faq_topic": "student_support",
+            "response_mode": "secondary_resource_direct",
+        })
 
     if is_help_capabilities_question(user_text):
         return {

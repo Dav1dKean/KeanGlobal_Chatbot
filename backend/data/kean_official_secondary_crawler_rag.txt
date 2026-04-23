@@ -1,0 +1,1108 @@
+Kean University Official Website Secondary RAG Data
+Source: filtered crawler chunks from official www.kean.edu pages
+Priority: secondary. If this conflicts with curated primary RAG files, use the curated primary source.
+Filtering: excludes non-www subdomains, PDFs, old news, board-resolution style pages, noisy archives, and chunks similar to existing curated data.
+
+==============================================================================
+Title: Office of Student Accountability, Standards and Education
+Source URL: https://www.kean.edu/SASE
+Last Modified: 2025-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Office of Student Accountability, Standards and Education
+Chunk: 0
+Title: Office of Student Accountability, Standards and Education
+Office of Student Accountability, Standards and Education
+Overview
+Welcome to the Office of Student Accountability, Standards and Education formerly known as the Office of Community Standards and Student Conduct. Kean University is committed to providing a campus environment where students can grow intellectually and develop as people. The Kean community depends on shared values and principles.
+
+Section: Overview
+Chunk: 1
+Title: Office of Student Accountability, Standards and Education
+[Section] Overview
+The Student Code of Conduct is a guide to our community values. These core values include integrity, community, fairness, respect and responsibility. Students and visitors are expected to uphold and abide by the standards of conduct that form the basis of the student code. Violations of the code may be received from individuals, police reports or incidents referred through another department within the University. Determination of a violation is made only after a complete investigation of the complaint. A Student Conduct Conference or a Student Conduct Hearing may be held to determine if a violation of community standards occurred.
+
+Section: Overview
+Chunk: 2
+Title: Office of Student Accountability, Standards and Education
+[Section] Overview
+The Office of Student Accountability, Standards and Education works closely with the Residence Life Judicial System, Greek Life Judicial Board, Office of the Provost/Vice President for Academic Affairs, the Affirmative Action Office, Athletics and Campus Police.
+The Office of Student Accountability, Standards and Education is responsible for the following:
+- Educating students regarding core values of the University community as outlined in the Student Code of Conduct
+- Investigating complaints of violations of the Student Code of Conduct following the guidelines of the student conduct process
+- Resolving, dismissing or referring cases to a Student Conduct Conference, a Student Conduct Hearing or an appropriate student conduct process
+- Guaranteeing procedures are fair to all as outlined in the Student Code of Conduct
+
+Section: Overview
+Chunk: 3
+Title: Office of Student Accountability, Standards and Education
+[Section] Overview
+- Guaranteeing procedures are fair to all as outlined in the Student Code of Conduct
+If you would like to report a violation of the Code of Conduct, please click here.
+Important Contact Information
+Campus Police (EMERGENCY): 911
+Campus Police (NONEMERGENCY): (908) 737-4800
+Student Health Services: (908) 737-4880
+Kean Counseling Center: (908) 737-4850
+Affirmative Action Office: (908) 737-3330
+
+==============================================================================
+Title: Academic Coaching
+Source URL: https://www.kean.edu/academic-coaching
+Last Modified: 2024-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Academic Coaching
+Chunk: 0
+Title: Academic Coaching
+Academic Coaching
+Academic Coaching is a student-centered support service that helps learners develop the skills, habits, and strategies necessary for academic and personal success. Unlike tutoring, which focuses on content mastery, academic coaching focuses on how students learn. Coaches work one-on-one with students to set goals, manage time effectively, improve study habits, build motivation, and address challenges such as procrastination or test anxiety.
+Key Areas of Support Include:
+-
+Time management and organization
+-
+Goal setting and academic planning
+-
+Study strategies and test preparation
+-
+Motivation and self-regulation
+-
+Managing stress and academic mindset
+
+Section: Academic Coaching
+Chunk: 1
+Title: Academic Coaching
+-
+Goal setting and academic planning
+-
+Study strategies and test preparation
+-
+Motivation and self-regulation
+-
+Managing stress and academic mindset
+Skill-building workshops on the topics above are offered throughout the semester, often in collaboration with faculty or student success programs. Workshops are typically offered at the beginning, midpoint, and end of the semester, with focused sessions before midterms and finals.
+How to Access Services
+Students, faculty, and/or advisors can schedule appointments through Navigate at tutoring.kean.edu.
+For more information on any student support services, visit the Nancy Thompson Learning Commons website at: Learning Commons.
+
+==============================================================================
+Title: Steps To Enrollment
+Source URL: https://www.kean.edu/accepted/steps-enrollment
+Last Modified: 2019-03-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Steps To Enrollment
+Chunk: 0
+Title: Steps To Enrollment
+Steps To Enrollment
+Accepted Students
+Get started by clicking on one of the accepted sections below:
+Accepted Kean Ocean Transfer Students
+Additional Information for Special Admission Programs
+Accepted Freshman Students
+Step 1. Save Your Spot
+Pay your $95 tuition deposit to reserve your space in our incoming class with two easy ways to pay.
+1. Go to the Accepted Student Tab in your Cougar App portal to "Deposit" at kean.edu/cougarapp.
+OR
+2. Mail a check or money order payable to Kean University. Include your name and Kean ID #:
+Kean University
+Office of Admissions
+1000 Morris Avenue
+Union, NJ 07083
+Step 2. Apply for Financial Aid
+Submit the Free Application for Federal Student Aid (FAFSA) online as soon as possible.
+The FAFSA evaluates eligibility for need-based aid, including grants, loans and work-study.
+
+Section: Step 2. Apply for Financial Aid
+Chunk: 1
+Title: Steps To Enrollment
+[Section] Step 2. Apply for Financial Aid
+The FAFSA evaluates eligibility for need-based aid, including grants, loans and work-study.
+Priority is given to students who file their FAFSA by March 1, so file early to maximize the
+amount of eligible aid you can receive.
+Go to studentaid.gov to:
+- Create an account, or FSA ID, to e-sign the FAFSA. Parents of dependent students must create a separate FSA ID.
+- File the FAFSA and include the Kean FAFSA school code 002622.
+New Jersey Dreamers - Complete the NJ Alternative Financial Aid Application at hesaa.org/pages/njalternativeapplication.aspx.
+Note: All Kean scholarship candidates are encouraged to file the FAFSA (or NJAFAA if applicable) for consideration.
+Step 3. Apply for Housing
+Many of the best memories of college come from living on campus. Make the most of your college
+experience by making Kean your home. Living on campus helps you Live. Learn. Thrive and Graduate
+on time.
+
+Section: Step 3. Apply for Housing
+Chunk: 2
+Title: Steps To Enrollment
+[Section] Step 3. Apply for Housing
+experience by making Kean your home. Living on campus helps you Live. Learn. Thrive and Graduate
+on time.
+All applicants are required to pay a non-refundable $125 application fee. The housing application for 2026-2027 is open!
+Click here for more information on how to apply for Housing.
+Step 4: Prepare to Enroll (Same-day Placement Testing, Advising, Registration)
+4A: Complete Placement Testing: The University's placement tests help determine appropriate placement for reading, writing and math courses. To schedule your placement testing appointment, please log in to your Cougar App portal. If you have any questions, you may contact the Placement Testing Office at testing@kean.edu. Please be sure to include all available SAT and ACT scores in your email.
+
+Section: Step 4: Prepare to Enroll (Same-day Placement Testing, Advising, Registration)
+Chunk: 3
+Title: Steps To Enrollment
+[Section] Step 4: Prepare to Enroll (Same-day Placement Testing, Advising, Registration)
+4B: Get Advised: Following the completion of placement tests, most incoming students will receive academic advising. This guidance will assist you in planning your courses for the upcoming semester.
+Department-Specific Advising: Students accepted into the following majors should reach out directly to the contacts listed below for advising and registration information after placement testing is complete.
+- Students accepted into majors in the School of Integrative Science and Technology should reach out to Judy April at japril@kean.edu.
+- Students accepted into majors in Theatre should contact Rachel Evans at revans@kean.edu.
+- Students accepted into all music and music education majors can connect to the Department of Music through music@kean.edu.
+
+Section: Step 4: Prepare to Enroll (Same-day Placement Testing, Advising, Registration)
+Chunk: 4
+Title: Steps To Enrollment
+[Section] Step 4: Prepare to Enroll (Same-day Placement Testing, Advising, Registration)
+- Students accepted into all music and music education majors can connect to the Department of Music through music@kean.edu.
+4C: Course Registration: Once steps 4A and 4B are completed, course registration can take place on the same day. It's highly recommended to register for classes as early as possible to secure preferred course days and times.
+Step 5. Gear Up For New Student Orientation
+These steps are general guidelines for navigating the enrollment process. Be sure to refer back to your Cougar App Portal for the most accurate information regarding placement testing, advising and course registration.
+Orientation offers a chance to meet your classmates and become more familiar with Kean before the fall semester arrives. New Student Orientation (NSO) is required for incoming students.
+Go to Kean.edu/NSO for details on dates and times
+Accepted Transfer Students
+
+Section: Step 5. Gear Up For New Student Orientation
+Chunk: 5
+Title: Steps To Enrollment
+[Section] Step 5. Gear Up For New Student Orientation
+Go to Kean.edu/NSO for details on dates and times
+Accepted Transfer Students
+Step 1. Submit Your Deposit
+Pay your $95 non-refundable tuition deposit to reserve your space!
+2 easy ways to pay:
+Log into the Accepted Student tab in your Cougar App portal
+*Hint: it’s the same login when you created your application*
+OR
+Mail a check or money order made payable to Kean University. Include your name and Kean ID #:
+Kean University
+Office of Admissions
+1000 Morris Avenue
+Union, NJ 07083
+Step 2. Review Your Program Evaluation
+PROGRAM EVALUATION
+You will receive an email with the subject line “Your Transfer Evaluation Is Ready” once your transfer credit evaluation is complete. To access your Transfer Credit Program evaluation:
+- Log-in to KeanWISE using your User ID and Password, which was provided in your acceptance letter that can be found in the Cougar App portal
+- Click on the “Students” tab
+
+==============================================================================
+Title: Kean Cares
+Source URL: https://www.kean.edu/cares
+Last Modified: 2025-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Kean Cares
+Chunk: 0
+Title: Kean Cares
+Kean Cares
+Be Your Best Self
+Kean Cares is an awareness campaign highlighting the services and departments Kean has available to students. In response to the Covid-19 pandemic's severe impact on the mental health of Kean students and their ability to cope with the various pressures inherent in college life, it's important for students to know there are resources at Kean. The services listed below are ready to support students.
+Kean Wellness Center
+The Center provides holistic, integrated health and wellness services for the entire campus community.
+Kean Support Services
+These offices around campus also provide vital support for students.
+- Affirmative Action
+- Center for Advising, Persistence & Success (CAPS)
+- Center for Veteran Student Success
+- Community Standards & Student Conduct
+- Cougar Connections Center of Social Work
+- First-Gen Scholars
+
+Section: Kean Support Services
+Chunk: 1
+Title: Kean Cares
+[Section] Kean Support Services
+- Center for Veteran Student Success
+- Community Standards & Student Conduct
+- Cougar Connections Center of Social Work
+- First-Gen Scholars
+- Kean Behavioral Intervention Team (KUBIT)
+- Occupational Therapy Community Cares Clinic
+- Public Safety & Police
+- Student Retention & Educational Innovation
+
+==============================================================================
+Title: Academic Advising
+Source URL: https://www.kean.edu/center-advising-persistence-and-success/academic-advising
+Last Modified: 2024-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Academic Advising
+Chunk: 0
+Title: Academic Advising
+Academic Advising
+Our center is staffed by Professional Academic Advisors who support matriculated Freshmen, Sophomores, and Transfer students (0–59 credits) at Kean Union. Advisors assist students in achieving their academic, professional, and campus engagement goals. Students are expected to meet with their CAPS Academic Advisor at least once per semester to review their academic progress and plan for the upcoming term. Juniors, seniors, and graduate students are advised by faculty within their academic departments. CAPS Advisors also provide support with course registration and help students stay on track with their semester-to-semester progress.
+Services Offered:
+-
+Academic Advisement
+-
+Co-Curricular Programming
+-
+4-year academic Planning
+-
+Academic Checklist Review
+-
+Referrals to Other Departments (ex. Financial Aid, One Stop)
+Special Program Advising
+
+Section: Academic Advising
+Chunk: 1
+Title: Academic Advising
+-
+4-year academic Planning
+-
+Academic Checklist Review
+-
+Referrals to Other Departments (ex. Financial Aid, One Stop)
+Special Program Advising
+EOF, BTS, Veterans, Kean Online, and Supera students are advised by their specialized program advisors.
+Students in the following programs are advised by their faculty advisors throughout their entire journey at Kean:
+- College of Education
+- School of Integrated Science and Technology (SIST)
+- Environmental Science
+- Theatre
+- Music
+Role of the Advisor
+Advisors at Kean University serve as knowledgeable and approachable guides, committed to student success. They assist students in understanding degree requirements, planning their academic path, and exploring opportunities aligned with their goals.
+Responsibilities Include:
+-
+Provide accurate and timely information about Kean’s degree programs, policies, and resources
+-
+
+Section: Role of the Advisor
+Chunk: 2
+Title: Academic Advising
+[Section] Role of the Advisor
+Responsibilities Include:
+-
+Provide accurate and timely information about Kean’s degree programs, policies, and resources
+-
+Help students set academic and career goals and make informed decisions
+-
+Connect students with campus resources. From Financial Aid to Athletics, an advisor serves as a conduit, connecting students to the services they need.
+-
+Offer personalized support and encouragement to help students overcome challenges and stay on track for graduation.
+-
+Monitor students’ academic progress and offer proactive interventions to address early academic alerts, never attended reports, and academic cases.
+Role of the Advisee
+Kean students are active participants in their academic success.
+Responsibilities Include:
+-
+Communicate openly and consistently with their advisors
+-
+Attend advising sessions prepared with questions, concerns, and goals
+-
+
+Section: Role of the Advisee
+Chunk: 3
+Title: Academic Advising
+[Section] Role of the Advisee
+-
+Communicate openly and consistently with their advisors
+-
+Attend advising sessions prepared with questions, concerns, and goals
+-
+Utilize University-specific tools like KeanWise and other advising resources to monitor academic progress
+-
+Take ownership of their educational experience by staying informed about University deadlines, policies, and graduation requirements
+
+==============================================================================
+Title: Cougar Connections
+Source URL: https://www.kean.edu/cougar-connections
+Last Modified: 2026-04-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Cougar Connections
+Chunk: 0
+Title: Cougar Connections
+Cougar Connections
+Cougar Connections Center of Social Work (CCCSW) is dedicated to providing campus and community services that assist and support students on their path to graduation. For immediate crisis counseling services, call the National Mental Health Crisis Hotline at 9-8-8 or visit kean.edu/gethelp.
+We Are Here For You
+Welcome!
+Kean University provides world-class educational opportunities for students, taking a holistic approach to overall health and well-being. As a community where cougars climb higher, we are motivated to reach out to each other in times of need to ensure safety, health and wellness.
+Cougar Connections Center of Social Work (CCCSW) offers support resources designed to enhance and improve student well-being, daily life and overall collegiate experience.
+
+Section: Welcome!
+Chunk: 1
+Title: Cougar Connections
+[Section] Welcome!
+Students are assisted with solving and coping with social, economic, emotional and behavioral problems that may be related to food, housing, clothing and personal or family crises. Attention and support are directed to meeting all student needs and empowering students of all backgrounds.
+Our Mission & Vision
+Mission Statement
+
+Section: Our Mission & Vision
+Chunk: 2
+Title: Cougar Connections
+[Section] Our Mission & Vision
+Our Mission & Vision
+Mission Statement
+Cougar Connections is designed to provide campus and community services that assist students to persist to graduation. Supportive resources are available to enhance and improve student well-being, daily life, and overall collegial experience. Students are assisted with solving and coping with social, economic, emotional and behavioral problems that may be related to food insecurity, housing issues, challenges with financial well-being, family crisis, and at-risk experiences or situations. Attention and support is directed to meet student needs of all backgrounds and empower students of all generations.
+Our Vision
+To provide campus and community supports that will increase a sense of belonging for all students to persist toward graduation.
+
+==============================================================================
+Title: On-Campus Resources
+Source URL: https://www.kean.edu/cougar-connections/campus-resources-0
+Last Modified: 2024-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: On-Campus Resources
+Chunk: 0
+Title: On-Campus Resources
+On-Campus Resources Financial Aid Scholarships Health Services Counseling Center Office of Accessibility Services Nancy Thompson Learning Commons Cougar Pantry Student Accounting CAPS Veterans Student Services
+
+==============================================================================
+Title: Our Services
+Source URL: https://www.kean.edu/cougar-connections/cccsw-services
+Last Modified: 2025-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Our Services
+Chunk: 0
+Title: Our Services
+Our Services
+The Cougar Connections Center of Social Work (CCCSW) promotes and prioritizes a sense of belonging on campus for all students, regardless of their circumstances. Our goal is to provide a holistic multifaceted approach to social services and support including but not limited to the following:
+- Basic Needs Resources
+- Financial Literacy
+- Case Management Support
+- Advocacy
+- Life Skills Development
+- Safe Space Support
+- Family Resources
+- Career Enhancement
+- Textbook Support
+Grant Services For Kean University Students
+The Mental Health in Higher Education: Community Provider Partnership and Professional Development Grant
+Make a referral to Cougar Connections Center of Social Work or Kean Counseling Center.
+Child Care Services for Qualifying Students
+
+Section: Grant Services For Kean University Students
+Chunk: 1
+Title: Our Services
+[Section] Grant Services For Kean University Students
+Make a referral to Cougar Connections Center of Social Work or Kean Counseling Center.
+Child Care Services for Qualifying Students
+CCAMPIS - Child Care Access Means Parents in School is a federal program of the U.S. Department of Education that assists qualified student parents/guardians with the cost of high-quality child care while completing their degree.
+
+==============================================================================
+Title: Helplines
+Source URL: https://www.kean.edu/cougar-connections/helplines
+Last Modified: 2025-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Helplines
+Chunk: 0
+Title: Helplines
+Helplines
+| Helplines | Phone Numbers |
+|---|---|
+| Suicide and Crisis Lifelife | 988 |
+| NJ Hopeline | 1-855-654-6735 |
+| National Suicide Prevention Lifeline | 1-800-273-8255 |
+| NJ Hope and Healing Hotline | 1-866-202-4357 |
+| LGBT National Youth Hotline | 1-800-246-7743 |
+| Domestic Violence Hotline | 1-800-572-7233 |
+| Mom 2 Mom | 1-877-914-6662 |
+| Division of Disability Services | 1-888-285-3036 |
+| NJ Disaster Mental Health Helpline | 1-877-294-4357 |
+| NJ Family Care - Health Insurance | 1-800-701-0710 |
+| NJ Housing Resource Center | 1-877-428-8844 |
+| Family Help Line | 1-800-843-5437 |
+| Food-Housing-Utility Assistance | DIAL 2-1-1 |
+| NJ Homeless Hotline | 1-877-746-5211 |
+| 2nd Floor Youth Helpline | 1-888-222-2228 |
+| NJ VET 2 VET Hotline | 1-866-838-7654 |
+| Utility Assistance | 1-800-510-3102 |
+| Utility Costs | 1-866-240-1347 |
+
+==============================================================================
+Title: Cougar Cards
+Source URL: https://www.kean.edu/cougarcards
+Last Modified: 2019-09-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Cougar Cards
+Chunk: 0
+Title: Cougar Cards
+Cougar Cards
+Kean University REQUIRES ALL active, registered students, faculty and staff to have an official Kean University identification card. Kean Cougar Cards provide access to campus buildings and classrooms, computer labs, the gymnasium and residence halls.. The Kean Cougar Card also serves as a form of identification for on-campus activities and University events. Students may also use Cougar Cards for meal plans, Cougar dollars and flex plans, if applicable.
+| GET the App! |
+| Obtaining a Cougar Card |
+| Kean Flex Dollars & Cougar Dollars |
+GET the App!
+Kean University is excited to introduce a new service that allows you to manage your Kean Cougar Card funds and view meal plan balances; anytime, anywhere. Download the GET Mobile app today!
+
+Section: Cougar Dollars
+Chunk: 1
+Title: Cougar Cards
+[Section] Cougar Dollars
+Simply search for "GET" in the Google Play or Apple App stores and use your Kean email login. Once installed on your device you'll be able to:
+- View your balances. Account balances are available in real time and accessible 24/7.
+- See your transaction history. Up to six months of transaction history can be displayed and information includes the date, time, location, account, type of transaction, and transaction amount.
+- Report your Kean Cougar card lost or stolen. This will immediately lock the card so it cannot be used until you report the card found or have it replaced.
+- Deposit Flex Dollars to your account for use at on and off campus locations. Also, you can make requests to others to deposit funds to your card on the GET Portal.
+- Explore locations within the app that accept any of our Kean Currencies.
+
+Section: Flex Dollars
+Chunk: 2
+Title: Cougar Cards
+[Section] Flex Dollars
+- Explore locations within the app that accept any of our Kean Currencies.
+In addition to the GET Mobile App you may access your account using a web browser by visiting the GET Portal. Your login is your Kean email credentials.
+With GET Mobile you're just a few clicks away from the most convenient way to manage your Kean Cougar Card!
+Obtaining a Cougar Card
+Upload your Cougar Card photo through the Kean University GET Mobile App today!
+- Log into the GET Mobile App (Visit the App Store or Google Play to download the GET App onto your smartphone).
+- Click on the Settings Icon
+- Click on Update Photo
+- Click on Upload
+- Choose Existing Photo from your Gallery or Take Photo
+- Submit Photo for Review
+Please follow the guidelines specified below when submitting your photo:
+
+Section: Flex Dollars
+Chunk: 3
+Title: Cougar Cards
+[Section] Flex Dollars
+- Submit Photo for Review
+Please follow the guidelines specified below when submitting your photo:
+- Your submitted photo should look similar to a driver's license or a passport photo (Photos should be cropped slightly above your head and directly below your shoulders).
+- You must look at the camera with open eyes. Smiles are allowed.
+- Should be facing forward. The camera should be at a straight angle directly in front of you.
+- All backgrounds should be plain/solid (no patterns) and light in color.
+- The photo must be in its original color (not black & white or sepia).
+- Must be clear and focused.
+- No other persons, accessories, or props may be included (i.e. no sunglasses, hats, large jewelry). Religious or medically necessary items are permitted (i.e. prescription eyewear or religious headwear).
+- Please do not send copyrighted photographs.
+Student Cougar Card
+
+Section: Flex Dollars
+Chunk: 4
+Title: Cougar Cards
+[Section] Flex Dollars
+- Please do not send copyrighted photographs.
+Student Cougar Card
+The Cougar Card Office is located on the first floor of the Miron Student Center, Office 6 and available from Monday to Friday, 10 a.m. – 5 p.m.
+Faculty/Staff ID Card
+The ID Card Office is located in the Office of Student Accounting on the third floor of the Administration Building.
+Replacement Cards:
+All cards that are lost, stolen or damaged are subject to a $15 replacement fee. Anyone who has lost their Cougar card should deactivate their card via the GET App immediately and also report the card as lost to The Office of Student Accounting the same day. Students who need a replacement Cougar Card can go to the Miron Student Center, Office 6 to request a new card from Monday – Friday, 10 a.m. – 5 p.m.
+
+==============================================================================
+Title: Commuter Lockers
+Source URL: https://www.kean.edu/division-student-affairs/policies/commuter-lockers
+Last Modified: 2024-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Commuter Lockers
+Chunk: 0
+Title: Commuter Lockers
+Commuter Lockers
+Commuter Lockers
+Kean University lockers are available to commuter students in the Townsend and Technology buildings. Commuter students may apply for a locker free of charge in the Commuter Resource Center, Hutchinson Room 130 M-Th 12-8pm and Fridays 11am-3pm.
+COMMUTER LOCKER-POLICY STATEMENT AND USER AGREEMENT
+Kean University is the owner and operator of all university lockers issued for students’ use. The University reserves the right to inspect lockers without notice and to charge students for damage and/or destruction of lockers.
+Procedures for locker usage:
+- Students will be issued a locker free of charge.
+- All locker contracts will expire on the last day of the Spring semester.
+- Students must remove all contents in lockers by the last day of the Spring semester.
+- The University will discard materials left in lockers after the last day of the Spring semester.
+
+Section: Commuter Lockers
+Chunk: 1
+Title: Commuter Lockers
+- The University will discard materials left in lockers after the last day of the Spring semester.
+- Lockers may be renewed as early as the first day of Summer Session I.
+- Students must be an enrolled/registered, commuter Kean University student.
+- Students are responsible for keeping the lockers clean; the university does not provide this service. (Lockers may be dusty and dirty from not being used the previous year).
+- Students are advised to place an additional lock on their locker since combinations numbers are re-used throughout the years.
+
+==============================================================================
+Title: Emergency Closures
+Source URL: https://www.kean.edu/division-student-affairs/policies/emergency-closures
+Last Modified: 2018-07-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Emergency Closures
+Chunk: 0
+Title: Emergency Closures
+Emergency Closures
+- All events held on Kean University property must comply with federal, state and local laws and University policies. It is the responsibility of the sponsoring organizations, groups or individuals to monitor events and ensure that all aspects of the event are in complete accordance with laws and University regulations. This includes fire and safety regulations, including those related to capacity and access.
+- Security at events is subject to the sole and exclusive control of Kean University. Searches of individuals must be conducted by authorized law enforcement personnel. Use of University grounds or facilities in connection with events requiring security is conditioned upon timely execution of a security agreement approved by the University.
+
+Section: Emergency Closures
+Chunk: 1
+Title: Emergency Closures
+- University representatives must have full access to all rooms, facilities and grounds utilized by any group, organization or individual at all times.
+- Use of University facilities or grounds must not interfere with or disrupt educational, academic or other University activities. It is the responsibility of any organization, group or individual seeking use of University facilities and grounds to ensure that the proposed use is conducted consistent with these procedures.
+- Organizations, groups or individuals using Kean University facilities and grounds cannot intimidate, interfere or discriminate on the basis of age, sex, sexual orientation, marital status, race, color, creed, national origin, physical handicap, political activity or union activity.
+- Appropriate attire must be worn in all campus facilities at all times, including shirt, shoes, pants/shorts/skirts.
+
+Section: Emergency Closures
+Chunk: 2
+Title: Emergency Closures
+- Appropriate attire must be worn in all campus facilities at all times, including shirt, shoes, pants/shorts/skirts.
+- Pets/animals are prohibited in Kean University buildings except for those allowed per the Americans with Disabilities Act.
+- No program may be held on University property without express authorization from Kean University.
+- Events may not be advertised prior to receiving a formal event confirmation and/or prior to execution and approval of a license agreement. Additionally, advertising for any event sponsored by an external organization must clearly state that the activity is “Not a program sponsored by Kean University.”
+
+Section: Emergency Closures
+Chunk: 3
+Title: Emergency Closures
+- Kean University is not responsible for materials, equipment, etc. that users or sponsoring organizations may leave in reserved or public spaces unattended. Users who choose to leave materials before and after events accept complete responsibility for the security of the items.
+- Sponsoring organizations, groups or individuals are responsible for any and all damages and cleaning beyond that considered to be “normal wear and tear.” Any organizations, groups or individuals that show disregard for facilities and/or equipment may be charged additional fees, be denied further use of University facilities, and/or be subject to the appropriate sanctions. Sponsoring organizations, groups or individuals assume responsibility for any damage done to facilities or equipment by their guests. Kean University accepts no responsibility for damage to, or loss of, any merchandise or personal property.
+
+==============================================================================
+Title: Kean ID
+Source URL: https://www.kean.edu/kean-id
+Last Modified: 2025-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Kean ID
+Chunk: 0
+Title: Kean ID
+Kean ID
+Kean ID Cards are issued to all active, registered students, faculty and staff and are the official Kean University Identification Card. Kean ID Cards provide access to campus buildings and classrooms, computer labs, the gymnasium and dormitories. The Kean ID card also serves as a form of identification for on-campus activities and University events. Students may also use Kean ID Cards for Meal Plans, Cougar Dollars, and Flex Plans, if applicable.
+
+Section: Kean ID
+Chunk: 1
+Title: Kean ID
+Kean ID Cards are obtained from the Miron Student Center. To receive your Kean ID, you must show a valid (legal) form of photo identification; for example, Driver’s License, State ID, Passport, Military/Dependent ID. There is no charge for the first card issued. If a card is lost, stolen or damaged, all are subject to a $15 replacement fee. Lost cards should be reported to Office of Student Accounting immediately. Payments are to be made at the Office of Student Accounting.
+Each student is responsible for the security of his/her card. Kean ID Cards are non-transferable and students may not “lend out” their cards to others. Cards that are used by someone other than the cardholder will be confiscated and disciplinary action may be taken.
+CONTACT
+Office of Student Accounting
+Administration Building – 3rd floor
+Phone: 908-737-3240
+
+==============================================================================
+Title: KUBIT Cares
+Source URL: https://www.kean.edu/kubit-cares
+Last Modified: 2024-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: KUBIT Cares
+Chunk: 0
+Title: KUBIT Cares
+KUBIT Cares
+KUBIT is a multidisciplinary team that provides caring support and collaboration through evidence-based risk assessment and interventions for any member of the Kean University community who may be exhibiting disruptive, distressed, changed, at-risk, and/or concerning behaviors.KUBIT meets regularly to review referrals received, gather information, assess risk, and intervene appropriately to support student well-being and campus safety.
+Mission
+To maintain a safe, supportive, and healthy community for all Kean University students, faculty, and staff. Caring about others across the spectrum of risk related to academics, safety, basic needs, life stressors, and mental health helps everyone climb higher to achieve their educational and career goals at Kean.
+Emergency
+
+Section: Emergency
+Chunk: 1
+Title: KUBIT Cares
+[Section] Emergency
+Emergency
+In case of an emergency or immediate danger to yourself, others or the community please DIAL 911 or call the Kean University Department of Public Safety and Police at (908) 737-4800.
+Who We Are
+KUBIT is a multidisciplinary team that provides proactive intervention, caring support and appropriate institutional response to students exhibiting disruptive and/or concerning behavior.
+KUBIT serves six major functions for the University:
+-
+Provides consultation, education and support to faculty, staff and administration in assisting students who display concerning, at-risk, disruptive, distressed or changed behaviors.
+-
+Gathers information to assess situations and behaviors involving students who are referred.
+-
+Recommends appropriate intervention strategies.
+-
+Connects students with needed campus and community resources.
+-
+
+Section: Who We Are
+Chunk: 2
+Title: KUBIT Cares
+[Section] Who We Are
+-
+Recommends appropriate intervention strategies.
+-
+Connects students with needed campus and community resources.
+-
+Monitors the ongoing behavior of students with concerning, at-risk, disruptive, distressed or changed behaviors.
+-
+Identifies emerging behavioral and wellness trends within the student population.
+
+==============================================================================
+Title: All About Making a KUBIT Referral
+Source URL: https://www.kean.edu/kubit-cares/all-about-making-kubit-referral
+Last Modified: 2024-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: All About Making a KUBIT Referral
+Chunk: 0
+Title: All About Making a KUBIT Referral
+All About Making a KUBIT Referral
+To make a referral, complete the Online Incident Form:
+- Why report concerns to KUBIT?
+KUBIT referrals are meant to be proactive, reduce or prevent violence, provide a safer school environment, and allow intervention for at-risk behavior before it becomes harmful to students, faculty, and the campus. The KUBIT addresses cases across the spectrum of risk from low to high in efforts to prevent behaviors from manifesting. As a result, KUBIT staff encourage you to make referrals in an effort to keep students, faculty, and the University safe. If you have any questions or concerns about the KUBIT referral process, please contact KUBIT@kean.edu.
+- What happens to a referral once a report is submitted?
+
+Section: All About Making a KUBIT Referral
+Chunk: 1
+Title: All About Making a KUBIT Referral
+- What happens to a referral once a report is submitted?
+The primary purpose of KUBIT is to be proactive in supporting at-risk students and providing on and off-campus resources to prevent behaviors from escalating. After a referral is received, a member of the KUBIT team will reach out to the referral source to obtain additional information. Pertinent information is discussed at the next KUBIT meeting and the team scales the at-risk behaviors utilizing the NABITA risk rubric.
+
+Section: All About Making a KUBIT Referral
+Chunk: 2
+Title: All About Making a KUBIT Referral
+Given the risk scale outcome, specific interventions are recommended and a KUBIT member follows up with the student. The students will be given the support and assistance they need by recommending on-campus and community resources. After students are provided with the resources they need to address referral needs, cases are closed or cases can remain open for monitoring and support as needed. All case management notes are documented in the Maxient database as KUBIT team members strive to close feedback loops with referral sources and students.
+*Please note, depending on the severity of the referred actions, and following a review of the information presented, additional University or community-based referrals may be required.
+Please review the BIT Report Flow Chart. (pdf)
+- What role does privacy play in the KUBIT process?
+
+==============================================================================
+Title: Student Resources
+Source URL: https://www.kean.edu/kubit-cares/student-resources
+Last Modified: 2024-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Student Resources
+Chunk: 0
+Title: Student Resources
+Student Resources
+Students may present with a variety of needs to meet academic, social, and emotional goals:
+- Basic Care: Food Insecurities, Housing challenges, Financial difficulties, Health Insurance and Counseling, Life Skills Development, Textbook Support, Academic and Career Support
+- Medical: Health and General Medical Concerns, Gynecology, STI/HIV testing, Physicals, and Tuberculosis testing (*Students must be enrolled and registered.)
+- Mental Health: Ongoing sadness, anxiety, changes in sleep or appetite, loss, lack of motivation, stress, feeling overwhelmed, or struggling to adjust to college life.
+Alcohol and Other Drug Services
+- Suicidal Ideations and Self-harm:
+Suicide and Crisis Lifeline/988
+- Accessibility Services: Disability Services and Support, Equal Access, Accessible Learning Environment for All
+Office of Accessibility Services
+
+Section: Student Resources
+Chunk: 1
+Title: Student Resources
+- Accessibility Services: Disability Services and Support, Equal Access, Accessible Learning Environment for All
+Office of Accessibility Services
+- Academics: Significant Change in Academic Performance/Behaviors, Not Attending Class, Struggling with Course Material, Not Completing/Submitting Assignments, Need Tutoring
+- KUPD Involvement: Student Emergencies
+- Hazing/Disruptive and Oppositional: Prohibited, Campus Violation
+- Roommate or Residence Hall: Struggling with Ongoing Roommate Conflicts, Questions about On-Campus Residence
+- Food Or Loaner Laptop Program: Food Insecurity, Access to a Laptop,
+- Campus Connections: Campus Groups, Organizations, Events, Community Service Opportunities
+- Computer and Technology: Need Assistance, Software and Services, Support Portal, Canva,
+- Financial Aid: FAFSA Filing, Types of Aid
+- Scholarship Services: Scholarships Eligibility
+
+==============================================================================
+Title: Contact Admissions
+Source URL: https://www.kean.edu/offices/admissions/contact-admissions
+Last Modified: 2022-08-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Contact Admissions
+Chunk: 0
+Title: Contact Admissions
+Contact Admissions
+A Note from the Vice President of Enrollment Services
+Welcome to Kean University!
+Thank you for your interest in Kean University! We are thrilled that you are considering joining our vibrant and diverse community. As you explore our website, we hope you discover the many advantages that make Kean a top choice for students seeking a world-class education.
+At Kean, we are dedicated to providing exceptional academic programs, state-of-the-art facilities, and a wealth of resources to support your success. Whether you are looking for rigorous academics, hands-on learning experiences, or a dynamic campus life, you will find it all at Kean.
+We invite you to take the next step in your journey. Connect with your admissions counselor to schedule a campus visit and see firsthand how Kean University can help you achieve your goals.
+
+Section: A Note from the Vice President of Enrollment Services
+Chunk: 1
+Title: Contact Admissions
+[Section] A Note from the Vice President of Enrollment Services
+We look forward to welcoming you to our community soon!
+Best,
+La Toro Yates, Ph.D.
+Vice President for Enrollment Services
+Welcome to Kean University's Office of Admissions
+Name: Sandra Mazara-Wheeler, Assistant Vice President of Admissions
+Hometown: South Orange, New Jersey
+Degree: B.A. in sociology, minor in business
+Alma Mater: Rutgers University - Newark
+Hobbies/Interests: Dancing, reading and spending time with my family.
+I've always had a passion for access to education; to me, it's the great equalizer. Throughout my career I've been fortunate to work at institutions that are committed to diversity and serving their community, and Kean University is no exception. Kean enrolls a significant number of first-generation college students, thereby providing a transformational educational experience for students and their families.
+Name: Ryan Alston, Director of Undergraduate Admissions
+
+Section: Welcome to Kean University's Office of Admissions
+Chunk: 2
+Title: Contact Admissions
+[Section] Welcome to Kean University's Office of Admissions
+Name: Ryan Alston, Director of Undergraduate Admissions
+Hometown: Neptune, New Jersey
+Degree: B.S. in mass communication/media studies, M.S. in industrial and organizational psychology
+Alma Mater: Wilkes University (B.S.), Grand Canyon University (M.S.)
+Hobbies/Interests: Youth sports coaching, exercising and Yankees baseball.
+Contact me: (908) 737-7107, ryalston@kean.edu
+I love the close-knit, family feel of Kean University. We're able to create personal connections with our students and their families that are unique to higher education, and truly make Kean feel like home away from home. Further, the proximity of our main campus in Union to New York City creates boundless opportunities for internships and careers, and our connection to the Jersey shore at Kean Ocean further expands our reach.
+Freshman Admissions
+Name: Daniel Flores, Senior Admissions Counselor
+
+Section: Freshman Admissions
+Chunk: 3
+Title: Contact Admissions
+[Section] Freshman Admissions
+Freshman Admissions
+Name: Daniel Flores, Senior Admissions Counselor
+Hometown: Hillside, New Jersey
+Degree: A.A. in computer information systems, B.S. in management information systems, MBA in management
+Alma Mater: Union County College (A.A.), Bloomfield College (B.S.), Felician University (MBA)
+Hobbies/Interests: Soccer, basketball and gaming.
+Recruitment Territory: Hudson County and Union County
+Specialties: Supera (Spanish Speaking Program)
+Contact me: (908) 737-7121, floresda@kean.edu
+
+==============================================================================
+Title: Center for Academic Success
+Source URL: https://www.kean.edu/offices/center-academic-success
+Last Modified: 2003-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Center for Academic Success
+Chunk: 0
+Title: Center for Academic Success
+Center for Academic Success
+Overview
+Kean University President Dawood Farahi developed the concept for the Center for Academic Success in 2003 to ensure excellence and accessibility for the entire Kean University student population. The Center for Academic Success began as a consolidation of the Career Services Center, the First Year Center and the Learning Assistance Program, and expanded to improve access to student academic support services.
+A major advancement in the delivery of these services occurred with the January 2005 opening of the Maxine & Jack Lane Center for Academic Success Building, a state-of-the-art facility located centrally on campus.
+Mission Statement
+The Center for Academic Success (CAS) is a cornerstone of Kean University's commitment to access, opportunity and affordability for students seeking a college degree.
+
+Section: Mission Statement
+Chunk: 1
+Title: Center for Academic Success
+[Section] Mission Statement
+CAS and its programmatic offerings are designed to help Kean University fulfill its mission of helping to guide students from admission through to graduation. The primary goal of the Center is to address the academic and informational needs of Kean University students in one convenient location, regardless of their level of academic preparation.
+Student Services
+Effective fall 2018, a University One Stop Service Center supported by the registrar’s office returned to the first floor of the building, and serves as a convenient, centralized location for students to access academic support; registrar and career services; scholarship, internship and international studies information; and more.
+
+Section: Student Services
+Chunk: 2
+Title: Center for Academic Success
+[Section] Student Services
+A valuable starting point for assisting newly accepted and continuing students with navigating Kean University, One Stop shares the first floor with the Veterans Resource Center, the School of General Studies and the Office of Student Success and Retention.
+A complete directory of the Center for Academic Success includes:
+- Veterans Resource Center (entry through Suite 111A)
+- School of General Studies (Suite 120/121)
+- School of General Studies Faculty Suite and Advising Center (Suite 111)
+- Student Success and Retention (Room 123)
+- Career Services and International Studies (Room 201)
+
+==============================================================================
+Title: CAS Mission
+Source URL: https://www.kean.edu/offices/center-academic-success/cas-mission
+Last Modified: 2025-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: CAS Mission
+Chunk: 0
+Title: CAS Mission
+CAS Mission
+Mission Statement
+The Center for Academic Success (CAS) is a cornerstone of Kean University's commitment to opportunity. It integrates all of the advisement, learning support and career counseling to provide full service to our students. This unique concept, the only facility of its kind in New Jersey, is implemented in a physical structure expressly designed for this very purpose.
+CAS and its programmatic offerings are designed to help Kean University realize its mission of educational access and excellence for its students. The primary goal of the center is to address the academic and informational needs of Kean University's students. It is regardless of their level of academic preparation.
+
+Section: Mission Statement
+Chunk: 1
+Title: CAS Mission
+[Section] Mission Statement
+The Center also has the goal of improving the quality, consistency and availability of academic support services to students. Through these efforts, CAS will seek to improve the retention and persistence to graduation rates for the University.
+
+==============================================================================
+Title: Disbursements and Adjustments
+Source URL: https://www.kean.edu/offices/financial-aid/disbursements-and-adjustments
+Last Modified: 2025-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Disbursements and Adjustments
+Chunk: 0
+Title: Disbursements and Adjustments
+Disbursements and Adjustments
+FINANCIAL AID DISBURSEMENTS
+Before aid can be disbursed to student accounts each semester, the Office of Financial Aid is required to confirm students’ enrollment status and cost of attendance for the academic year or term, including second half-term courses. Additionally, students must establish eligibility, i.e., begin attendance in all semester long classes within the first two weeks of the term and in half-term courses within the first week of the class start.
+Students selected for verification must submit all requested documents before aid can be disbursed. Documents are reviewed on a rolling basis and in the date order that they are received by this office.
+
+Section: Disbursements and Adjustments
+Chunk: 1
+Title: Disbursements and Adjustments
+First-time Federal Direct Stafford Loan borrowers at Kean University must complete Entrance Counseling and sign a Direct Loan Master Promissory Note (MPN) before loan funds can be disbursed. The Entrance Counseling and MPN can both be completed online by logging in at studentaid.gov.
+Annual financial aid awards are generally disbursed in two payments during the fall and spring semesters. Students attending only one semester will receive one disbursement during that term of enrollment.
+
+Section: Disbursements and Adjustments
+Chunk: 2
+Title: Disbursements and Adjustments
+Disbursed aid is first applied toward outstanding balances from tuition and fees, room and board (if applicable), and other direct charges. Any overpayments from financial aid and/or cash payments are refunded by the Office of Student Accounting to the student by check or direct deposit, to be used for other educational expenses. The Office of Student Accounting will contact eligible students when a refund is available or a balance is due.
+FINANCIAL AID ADJUSTMENTS
+Awarded aid is subject to change, for several reasons:
+
+Section: Disbursements and Adjustments
+Chunk: 3
+Title: Disbursements and Adjustments
+FINANCIAL AID ADJUSTMENTS
+Awarded aid is subject to change, for several reasons:
+Change in Enrollment Status. Financial aid is initially awarded based on full-time enrollment (12 or more credits per semester for undergraduates; 9 or more credits per semester for graduates) at Kean University. Dropping and/or adding courses during the registration period and the first week of class can change student enrollment status from full-time to part-time and this can affect aid eligibility.
+- New Jersey State Aid, such as Tuition Aid Grant and Garden State Guarantee Program (GSG), requires full-time enrollment (12+ credits per semester) at Kean University.
+- Federal Direct Loan borrowers must be enrolled at least half-time (6 or more credits per semester for undergraduates; 4.5 or more credits per semester for graduates).
+
+==============================================================================
+Title: Unemployment Tuition Waiver
+Source URL: https://www.kean.edu/offices/financial-aid/unemployment-tuition-waiver
+Last Modified: 2026-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Unemployment Tuition Waiver
+Chunk: 0
+Title: Unemployment Tuition Waiver
+Unemployment Tuition Waiver
+Spring 2026 Unemployment Tuition Waiver Checklist
+This Checklist is a REQUIRED document that must be submitted by mail or in person at the Office of Financial Aid, along with all New Jersey One Stop Career Center forms.
+
+Section: Unemployment Tuition Waiver
+Chunk: 1
+Title: Unemployment Tuition Waiver
+Pursuant to N.J.S.A. 18A: 64-13.1 et seq. or 18A: 64A-23.1, the State of New Jersey created a program to allow certain unemployed individuals to attend a public institution of higher education in the state of New Jersey tuition-free on a space-available basis. Additionally, individuals who qualify for this program may have certain fees waived or reduced. To apply for this benefit, individuals must obtain certification from the Department of Labor, Division of Workforce New Jersey that they qualify for this benefit. Additionally, individuals must verify their past presence in the labor market for at least two years and their unemployed status or receipt of a layoff notice as proof of eligibility or an Employability Development Plan from the Division of Employment Services.
+SEE REGISTRAR’S WEBSITE FOR LAST DAY OF ADD/DROP
+
+Section: Unemployment Tuition Waiver
+Chunk: 2
+Title: Unemployment Tuition Waiver
+SEE REGISTRAR’S WEBSITE FOR LAST DAY OF ADD/DROP
+Students are only eligible to register for courses on the LAST day of add/drop on a space-available basis for each course. (Students cannot register before or after this date, and no overloads are allowed.)
+Students who register for courses prior to or after that date will forfeit his or her right to have those courses covered by the NJ Unemployment Tuition Waiver Program. If you are a matriculated student, and are eligible for a grant, you will be required to use the grant(s) first to cover the program cost. Students are subject to Kean University’s Satisfactory Academic Progress Policy for Financial Aid. The student must be making academic progress toward a degree and cannot be in default of a student loan in order to participate in the program.
+
+Section: Unemployment Tuition Waiver
+Chunk: 3
+Title: Unemployment Tuition Waiver
+Students who qualify for the NJ Unemployment Tuition Waiver Program will receive a waiver administered by the Office of Financial Aid that will cover tuition and certain fees, minus any federal and state grants and scholarships that the student may be eligible to receive. (Health Insurance, late fees, and Graduation application fees are examples of fees not covered under the Unemployment Tuition Waiver Program.) The maximum amount of tuition and fees that Kean University will waive is based on the flat rate charge for undergraduate students. The maximum number of credits per term for undergraduate students is 19 and 12 for graduate students. When the student is eligible for federal, state, or institutional grants and scholarships that exceed the student’s cost for tuition and applicable fees, the student does not qualify for the NJ Tuition Benefit for Unemployed.
+
+==============================================================================
+Title: Bicycle Parking
+Source URL: https://www.kean.edu/offices/office-student-government/commuter-resource-center/bicycle-parking
+Last Modified: 2026-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Bicycle Parking
+Chunk: 0
+Title: Bicycle Parking
+Bicycle Parking
+Bicycle Racks are located at the following locations:
+- East Campus - Rear Entrance
+- East Campus - Upper Parking Lot
+- STEM Building - Outside the Atrium Entrance
+- GLAB - Under the stairs at the main entrance
+- NAAB - At the Main Entrance
+- Hynes Hall - Main Entrance
+- Wilkins Theatre - Rear Side - Along Cougar Walk
+- Harwood Arena - Across from Main Entrance - Along Cougar Walk
+
+==============================================================================
+Title: Academic Advising Requirements
+Source URL: https://www.kean.edu/offices/registrars-office/registration-information/academic-advising-requirements
+Last Modified: 2025-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Academic Advising Requirements
+Chunk: 0
+Title: Academic Advising Requirements
+Academic Advising Requirements
+The University recognizes academic advisement as an essential component of the student experience. All Kean University undergraduate students are assigned an academic advisor to support their academic progress and success.
+NJCU students will continue to receive academic advising through the University Advisement Center at New Jersey City University. Current NJCU students should visit the NJCU University Advisement Center webpage for additional information.
+Kean-NJCU Advisement
+Students enrolled at New Jersey City University for Spring 2026 should continue to meet with their NJCU advisors for Fall 2026 course registration. Please visit the NJCU University Advisement Center webpage to learn more.
+Continuing Undergraduate Student Academic Advisement
+
+Section: Continuing Undergraduate Student Academic Advisement
+Chunk: 1
+Title: Academic Advising Requirements
+[Section] Continuing Undergraduate Student Academic Advisement
+Continuing Undergraduate Student Academic Advisement
+Academic advisors for continuing undergraduate students are assigned by academic major, credits completed, campus and/or special admit program. Depending on a student's major (i.e. education), new incoming freshman student status or special admit program (i.e. EOF, Bridge to Success, Supera), an academic advisement hold will be placed on their account each semester until they have met with an academic advisor.
+
+Section: Continuing Undergraduate Student Academic Advisement
+Chunk: 2
+Title: Academic Advising Requirements
+[Section] Continuing Undergraduate Student Academic Advisement
+Students with registration advisement holds can schedule an appointment with their special program assigned academic advisor, via Navigate360 to discuss registration. After their appointment, the hold will be removed from their account, enabling registration. Students with a second major or content area may have a second major advisement hold placed on their account until they have met with their second advisor. For additional information about resolving registration advisement holds, please visit the Registration Restrictions and Holds webpage.
+All students are encouraged to regularly review their program evaluations and seek registration guidance from their academic advisor to ensure timely degree completion. Each academic advisor may have different preferences for scheduling advisement appointments.
+Ways to meet with an academic Advisor
+
+Section: Continuing Undergraduate Student Academic Advisement
+Chunk: 3
+Title: Academic Advising Requirements
+[Section] Continuing Undergraduate Student Academic Advisement
+Ways to meet with an academic Advisor
+- Make an appointment through the Navigate360 app
+- Visit faculty during posted office hours
+- Email the Faculty Advisor directly to request an appointment. Students can find their advisors’ email addressed on their Keanwise account and on their Navigate APP.
+- Walk into the office
+To find a specific academic advisor's contact information, please view the Kean University Directory.
+Continuing undergraduate students can find their advisor as a part of their success network within Navigate360 or by visiting KeanWISE. For additional information about finding your assigned academic advisor in KeanWISE, view the instructions below.
+Finding Your Academic Advisor in KeanWISE
+Graduate Student Academic Advisement
+
+==============================================================================
+Title: Meal Plans
+Source URL: https://www.kean.edu/offices/student-accounting/meal-plans
+Last Modified: 2026-01-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Meal Plan Policies
+Chunk: 9
+Title: Meal Plans
+[Section] Meal Plan Policies
+Meal Plan Exemption
+Students may request to receive exemption from the meal plan for a specific documented medical condition. Please contact the Office of Accessibility Services, Kean University, 1000 Morris Avenue, DN-122, Union, NJ 07083.
+Meal Plan Frequently Asked Questions
+Meals included in the Unlimited Plan may only be used at Keanu's Kitchen.
+What are Cougar Dollars?
+Cougar Dollars work like cash with the convenience of being accessible from your Kean ID card. Cougar Dollars are accepted at all on-campus managed dining locations.
+What are Flex Dollars?
+Flex Dollars can be used at all Gourmet Dining on-campus eateries as well as participating off campus vendors **see Kean website for most current list**.
+How will a student know the balance remaining on his or her Meal Plan?
+A student may check his or her balance using their GET app or at any of our retail location registers.
+
+==============================================================================
+Title: Kean University Campus Resources
+Source URL: https://www.kean.edu/offices/student-success-and-retention/kean-university-campus-resources
+Last Modified: 2018-08-01
+Crawl Date: 2026-04-21
+==============================================================================
+
+Section: Kean University Campus Resources
+Chunk: 0
+Title: Kean University Campus Resources
+Kean University Campus Resources
+Please view the various campus resources and departments on campus that can provide assistance in various ways. If you have any questions, please email retain@kean.edu
+Student Accounting
+The Office of Student Accounting at Kean University is dedicated to effectively, efficiently and expeditiously provide students, alumni and their families with accurate financial information and guidance with respect to their financial obligations while complying with all policies and guidelines set forth by Kean University and all associated governing bodies.
+Location: Union Campus, Administration Building
+Contact: billing@kean.edu
+The Office of Financial Aid
+The Office of Financial Aid is dedicated to educating students regarding the various aid programs that make attending college affordable for all.
+Location: Union Campus, Administration Building
+
+Section: The Office of Financial Aid
+Chunk: 1
+Title: Kean University Campus Resources
+[Section] The Office of Financial Aid
+Location: Union Campus, Administration Building
+Contact: finaid@kean.edu
+Office of Scholarship Services
+The mission of the Office of Scholarship Services is to help support the academic excellence of prospective and current deserving Kean University students through philanthropic scholarship support. The Office is dedicated to providing financial access to a world-class education, as well as upholding ethical standards of scholarship dissemination and assessment.
+Location: Union Campus, Administration Building
+Contact: scholarships@kean.edu
+Cougar Pantry
+Cougar Pantry offers an assortment of donated non-perishable foods and health and hygiene products that are complimentary for registered Kean University students.
+Office of Accessibility Services
+
+Section: Office of Accessibility Services
+Chunk: 2
+Title: Kean University Campus Resources
+[Section] Office of Accessibility Services
+Office of Accessibility Services
+The Office of Accessibility Services strives to increase disability and access awareness throughout the campus community and beyond in a manner consistent with the current social model of disability services. OAS is committed to ensuring the full participation of individuals with disabilities according to law.
+Location: Union Campus, Downs Hall
+Contact: accessibilityservices@kean.edu
+Cougar Connections
+The Cougar Connections Center of Social Work (CCSW) promotes and prioritizes a sense of belonging on campus for all students,
+Location: Union Campus, Center for Academic Success RM 224-228
+Contact:
+Office of Career Services
+
+Section: Cougar Connections
+Chunk: 3
+Title: Kean University Campus Resources
+[Section] Cougar Connections
+Location: Union Campus, Center for Academic Success RM 224-228
+Contact:
+Office of Career Services
+At Kean, we believe in helping all students find an internship or job to launch their careers. Our mission is to assist students and alumni in identifying their career goals and securing employment that fulfills them. We help every step of the way. Find out more.
+Location: Union Campus, Center for Academic Success RM201
+Contact: career@kean.edu
+Kean Counseling Center
+Welcome to Kean Counseling Center! Our goal is to provide all registered Kean students with a range of counseling, consultation, and referral services to address your mental health and wellness needs. If you are experiencing any mental health concerns, don’t hesitate to reach out to us.
+Location: Union Campus, Downs Hall
+Contact: kucc@kean.edu
+Center for Veteran Student Success
+
+Section: Kean Counseling Center
+Chunk: 4
+Title: Kean University Campus Resources
+[Section] Kean Counseling Center
+Location: Union Campus, Downs Hall
+Contact: kucc@kean.edu
+Center for Veteran Student Success
+Center For Veteran Student Success provides transition services to veterans, service members, and dependents under the Kean Veterans Educational Transition Services Program, Kean V.E.T.S. We are dedicated to creating a seamless transition from soldier to student by providing a multitude of services at Kean and surrounding Kean Community.
+Location: Union Campus, CAS 208
+Contact: veteran@kean.edu
+One Stop Service Center
+The Office of the Registrar is committed to the student-centered mission of Kean University: maintaining a student-centered educational environment in which diversity can flourish and an atmosphere in which mutual respect characterizes relations among the members of a pluralistic community.
+Location: Union Campus, Administration Building, 1st Floor
+Contact: regme@kean.edu
+
+Section: One Stop Service Center
+Chunk: 5
+Title: Kean University Campus Resources
+[Section] One Stop Service Center
+Location: Union Campus, Administration Building, 1st Floor
+Contact: regme@kean.edu
+Nancy Thompson Learning Commons (NTLC)
+The Nancy Thompson Learning Commons (NTLC) serves as an intellectual and cultural center at Kean University and is dedicated to promoting lifelong learning. The Learning Commons offers student support services designed to meet the academic and research needs of the Kean Community.
+Location: Union Campus
+Contact: learningcommons@kean.edu
+CCAMPIS
+The goal is to increase the likelihood of low-income student parents/guardians in completing their education by providing them the support needed to become academically successful knowing that their children are safe and well cared for and educated by high-quality teachers during the day and/or after school.
+Location: Union Campus, Hennings Hall
+Contact: CCAMPIS@kean.edu
+Student Health Services
+
+Section: CCAMPIS
+Chunk: 6
+Title: Kean University Campus Resources
+[Section] CCAMPIS
+Location: Union Campus, Hennings Hall
+Contact: CCAMPIS@kean.edu
+Student Health Services
+We are here to support your health and wellness needs. From illnesses to injuries to immunizations, our office is available for all matriculated students of Kean University.
+Location: Union Campus, Downs Hall
+Contact:
+Kean Information Technology (KIT)
+Information technology is a vital part of Kean University. The Office of Information Technology (IT) maintains and administers university computer systems. Kean is committed to offering students, faculty, and staff access to the software and services they need to facilitate academic achievement and professional growth.
+Location: Union Campus, Technology Building
+Contact: OCIS@kean.edu
+ORSP
+
+Section: Kean Information Technology (KIT)
+Chunk: 7
+Title: Kean University Campus Resources
+[Section] Kean Information Technology (KIT)
+Location: Union Campus, Technology Building
+Contact: OCIS@kean.edu
+ORSP
+The mission of the Office of Research and Sponsored Programs (ORSP) is to grow the research enterprise throughout the University with an emphasis on faculty-student research and a focus on securing external funding.
+Location: Union Campus, Townsend Hall
+Contact: OSRP@kean.edu
+Alcohol & Other Drugs
+Location: Downs Hall 127
+Phone: (908) 737-4850
+Email: aod@kean.edu
+Alcohol and Other Drug Services are available to help students with substance use concerns for themselves and that of family or friends. The Alcohol and Other Drug Services website contains information to help navigate on-campus services and off-campus resources. All services are available to students free of charge and are offered both in person and remotely. To schedule an appointment, you must first register for an account on the Student Health Portal.
