@@ -13,6 +13,10 @@ from app.main import ChatRequest, chat  # noqa: E402
 
 CASES = [
     ("how do I apply?", "admissions_direct", "faq"),
+    ("what is eof?", "eof_direct", "faq"),
+    ("how to apply to eof?", "eof_direct", "faq"),
+    ("what is fbla?", "fbla_direct", "faq"),
+    ("tell me about fbla?", "fbla_direct", "faq"),
     ("library hours", "hours_library", "faq"),
     ("how does the shuttle work?", "shuttle_direct", "faq"),
     ("where is the bookstore?", "bookstore_direct", "faq"),

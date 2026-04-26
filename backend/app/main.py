@@ -2577,6 +2577,35 @@ def is_admissions_question(text: str) -> bool:
         )
     )
 
+def is_eof_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return keyword_in_text(q, q_tokens, "eof") or "educational opportunity fund" in q
+
+def is_eof_application_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return is_eof_question(text) and any(
+        keyword_in_text(q, q_tokens, keyword)
+        for keyword in (
+            "apply",
+            "application",
+            "admission",
+            "admissions",
+            "admit",
+            "deadline",
+            "eligible",
+            "eligibility",
+            "how",
+            "join",
+        )
+    )
+
+def is_fbla_question(text: str) -> bool:
+    q = normalize(text)
+    q_tokens = tokenize(text)
+    return keyword_in_text(q, q_tokens, "fbla") or "future business leaders of america" in q
+
 def is_graduation_question(text: str) -> bool:
     q = normalize(text)
     q_tokens = tokenize(text)
@@ -3290,6 +3319,29 @@ def build_course_repeat_answer(lang: str) -> str:
 def build_admissions_answer(lang: str) -> str:
     return trn("admissions_summary", lang)
 
+def build_eof_answer(text: str, lang: str) -> str:
+    if is_eof_application_question(text):
+        answer = (
+            "Here is how to apply to Kean's Educational Opportunity Fund (EOF):\n"
+            "1. Freshman applicants should complete the Common Application or Kean University online application and select EOF Freshman or EOF (Educational Opportunity Fund) as the admission type.\n"
+            "2. After applying, complete the EOF Supplemental Application in the Kean University Application Portal.\n"
+            "3. Submit the required financial eligibility documents, including FAFSA or New Jersey Alternative Financial Aid Application information when requested.\n"
+            "4. Transfer applicants should select EOF Transfer status. Current Kean students and EOF re-admit students use the EOF Academic Year application when spots are available.\n"
+            "5. Questions can go to EOFAdmissions@kean.edu. More information: https://www.kean.edu/applyeof"
+        )
+        return answer if lang == "en" else answer
+
+    answer = (
+        "EOF stands for the New Jersey Educational Opportunity Fund. At Kean, EOF provides financial assistance and comprehensive support services for motivated students who have strong academic potential and may come from educationally or economically disadvantaged backgrounds. Support can include EOF counseling, tutoring, developmental coursework, academic workshops, and help with financial aid and career development. EOF is limited-capacity, so students must meet eligibility requirements and apply through the correct EOF pathway."
+    )
+    return answer if lang == "en" else answer
+
+def build_fbla_answer(lang: str) -> str:
+    answer = (
+        "FBLA stands for Future Business Leaders of America. Kean University is home to the state office for New Jersey FBLA, along with New Jersey DECA and New Jersey HOSA. NJ FBLA helps students prepare for community-minded business leadership through career preparation, leadership development, academic competitions, educational programs, and community service. Kean's records list NJFBLA.org for more information."
+    )
+    return answer if lang == "en" else answer
+
 def build_graduation_answer(text: str, lang: str) -> str:
     if is_graduation_ceremony_info_question(text):
         answer = (
@@ -3823,6 +3875,9 @@ def build_location_aliases(place: dict) -> list[str]:
         aliases.add(value)
 
     for extra_alias in LOCATION_ALIAS_OVERRIDES.get(place["id"], ()):
+        aliases.add(extra_alias)
+
+    for extra_alias in place.get("aliases", []) or []:
         aliases.add(extra_alias)
 
     return [normalize(alias) for alias in aliases if normalize(alias)]
@@ -6140,6 +6195,22 @@ async def chat(req: ChatRequest):
             "response_mode": "course_repeat_policy",
         })
 
+    if is_eof_question(user_text):
+        return with_location({
+            "answer": await localized(build_eof_answer(user_text, lang)),
+            "intent": "faq",
+            "faq_topic": "admissions",
+            "response_mode": "eof_direct",
+        })
+
+    if is_fbla_question(user_text):
+        return with_location({
+            "answer": await localized(build_fbla_answer(lang)),
+            "intent": "faq",
+            "faq_topic": "student_orgs",
+            "response_mode": "fbla_direct",
+        })
+
     if is_admissions_question(user_text) and not location_context_requested:
         return with_location({
             "answer": await localized(build_admissions_answer(lang)),
@@ -6440,6 +6511,36 @@ async def chat(req: ChatRequest):
         }
 
     if is_parking_location_question(user_text):
+        parking_destination_id = None
+        if normalized_destination_id:
+            destination = campus_location_by_id.get(normalized_destination_id, {})
+            if destination.get("type") == "parking":
+                parking_destination_id = normalized_destination_id
+
+        if not parking_destination_id:
+            parking_destination_id = find_location_destination_id(
+                user_text,
+                allowed_types={"parking"},
+            )
+
+        if parking_destination_id:
+            destination = campus_location_by_id.get(parking_destination_id, {})
+            specific_location_mode = "directions" if (normalized_start_id or use_current_location) else "highlight"
+            return remember_response({
+                "answer": trn(
+                    "location_opening_directions_specific" if specific_location_mode == "directions" else "location_opening_specific",
+                    lang,
+                    name=destination.get("name", "That location"),
+                    campus=localize_campus_label_for_location(destination.get("campus", "campus"), lang),
+                ),
+                "intent": "location",
+                "start_id": normalized_start_id,
+                "destination_id": parking_destination_id,
+                "use_current_location": False if normalized_start_id else (specific_location_mode == "directions"),
+                "location_mode": specific_location_mode,
+                "response_mode": "parking_location_direct",
+            })
+
         audience = parking_audience(user_text)
         key = {
             "student": "parking_guidance_student",

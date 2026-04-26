@@ -18,24 +18,6 @@
     "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
   },
   {
-    "edge_id": "eB00011",
-    "from_id": "alumni_stadium_main",
-    "to_id": "glab_lot",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00013",
-    "from_id": "alumni_stadium_main",
-    "to_id": "kean_hall_lot",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
     "edge_id": "eB00014",
     "from_id": "bartlett_hall_main",
     "to_id": "burch_hall_main",
@@ -57,15 +39,6 @@
     "edge_id": "eB00016",
     "from_id": "bartlett_hall_main",
     "to_id": "freshman_residence_hall_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00017",
-    "from_id": "bartlett_hall_main",
-    "to_id": "rogers_hall_main",
     "mode": "walk",
     "accessible": "yes",
     "notes": "Auto-suggested proximity edge (trace on sidewalks)",
@@ -102,15 +75,6 @@
     "edge_id": "eB00022",
     "from_id": "bruce_hall_main",
     "to_id": "science_building_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00023",
-    "from_id": "bruce_hall_main",
-    "to_id": "technology_center_main",
     "mode": "walk",
     "accessible": "yes",
     "notes": "Auto-suggested proximity edge (trace on sidewalks)",
@@ -252,15 +216,6 @@
     "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
   },
   {
-    "edge_id": "eB00051",
-    "from_id": "east_campus_building_main",
-    "to_id": "east_campus_upper_lot",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
     "edge_id": "eB00052",
     "from_id": "east_campus_building_main",
     "to_id": "enlow_recital_hall_main",
@@ -318,15 +273,6 @@
     "edge_id": "eB00059",
     "from_id": "freshman_residence_hall_main",
     "to_id": "upperclassman_residence_hall_main",
-    "mode": "walk",
-    "accessible": "yes",
-    "notes": "Auto-suggested proximity edge (trace on sidewalks)",
-    "suggested_next_step": "Trace sidewalk path, export GeoJSON, convert lng,lat -> lat,lng;..."
-  },
-  {
-    "edge_id": "eB00061",
-    "from_id": "glab_main",
-    "to_id": "kean_hall_lot",
     "mode": "walk",
     "accessible": "yes",
     "notes": "Auto-suggested proximity edge (trace on sidewalks)",
