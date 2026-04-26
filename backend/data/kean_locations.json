@@ -50,33 +50,43 @@
   {
     "id": "admissions_faculty_lot",
     "name": "Admissions Faculty Lot",
-    "latlng": "40.680773, -74.233794",
+    "latlng": "40.680814426349016, -74.23380491426231",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.680773,
-    "longitude": -74.233794,
+    "aliases": [
+      "admissions faculty lot",
+      "admissions faculty parking",
+      "faculty admissions lot"
+    ],
+    "latitude": 40.680814426349016,
+    "longitude": -74.23380491426231,
     "coordinates": [
-      -74.233794,
-      40.680773
+      -74.23380491426231,
+      40.680814426349016
     ]
   },
   {
     "id": "admissions_student_lot",
     "name": "Admissions Student Lot",
-    "latlng": "40.680909, -74.234782",
+    "latlng": "40.680859737622804, -74.23502896197306",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.680909,
-    "longitude": -74.234782,
+    "aliases": [
+      "admissions student lot",
+      "admissions student parking",
+      "student admissions lot"
+    ],
+    "latitude": 40.680859737622804,
+    "longitude": -74.23502896197306,
     "coordinates": [
-      -74.234782,
-      40.680909
+      -74.23502896197306,
+      40.680859737622804
     ]
   },
   {
@@ -546,17 +556,21 @@
   {
     "id": "cougar_hall_lot",
     "name": "Cougar Hall Lot",
-    "latlng": "40.678616, -74.237648",
+    "latlng": "40.67866403870646, -74.23753794048613",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.678616,
-    "longitude": -74.237648,
+    "aliases": [
+      "cougar hall lot",
+      "cougar lot"
+    ],
+    "latitude": 40.67866403870646,
+    "longitude": -74.23753794048613,
     "coordinates": [
-      -74.237648,
-      40.678616
+      -74.23753794048613,
+      40.67866403870646
     ]
   },
   {
@@ -658,17 +672,23 @@
   {
     "id": "d_angola_lot",
     "name": "D'Angola Lot",
-    "latlng": "40.679394, -74.23875",
+    "latlng": "40.679414831645396, -74.23873467528125",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.679394,
-    "longitude": -74.23875,
+    "aliases": [
+      "d'angola lot",
+      "d angola lot",
+      "dangola lot",
+      "d'angola gym lot"
+    ],
+    "latitude": 40.679414831645396,
+    "longitude": -74.23873467528125,
     "coordinates": [
-      -74.23875,
-      40.679394
+      -74.23873467528125,
+      40.679414831645396
     ]
   },
   {
@@ -850,17 +870,22 @@
   {
     "id": "east_campus_lower_lot",
     "name": "East Campus Lower Lot",
-    "latlng": "40.680874, -74.224894",
+    "latlng": "40.68076916804871, -74.2249118169369",
     "campus": "East",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.680874,
-    "longitude": -74.224894,
+    "aliases": [
+      "east campus lower lot",
+      "east lower lot",
+      "lower east campus lot"
+    ],
+    "latitude": 40.68076916804871,
+    "longitude": -74.2249118169369,
     "coordinates": [
-      -74.224894,
-      40.680874
+      -74.2249118169369,
+      40.68076916804871
     ]
   },
   {
@@ -881,18 +906,24 @@
   },
   {
     "id": "east_campus_upper_lot",
-    "name": "East Campus Upper Lot",
-    "latlng": "40.680227, -74.223294",
+    "name": "East Campus Upper Lot (Faculty)",
+    "latlng": "40.68023533931103, -74.22334678399042",
     "campus": "East",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.680227,
-    "longitude": -74.223294,
+    "aliases": [
+      "east campus upper lot",
+      "east upper lot",
+      "east campus faculty lot",
+      "east campus upper faculty lot"
+    ],
+    "latitude": 40.68023533931103,
+    "longitude": -74.22334678399042,
     "coordinates": [
-      -74.223294,
-      40.680227
+      -74.22334678399042,
+      40.68023533931103
     ]
   },
   {
@@ -1346,17 +1377,22 @@
   {
     "id": "glab_lot",
     "name": "GLAB Lot",
-    "latlng": "40.682491, -74.237025",
+    "latlng": "40.68257190512399, -74.23708207671615",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.682491,
-    "longitude": -74.237025,
+    "aliases": [
+      "glab lot",
+      "green lane lot",
+      "green lane academic building lot"
+    ],
+    "latitude": 40.68257190512399,
+    "longitude": -74.23708207671615,
     "coordinates": [
-      -74.237025,
-      40.682491
+      -74.23708207671615,
+      40.68257190512399
     ]
   },
   {
@@ -1474,17 +1510,25 @@
   {
     "id": "harwood_lot",
     "name": "Harwood Lot",
-    "latlng": "40.680893, -74.23704",
+    "latlng": "40.680857062335015, -74.23695588740226",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.680893,
-    "longitude": -74.23704,
+    "aliases": [
+      "harwood lot",
+      "hardwood lot",
+      "harwood arena lot",
+      "hardwood arena lot",
+      "hardwood areana lot",
+      "harwood areana lot"
+    ],
+    "latitude": 40.680857062335015,
+    "longitude": -74.23695588740226,
     "coordinates": [
-      -74.23704,
-      40.680893
+      -74.23695588740226,
+      40.680857062335015
     ]
   },
   {
@@ -1698,17 +1742,21 @@
   {
     "id": "hynes_hall_lot",
     "name": "Hynes Hall Lot",
-    "latlng": "40.683246, -74.23179",
+    "latlng": "40.68329205682242, -74.23164350339512",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.683246,
-    "longitude": -74.23179,
+    "aliases": [
+      "hynes hall lot",
+      "hynes lot"
+    ],
+    "latitude": 40.68329205682242,
+    "longitude": -74.23164350339512,
     "coordinates": [
-      -74.23179,
-      40.683246
+      -74.23164350339512,
+      40.68329205682242
     ]
   },
   {
@@ -1922,17 +1970,20 @@
   {
     "id": "kean_hall_lot",
     "name": "Kean Hall Lot",
-    "latlng": "40.681925, -74.235855",
+    "latlng": "40.68178029394806, -74.23585258033766",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.681925,
-    "longitude": -74.235855,
+    "aliases": [
+      "kean hall lot"
+    ],
+    "latitude": 40.68178029394806,
+    "longitude": -74.23585258033766,
     "coordinates": [
-      -74.235855,
-      40.681925
+      -74.23585258033766,
+      40.68178029394806
     ]
   },
   {
@@ -2017,18 +2068,24 @@
   },
   {
     "id": "lhac_lot",
-    "name": "LHAC Lot",
-    "latlng": "40.680196297634204, -74.22749309322569",
+    "name": "Liberty Hall Academic Center (LHAC) Lot",
+    "latlng": "40.68019541339676, -74.227439167495",
     "campus": "Liberty Hall",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.680196297634204,
-    "longitude": -74.22749309322569,
+    "aliases": [
+      "lhac lot",
+      "lahc lot",
+      "liberty hall academic center lot",
+      "liberty hall lot"
+    ],
+    "latitude": 40.68019541339676,
+    "longitude": -74.227439167495,
     "coordinates": [
-      -74.22749309322569,
-      40.680196297634204
+      -74.227439167495,
+      40.68019541339676
     ]
   },
   {
@@ -2210,33 +2267,44 @@
   {
     "id": "morris_ave_faculty_staff_lot",
     "name": "Morris Ave Faculty/Staff Lot",
-    "latlng": "40.679373, -74.232266",
+    "latlng": "40.679452958117274, -74.23229201405555",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.679373,
-    "longitude": -74.232266,
+    "aliases": [
+      "morris ave faculty lot",
+      "morris avenue faculty lot",
+      "morris faculty lot",
+      "morris ave faculty staff lot"
+    ],
+    "latitude": 40.679452958117274,
+    "longitude": -74.23229201405555,
     "coordinates": [
-      -74.232266,
-      40.679373
+      -74.23229201405555,
+      40.679452958117274
     ]
   },
   {
     "id": "morris_ave_student_lot",
     "name": "Morris Ave Student Lot",
-    "latlng": "40.680191, -74.233304",
+    "latlng": "40.68034767728124, -74.23334416480247",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.680191,
-    "longitude": -74.233304,
+    "aliases": [
+      "morris ave student lot",
+      "morris avenue student lot",
+      "morris student lot"
+    ],
+    "latitude": 40.68034767728124,
+    "longitude": -74.23334416480247,
     "coordinates": [
-      -74.233304,
-      40.680191
+      -74.23334416480247,
+      40.68034767728124
     ]
   },
   {
@@ -2418,17 +2486,22 @@
   {
     "id": "overnight_parking_lot",
     "name": "Overnight Parking Lot",
-    "latlng": "40.675906, -74.229726",
+    "latlng": "40.67580611543995, -74.22947599130855",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.675906,
-    "longitude": -74.229726,
+    "aliases": [
+      "overnight parking",
+      "overnight parking lot",
+      "overnight lot"
+    ],
+    "latitude": 40.67580611543995,
+    "longitude": -74.22947599130855,
     "coordinates": [
-      -74.229726,
-      40.675906
+      -74.22947599130855,
+      40.67580611543995
     ]
   },
   {
@@ -2770,17 +2843,21 @@
   {
     "id": "stem_lot",
     "name": "STEM Lot",
-    "latlng": "40.68048234669881, -74.2295090460723",
+    "latlng": "40.68043618464646, -74.22950373322448",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.68048234669881,
-    "longitude": -74.2295090460723,
+    "aliases": [
+      "stem lot",
+      "stem building lot"
+    ],
+    "latitude": 40.68043618464646,
+    "longitude": -74.22950373322448,
     "coordinates": [
-      -74.2295090460723,
-      40.68048234669881
+      -74.22950373322448,
+      40.68043618464646
     ]
   },
   {
@@ -3026,17 +3103,23 @@
   {
     "id": "vaughn_eames_lot",
     "name": "Vaughn-Eames Lot",
-    "latlng": "40.677057, -74.230852",
+    "latlng": "40.67686194877578, -74.23048563834246",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.677057,
-    "longitude": -74.230852,
+    "aliases": [
+      "vaughn-eames lot",
+      "vaughn eames lot",
+      "vaughn-aemes lot",
+      "vaughn ames lot"
+    ],
+    "latitude": 40.67686194877578,
+    "longitude": -74.23048563834246,
     "coordinates": [
-      -74.230852,
-      40.677057
+      -74.23048563834246,
+      40.67686194877578
     ]
   },
   {
@@ -3074,17 +3157,24 @@
   {
     "id": "visitors_parking_lot",
     "name": "Visitors Parking Lot",
-    "latlng": "40.680431, -74.236273",
+    "latlng": "40.680216250737914, -74.23625622593397",
     "campus": "Main",
     "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "parking",
-    "latitude": 40.680431,
-    "longitude": -74.236273,
+    "aliases": [
+      "visitors parking lot",
+      "visitors lot",
+      "visitor's lot",
+      "visitor lot",
+      "visitor parking"
+    ],
+    "latitude": 40.680216250737914,
+    "longitude": -74.23625622593397,
     "coordinates": [
-      -74.236273,
-      40.680431
+      -74.23625622593397,
+      40.680216250737914
     ]
   },
   {

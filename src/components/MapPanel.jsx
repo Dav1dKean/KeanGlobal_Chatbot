@@ -71,34 +71,66 @@ const LOCATION_TYPE_LABELS = {
 const ROUTE_NODE_ALIASES = {
   administration_lot: "visitors_parking_lot",
   "downs_hall_entrance_front": "downs_hall_main",
+  freshman_quad_main: "freshman_residence_hall_main",
+  hutchinson_hall: "hutchinson_hall_side",
+  hutchinson_hall_main: "hutchinson_hall_side",
   kean_parking_garage_near_hynes: "kean_parking_garage",
   "kean parking garage near hynes": "kean_parking_garage",
   "parking garage near hynes": "kean_parking_garage",
-  "kean_hall_entrance_front": "kean_hall_main",
-  "kean_hall_entrance_side": "kean_hall_main",
-  "miron_center_main": "miron_main",
-  "naab_entrance_front": "naab_main",
-  "north_ave_academic_main": "naab_main",
+  kean_hall_main: "kean_hall_entrance_front",
+  miron_main: "miron_center_main",
+  naab_main: "naab_entrance_front",
+  north_ave_academic_main: "naab_entrance_front",
   shuttle_stop_stem_liberty_hall: "shuttle_stop_lhac",
   "shuttle stop stem liberty hall": "shuttle_stop_lhac",
   visitors_lot: "visitors_parking_lot",
-  "vaughn_eames_front": "vaughn_eames_main",
-  "wilkins_theatre_front": "wilkins_theatre_main"
+  vaughn_eames_main: "vaughn_eames_front",
+  wilkins_main: "wilkins_theatre_front",
+  wilkins_theatre_main: "wilkins_theatre_front"
 };
 
 const MERGED_ROUTE_NODE_IDS = {
-  downs_main: "downs_hall_main"
+  "Downs Hall Entrance front": "downs_hall_main",
+  "Cougar Pantry": "cougars_den",
+  cas_main: "cas_main_front2",
+  cas_main1: "cas_main_front1",
+  cas_main2: "cas_main_front2",
+  cas_main_rear: "cas_main_front2",
+  cougar_hall_faculty_staff_lot: "cougar_hall_lot",
+  d_angola_gym_lot_2: "d_angola_lot",
+  downs_main: "downs_hall_main",
+  east_campus_faculty_lot: "east_campus_upper_lot",
+  east_campus_overflow_lot: "east_campus_lower_lot",
+  freshman_quad_main: "freshman_residence_hall_main",
+  harwood_main: "harwood_arena_main",
+  hennings_hall_main1: "hennings_hall_front",
+  hutchinson_hall: "hutchinson_hall_side",
+  hynes_hall_lot_overflow_lot: "hynes_hall_lot",
+  kean_hall_main: "kean_hall_entrance_front",
+  kean_hall_faculty_staff_lot: "kean_hall_lot",
+  kean_hall_student_lot: "kean_hall_lot",
+  miron_main: "miron_center_main",
+  naab_faculty_staff_lot: "naab_entrance_front",
+  naab_main: "naab_entrance_front",
+  north_ave_academic_main: "naab_entrance_front",
+  overnight_parking_lot: "overnight_lot",
+  shuttle_stop_morris_ave_1: "shuttle_stop_morris_ave_2",
+  vaughn_eames_main: "vaughn_eames_front",
+  wilkins_main: "wilkins_theatre_front",
+  wilkins_theatre_main: "wilkins_theatre_front"
 };
 
 const PREFERRED_ROUTE_DESTINATION_IDS = {
   campus_police: "campus_police_main",
-  cas: "cas_main",
+  cas: "cas_main_front2",
   downs_hall: "downs_hall_main",
   harwood_arena: "harwood_arena_main",
   hennings_hall: "hennings_hall_front",
   hutchinson_hall: "hutchinson_hall_side",
+  hutchinson_hall_main: "hutchinson_hall_side",
+  library: "library_main",
   naab: "naab_entrance_front",
-  wilkins_theatre: "wilkins_main"
+  wilkins_theatre: "wilkins_theatre_side"
 };
 
 const IMAGE_TOKEN_STOP_WORDS = new Set([
@@ -1599,6 +1631,7 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
       addAlias(id, id);
       addAlias(normalizedId, id);
       addAlias(location.name, id);
+      (location.aliases || []).forEach(alias => addAlias(alias, id));
 
       const base = normalizedId
         .replace(/_entrance_(front|rear|side)\d*$/g, "")
@@ -1628,6 +1661,10 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
       const preferredDestinationId = preferDestination ? PREFERRED_ROUTE_DESTINATION_IDS[normalizedRequested] : null;
       if (preferredDestinationId && routableLocationIds.has(preferredDestinationId)) {
         return preferredDestinationId;
+      }
+      const mergedDestinationId = MERGED_ROUTE_NODE_IDS[requested];
+      if (mergedDestinationId && routableLocationIds.has(mergedDestinationId)) {
+        return mergedDestinationId;
       }
 
       const candidates = [];
