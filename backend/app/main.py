@@ -832,8 +832,16 @@ LOCATION_ALIAS_OVERRIDES = {
         "administration building",
         "financial aid",
         "registrar",
-        "student accounts",
-        "admissions office"
+        "student accounts"
+    ),
+    "admissions_office": (
+        "admissions",
+        "admission",
+        "admissions office",
+        "admission office",
+        "office of admissions",
+        "kean admissions",
+        "kean hall north wing",
     ),
     "cas": (
         "cas",
@@ -2099,6 +2107,7 @@ def load_campus_locations():
                 "type": row_type,
                 "parent": str(entry.get("parent") or "").strip(),
                 "position": position,
+                "aliases": entry.get("aliases") if isinstance(entry.get("aliases"), list) else [],
             }
         )
     return rows

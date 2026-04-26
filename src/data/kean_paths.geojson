@@ -10122,6 +10122,1645 @@
           ]
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00242",
+        "from_id": "kean_hall_lot",
+        "to_id": "admissions_office",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided admissions connector (Kean Hall Lot to Admissions Office).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23566084865024,
+            40.681805437910896
+          ],
+          [
+            -74.23517157634899,
+            40.68184597118014
+          ],
+          [
+            -74.23504411885853,
+            40.681705663602685
+          ],
+          [
+            -74.23501698030077,
+            40.6816502119386
+          ],
+          [
+            -74.2350114594503,
+            40.68161881168979
+          ],
+          [
+            -74.2349176049969,
+            40.68155182444218
+          ],
+          [
+            -74.23466916673749,
+            40.68135295565503
+          ],
+          [
+            -74.2348071879927,
+            40.68128387477941
+          ],
+          [
+            -74.23499765732447,
+            40.681262941166665
+          ],
+          [
+            -74.2349562509482,
+            40.6813173685463
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00243",
+        "from_id": "kean_hall_entrance_side",
+        "to_id": "admissions_office",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided admissions connector (Kean Hall side entrance to Admissions Office).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23533166886911,
+            40.68121898074921
+          ],
+          [
+            -74.23521573101513,
+            40.68111849925029
+          ],
+          [
+            -74.23515224123766,
+            40.68116874001865
+          ],
+          [
+            -74.2349838553065,
+            40.68118130020446
+          ],
+          [
+            -74.23499489700679,
+            40.68125038118637
+          ],
+          [
+            -74.23496453233085,
+            40.681321555456805
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00244",
+        "from_id": "glab_main",
+        "to_id": "admissions_office",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided admissions connector (GLAB to Admissions Office).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23618867177936,
+            40.68259095252344
+          ],
+          [
+            -74.23614450497755,
+            40.68254908611232
+          ],
+          [
+            -74.23592367096921,
+            40.682703991702084
+          ],
+          [
+            -74.23581325396503,
+            40.682791910931
+          ],
+          [
+            -74.2355813782564,
+            40.68260351244177
+          ],
+          [
+            -74.23554273230508,
+            40.68259095252344
+          ],
+          [
+            -74.23558413868196,
+            40.68242767337145
+          ],
+          [
+            -74.23520319963835,
+            40.68184782020745
+          ],
+          [
+            -74.23501825437312,
+            40.6816740725219
+          ],
+          [
+            -74.23502377522357,
+            40.68163848558413
+          ],
+          [
+            -74.23491059779448,
+            40.681531724658356
+          ],
+          [
+            -74.23468148251078,
+            40.68136216283645
+          ],
+          [
+            -74.23479465993984,
+            40.68128680188801
+          ],
+          [
+            -74.23498512927223,
+            40.68127005499926
+          ],
+          [
+            -74.23495752502119,
+            40.68132448237313
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00245",
+        "from_id": "hennings_hall_front",
+        "to_id": "admissions_office",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided admissions connector (Hennings Hall to Admissions Office).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23385040661148,
+            40.68027233595953
+          ],
+          [
+            -74.23382004193552,
+            40.680420966676564
+          ],
+          [
+            -74.23394426106488,
+            40.68054866322555
+          ],
+          [
+            -74.2340353550934,
+            40.680720320495396
+          ],
+          [
+            -74.23401327119618,
+            40.68100083230624
+          ],
+          [
+            -74.23442181411201,
+            40.68127715655186
+          ],
+          [
+            -74.23484415915239,
+            40.68099873893601
+          ],
+          [
+            -74.23495181573166,
+            40.68109084714857
+          ],
+          [
+            -74.23501254508419,
+            40.6812625030222
+          ],
+          [
+            -74.23495733658211,
+            40.681327397200704
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00246",
+        "from_id": "bruce_hall_main",
+        "to_id": "admissions_office",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided admissions connector (Bruce Hall to Admissions Office).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23504226911379,
+            40.680551059791156
+          ],
+          [
+            -74.23529164430704,
+            40.68094203814783
+          ],
+          [
+            -74.23497502187085,
+            40.68115240055329
+          ],
+          [
+            -74.23500023958655,
+            40.681252269341826
+          ],
+          [
+            -74.2349498041545,
+            40.68132451475506
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00247",
+        "from_id": "administration_main",
+        "to_id": "admissions_office",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided admissions connector (Administration to Admissions Office).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.2361632951891,
+            40.67979380631664
+          ],
+          [
+            -74.23608203810413,
+            40.679844804202816
+          ],
+          [
+            -74.23615488928428,
+            40.680091293436675
+          ],
+          [
+            -74.23569256492179,
+            40.68048227473156
+          ],
+          [
+            -74.23560570389968,
+            40.68070326300787
+          ],
+          [
+            -74.23497526158727,
+            40.681168610356735
+          ],
+          [
+            -74.23499767733466,
+            40.68125148019311
+          ],
+          [
+            -74.23496125174461,
+            40.68132372560723
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00248",
+        "from_id": "visitors_parking_lot",
+        "to_id": "admissions_office",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided admissions connector (Visitors Lot to Admissions Office).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23614648451124,
+            40.68044827586414
+          ],
+          [
+            -74.2356953675885,
+            40.68048652390729
+          ],
+          [
+            -74.23562251640904,
+            40.680694762866494
+          ],
+          [
+            -74.2349640538203,
+            40.68117073518792
+          ],
+          [
+            -74.23499487547319,
+            40.68124935528891
+          ],
+          [
+            -74.23495004397834,
+            40.681327975297194
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00249",
+        "from_id": "admissions_office",
+        "to_id": "miron_center_main",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Admissions Office to Miron Student Center).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23496098425376,
+            40.68132237122404
+          ],
+          [
+            -74.2350058157493,
+            40.681250125808475
+          ],
+          [
+            -74.23498620197012,
+            40.681167255970394
+          ],
+          [
+            -74.23528601259541,
+            40.68094839410821
+          ],
+          [
+            -74.23501982559127,
+            40.68054466645762
+          ],
+          [
+            -74.23472281714227,
+            40.67989444749779
+          ],
+          [
+            -74.23452948131825,
+            40.67988807276885
+          ],
+          [
+            -74.23433614530276,
+            40.679647957605226
+          ],
+          [
+            -74.2342624055344,
+            40.67937215807467
+          ],
+          [
+            -74.23426520750265,
+            40.679323284755014
+          ],
+          [
+            -74.23439409805202,
+            40.67929141083101
+          ],
+          [
+            -74.23438849411481,
+            40.67921916321427
+          ],
+          [
+            -74.23443892954752,
+            40.67921916321427
+          ],
+          [
+            -74.23484521481309,
+            40.6784711832822
+          ],
+          [
+            -74.23503574866886,
+            40.6781758138963
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00250",
+        "from_id": "hutchinson_hall_rear",
+        "to_id": "cas_main_rear",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Hutchinson rear to CAS rear).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23370600988451,
+            40.67954655136751
+          ],
+          [
+            -74.23393577129862,
+            40.67951892739359
+          ],
+          [
+            -74.23398900869958,
+            40.67952317723618
+          ],
+          [
+            -74.23425799767134,
+            40.67937443257446
+          ],
+          [
+            -74.23427200751397,
+            40.67932130940076
+          ],
+          [
+            -74.2343896901896,
+            40.67928943547585
+          ],
+          [
+            -74.23439249215788,
+            40.67922568758078
+          ],
+          [
+            -74.23443452168446,
+            40.679208688132036
+          ],
+          [
+            -74.23451017483285,
+            40.679025943781596
+          ],
+          [
+            -74.23436167050498,
+            40.67892607165757
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00251",
+        "from_id": "hennings_hall_side",
+        "to_id": "cas_main_rear",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Hennings side to CAS rear).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23414078055329,
+            40.68019925167022
+          ],
+          [
+            -74.23421363173344,
+            40.680203501469435
+          ],
+          [
+            -74.2342864829129,
+            40.68010575601275
+          ],
+          [
+            -74.23419681992253,
+            40.67999313606933
+          ],
+          [
+            -74.23414078055329,
+            40.67982526825318
+          ],
+          [
+            -74.23394184079277,
+            40.679551154075625
+          ],
+          [
+            -74.23425846322827,
+            40.679385410072086
+          ],
+          [
+            -74.2342752750392,
+            40.679325912124455
+          ],
+          [
+            -74.23438174984109,
+            40.67928341355778
+          ],
+          [
+            -74.23438735377762,
+            40.679217540725574
+          ],
+          [
+            -74.23444339314685,
+            40.679200541274696
+          ],
+          [
+            -74.23450503657519,
+            40.67903054717664
+          ],
+          [
+            -74.23437614602582,
+            40.67892642517862
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00252",
+        "from_id": "morris_ave_student_lot",
+        "to_id": "hennings_hall_side",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Morris Ave Student Lot to Hennings side).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23328226863829,
+            40.680280651260034
+          ],
+          [
+            -74.2336832072954,
+            40.68015700197839
+          ],
+          [
+            -74.23390773294328,
+            40.680365786697166
+          ],
+          [
+            -74.23413225859115,
+            40.680229975352546
+          ],
+          [
+            -74.23415096906174,
+            40.68019551571368
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00253",
+        "from_id": "dougall_hall_main",
+        "to_id": "freshman_residence_hall_main",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Dougall Hall main to Freshman Residence Hall).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23380986435434,
+            40.6764246290237
+          ],
+          [
+            -74.23385456465255,
+            40.67644157943218
+          ],
+          [
+            -74.23448675457557,
+            40.6764076786103
+          ],
+          [
+            -74.23450591184613,
+            40.67644642240495
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00254",
+        "from_id": "dougall_hall_main",
+        "to_id": "cas_main_front2",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Dougall Hall main to CAS front 2).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23381732222825,
+            40.676417565809544
+          ],
+          [
+            -74.23383328662062,
+            40.67645388811198
+          ],
+          [
+            -74.23405359522974,
+            40.67643693770654
+          ],
+          [
+            -74.2341110670414,
+            40.676708143676166
+          ],
+          [
+            -74.2340982955272,
+            40.676749308772145
+          ],
+          [
+            -74.23430583290072,
+            40.67753870552164
+          ],
+          [
+            -74.23397696642539,
+            40.677865600036
+          ],
+          [
+            -74.23403124535811,
+            40.67813195734317
+          ],
+          [
+            -74.23415576761597,
+            40.67828692837844
+          ],
+          [
+            -74.23418450352105,
+            40.678412842078615
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00255",
+        "from_id": "hri_main",
+        "to_id": "cas_main_front1",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (HRI main to CAS front 1).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23362863709905,
+            40.67810365254232
+          ],
+          [
+            -74.23374333685463,
+            40.678085200879025
+          ],
+          [
+            -74.23382327910855,
+            40.678285532950525
+          ],
+          [
+            -74.23328801358305,
+            40.678388334700315
+          ],
+          [
+            -74.23333667408521,
+            40.67852013158412
+          ],
+          [
+            -74.23338881033811,
+            40.678586029928596
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00256",
+        "from_id": "nathan_weiss_building_main",
+        "to_id": "east_campus_lower_lot",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Nathan Weiss main to East Campus lower lot).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.2238184179617,
+            40.67965008401276
+          ],
+          [
+            -74.22368250314254,
+            40.67964254207345
+          ],
+          [
+            -74.22326481369741,
+            40.67986377193637
+          ],
+          [
+            -74.22346039843775,
+            40.6801377942719
+          ],
+          [
+            -74.22353332834037,
+            40.680235838687224
+          ],
+          [
+            -74.2235465883226,
+            40.680348966679105
+          ],
+          [
+            -74.22379189799648,
+            40.680364050397
+          ],
+          [
+            -74.22404052266651,
+            40.68037913411149
+          ],
+          [
+            -74.22418306747716,
+            40.68050734554561
+          ],
+          [
+            -74.22488584654286,
+            40.68066572403583
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00257",
+        "from_id": "enlow_recital_hall_main",
+        "to_id": "east_campus_lower_lot",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Enlow Recital Hall main to East Campus lower lot).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.22419591834158,
+            40.67987377607656
+          ],
+          [
+            -74.22377159890573,
+            40.67967014410101
+          ],
+          [
+            -74.2237052989938,
+            40.67963746236791
+          ],
+          [
+            -74.22329755453555,
+            40.679838580471
+          ],
+          [
+            -74.22329423954017,
+            40.679916513572664
+          ],
+          [
+            -74.22352297423569,
+            40.680223217153326
+          ],
+          [
+            -74.2235594391878,
+            40.68033131725929
+          ],
+          [
+            -74.22357269917002,
+            40.68036651260465
+          ],
+          [
+            -74.22375502392735,
+            40.680358970746425
+          ],
+          [
+            -74.22399370361052,
+            40.68036148469906
+          ],
+          [
+            -74.22415945339026,
+            40.680474612478264
+          ],
+          [
+            -74.22477935756646,
+            40.68058774006488
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00258",
+        "from_id": "enlow_recital_hall_main",
+        "to_id": "east_campus_upper_lot",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Enlow Recital Hall main to East Campus upper faculty lot).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.22413956341654,
+            40.679838580471
+          ],
+          [
+            -74.22374176394513,
+            40.67963243440789
+          ],
+          [
+            -74.22336053945209,
+            40.67981092676797
+          ],
+          [
+            -74.22334727946986,
+            40.68014277044887
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00259",
+        "from_id": "burch_hall_main",
+        "to_id": "bartlett_hall_main",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Burch Hall main to Bartlett Hall main).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23368004901339,
+            40.67567992040202
+          ],
+          [
+            -74.23404677801855,
+            40.67564248129855
+          ],
+          [
+            -74.23431662163242,
+            40.67596543374154
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00260",
+        "from_id": "burch_hall_main",
+        "to_id": "rogers_hall_main",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Burch Hall to Rogers Hall).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23368434434298,
+            40.67567355420445
+          ],
+          [
+            -74.23402230787927,
+            40.675640877183326
+          ],
+          [
+            -74.2339061344225,
+            40.67529217983926
+          ],
+          [
+            -74.23395059041705,
+            40.67527951096662
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00261",
+        "from_id": "Cougar Pantry",
+        "to_id": "vaughn_eames_lot",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Cougar Pantry to Vaughn-Eames Lot).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23254300384528,
+            40.67660389130026
+          ],
+          [
+            -74.23288268236541,
+            40.676576645357216
+          ],
+          [
+            -74.2330296699104,
+            40.67683590427819
+          ],
+          [
+            -74.23306396958691,
+            40.67694451620682
+          ],
+          [
+            -74.23271160744801,
+            40.67701311193784
+          ],
+          [
+            -74.23235729582521,
+            40.677176231951705
+          ],
+          [
+            -74.23210987012503,
+            40.6773325697211
+          ],
+          [
+            -74.23197910801376,
+            40.67741718672127
+          ],
+          [
+            -74.23183694238922,
+            40.67741774410737
+          ],
+          [
+            -74.23173408780775,
+            40.677389341360254
+          ],
+          [
+            -74.23156091888859,
+            40.67713828534826
+          ],
+          [
+            -74.23126147581613,
+            40.67684700140228
+          ],
+          [
+            -74.23104855009515,
+            40.67660431351166
+          ],
+          [
+            -74.23041796990564,
+            40.67669817943022
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00262",
+        "from_id": "morris_ave_faculty_staff_lot",
+        "to_id": "east_campus_lower_lot",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Morris Ave Faculty/Staff Lot to East Campus lower lot).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23223177974957,
+            40.67931401648363
+          ],
+          [
+            -74.2323123869124,
+            40.679051248362555
+          ],
+          [
+            -74.23218520136932,
+            40.67899893789169
+          ],
+          [
+            -74.2320710493037,
+            40.67896250480044
+          ],
+          [
+            -74.23191510753401,
+            40.67891055205595
+          ],
+          [
+            -74.23179123637622,
+            40.678894128955704
+          ],
+          [
+            -74.23165433174096,
+            40.67886182841002
+          ],
+          [
+            -74.23154934439815,
+            40.678818865364946
+          ],
+          [
+            -74.2315467495359,
+            40.67869892118094
+          ],
+          [
+            -74.23152432727196,
+            40.678561900627386
+          ],
+          [
+            -74.23150340431846,
+            40.678441438186184
+          ],
+          [
+            -74.2313868932869,
+            40.67829596395538
+          ],
+          [
+            -74.23115907278246,
+            40.67812813549659
+          ],
+          [
+            -74.23097002240391,
+            40.67814909390964
+          ],
+          [
+            -74.23094402619236,
+            40.67819881987745
+          ],
+          [
+            -74.23058683791133,
+            40.6784643911204
+          ],
+          [
+            -74.23036404197853,
+            40.67860702933308
+          ],
+          [
+            -74.23046048971213,
+            40.67872452275512
+          ],
+          [
+            -74.23029789955879,
+            40.6788541602522
+          ],
+          [
+            -74.23018128228519,
+            40.6789775121878
+          ],
+          [
+            -74.23013038676828,
+            40.67916677066975
+          ],
+          [
+            -74.22999954470163,
+            40.679336492780834
+          ],
+          [
+            -74.22952297841833,
+            40.679676043310764
+          ],
+          [
+            -74.22938384447214,
+            40.67981443011479
+          ],
+          [
+            -74.22918151288644,
+            40.67992537369082
+          ],
+          [
+            -74.22894726400907,
+            40.68004697937124
+          ],
+          [
+            -74.22876349776607,
+            40.680155766851215
+          ],
+          [
+            -74.22841322148308,
+            40.68003694311753
+          ],
+          [
+            -74.227797738877,
+            40.68042016187022
+          ],
+          [
+            -74.22751220526705,
+            40.68067392609484
+          ],
+          [
+            -74.22699877929838,
+            40.68092149579931
+          ],
+          [
+            -74.2266316478607,
+            40.681079397399145
+          ],
+          [
+            -74.2256929913147,
+            40.681034602562704
+          ],
+          [
+            -74.22502182008976,
+            40.680864598392844
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00263",
+        "from_id": "cougar_softball_field",
+        "to_id": "d_angola_lot",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Cougar Softball Field to D'Angola Lot).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.2392100071156,
+            40.67970339075819
+          ],
+          [
+            -74.23906633211818,
+            40.679706682010874
+          ],
+          [
+            -74.23900449451611,
+            40.67968940802024
+          ],
+          [
+            -74.23870893461425,
+            40.6794081496399
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00264",
+        "from_id": "d_angola_pool",
+        "to_id": "d_angola_lot",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (D'Angola Pool to D'Angola Lot).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23867103581283,
+            40.67976422689648
+          ],
+          [
+            -74.23877610722441,
+            40.67976367138181
+          ],
+          [
+            -74.23891488943782,
+            40.67962586739367
+          ],
+          [
+            -74.23873319143958,
+            40.67938378986878
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00265",
+        "from_id": "emergency_phone_east_campus_gym",
+        "to_id": "east_campus_lower_lot",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (East Campus Gym emergency phone to East Campus lower lot).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.22439216129072,
+            40.68036099560604
+          ],
+          [
+            -74.22487634435882,
+            40.68052760558544
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00266",
+        "from_id": "kean_east_soccer_field_1",
+        "to_id": "east_campus_lower_lot",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Kean East Soccer Field 1 to East Campus lower lot).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.22773195231706,
+            40.68324242983499
+          ],
+          [
+            -74.22752770329791,
+            40.68231091189273
+          ],
+          [
+            -74.22645380042039,
+            40.68135997666326
+          ],
+          [
+            -74.22497187504851,
+            40.68084876544543
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00267",
+        "from_id": "kean_east_soccer_field_2",
+        "to_id": "east_campus_lower_lot",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Kean East Soccer Field 2 to East Campus lower lot).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.22664516329495,
+            40.681783615013785
+          ],
+          [
+            -74.22582147167999,
+            40.68116922605361
+          ],
+          [
+            -74.22500661782742,
+            40.68078788381254
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00268",
+        "from_id": "emergency_phone_kean_hall_parking",
+        "to_id": "kean_hall_entrance_front",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Emergency Phone - Kean Hall Parking to Kean Hall front entrance).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23606544988722,
+            40.68161369569688
+          ],
+          [
+            -74.23588013238219,
+            40.6813284220664
+          ],
+          [
+            -74.23612803177434,
+            40.68117869082434
+          ],
+          [
+            -74.23611326755768,
+            40.68107666588617
+          ],
+          [
+            -74.23581967497397,
+            40.68085558619259
+          ],
+          [
+            -74.23575564596226,
+            40.68091415314947
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00269",
+        "from_id": "bike_scooter_parking_glab_main_entrance",
+        "to_id": "glab_main",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Bike/Scooter Parking near GLAB to GLAB main entrance).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23628986813067,
+            40.68254536553087
+          ],
+          [
+            -74.23619535357388,
+            40.68258780491652
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00270",
+        "from_id": "bike_scooter_parking_harwood_cougar_walk",
+        "to_id": "d_angola_gym_main",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Bike/Scooter Parking near Harwood Arena to D'Angola Gym).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23731605862113,
+            40.67987473815222
+          ],
+          [
+            -74.23745355870763,
+            40.67992318033643
+          ],
+          [
+            -74.2375520531704,
+            40.67994861844849
+          ],
+          [
+            -74.23766133194468,
+            40.68000820411211
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00271",
+        "from_id": "bike_scooter_parking_wilkins_cougar_walk",
+        "to_id": "cas_main_front1",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Bike/Scooter Parking near Wilkins to CAS front 1).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23276277890307,
+            40.678404487289384
+          ],
+          [
+            -74.23287002686833,
+            40.67844759319749
+          ],
+          [
+            -74.23305373382827,
+            40.678426261574145
+          ],
+          [
+            -74.23323384601798,
+            40.678393547151984
+          ],
+          [
+            -74.23330420087801,
+            40.67839521121209
+          ],
+          [
+            -74.23333780263782,
+            40.67851668656593
+          ],
+          [
+            -74.23338524662984,
+            40.678581486908
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00272",
+        "from_id": "bike_scooter_parking_naab_main_entrance",
+        "to_id": "naab_entrance_front",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Bike/Scooter Parking near NAAB to NAAB main entrance).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.22912583010101,
+            40.676725307593074
+          ],
+          [
+            -74.22906203344759,
+            40.67663059400948
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00273",
+        "from_id": "bike_scooter_parking_hynes_main_entrance",
+        "to_id": "Hynes_hall_entrance_front",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Bike/Scooter Parking near Hynes to Hynes front entrance).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23256095037101,
+            40.682681648462165
+          ],
+          [
+            -74.23264414901938,
+            40.68276466130118
+          ],
+          [
+            -74.23258444326036,
+            40.682812413974204
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00274",
+        "from_id": "ev_charging_station_main_campus",
+        "to_id": "hutchinson_hall_front",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (EV Charging at Morris Ave Student Lot to Hutchinson front).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.2332824339228,
+            40.67993018829685
+          ],
+          [
+            -74.23341244227258,
+            40.67991462270794
+          ],
+          [
+            -74.23349875771142,
+            40.67998632090246
+          ],
+          [
+            -74.23361323552628,
+            40.67995518126472
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00275",
+        "from_id": "bike_scooter_parking_stem_atrium",
+        "to_id": "stem_main",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (Bike/Scooter Parking near STEM to STEM main entrance) and corrected STEM bike/scooter coordinates.",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.23080170116965,
+            40.67955059440857
+          ],
+          [
+            -74.2309933937071,
+            40.67972211942768
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "eB00276",
+        "from_id": "ev_charging_station_east_campus",
+        "to_id": "east_campus_building_main",
+        "mode": "walk",
+        "accessible": "yes",
+        "notes": "Imported traced geometry from user-provided connector (EV Charging in East Campus to East Campus main entrance).",
+        "source": "user_trace"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.22384995396094,
+            40.6807256826871
+          ],
+          [
+            -74.22393334040041,
+            40.68058377856525
+          ],
+          [
+            -74.22400696438123,
+            40.68054456233668
+          ],
+          [
+            -74.22403199106286,
+            40.68047479122208
+          ],
+          [
+            -74.22397228273876,
+            40.680445023746415
+          ],
+          [
+            -74.22382632373657,
+            40.68042476844127
+          ],
+          [
+            -74.22365254539343,
+            40.68042433397903
+          ],
+          [
+            -74.22354439490451,
+            40.68041074898076
+          ],
+          [
+            -74.22352460761033,
+            40.68005006272864
+          ],
+          [
+            -74.22362964320189,
+            40.68003836928423
+          ]
+        ]
+      }
     }
   ]
 }

@@ -284,17 +284,17 @@
   {
     "id": "bike_scooter_parking_stem_atrium",
     "name": "Bike / Scooter Parking - STEM Building Atrium Entrance",
-    "latlng": "40.679720699031954, -74.230948337167",
+    "latlng": "40.679456898509684, -74.23063490577586",
     "campus": "Main",
     "routable": "yes",
     "parent": "stem",
     "accessibility": "yes",
     "type": "bike_scooter_parking",
-    "latitude": 40.679720699031954,
-    "longitude": -74.230948337167,
+    "latitude": 40.679456898509684,
+    "longitude": -74.23063490577586,
     "coordinates": [
-      -74.230948337167,
-      40.679720699031954
+      -74.23063490577586,
+      40.679456898509684
     ]
   },
   {
@@ -696,7 +696,7 @@
     "name": "D'Angola Pool",
     "latlng": "40.67979671480611, -74.23864032922894",
     "campus": "Main",
-    "routable": "no",
+    "routable": "yes",
     "parent": null,
     "accessibility": "yes",
     "type": "building",
@@ -1920,6 +1920,31 @@
     ]
   },
   {
+    "id": "admissions_office",
+    "name": "Office of Admissions (Kean Hall - North Wing)",
+    "latlng": "40.68131777355341, -74.23495182214415",
+    "campus": "Main",
+    "routable": "yes",
+    "parent": null,
+    "accessibility": "yes",
+    "type": "office",
+    "aliases": [
+      "admissions",
+      "admission",
+      "admissions office",
+      "admission office",
+      "office of admissions",
+      "kean admissions",
+      "kean hall north wing"
+    ],
+    "latitude": 40.68131777355341,
+    "longitude": -74.23495182214415,
+    "coordinates": [
+      -74.23495182214415,
+      40.68131777355341
+    ]
+  },
+  {
     "id": "kean_hall_entrance_front",
     "name": "Kean Hall Entrance front",
     "latlng": "40.680916038677786, -74.23575959668204",
@@ -1941,7 +1966,7 @@
     "latlng": "40.68122747329496, -74.23534094830305",
     "campus": null,
     "routable": "yes",
-    "parent": null,
+    "parent": "kean_hall",
     "accessibility": "yes",
     "type": "entrance",
     "latitude": 40.68122747329496,

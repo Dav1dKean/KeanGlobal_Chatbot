@@ -109,6 +109,7 @@ const MERGED_ROUTE_NODE_IDS = {
   kean_hall_main: "kean_hall_entrance_front",
   kean_hall_faculty_staff_lot: "kean_hall_lot",
   kean_hall_student_lot: "kean_hall_lot",
+  lhac_lot: "liberty_hall_lot",
   miron_main: "miron_center_main",
   naab_faculty_staff_lot: "naab_entrance_front",
   naab_main: "naab_entrance_front",
@@ -411,7 +412,8 @@ function parseLocationRecords(data) {
         routable: toBoolean(location?.routable),
         parent: (location?.parent || "").trim() || null,
         accessibility: toBoolean(location?.accessibility),
-        type: (location?.type || "location").trim().toLowerCase()
+        type: (location?.type || "location").trim().toLowerCase(),
+        aliases: Array.isArray(location?.aliases) ? location.aliases : []
       };
     })
     .filter(Boolean);
@@ -1693,9 +1695,20 @@ function MapPanel({ setShowMap, routeRequest, standalone = false, onRouteDirecti
         }))
         .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
 
-      return rankedCandidates[0]?.id || null;
+      if (rankedCandidates[0]?.id) return rankedCandidates[0].id;
+
+      const requestedLocation = locationsById.get(requested);
+      if (requestedLocation?.position) {
+        const routableCoordinateCandidates = locations.filter(
+          location => location.routable && location.position
+        );
+        const nearest = getNearestLocation(requestedLocation.position, routableCoordinateCandidates);
+        if (nearest?.id) return nearest.id;
+      }
+
+      return null;
     };
-  }, [aliasCandidatesByNormalizedId, childrenByParent, locationsById, routableLocationIds]);
+  }, [aliasCandidatesByNormalizedId, childrenByParent, locations, locationsById, routableLocationIds]);
 
   const graphLocations = useMemo(() => locations.filter(location => location.routable), [locations]);
 
